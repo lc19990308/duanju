@@ -1,0 +1,381 @@
+
+<template>
+	<view class="VideoPay" :class="{ active: show }" :style="[{ height: winHeight + 'px' }]" @click="$emit('close')">
+		<view class="popup" :style="[{ height: winHeight * 0.6 + 'px' }]" @click.stop="">
+			<view class="p_head">
+				<view class="left">
+					<text class="text1">支持作者创作，解锁后继续阅读</text>
+				</view>
+				<text class="right" @click="$emit('close')">关闭</text>
+			</view>
+			<view class="p_text">
+				<view class="left">
+					<text class="text1">解锁本集：</text>
+					<text class="text2">{{ price }}积分</text>
+				</view>
+				<text class="right">账号余额：{{ userInfoStore.usable || 0 }}积分</text>
+			</view>
+			<view class="p_list">
+				<waterfall column-count="2" column-width="auto" column-gap="20" left-gap="20" right-gap="20">
+					<!-- <cell>
+						<view class="item">
+							<view class="content">
+								<view class="line1">
+									<text class="text1">69.9</text>
+									<text class="text2">元</text>
+								</view>
+								<view class="line2">
+									<text class="text1">6900</text>
+									<text class="text2">+2500积分</text>
+								</view>
+							</view>
+							<text class="tips">多送30元</text>
+							<text class="badge">特惠</text>
+						</view>
+					</cell> -->
+					<!-- <cell>
+						<view class="item item2">
+							<view class="content">
+								<view class="line1">
+									<text class="text1">69.9</text>
+									<text class="text2">元</text>
+								</view>
+								<view class="line2">
+									<text class="text1">解锁整部剧</text>
+									<text class="text2"></text>
+								</view>
+							</view>
+						</view>
+					</cell> -->
+
+					<cell v-for="(item, index) in integralData" :key="index">
+						<view class="item" @click="recharge('integral', item.id, item.price)">
+							<view class="content">
+								<view class="line1">
+									<text class="text1">{{ item.price }}</text>
+									<text class="text2">元</text>
+								</view>
+								<view class="line2">
+									<text class="text1">{{ item.original_usable }}</text>
+									<text class="text2" v-if="item.give_usable">+{{ item.give_usable }}</text>
+									<text class="text2">积分</text>
+								</view>
+							</view>
+							<text class="badge" v-if="item.flag">{{ item.flag }}</text>
+						</view>
+					</cell>
+					<cell v-for="(item, index) in vipData" :key="index">
+						<view class="item" @click="recharge('member', item.id, item.price)">
+							<view class="content">
+								<view class="line1">
+									<text class="text1">{{ item.price }}/{{ item.type_text }}</text>
+								</view>
+								<view class="line2">
+									<text class="text2">全站爽剧免费看</text>
+								</view>
+							</view>
+							<text class="tips">开通会员</text>
+						</view>
+					</cell>
+					<cell>
+						<view class="item item2" @click="gotoPage('/pages/user/info/contact')">
+							<view class="content">
+								<view class="line1">
+									<text class="text1">联系我们</text>
+								</view>
+							</view>
+						</view>
+					</cell>
+					<cell>
+						<view class="item item2" @click="gotoPage('/pages/user/integral/task')">
+							<view class="content">
+								<view class="line1">
+									<text class="text1">免费积分</text>
+								</view>
+								<view class="line2">
+									<text class="text1">做任务获取积分</text>
+								</view>
+							</view>
+						</view>
+					</cell>
+				</waterfall>
+			</view>
+			<text class="p_info">虚拟商品购买后不可退换，青少年请在家长陪同下充值</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	import { mapState, mapGetters, mapMutations, mapActions } from "vuex"
+	export default {
+		name: "VideoPayNvue",
+		props: {
+			show: {
+				type: Boolean,
+				default: false
+			},
+			price: {
+				type: Number,
+				default: 0
+			}
+		},
+		data() {
+			return {
+				userInfoStore: this.$store.state.user.userInfo,
+				winWidth: 0,
+				winHeight: 0,
+				integralData: [],
+				vipData: []
+			};
+		},
+		computed: {
+			...mapGetters("user", ["token", "userInfo"]),
+		},
+		watch: {
+			userInfo: {
+				deep: true,
+				handler: function(newValue, oldValue) {
+					this.userInfoStore = newValue
+				}
+			},
+			show(newValue, oldValue) {
+				if(newValue) {
+					this.getUserInfo()
+				}
+			},
+		},
+		created() {
+			this.getIntegralList()
+			this.getVipList()
+		},
+		mounted() {
+			this.winWidth = uni.getSystemInfoSync().windowWidth
+			this.winHeight = uni.getSystemInfoSync().windowHeight
+		},
+		methods: {
+			...mapActions('user', ['getUserInfo']),
+			gotoPage(url) {
+				if(!this.token) return uni.showToast({ title: '请先登录', icon: 'none' })
+				uni.navigateTo({ url })
+			},
+			// 获取积分套餐列表
+			getIntegralList() {
+				getApp().$request('integral.list').then(res => {
+					if(res.code === 1) {
+						res.data.list && res.data.list.length && (this.integralData = res.data.list)
+					}
+				})
+			},
+			// 获取vip套装列表
+			getVipList() {
+				getApp().$request('user.vip').then(res => {
+					if(res.code === 1) {
+						res.data.list && res.data.list.length && (this.vipData = res.data.list)
+					}
+				})
+			},
+			// 充值
+			recharge(type, id, price) {
+				if(!this.token) return uni.showToast({ title: '请先登录', icon: 'none' })
+				uni.showToast({ title: '您暂无开通APP支付功能', icon: 'none' })
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.VideoPay {
+		width: 750rpx;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		z-index: 100;
+		transition: transform 0.5s;
+		transform: translateY(100%);
+		
+		&.active {
+			transform: translateY(0);
+		}
+		
+		.popup {
+			width: 750rpx;
+			background: #000;
+			border-radius: 20rpx 20rpx 0 0;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			z-index: 1;
+			color: #fff;
+			padding-bottom: 60rpx;
+			border-top: 2rpx solid #333;
+			display: flex;
+			flex-direction: column;
+			
+			.p_head {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				position: relative;
+				padding: 30rpx 40rpx;
+
+				.left {
+					flex: 1;
+					display: flex;
+					flex-direction: row;
+					
+					.text1 {
+						font-weight: 700;
+						line-height: 48rpx;
+						font-size: 32rpx;
+						color: #fff;
+					}
+					
+					.text2 {
+						font-size: 24rpx;
+						color: rgba(#fff, 0.5);
+						margin: 0 40rpx;
+						line-height: 48rpx;
+					}
+				}
+				
+				.right {
+					color: #EE7F33;
+					margin-left: 20rpx;
+					font-size: 32rpx;
+				}
+			}
+			
+			.p_text {
+				padding: 0 40rpx;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				
+				.left {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					
+					.text1 {
+						font-size: 28rpx;
+						color: #fff;
+					}
+					
+					.text2 {
+						color: #EE7F33;
+						font-size: 28rpx;
+					}
+				}
+				
+				.right {
+					color: rgba(#fff, 0.7);
+					font-size: 28rpx;
+				}
+			}
+			
+			.p_list {
+				flex: 1;
+				margin-top: 40rpx;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				
+				.item {
+					height: 168rpx;
+					background: #fff;
+					margin-bottom: 40rpx;
+					position: relative;
+					z-index: 1;
+					color: #000;
+					display: flex;
+					flex-direction: column;
+					border-radius: 20rpx;
+					overflow: hidden;
+					
+					&.item2 {
+						background: #EE7F33;
+						
+						.text1 {
+							color: #fff !important;
+						}
+						
+						.text2 {
+							color: #fff !important;
+						}
+					}
+					
+					.content {
+						flex: 1;
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						
+						.line1 {
+							display: flex;
+							flex-direction: row;
+							align-items: flex-end;
+							justify-content: center;
+							
+							.text1 {
+								font-size: 40rpx;
+								font-weight: 700;
+								color: #000;
+							}
+							
+							.text2 {
+								font-size: 28rpx;
+								color: #000;
+							}
+						}
+						
+						.line2 {
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+							justify-content: center;
+							
+							.text1 {
+								font-size: 28rpx;
+								color: #000;
+							}
+							
+							.text2 {
+								color: #EE7F33;
+								font-size: 28rpx;
+							}
+						}
+					}
+					
+					.tips {
+						font-size: 28rpx;
+						text-align: center;
+						background: #EE7F33;
+						padding: 8rpx 0;
+						color: #fff;
+						border-radius: 0 0 20rpx 20rpx;
+						overflow: hidden;
+					}
+					
+					.badge {
+						position: absolute;
+						top: -2rpx;
+						right: -2rpx;
+						padding: 4rpx 16rpx;
+						font-size: 24rpx;
+						background: #EE7F33;
+						border-radius: 0 0 0 20rpx;
+						color: #fff;
+					}
+				}
+			}
+			
+			.p_info {
+				font-size: 24rpx;
+				text-align: center;
+				margin-top: 20rpx;
+				color: #fff;
+			}
+		}
+	}
+</style>

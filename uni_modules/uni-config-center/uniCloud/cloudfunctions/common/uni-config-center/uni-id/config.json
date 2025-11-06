@@ -1,0 +1,92 @@
+{
+  "passwordSecret": "quanzi@#", 
+  "passwordStrength": "medium", 
+  "tokenSecret": "quanzi@#", 
+  "tokenExpiresIn": 7200, 
+  "tokenExpiresThreshold": 3600, 
+  "passwordErrorLimit": 6, 
+  "passwordErrorRetryTime": 3600, 
+  "autoSetInviteCode": false,
+  "forceInviteCode": false, 
+  "app": { 
+    "tokenExpiresIn": 2592000,
+    "tokenExpiresThreshold": 864000,
+    "oauth": {      
+      "weixin": {
+        "appid": "wxda2c3eef7d7e3413",
+        "appsecret": "90c74aae689afea712c2c68df3bdec0c"
+      },     
+      "qq": {
+        "appid": "wxda2c3eef7d7e3413", 
+        "appsecret": "90c74aae689afea712c2c68df3bdec0c"
+      },
+      "apple": { 
+        "bundleId": ""
+      }
+    }
+  },
+  "web": { 
+    "tokenExpiresIn": 259200,
+    "tokenExpiresThreshold": 3600,
+    "oauth": {
+      "weixin-h5": { 
+        "appid": "wxda2c3eef7d7e3413",
+        "appsecret": "90c74aae689afea712c2c68df3bdec0c"
+      },
+      "weixin-web": { 
+        "appid": "wxda2c3eef7d7e3413",
+        "appsecret": "90c74aae689afea712c2c68df3bdec0c"
+      }
+    }
+  },
+  "mp-weixin": {
+    "tokenExpiresIn": 259200,
+    "tokenExpiresThreshold": 86400,
+    "oauth": {     
+      "weixin": {
+        "appid": "wxda2c3eef7d7e3413",
+        "appsecret": "90c74aae689afea712c2c68df3bdec0c"
+      }
+    }
+  },
+  "mp-qq": {
+    "tokenExpiresIn": 259200,
+    "tokenExpiresThreshold": 86400,
+    "oauth": {     
+      "qq": {
+        "appid": "",
+        "appsecret": ""
+      }
+    }
+  },
+  "mp-alipay": {
+    "tokenExpiresIn": 259200,
+    "tokenExpiresThreshold": 86400,
+    "oauth": {      
+      "alipay": {
+        "appid": "",
+        "privateKey": "", 
+        "keyType": "PKCS8" 
+      }
+    }
+  },
+  "service": {
+    "sms": {
+      "name": "青年帮科技", 
+      "codeExpiresIn": 180, 
+      "smsKey": "91da7bc338db145b8563efdede4c72c5", 
+      "smsSecret": "3764dad0c17f0124a972a660d52c78c6", 	  
+      "scene": {
+        "login-by-sms": { 
+          "templateId": "18010", 
+          "codeExpiresIn": 240 
+        }
+      }
+    },
+    "univerify": {
+      "appid": "", 
+      "apiKey": "", 
+      "apiSecret": ""
+    }
+  }
+}

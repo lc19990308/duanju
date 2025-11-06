@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "u-icon": "/uview-ui/components/u-icon/u-icon",
+    "uv-icon": "/uni_modules/uv-icon/components/uv-icon/uv-icon",
+    "uni-icons": "/uni_modules/uni-icons/components/uni-icons/uni-icons",
+    "my-component": "/pages/video/episode",
+    "popups": "/components/popups/charge-dialog"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "账户详情",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "default",
+  "usingComponents": {
+    "u-list": "/uview-ui/components/u-list/u-list",
+    "u-list-item": "/uview-ui/components/u-list-item/u-list-item",
+    "u-cell": "/uview-ui/components/u-cell/u-cell",
+    "zy-segmented": "/pages/user/account/components/zy-segmented-control/zy-segmented-control"
+  }
+}

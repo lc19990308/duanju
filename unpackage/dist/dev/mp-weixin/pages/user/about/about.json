@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "关于我们",
+  "navigationStyle": "default",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u-avatar-group": "/uview-ui/components/u-avatar-group/u-avatar-group",
+    "u-cell": "/uview-ui/components/u-cell/u-cell"
+  }
+}

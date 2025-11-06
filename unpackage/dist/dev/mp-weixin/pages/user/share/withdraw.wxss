@@ -1,0 +1,173 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.page_content.data-v-b556dfd6 {
+  background: #F9F9F9;
+}
+.page_content.data-v-b556dfd6::before {
+  content: "";
+  width: 100%;
+  height: 420rpx;
+  background: linear-gradient(141.96deg, #F28B45 0%, #FEB787 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.page_content .main_content.data-v-b556dfd6 {
+  overflow: hidden;
+  padding: 24rpx 40rpx 0 40rpx;
+  display: flex;
+  flex-direction: column;
+}
+.page_content .main_content .top_card.data-v-b556dfd6 {
+  position: relative;
+  border-radius: 20rpx;
+  background: #fff;
+  padding: 40rpx;
+  font-weight: 700;
+}
+.page_content .main_content .top_card .line1.data-v-b556dfd6 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+.page_content .main_content .top_card .line1 .left.data-v-b556dfd6 {
+  font-size: 36rpx;
+  color: #000;
+}
+.page_content .main_content .top_card .line1 .right.data-v-b556dfd6 {
+  font-size: 24rpx;
+  color: #2e2e2e;
+  display: flex;
+  align-items: center;
+}
+.page_content .main_content .top_card .line1 .right .image.data-v-b556dfd6 {
+  width: 32rpx;
+  margin-right: 20rpx;
+}
+.page_content .main_content .top_card .line2.data-v-b556dfd6 {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 2rpx solid #dddddd;
+}
+.page_content .main_content .top_card .line2 .text.data-v-b556dfd6 {
+  font-size: 32rpx;
+  color: #666666;
+}
+.page_content .main_content .top_card .line2 .input.data-v-b556dfd6 {
+  font-size: 32rpx;
+  color: #000;
+}
+.page_content .main_content .top_card .line3.data-v-b556dfd6 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 40rpx 0;
+}
+.page_content .main_content .top_card .line3 .left.data-v-b556dfd6 {
+  font-size: 36rpx;
+  color: #000;
+}
+.page_content .main_content .top_card .line3 .right.data-v-b556dfd6 {
+  font-size: 28rpx;
+  color: #FEB787;
+}
+.page_content .main_content .content_box.data-v-b556dfd6 {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.page_content .main_content .content_box .title.data-v-b556dfd6 {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #272d2f;
+  padding: 20rpx 0;
+}
+.page_content .main_content .content_box .block_box.data-v-b556dfd6 {
+  flex: 1;
+  overflow: hidden;
+}
+.page_content .main_content .content_box .block_box .scroll_view.data-v-b556dfd6 {
+  height: 100%;
+}
+.page_content .main_content .content_box .block_box .scroll_view .scroll_content.data-v-b556dfd6 {
+  padding-bottom: 60rpx;
+}
+.page_content .main_content .content_box .list_box .item.data-v-b556dfd6 {
+  padding: 40rpx 0;
+  border-bottom: 2rpx solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.page_content .main_content .content_box .list_box .item .left.data-v-b556dfd6 {
+  display: flex;
+  align-items: center;
+}
+.page_content .main_content .content_box .list_box .item .left .photo.data-v-b556dfd6 {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 20rpx;
+  background: #fff;
+  box-shadow: 0 0 60rpx 0 rgba(202, 202, 202, 0.3);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.page_content .main_content .content_box .list_box .item .left .photo .image.data-v-b556dfd6 {
+  width: 60rpx;
+}
+.page_content .main_content .content_box .list_box .item .left .info.data-v-b556dfd6 {
+  margin-left: 40rpx;
+}
+.page_content .main_content .content_box .list_box .item .left .info .text1.data-v-b556dfd6 {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #272D2F;
+  margin-bottom: 12rpx;
+}
+.page_content .main_content .content_box .list_box .item .left .info .text2.data-v-b556dfd6 {
+  font-size: 24rpx;
+  color: #A5ACB6;
+}
+.page_content .main_content .content_box .list_box .item .right.data-v-b556dfd6 {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #000;
+}
+.page_content .main_content .content_box .list_box .item .right.type1.data-v-b556dfd6 {
+  color: #512569;
+}
+.page_content .main_content .content_box .be_empty.data-v-b556dfd6 {
+  font-size: 28rpx;
+  color: #999;
+  text-align: center;
+  padding: 40rpx 0;
+}

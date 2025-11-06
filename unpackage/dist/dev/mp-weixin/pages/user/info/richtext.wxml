@@ -1,0 +1,1 @@
+<view class="page_content data-v-0af97382"><view class="head_content data-v-0af97382"><custom-navbar vue-id="55e602a7-1" title="{{navbarTitle}}" class="data-v-0af97382" bind:__l="__l"></custom-navbar></view><view class="main_content data-v-0af97382"><u-parse vue-id="55e602a7-2" content="{{info.content}}" class="data-v-0af97382" bind:__l="__l"></u-parse></view></view>

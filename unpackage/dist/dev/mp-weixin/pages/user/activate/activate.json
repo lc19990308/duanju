@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "开通会员",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "default",
+  "usingComponents": {
+    "u-cell": "/uview-ui/components/u-cell/u-cell",
+    "u--text": "/uview-ui/components/u--text/u--text",
+    "uni-pay": "/uni_modules/uni-pay/components/uni-pay/uni-pay",
+    "wen-tag": "/components/tag-select/tag-select"
+  }
+}

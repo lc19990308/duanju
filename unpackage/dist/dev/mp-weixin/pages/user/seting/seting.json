@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "系统设置",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "default",
+  "usingComponents": {
+    "u-cell-group": "/uview-ui/components/u-cell-group/u-cell-group",
+    "u-cell": "/uview-ui/components/u-cell/u-cell"
+  }
+}

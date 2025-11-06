@@ -1,0 +1,112 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/video/videoDetails",
+    "pages/index/playes",
+    "pages/home/video",
+    "pages/home/watch",
+    "pages/home/user",
+    "pages/home/update",
+    "pages/login/login",
+    "pages/login/register",
+    "components/tag-select/tag-select"
+  ],
+  "subPackages": [
+    {
+      "root": "pages/video",
+      "pages": [
+        "play",
+        "recharge",
+        "record",
+        "search",
+        "details",
+        "episode"
+      ]
+    },
+    {
+      "root": "pages/user",
+      "pages": [
+        "login/login",
+        "unipays/unipays",
+        "integral/index",
+        "integral/recharge",
+        "integral/task",
+        "dealer/index",
+        "member/index",
+        "info/index",
+        "info/richtext",
+        "info/contact",
+        "share/index",
+        "share/team",
+        "share/brokerage",
+        "share/withdraw",
+        "share/payee",
+        "share/poster",
+        "seting/seting",
+        "account/account",
+        "activate/activate",
+        "about/about",
+        "about/detail/detail",
+        "recharge/recharge"
+      ]
+    },
+    {
+      "root": "uni_modules/uni-pay/pages",
+      "pages": [
+        "success/success",
+        "ad-interactive-webview/ad-interactive-webview"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#FFF",
+    "backgroundColor": "#FFF",
+    "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#fff",
+    "backgroundColor": "#000",
+    "borderStyle": "black",
+    "fontSize": 16,
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "剧场",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      },
+      {
+        "pagePath": "pages/home/video",
+        "text": "精选",
+        "navigationStyle": "custom"
+      },
+      {
+        "pagePath": "pages/home/watch",
+        "text": "追剧",
+        "navigationStyle": "custom"
+      },
+      {
+        "pagePath": "pages/home/user",
+        "text": "我的",
+        "navigationStyle": "custom"
+      }
+    ]
+  },
+  "plugins": {
+    "playlet-plugin": {
+      "version": "latest",
+      "provider": "wx94a6522b1d640c3b",
+      "genericsImplementation": {
+        "playlet": {
+          "charge-dialog": "/components/charge-dialog/charge-dialog"
+        }
+      }
+    }
+  },
+  "usingComponents": {
+    "charge-dialog": "/components/charge-dialog/charge-dialog"
+  }
+}

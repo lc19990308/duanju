@@ -1,0 +1,13 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "u-icon": "/uview-ui/components/u-icon/u-icon",
+    "u-loading-icon": "/uview-ui/components/u-loading-icon/u-loading-icon",
+    "u-safe-bottom": "/uview-ui/components/u-safe-bottom/u-safe-bottom",
+    "u-notify": "/uview-ui/components/u-notify/u-notify",
+    "video-menu": "/pages/video/components/VideoMenu",
+    "video-pay": "/pages/video/components/VideoPay"
+  }
+}

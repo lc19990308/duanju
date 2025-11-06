@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u-icon": "/uview-ui/components/u-icon/u-icon",
+    "u-scroll-list": "/uview-ui/components/u-scroll-list/u-scroll-list",
+    "u--text": "/uview-ui/components/u--text/u--text",
+    "u-modal": "/uview-ui/components/u-modal/u-modal",
+    "u-input": "/uview-ui/components/u-input/u-input"
+  }
+}

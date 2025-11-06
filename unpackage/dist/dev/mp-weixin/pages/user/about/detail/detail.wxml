@@ -1,0 +1,1 @@
+<view class="detail data-v-0c9f1382"><view class="de_title data-v-0c9f1382">{{'《'+protocolName+'》'}}</view><view class="de_content data-v-0c9f1382"><u-parse vue-id="f1784478-1" content="{{content}}" class="data-v-0c9f1382" bind:__l="__l"></u-parse></view></view>
