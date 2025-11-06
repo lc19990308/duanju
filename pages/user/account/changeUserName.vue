@@ -1,6 +1,7 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="Thay đổi tên" :autoBack="true" :placeholder='true' rightText='保存' />
+		<u-navbar title="Thay đổi tên" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+			:autoBack="true" :placeholder='true' rightText='lưu' />
 		<view class="form">
 			<view class="upload-box">
 				<view class="avatar">
@@ -16,8 +17,7 @@
 			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
 				<u-form-item label="Tên người dùng" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none'  placeholder='Visitor'
-						 />
+					<u-input v-model="form.name" border='none' placeholder='Tên người dùng' :placeholderStyle='placeholderStyle' />
 				</u-form-item>
 			</u--form>
 		</view>
@@ -28,15 +28,21 @@
 	export default {
 		data() {
 			return {
+				titleStyle: {
+					color: '#fff',
+					fontFamily: 'PingFang SC, PingFang SC',
+					fontWeight: 800,
+					color: '#FFFFFF',
+				},
 				labelStyle: {
 					color: '#FFFFFF',
 					fontFamily: 'Inter, Inter',
 					fontWeight: 400,
 					fontsize: '32rpx',
 				},
+				placeholderStyle: 'color: #666;',
 				form: {
 					name: '',
-
 				},
 				rules: {
 					name: [{
@@ -52,7 +58,16 @@
 
 <style lang="scss" scoped>
 	page {
-		background-color: #000000;
+		background-color: #000;
+
+	}
+
+	.app-container {
+		min-height: 100vh;
+		background-image: url('/static/images/ navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		background-position: 100% 100%;
 	}
 
 	.upload-box {
@@ -103,5 +118,16 @@
 		background: #282828;
 		border-radius: 20rpx;
 		padding: 10rpx 20rpx;
+	}
+
+	::v-deep .u-navbar__content__right__text {
+		font-family: PingFang SC, PingFang SC;
+		font-weight: 800;
+		font-size: 22rpx;
+		color: #FFFFFF;
+	}
+
+	::v-deep .uni-input-input {
+		color: #f7f7f7;
 	}
 </style>

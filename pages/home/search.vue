@@ -1,6 +1,7 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="" :autoBack="true" :placeholder='true'>
+		<u-navbar title="" :autoBack="true" :fixed='true' :placeholder='true' bgColor='transparent'
+			:titleStyle='titleStyle' leftIconColor='#fff'>
 			<template slot='center'>
 				<view class="input-box">
 					<input type="text" placeholder="Tìm kiếm" />
@@ -35,7 +36,9 @@
 			<view class="hot-content">
 				<view class="hot-item">
 					<view class="hot-text">Rơi vào tình yêu</view>
-					<view class="icon"></view>
+					<view class="icon">
+						<image class="icon-hot" src="/static/images/hot.png" mode=""></image>
+					</view>
 				</view>
 				<view class="hot-item">
 					<view class="hot-text">Bất chấp tất cả</view>
@@ -55,11 +58,13 @@
 		<view class="book-list">
 			<view class="title">
 				<view class="text">Phổ biến gần đây</view>
-				<view class="icon"></view>
+				<view class="icon">
+					<image class="icon-hot" src="/static/images/hot.png" mode=""></image>
+				</view>
 			</view>
 			<view class="book-list-item" v-for="(item,index) in 3" :key="index">
 				<view class="cover">
-					
+					<image class="tag" src="/static/images/Frame-8.png" mode=""></image>
 				</view>
 				<view class="content">
 					<view class="book-title">bộ phim cổ ...</view>
@@ -80,7 +85,12 @@
 	export default {
 		data() {
 			return {
-
+				titleStyle: {
+					color: '#fff',
+					fontFamily: 'PingFang SC, PingFang SC',
+					fontWeight: 800,
+					color: '#FFFFFF',
+				},
 			}
 		},
 		methods: {
@@ -91,8 +101,18 @@
 
 <style lang="scss" scoped>
 	page {
+		background-color: #000;
+	}
+
+	.app-container {
 		min-height: 100vh;
-		background-color: #000000;
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		background-position: 100% 100%;
+		// background-size: cover;
+		background-attachment: fixed;
+		/* 背景固定 */
 	}
 
 	.input-box {
@@ -113,22 +133,27 @@
 	uni-input {
 		width: 100%;
 	}
-	.remove-block{
+
+	.remove-block {
 		padding: 18rpx 36rpx;
-		.action-row{
+
+		.action-row {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			.action-text{
+
+			.action-text {
 				font-family: Inter, Inter;
 				font-weight: bold;
 				font-size: 32rpx;
 				color: #D1D1D1;
 			}
 		}
-		.remove-content{
+
+		.remove-content {
 			margin-top: 18rpx;
-			.remove-item{
+
+			.remove-item {
 				display: inline-block;
 				padding: 16rpx 32rpx;
 				margin-bottom: 24rpx;
@@ -139,81 +164,131 @@
 				font-weight: 400;
 				font-size: 27rpx;
 				color: #D1D1D1;
+				box-shadow: 2rpx 2rpx 2rpx #2F2D34;
 			}
 		}
 	}
-	.hot-keyword{
+
+	.hot-keyword {
 		padding: 18rpx 36rpx;
-		.hot-keyword-action{
+
+		.hot-keyword-action {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			.action-text{
+
+			.action-text {
 				font-family: Inter, Inter;
 				font-weight: bold;
 				font-size: 32rpx;
 				color: #D1D1D1;
 			}
 		}
-		.hot-content{
-			.hot-item{
-				display: inline-block;
+
+		.hot-content {
+			display: flex;
+			flex-wrap: wrap;
+
+			.hot-item {
+				display: flex;
+				align-items: center;
 				margin-right: 24rpx;
 				height: 66rpx;
 				border-radius: 24rpx;
-				.hot-text{
+
+				.hot-text {
 					font-family: Inter, Inter;
 					font-weight: 400;
 					font-size: 27rpx;
 					color: #999999;
 				}
+
+				.icon {
+					width: 36rpx;
+					height: 36rpx;
+					margin-left: 16rpx;
+
+					.icon-hot {
+						width: 100%;
+						height: 100%;
+					}
+				}
 			}
 		}
 	}
-	.book-list{
-		.title{
+
+	.book-list {
+		.title {
+			display: flex;
+			align-items: center;
 			padding: 18rpx 36rpx;
-			.text{
+			.text {
 				font-family: Inter, Inter;
 				font-weight: bold;
 				font-size: 32rpx;
 				color: #FFCD03;
 			}
+			.icon {
+				width: 36rpx;
+				height: 36rpx;
+				margin-left: 16rpx;
+			
+				.icon-hot {
+					width: 100%;
+					height: 100%;
+				}
+			}
 		}
-		.book-list-item{
+
+		.book-list-item {
 			display: flex;
 			margin: 0 auto 20rpx auto;
 			padding: 24rpx;
 			box-sizing: border-box;
 			width: 678rpx;
 			height: 316rpx;
-			background: linear-gradient( 90deg, rgba(255,205,3,0.2) 0%, rgba(255,205,3,0) 100%);
+			background: linear-gradient(90deg, rgba(255, 205, 3, 0.2) 0%, rgba(255, 205, 3, 0) 100%);
 			border-radius: 24rpx;
-			.cover{
+
+			.cover {
+				position: relative;
 				width: 210rpx;
 				height: 268rpx;
-				background: linear-gradient( 180deg, rgba(0,0,0,0.2) 69%, rgba(0,0,0,0.9) 100%);
+				background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 69%, rgba(0, 0, 0, 0.9) 100%);
 				border-radius: 12rpx;
+				.tag{
+					position: absolute;
+					top: 0rpx;
+					left: 10rpx;
+					width: 35rpx;
+					height: 39rpx;
+					z-index: 9;
+				}
 			}
-			.content{
+
+			.content {
 				flex: 1;
 				margin-left: 25rpx;
-				.book-title{
+
+				.book-title {
 					font-family: Inter, Inter;
 					font-weight: 400;
 					font-size: 32rpx;
 					color: #FFFFFF;
 				}
-				.desc{
+
+				.desc {
 					margin-top: 24rpx;
 					font-family: Inter, Inter;
 					font-weight: 400;
 					font-size: 22rpx;
 					color: #666666;
 				}
-				.tag{
+
+				.tag {
 					margin-top: 24rpx;
-					.tag-item{
+
+					.tag-item {
 						display: inline-block;
 						width: 158rpx;
 						height: 48rpx;

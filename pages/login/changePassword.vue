@@ -1,6 +1,7 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="" :autoBack="true" :placeholder='true'>
+		<u-navbar title="" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff' :autoBack="true"
+			:placeholder='true'>
 		</u-navbar>
 		<u-toast ref="uToast"></u-toast>
 		<u-code :seconds="seconds" ref="uCode" @change="codeChange" />
@@ -13,25 +14,40 @@
 			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
 				<u-form-item label="email điện tử" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' prefixIcon="search" placeholder='Vui lòng nhập email'
-						prefixIconStyle="font-size: 22px;color: #fff" />
+					<u-input v-model="form.name" border='none' placeholder='Vui lòng nhập email'
+						:placeholderStyle='placeholderStyle'>
+						<template slot='prefix'>
+							<image class="input-icon" src="/static/images/Frame-23.png" mode=""></image>
+						</template>
+					</u-input>
 				</u-form-item>
 				<u-form-item label="Mã xác minh" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' prefixIcon="search" placeholder='Nhập mã xác nhận'
-						prefixIconStyle="font-size: 22px;color: #fff" />
+					<u-input v-model="form.name" border='none' placeholder='Nhập mã xác nhận'
+						:placeholderStyle='placeholderStyle'>
+						<template slot='prefix'>
+							<image class="input-icon" src="/static/images/Frame-25.png" mode=""></image>
+						</template>
+					</u-input>
 					<u-button class="code-btn" slot="right" @tap="getCode">{{tips}}</u-button>
-
 				</u-form-item>
 				<u-form-item label="mật khẩu" prop="name" :borderBottom='false'>
 					<u-input v-model="form.name" border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
-						prefixIconStyle="font-size: 22px;color: #fff" />
+						:placeholderStyle='placeholderStyle'>
+						<template slot='prefix'>
+							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
+						</template>
+					</u-input>
 				</u-form-item>
 				<u-form-item label="Xác nhận mật khẩu" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' prefixIcon="search" placeholder='Nhập lại mật khẩu mới'
-						prefixIconStyle="font-size: 22px;color: #fff" />
+					<u-input v-model="form.name" border='none' placeholder='Nhập lại mật khẩu mới'
+						:placeholderStyle='placeholderStyle'>
+						<template slot='prefix'>
+							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
+						</template>
+					</u-input>
 				</u-form-item>
 			</u--form>
-			<u-button class="submt-btn" @click="submit">提交</u-button>
+			<u-button class="submt-btn" @click="submit">Đặt lại mật khẩu</u-button>
 		</view>
 	</view>
 </template>
@@ -60,6 +76,10 @@
 				tips: 'lấy',
 				// refCode: null,
 				seconds: 10,
+				placeholderStyle: {
+					color: '#666'
+				}
+
 			}
 		},
 		methods: {
@@ -96,8 +116,16 @@
 
 <style lang="scss" scoped>
 	page {
+		background-color: #000;
+
+	}
+
+	.app-container {
 		min-height: 100vh;
-		background-color: #000000;
+		background-image: url('/static/images/ navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		background-position: 100% 100%;
 	}
 
 	.title {
@@ -132,7 +160,8 @@
 		border-radius: 20rpx;
 		padding: 10rpx 20rpx;
 	}
-	.code-btn{
+
+	.code-btn {
 		margin-left: 20rpx !important;
 		width: 200rpx !important;
 		height: 68rpx !important;
@@ -142,16 +171,35 @@
 		font-weight: 400;
 		font-size: 28rpx;
 		color: #FFCD03;
+		box-shadow: 2rpx 2rpx 2rpx #282828;
+		border-color: #282828;
+		border-width: 2rpx;
+		border-style: solid;
 	}
-	.submt-btn{
+
+	.submt-btn {
 		margin-top: 36rpx;
 		width: 678rpx;
 		height: 88rpx;
 		background: #EDC267;
+		box-shadow: 2rpx 2rpx 2rpx #EDC267;
+		border-color: #EDC267;
+		border-width: 2rpx;
+		border-style: solid;
 		border-radius: 62rpx;
 		font-family: Inter, Inter;
 		font-weight: 400;
 		font-size: 28rpx;
 		color: #000000;
+	}
+
+	::v-deep .uni-input-input {
+		color: #f7f7f7;
+	}
+
+	.input-icon {
+		width: 36rpx;
+		height: 36rpx;
+		margin-right: 24rpx;
 	}
 </style>

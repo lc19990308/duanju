@@ -1,6 +1,7 @@
 {
 	"easycom": {
-		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue",
+		"^z-(.*)": "@zebra-ui/swiper/components/z-$1/z-$1.vue"
 	},
 	"pages": [ // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		// 登录
@@ -106,6 +107,13 @@
 			}
 		},
 		{
+			"path": "pages/login/new-login",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/login/register",
 			"style": {
 				"navigationBarTitleText": "",
@@ -123,7 +131,7 @@
 			"path": "pages/login/changePassword",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationStyle": "custom"
 			}
 		},
 		{

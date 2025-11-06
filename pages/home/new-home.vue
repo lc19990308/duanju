@@ -4,20 +4,23 @@
 		<view class="navbar">
 			<view class="navbar-head">
 				<view class="logo">
-					<view class="icon"></view>
-					<view class="logo-text">Truyện ngắn Monkey</view>
+					<image class="icon" src="/static/images/Frame.png" mode=""></image>
+					<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
 				</view>
-				<view class="right-icon"></view>
+				<image class="right-icon" src="/static/images/gift1.png" mode=""></image>
 			</view>
 			<view class="search-box">
 				<input type="text" placeholder="Tìm kiếm" />
 				<u-icon name="search" color="#999" size="28"></u-icon>
 			</view>
 		</view>
-		<u-swiper :list="list2" keyName="image" radius="5" bgColor="#ffffff" previousMargin="30" nextMargin="30"
-			indicator indicatorMode="line" :autoplay="false" circular></u-swiper>
+		<view class="swiperItem">
+			<HR_swiper s_type="swiper2" s_style="height:600rpx" :s_list="swiper2List" @bindChange="change2"
+				@bindItem="bindItem2">
+			</HR_swiper>
+		</view>
 		<view class="tabs">
-			<view class="tabs-item">
+			<view class="tabs-item tabs-item_active">
 				tất cả
 			</view>
 			<view class="tabs-item">
@@ -40,62 +43,110 @@
 </template>
 
 <script>
+	import HR_swiper from "@/uni_modules/hongren-swiper/components/hongren-swiper/hongren-swiper.vue";
+
 	export default {
+		components: {
+			HR_swiper
+		},
 		data() {
 			return {
-				list2: [{
-						image: "https://uviewui.com/swiper/swiper2.png",
-						title: "昨夜星辰昨夜风，画楼西畔桂堂东",
+				swiper2List: [{
+						id: 7,
+						path: "",
+						image: "https://img.pic88.com/preview/2020/09/03/***21176.jpg!t640?imageView2/1/sharpen/1"
 					},
 					{
-						image: "https://uviewui.com/swiper/swiper1.png",
-						title: "身无彩凤双飞翼，心有灵犀一点通",
+						id: 1,
+						path: "/pages/index/index",
+						image: "https://img.pic88.com/preview/2020/08/05/***460246.jpg!s640?imageView2/1/sharpen/1"
 					},
 					{
-						image: "https://uviewui.com/swiper/swiper3.png",
-						title: "谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳",
+						id: 2,
+						path: "",
+						image: "https://img.pic88.com/16056878326348.jpg?imageMogr2/quality/90!/thumbnail/640/sharpen/1/"
 					},
+					{
+						id: 3,
+						path: "",
+						image: "https://img.pic88.com/preview/2020/09/02/***26270.jpg!t640?imageView2/1/sharpen/1"
+					},
+					{
+						id: 4,
+						path: "",
+						image: "https://img.pic88.com/16056541538809.jpg?imageMogr2/quality/90!/thumbnail/640/sharpen/1/"
+					},
+					{
+						id: 5,
+						path: "",
+						image: "https://img.pic88.com/preview/2020/09/03/***22672.jpg!t640?imageView2/1/sharpen/1"
+					},
+					{
+						id: 6,
+						path: "",
+						image: "https://img.pic88.com/preview/2020/09/02/***25720.jpg!t640?imageView2/1/sharpen/1"
+					}
 				],
 			}
+		},
+		methods: {
+			change2(e) {
+				let {
+					current
+				} = e.detail
+				console.log('change2: ', current);
+			},
+			bindItem2(evt) {
+				let {
+					item
+				} = evt.currentTarget.dataset
+				console.log('bindItem2: ', item);
+			},
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	page {
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 		background-color: #000;
 	}
-	.navbar{
+
+	.navbar {
 		padding: 22rpx 24rpx 16rpx 24rpx;
-		.navbar-head{
+
+		.navbar-head {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			.logo{
+
+			.logo {
 				display: flex;
 				align-items: center;
-				.icon{
+
+				.icon {
 					width: 69rpx;
 					height: 63rpx;
-					background-color: red;
 					border-radius: 50%;
+
 				}
-				.logo-text{
+
+				.logo-text {
+					width: 293rpx;
+					height: 36rpx;
 					margin-left: 11rpx;
-					font-family: Kenia, Kenia;
-					font-weight: 400;
-					font-size: 36rpx;
-					color: #FFFFFF;
 				}
 			}
-			.right-icon{
+
+			.right-icon {
 				width: 78rpx;
 				height: 78rpx;
-				background-color: red;
-				border-radius: 50%;
 			}
 		}
-		.search-box{
+
+		.search-box {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -103,10 +154,18 @@
 			padding: 18rpx 15rpx 18rpx 42rpx;
 			width: 500rpx;
 			height: 64rpx;
-			background: rgba(255,255,255,0.3);
+			background: rgba(255, 255, 255, 0.3);
 			border-radius: 37rpx;
 		}
 	}
+
+	.swiperItem {
+		position: relative;
+		width: 100%;
+		min-height: 300rpx;
+		margin-bottom: 30rpx;
+	}
+
 	.tabs {
 		display: flex;
 		margin: 0 34rpx;
@@ -123,6 +182,10 @@
 			font-weight: 400;
 			font-size: 27rpx;
 			color: #D1D1D1;
+		}
+		.tabs-item_active{
+			background: linear-gradient( 90deg, #3EF2FF 0%, #FFE23E 100%);
+			color: #000000;
 		}
 	}
 
@@ -158,4 +221,23 @@
 	.card-item:nth-child(3n-1) {
 		margin: 0 24rpx;
 	}
+
+	.swiperItem{
+		margin-top: 32rpx;
+	}
+
+	::v-deep .swiper2_item {
+		border-radius: 20rpx;
+		width: 100%;
+		height: 100%;
+	}
+
+	::v-deep .uni-swiper-slides {
+		width: 342rpx;
+		height: 456rpx;
+	}
+
+	// ::v-deep .swiper-item-card{
+	// 	width: 342rpx !important;
+	// }
 </style>

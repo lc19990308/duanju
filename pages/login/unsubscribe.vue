@@ -1,6 +1,6 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="Thay đổi tên" :autoBack="true" :placeholder='true'>
+		<u-navbar title="Thay đổi tên" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff' :autoBack="true" :placeholder='true'>
 		</u-navbar>
 		<view class="agreement">
 			<view class="agreement-item">
@@ -45,6 +45,9 @@
 		data() {
 			return {
 				checkboxValue1: 1,
+				titleStyle:{
+					color:'#fff'
+				}
 			}
 		},
 		methods: {
@@ -55,7 +58,9 @@
 
 <style lang="scss" scoped>
 	page{
-		background-color: #000000;
+		background-image: url('/static/images/ navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 	}
 
 	.agreement {
@@ -69,6 +74,7 @@
 			background: #282828;
 			border-radius: 20rpx;
 			border: 2rpx solid #555555;
+			box-shadow: 2rpx 2rpx 2rpx #555555;
 			box-sizing: border-box;
 			padding: 18rpx 34rpx;
 			margin-bottom: 36rpx;

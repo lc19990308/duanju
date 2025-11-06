@@ -1,14 +1,16 @@
 <!--联系客服-->
 <template>
 	<view class="app-container">
-		<u-navbar title="Liên hệ h hỗ trợ khách hàng" :autoBack="true" :placeholder='true' />
+		<u-navbar title="Liên hệ h hỗ trợ khách hàng" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff' :autoBack="true" :placeholder='true' />
 
 		<view class="chat-box">
 			<view class="time">2025.01.24 16:22:34</view>
 
 			<!-- 对方消息 -->
 			<view class="chat-item left">
-				<view class="avatar"></view>
+				<view class="avatar">
+					<image src="/static/images/Frame.png" mode=""></image>
+				</view>
 				<view class="user-info">
 					<view class="nickname">Truyện ngắn Monkey</view>
 					<view class="msg-box">
@@ -19,7 +21,9 @@
 
 			<!-- 自己消息 -->
 			<view class="chat-item right">
-				<view class="avatar"></view>
+				<view class="avatar">
+					<image src="/static/images/Frame.png" mode=""></image>
+				</view>
 				<view class="user-info">
 					<view class="nickname">Bạn</view>
 					<view class="msg-box">
@@ -31,7 +35,8 @@
 		<!--问题卡片-->
 		<view class="issue-card">
 			<view class="issue-action">
-				<u-icon name="question-circle" color="#FFCD03" size="24"></u-icon>
+
+				<image class="question-circle" src="/static/images/Frame-43.png" mode=""></image>
 				<view class="issue-text">Câu hỏi nhanh</view>
 			</view>
 			<view class="issue-content">
@@ -55,8 +60,11 @@
 		</view>
 		<view class="fill-box" />
 		<view class="footer-action">
-			<view class="input-box">
-				<input type="text" placeholder="Vui lòng nhập câu hỏi của bạn..." />
+			<view class="input-boder">
+				<view class="input-box">
+					<input type="text" :placeholderStyle='placeholderStyle'
+						placeholder="Vui lòng nhập câu hỏi của bạn..." />
+				</view>
 			</view>
 			<view class="input-icon"></view>
 		</view>
@@ -67,7 +75,13 @@
 	export default {
 		data() {
 			return {
-
+				placeholderStyle: 'color: #666;',
+				titleStyle: {
+					color: '#fff',
+					fontFamily: 'PingFang SC, PingFang SC',
+					fontWeight: 800,
+					color: '#FFFFFF',
+				},
 			}
 		}
 	}
@@ -76,7 +90,17 @@
 <style lang="scss" scoped>
 	page {
 		background-color: #000;
+
 	}
+
+	.app-container {
+		min-height: 100vh;
+		background-image: url('/static/images/ navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		background-position: 100% 100%;
+	}
+
 
 	.footer-action {
 		display: flex;
@@ -95,12 +119,21 @@
 		height: 156rpx;
 	}
 
-	.input-box {
+	.input-boder {
+		position: relative;
+		border-radius: 50rpx;
 		width: 566rpx;
 		box-sizing: border-box;
+		padding: 2rpx;
+		/* 边框宽度 */
+		background: linear-gradient(135deg, rgba(233, 233, 233, 0.2), rgba(233, 233, 233, 0.6), rgba(233, 233, 233, 0.2));
+	}
+
+	.input-box {
+		background: #000;
+		/* 内部背景色 */
 		padding: 30rpx 24rpx;
 		border-radius: 50rpx;
-		border: 2rpx solid #bbb;
 		font-family: Inter, Inter;
 		font-weight: 400;
 		font-size: 28rpx;
@@ -122,13 +155,19 @@
 			align-items: center;
 			width: 340rpx;
 			margin-left: 36rpx;
-			background: #252525;
 			border-radius: 46rpx;
 			margin-bottom: 16rpx;
 			border: 2rpx solid;
 			padding: 15rpx 27rpx;
 			box-sizing: border-box;
-			border: 2rpx solid #eee;
+			background-image: url('/static/images/Framebg.png');
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+
+			.question-circle {
+				width: 34rpx;
+				height: 34rpx;
+			}
 
 			.issue-text {
 				font-family: Inter, Inter;
@@ -142,8 +181,10 @@
 		.issue-content {
 			width: 678rpx;
 			margin: 0 auto;
-			border: 2rpx solid #eee;
-			padding: 5rpx;
+			background-image: url('/static/images/frame-card.png');
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			padding: 15rpx;
 			border-radius: 20rpx;
 
 			.issue-item {
@@ -151,7 +192,6 @@
 				align-items: center;
 				justify-content: space-between;
 				padding: 30rpx 24rpx;
-				background: #1F1F1F;
 
 				.label {
 					font-family: Inter, Inter;
@@ -215,10 +255,14 @@
 			.avatar {
 				width: 100rpx;
 				height: 100rpx;
-				background: #000000;
 				border-radius: 81rpx;
 				border: 2rpx solid #6D6864;
 				flex-shrink: 0;
+
+				image {
+					width: 100%;
+					height: 100%;
+				}
 			}
 
 			.user-info {
@@ -243,6 +287,7 @@
 					font-weight: 400;
 					font-size: 24rpx;
 					color: #D1D1D1;
+					box-shadow: 2rpx 2rpx 2rpx #1F1F1F;
 				}
 			}
 		}
