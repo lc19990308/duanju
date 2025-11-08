@@ -146,7 +146,37 @@ const api = {
 			url: '/addons/drama/wechat/jssdk',
 			method: 'POST',
 			desc: '微信公众号分享'
-		}
+		},
+		uploadFile: {
+			url: '/api/appApi/uploadFile',
+			method: 'POST',
+			desc: '文件上传'
+		},
+		addFeedback: {
+			url: '/api/appApi/addFeedback',
+			method: 'POST',
+			desc: '用户反馈'
+		},
+		feedbackList: {
+			url: '/api/appApi/feedbackList',
+			method: 'GET',
+			desc: '用户反馈'
+		},
+		getUserInfo: {
+			url: '/api/sys/user/getUserInfo',
+			method: 'GET',
+			desc: '用户信息'
+		},
+		appUpdateProfile: {
+			url: '/api/sys/user/appUpdateProfile',
+			method: 'PUT',
+			desc: '修改用户信息'
+		},
+		deleteAccount: {
+			url: '/api/sys/user/deleteAccount',
+			method: 'PUT',
+			desc: '注销账号'
+		},
 	},
 	// 视频
 	video: {
@@ -234,7 +264,22 @@ const api = {
 			url: '/api/wxApi/filmDramaSeriesSecond',
 			method: 'POST',
 			desc: '点赞追剧'
-		}
+		},
+		carouselList: {
+			url: '/api/appApi/carouselList',
+			method: 'GET',
+			desc: '首页轮播图列表'
+		},
+		filmDlassifyList: {
+			url: '/api/appApi/filmDlassifyList',
+			method: 'GET',
+			desc: '剧集分类列表'
+		},
+		filmDramaList: {
+			url: '/api/appApi/filmDramaList',
+			method: 'GET',
+			desc: '分类剧集列表'
+		},
 	},
 	//微信充值会员、金币
 	wchatapi: {
@@ -494,24 +539,51 @@ const api = {
 		},
 	},
 	// 账户管理
-	accountKeeper:{
-		filmDramaMember:{
+	accountKeeper: {
+		filmDramaMember: {
 			url: '/api/wxApi/filmDramaMember',
 			method: 'GET',
 			desc: '会员信息查询'
 		},
-		orderVipRechargeList:{
+		orderVipRechargeList: {
 			url: '/api/wxApi/orderVipRechargeList',
 			method: 'GET',
 			desc: '充值订单列表-充值记录'
 		},
-		orderPayRechargeList:{
+		orderPayRechargeList: {
 			url: '/api/wxApi/orderPayRechargeList',
 			method: 'GET',
 			desc: '消费订单列表-消费记录'
 		}
 	},
-	
+	//搜索
+	serach: {
+		filmDramaMember: {
+			url: '/api/appApi/filmDramaList',
+			method: 'GET',
+			desc: '查找剧集并记录搜索历史'
+		},
+		searchHistoryList: {
+			url: '/api/appApi/searchHistoryList',
+			method: 'GET',
+			desc: '查找搜索历史记录'
+		},
+		clearSearchHistory: {
+			url: '/api/appApi/clearSearchHistory',
+			method: 'DELETE',
+			desc: '清空搜索历史'
+		},
+		searchRecommendedList: {
+			url: '/api/appApi/searchRecommendedList',
+			method: 'GET',
+			desc: '热点搜索词'
+		},
+		hotDramaList: {
+			url: '/api/appApi/hotDramaList',
+			method: 'GET',
+			desc: '热门剧集推荐API'
+		},
+	},
 }
 
 export default api;

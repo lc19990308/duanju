@@ -35,7 +35,6 @@
 		<!--问题卡片-->
 		<view class="issue-card">
 			<view class="issue-action">
-
 				<image class="question-circle" src="/static/images/Frame-43.png" mode=""></image>
 				<view class="issue-text">Câu hỏi nhanh</view>
 			</view>
@@ -95,7 +94,7 @@
 
 	.app-container {
 		min-height: 100vh;
-		background-image: url('/static/images/ navbar-bg.png');
+		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;

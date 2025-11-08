@@ -1,14 +1,16 @@
 <template>
 	<view class="app-container">
 		<u-navbar title="Thay đổi tên" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
-			:autoBack="true" :placeholder='true' rightText='lưu' />
+			:autoBack="true" :placeholder='true' @rightClick='rightClick' rightText='lưu' />
 		<view class="form">
-			<view class="upload-box">
+			<view class="upload-box" @tap="uploadImage">
 				<view class="avatar">
 					<view class="upload-icon">
 						<u-icon name="plus" color="#fff" size="28"></u-icon>
 					</view>
-					<view class="avatar-shade"></view>
+					<view class="avatar-shade">
+						<image :src="form.avatar" mode=""></image>
+					</view>
 				</view>
 				<view class="upload-tips">
 					Upload ảnh đại diện
@@ -16,8 +18,9 @@
 			</view>
 			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="Tên người dùng" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Tên người dùng' :placeholderStyle='placeholderStyle' />
+				<u-form-item label="Tên người dùng" prop="realname" :borderBottom='false'>
+					<u-input v-model="form.realname" border='none' placeholder='Tên người dùng'
+						:placeholderStyle='placeholderStyle' />
 				</u-form-item>
 			</u--form>
 		</view>
@@ -25,6 +28,11 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from "vuex"
+	import apis from '@/utils/config.js'
+	import apiMoen from '@/utils/config.js';
 	export default {
 		data() {
 			return {
@@ -42,16 +50,62 @@
 				},
 				placeholderStyle: 'color: #666;',
 				form: {
-					name: '',
+					realname: '',
+					avatar: '',
 				},
-				rules: {
-					name: [{
-						required: true,
-						message: '请输入姓名',
-						trigger: ['blur', 'change']
-					}]
-				},
+				api: apis.MPWEIXIN,
+				createBy: '',
 			}
+		},
+		computed: {
+			...mapState('user', ['uid']),
+		},
+		methods: {
+			getUserInfo() {
+				this.$request('user.getUserInfo').then(res => {
+					const result = res.result.userInfo;
+					console.log(result,'result')
+					this.form = {
+						realname:result.realname,
+						avatar:result.avatar || '',
+					}
+				})
+			},
+			rightClick() {
+				this.$request('user.appUpdateProfile',{
+					...this.form
+				}).then(res => {
+					this.$u.toast('操作成功！')
+					this.getUserInfo();
+				})
+			},
+			uploadImage() {
+				uni.chooseImage({
+					success: (chooseImageRes) => {
+						const tempFilePaths = chooseImageRes.tempFilePaths;
+						uni.uploadFile({
+							url: `${this.api}/api/appApi/uploadFile`, //仅为示例，非真实的接口地址
+							filePath: tempFilePaths[0],
+							name: 'file',
+							formData: {
+								createBy: this.createBy
+							},
+							header: {
+								'X-Tenant-Id': apiMoen.tenantId
+							},
+							success: (uploadFileRes) => {
+								const res = JSON.parse(uploadFileRes.data);
+								this.form.avatar = res.result.savePath;
+								console.log(this.form.avatar,'avatar')
+							}
+						});
+					}
+				});
+			},
+		},
+		onLoad() {
+			this.createBy = this.uid;
+			this.getUserInfo();
 		}
 	}
 </script>
@@ -64,7 +118,7 @@
 
 	.app-container {
 		min-height: 100vh;
-		background-image: url('/static/images/ navbar-bg.png');
+		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;
@@ -84,7 +138,6 @@
 			width: 168rpx;
 			height: 168rpx;
 			margin: 0 auto 0 auto;
-			background: red;
 			border-radius: 50%;
 			border: 5rpx solid #A8A8A8;
 

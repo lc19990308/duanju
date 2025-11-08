@@ -82,6 +82,10 @@
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex'
+
 	export default {
 		data() {
 			return {
@@ -93,9 +97,85 @@
 				},
 			}
 		},
-		methods: {
-
+		computed: {
+			...mapState('user', ['userInfo'])
 		},
+		methods: {
+			//获取搜索历史
+			getHistoryList() {
+				// console.log(this.userInfo,'memberId',this.$store.state.user.userInfo)
+				this.$request('serach.searchHistoryList', {
+					memberId: this.userInfo.memberId,
+					sysOrgCode: this.userInfo.sysOrgCode,
+					pageNo: 1,
+					pageSize: 10,
+				}).then(res => {
+					console.log(res.result, 'xxs')
+					// this.total = res.result.records;
+					// this.swiperList = res.result.map(item=>{
+					// 	return {
+					// 		id: item.id,
+					// 		path: '',
+					// 		image:item.dramaPoster,
+					// 	}
+					// })
+				})
+			},
+			//获取热搜词
+			getHotKeyword() {
+				this.$request('serach.searchRecommendedList', {
+					sysOrgCode: this.userInfo.sysOrgCode,
+				}).then(res => {
+					console.log(res.result, 'xxs')
+					// this.total = res.result.records;
+					// this.swiperList = res.result.map(item=>{
+					// 	return {
+					// 		id: item.id,
+					// 		path: '',
+					// 		image:item.dramaPoster,
+					// 	}
+					// })
+				})
+				// searchRecommendedList().then()
+			},
+			//获取搜索剧集
+			getVideoList() {
+				this.$request('serach.hotDramaList', {
+					sysOrgCode: this.userInfo.sysOrgCode,
+				}).then(res => {
+					console.log(res.result, 'xxs')
+					// this.total = res.result.records;
+					// this.swiperList = res.result.map(item=>{
+					// 	return {
+					// 		id: item.id,
+					// 		path: '',
+					// 		image:item.dramaPoster,
+					// 	}
+					// })
+				})
+			},
+			//查找剧集并且记录
+			getSerachList() {
+				this.$request('serach.filmDramaMember', {
+					sysOrgCode: this.userInfo.sysOrgCode,
+				}).then(res => {
+					console.log(res.result, 'xxs')
+				})
+			},
+			//清除历史
+			claerHistory() {
+				this.$request('serach.clearSearchHistory', {
+					sysOrgCode: this.userInfo.sysOrgCode,
+				}).then(res => {
+					console.log(res.result, 'xxs')
+				})
+			},
+		},
+		onLoad() {
+			this.getHistoryList();
+			this.getHotKeyword();
+			this.getVideoList();
+		}
 	}
 </script>
 
@@ -122,7 +202,8 @@
 		padding: 10rpx 20rpx;
 		height: 64rpx;
 		margin-left: 50rpx;
-		background: #f7f7f7;
+		// background: #f7f7f7;
+		background-color: rgba(255, 255, 255, .3);
 		border-radius: 37rpx;
 	}
 
@@ -132,6 +213,7 @@
 
 	uni-input {
 		width: 100%;
+		color: #666;
 	}
 
 	.remove-block {
@@ -222,17 +304,19 @@
 			display: flex;
 			align-items: center;
 			padding: 18rpx 36rpx;
+
 			.text {
 				font-family: Inter, Inter;
 				font-weight: bold;
 				font-size: 32rpx;
 				color: #FFCD03;
 			}
+
 			.icon {
 				width: 36rpx;
 				height: 36rpx;
 				margin-left: 16rpx;
-			
+
 				.icon-hot {
 					width: 100%;
 					height: 100%;
@@ -256,7 +340,8 @@
 				height: 268rpx;
 				background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 69%, rgba(0, 0, 0, 0.9) 100%);
 				border-radius: 12rpx;
-				.tag{
+
+				.tag {
 					position: absolute;
 					top: 0rpx;
 					left: 10rpx;
@@ -305,5 +390,9 @@
 				}
 			}
 		}
+	}
+
+	::v-deep .uni-input-placeholder {
+		color: #666666;
 	}
 </style>

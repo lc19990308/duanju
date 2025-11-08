@@ -33,6 +33,7 @@
 </template>
 
 <script>
+	import { mapMutations } from 'vuex'
 	import apiMoen from '../../../utils/config.js';
 	export default {
 		data() {
@@ -42,7 +43,7 @@
 					// password: ''
 					sysOrgCode: apiMoen.sysOrgCode,
 				},
-				AllocatProgram:{},
+				AllocatProgram: {},
 				rules: {
 					accountNumber: [{
 						type: 'string',
@@ -63,25 +64,26 @@
 			this.getAllocatProgram()
 		},
 		methods: {
-			getAllocatProgram(){
-				this.$request('wchatapi.allocatProgram',{
-					sysOrgCode:apiMoen.sysOrgCode,
-					tenantId:apiMoen.tenantId
-				}).then(res=>{
+			...mapMutations('user', ['setUserInfo']),
+			getAllocatProgram() {
+				this.$request('wchatapi.allocatProgram', {
+					sysOrgCode: apiMoen.sysOrgCode,
+					tenantId: apiMoen.tenantId
+				}).then(res => {
 					console.log(res)
 					this.AllocatProgram = res.result
 				})
 			},
 			submit() {
 				this.$request('common.memberAccountNumberAdd', this.userInfo).then(res => {
-					console.log("登录",res)
+					console.log("登录", res)
 					if (res.code != 200) {
 						uni.showToast({
 							title: '系统异常登录失败',
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
-					}else{
+					} else {
 						uni.showToast({
 							title: '登录成功',
 							icon: 'none',
@@ -91,12 +93,13 @@
 						const tenantId = res.result.tenantId
 						const memberName = res.result.memberName
 						const sysOrgCode = res.result.sysOrgCode
+						this.setUserInfo(res.result) 
 						uni.setStorageSync('id', id)
 						uni.setStorageSync('tenantId', tenantId)
 						uni.setStorageSync('sysOrgCode', sysOrgCode)
-						console.log("登录111",res)
+						console.log("登录111", res)
 						uni.switchTab({
-						  url: '/pages/home/index'
+							url: '/pages/home/index'
 						})
 					}
 				}).catch(err => {

@@ -56,7 +56,8 @@ const request = (path, data, error = true) => {
 				// 'Token': store.state.user.token || '',
 				// 'Sign': SIGN || '',
 				// 'X-Tenant-Id': uni.getStorageSync('tenantId')
-				'X-Tenant-Id': apiMoen.tenantId
+				'X-Tenant-Id': apiMoen.tenantId,
+				'X-Access-Token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjI4OTQxNTAsInVzZXJuYW1lIjoiMTU4NzIzNzU0N0BxcS5jb20ifQ.VI-KZgFro8DJFpfgOuTWonli85ji-zFOGr64P438xYs',
 				// 'X-Access-Token': uni.getStorageSync('tenantId')
 			},
 			success: res => {

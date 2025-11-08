@@ -1,9 +1,8 @@
 <template>
 	<view class="detail">
-		<view class="de_title">
-			
-			《{{protocolName}}》
-		</view>
+		<u-navbar :title="protocolName" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff'
+			:autoBack="true" :placeholder='true' :fixed='true'>
+		</u-navbar>
 		<view class="de_content">
 			<u-parse :content="content"></u-parse>
 		</view>
@@ -17,6 +16,9 @@
 				content: '',
 				protocolName:'',
 				id: null,
+				titleStyle: {
+					color: '#fff'
+				}
 			};
 		},
 		onLoad(options) {
@@ -43,6 +45,14 @@
 </script>
 
 <style lang="scss" scoped>
+	page {
+		background-color: #000;
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		background-position: 100% 100%;
+	
+	}
 	.detail {
 		padding-top: 60rpx;
 		width: 90%;
@@ -50,6 +60,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		color: #d1d1d1;
 
 		.de_title {
 			font-weight: bold;

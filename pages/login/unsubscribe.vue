@@ -1,6 +1,7 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="Thay đổi tên" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff' :autoBack="true" :placeholder='true'>
+		<u-navbar title="Thay đổi tên" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff'
+			:autoBack="true" :placeholder='true' >
 		</u-navbar>
 		<view class="agreement">
 			<view class="agreement-item">
@@ -27,15 +28,15 @@
 				<view class="value"></view>
 			</view>
 			<view class="agreement-checked">
-				<u-checkbox-group v-model="checkboxValue1" shape='circle'  activeColor='#EDC267' @change="checkboxChange">
-					<u-checkbox :customStyle="{marginBottom: '8px'}" name="1" inactiveColor='#000000'>
+				<u-checkbox-group shape='circle' activeColor='#EDC267' @change="checkboxChange">
+					<u-checkbox :customStyle="{marginBottom: '8px'}" :checked='confirmed' inactiveColor='#000000'>
 					</u-checkbox>
 				</u-checkbox-group>
 				<view class="agreement-tips">
 					Tôi chấp nhận rủi ro xóa và đồng ý xóa tài khoản của mình
 				</view>
 			</view>
-			<u-button class="submt-btn" type="primary" text="Xác nhận rủi ro và xóa"></u-button>
+			<u-button class="submt-btn" @tap="submitForm" type="primary" text="Xác nhận rủi ro và xóa"></u-button>
 		</view>
 	</view>
 </template>
@@ -44,21 +45,32 @@
 	export default {
 		data() {
 			return {
-				checkboxValue1: 1,
-				titleStyle:{
-					color:'#fff'
+				confirmed: false,
+				titleStyle: {
+					color: '#fff'
 				}
 			}
 		},
 		methods: {
-			checkboxChange(){},
+			checkboxChange(e) {
+				this.confirmed = !this.confirmed;
+			},
+			submitForm() {
+				if (this.confirmed) {
+					this.$request('user.deleteAccount').then(res => {
+						this.$u.toast('操作成功！')
+					})
+				}else{
+					this.$u.toast('请确认删除账户协议！')
+				}
+			},
 		},
 	}
 </script>
 
 <style lang="scss" scoped>
-	page{
-		background-image: url('/static/images/ navbar-bg.png');
+	page {
+		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 	}
@@ -108,6 +120,7 @@
 	.agreement-checked {
 		display: flex;
 		padding: 0 57rpx 0 32rpx;
+
 		.agreement-tips {
 			width: 624px;
 			font-family: Inter, Inter;
@@ -131,7 +144,8 @@
 		border: 2rpx solid #EDC267;
 		color: #000000;
 	}
-	::v-deep .u-checkbox__icon-wrap--circle{
+
+	::v-deep .u-checkbox__icon-wrap--circle {
 		border: 2rpx solid #EDC267 !important;
 		background-color: #000 !important;
 	}

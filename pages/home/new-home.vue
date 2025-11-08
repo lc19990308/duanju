@@ -9,21 +9,21 @@
 				</view>
 				<image class="right-icon" src="/static/images/gift1.png" mode=""></image>
 			</view>
-			<view class="search-box">
-				<input type="text" placeholder="Tìm kiếm" />
+			<navigator class="search-box" hover-class="none" url="/pages/home/search">
+				<input type="text" :disabled="true"  v-model='query.searchValue' placeholder="Tìm kiếm" />
 				<u-icon name="search" color="#999" size="28"></u-icon>
-			</view>
+			</navigator>
 		</view>
 		<view class="swiperItem">
-			<HR_swiper s_type="swiper2" s_style="height:600rpx" :s_list="swiper2List" @bindChange="change2"
+			<HR_swiper s_type="swiper2" s_style="height:600rpx" :s_list="swiperList" @bindChange="change2"
 				@bindItem="bindItem2">
 			</HR_swiper>
 		</view>
 		<view class="tabs">
-			<view class="tabs-item tabs-item_active">
-				tất cả
+			<view class="tabs-item" v-for="(item,index) in cateList" :key="index">
+				{{item.classifyName}}
 			</view>
-			<view class="tabs-item">
+<!-- 			<view class="tabs-item">
 				Võ hiệp
 			</view>
 			<view class="tabs-item">
@@ -31,12 +31,12 @@
 			</view>
 			<view class="tabs-item">
 				hồi hộp
-			</view>
+			</view> -->
 		</view>
 		<view class="card">
-			<view class="card-item" v-for="(item,index) in 9 " :key="index">
-				<view class="cover"></view>
-				<view class="title">bộ phim cổ ...</view>
+			<view class="card-item" v-for="(item,index) in list " :key="index">
+				<image class="cover" :src="item.dramaPoster" mode=""></image>
+				<view class="title">{{item.dramaDescribe}}</view>
 			</view>
 		</view>
 	</view>
@@ -51,42 +51,16 @@
 		},
 		data() {
 			return {
-				swiper2List: [{
-						id: 7,
-						path: "",
-						image: "https://img.pic88.com/preview/2020/09/03/***21176.jpg!t640?imageView2/1/sharpen/1"
-					},
-					{
-						id: 1,
-						path: "/pages/index/index",
-						image: "https://img.pic88.com/preview/2020/08/05/***460246.jpg!s640?imageView2/1/sharpen/1"
-					},
-					{
-						id: 2,
-						path: "",
-						image: "https://img.pic88.com/16056878326348.jpg?imageMogr2/quality/90!/thumbnail/640/sharpen/1/"
-					},
-					{
-						id: 3,
-						path: "",
-						image: "https://img.pic88.com/preview/2020/09/02/***26270.jpg!t640?imageView2/1/sharpen/1"
-					},
-					{
-						id: 4,
-						path: "",
-						image: "https://img.pic88.com/16056541538809.jpg?imageMogr2/quality/90!/thumbnail/640/sharpen/1/"
-					},
-					{
-						id: 5,
-						path: "",
-						image: "https://img.pic88.com/preview/2020/09/03/***22672.jpg!t640?imageView2/1/sharpen/1"
-					},
-					{
-						id: 6,
-						path: "",
-						image: "https://img.pic88.com/preview/2020/09/02/***25720.jpg!t640?imageView2/1/sharpen/1"
-					}
-				],
+				swiperList: [],
+				query: {
+					pageNo: 1,
+					pageSize: 9,
+					sysOrgCode: '',
+					searchValue: '',
+				},
+				total: 0,
+				list: [],
+				cateList:[],
 			}
 		},
 		methods: {
@@ -102,6 +76,55 @@
 				} = evt.currentTarget.dataset
 				console.log('bindItem2: ', item);
 			},
+			//获取轮播图
+			getBanner() {
+				this.$request('video.carouselList').then(res => {
+					console.log(res.result, 'xxs')
+					this.swiperList = res.result.map(item => {
+						return {
+							id: item.id,
+							path: '',
+							image: item.dramaPoster,
+						}
+					})
+				})
+			},
+			//获取分类列表
+			getCateList() {
+				this.$request('video.filmDlassifyList').then(res => {
+					console.log(res.result, 'filmDlassifyList')
+					// this.cateList = res.result.records;
+					console.log(this.cateList,'cateList')
+					// this.total = res.result.records;
+					// this.swiperList = res.result.map(item=>{
+					// 	return {
+					// 		id: item.id,
+					// 		path: '',
+					// 		image:item.dramaPoster,
+					// 	}
+					// })
+				})
+			},
+			//获取列表
+			getVideoList() {
+				this.$request('video.filmDramaList', this.query).then(res => {
+					console.log(res.result.records, 'xxs')
+					this.list = this.list.concat(res.result.records);
+					this.total = res.result.total;
+					// this.swiperList = res.result.map(item=>{
+					// 	return {
+					// 		id: item.id,
+					// 		path: '',
+					// 		image:item.dramaPoster,
+					// 	}
+					// })
+				})
+			},
+		},
+		onLoad() {
+			this.getBanner();
+			this.getCateList();
+			this.getVideoList();
 		}
 	}
 </script>
@@ -183,8 +206,9 @@
 			font-size: 27rpx;
 			color: #D1D1D1;
 		}
-		.tabs-item_active{
-			background: linear-gradient( 90deg, #3EF2FF 0%, #FFE23E 100%);
+
+		.tabs-item_active {
+			background: linear-gradient(90deg, #3EF2FF 0%, #FFE23E 100%);
 			color: #000000;
 		}
 	}
@@ -203,7 +227,6 @@
 		.cover {
 			width: 100%;
 			height: 268rpx;
-			background-color: red;
 			border-radius: 20rpx 20rpx 0px 0px;
 		}
 
@@ -215,6 +238,12 @@
 			font-weight: 400;
 			font-size: 26rpx;
 			color: #FFFFFF;
+			white-space: nowrap;
+			/* 不换行 */
+			overflow: hidden;
+			/* 超出隐藏 */
+			text-overflow: ellipsis;
+			/* 显示省略号 */
 		}
 	}
 
@@ -222,7 +251,7 @@
 		margin: 0 24rpx;
 	}
 
-	.swiperItem{
+	.swiperItem {
 		margin-top: 32rpx;
 	}
 
@@ -235,6 +264,10 @@
 	::v-deep .uni-swiper-slides {
 		width: 342rpx;
 		height: 456rpx;
+	}
+
+	::v-deep .uni-input-input {
+		color: #fff;
 	}
 
 	// ::v-deep .swiper-item-card{

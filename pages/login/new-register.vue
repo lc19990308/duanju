@@ -15,6 +15,23 @@
 						</template>
 					</u-input>
 				</u-form-item>
+				<u-form-item label="Mã xác minh" prop="name" :borderBottom='false'>
+					<u-input v-model="form.name" border='none' placeholder='Nhập mã xác nhận'
+						:placeholderStyle='placeholderStyle'>
+						<template slot='prefix'>
+							<image class="input-icon" src="/static/images/Frame-25.png" mode=""></image>
+						</template>
+					</u-input>
+					<u-button class="code-btn" slot="right" @tap="getCode">{{tips}}</u-button>
+				</u-form-item>
+				<u-form-item label="mật khẩu" prop="name" :borderBottom='false'>
+					<u-input v-model="form.name" border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
+						:placeholderStyle='placeholderStyle'>
+						<template slot='prefix'>
+							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
+						</template>
+					</u-input>
+				</u-form-item>
 				<u-form-item label="mật khẩu" prop="name" :borderBottom='false'>
 					<u-input v-model="form.name" border='none' placeholder='Nhập mật khẩu'
 						:placeholderStyle='placeholderStyle'>
@@ -24,8 +41,8 @@
 					</u-input>
 				</u-form-item>
 			</u--form>
-			<u-button class="submt-btn" @click="submit">Đăng nhập</u-button>
-			<u-button class="reset-btn" @click="submit">đăng ký</u-button>
+			<u-button class="submt-btn" @click="submit">đăng ký</u-button>
+			<u-button class="reset-btn" @click="submit">Đăng nhập</u-button>
 		</view>
 		<view class="btn-groud">
 			<view class="btn-groud-item">
@@ -48,7 +65,7 @@
 				</u-checkbox>
 			</u-checkbox-group>
 			<view class="agreement-tips">
-				Tôi đã đồng ý với Thỏa thuận người dùng và Chính sách bảo mật
+				Tôi chấp nhận rủi ro xóa và đồng ý xóa tài khoản của mình
 			</view>
 		</view>
 	</view>
@@ -155,8 +172,8 @@
 	}
 
 	.form {
-		padding: 0 36rpx;
 		margin: 55rpx 0 0 0;
+		padding: 0 36rpx;
 		box-sizing: border-box;
 	}
 

@@ -114,6 +114,13 @@
 			}
 		},
 		{
+			"path": "pages/login/new-register",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/login/register",
 			"style": {
 				"navigationBarTitleText": "",
@@ -349,7 +356,7 @@
 					"style": {
 						"navigationBarTitleText": "系统设置",
 						"enablePullDownRefresh": false,
-						"navigationStyle": "default"
+						"navigationStyle": "custom"
 					}
 				},
 				{
@@ -357,6 +364,22 @@
 					"style": {
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false,
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "seting/setLanguage",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false,
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "seting/opinion",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": true,
 						"navigationStyle": "custom"
 					}
 				},
@@ -397,7 +420,7 @@
 					"path": "about/detail/detail",
 					"style": {
 						"navigationBarTitleText": "",
-						"navigationStyle": "default",
+						"navigationStyle": "custom",
 						"enablePullDownRefresh": false
 					}
 				},
