@@ -494,10 +494,15 @@ const api = {
 			method: 'GET',
 			desc: '团队'
 		},
+		teamNum: {
+			url: '/api/appApi/appDivideApi/getTeamData',
+			method: 'GET',
+			desc: '团队统计'
+		},
 		teamNew: {
 			url: '/api/appApi/appDivideApi/getTeamDataList',
 			method: 'GET',
-			desc: '新团队'
+			desc: '团队列表'
 		},
 		brokerage: {
 			url: '/addons/drama/reseller/log',

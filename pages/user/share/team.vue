@@ -66,14 +66,22 @@
 				this.teamList()
 			},
 			teamList() {
-				this.$request('share.teamNew', {
+				this.$request('share.teamNum', {
 					memberId: '1',
 				}).then(res => {
 					if(res.code === 1) {
 						this.info = {
-							count_direct: res.DivideRecordByTeamVo[0].todayDivideGold,
-							count_indirect: res.DivideRecordByTeamVo[0].totalDivideGold
+							count_direct: res.totalExtendNumber,
+							count_indirect: res.totalProfit
 						}
+						
+					}
+				})
+				this.$request('share.teamNew', {
+					memberId: '1',
+				}).then(res => {
+					if(res.code === 1) {
+						
 						if(res.DivideRecordByTeamVo && res.DivideRecordByTeamVo.length) {
 							this.list = this.list.concat(res.DivideRecordByTeamVo)
 						} 
