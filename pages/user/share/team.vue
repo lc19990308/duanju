@@ -2,17 +2,17 @@
 <template>
 	<view class="page_content">
 		<view class="head_content">
-			<CustomNavbar title="团队管理"></CustomNavbar>
+			<CustomNavbar title="đội của tôi"></CustomNavbar>
 		</view>
 		<view class="main_content">
 			<scroll-view class="scroll_view" :scroll-y="true" @scrolltolower="scrollBottom">
 				<view class="scroll_content">
 					<view class="top_card">
-						<view class="text1">{{ info.count }}人</view>
-						<view class="text2">直推用户{{ info.count_direct }}人  间推用户{{ info.count_indirect }}人</view>
+						<!-- <view class="text1">{{ info.count }}人</view> -->
+						<view class="text2">{{ info.count_direct }}<br>Số lượng  {{ info.count_indirect }}<br>lợi nhuận</view>
 					</view>
 					<view class="content_box">
-						<view class="title">团队信息</view>
+						<view class="title">Giới thiệu trực tiếp</view>
 						<view class="list_box" v-if="list.length">
 							<view class="item" v-for="(item, index) in list" :key="index">
 								<view class="left">
@@ -24,10 +24,10 @@
 										<view class="text2">{{ item.createtime }}</view>
 									</view>
 								</view>
-								<view class="right">{{ item.type == '1' ? '直推' : '间推' }}用户</view>
+								<view class="right">+80</view>
 							</view>
 						</view>
-						<view class="be_empty" v-else>没有团队信息</view>
+						<view class="be_empty" v-else>null</view>
 					</view>
 				</view>
 			</scroll-view>
