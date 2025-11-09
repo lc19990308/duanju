@@ -1,7 +1,6 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff' :autoBack="true"
-			:placeholder='true'>
+		<u-navbar title="" bgColor='transparent' leftIconColor='#fff' :autoBack="true" :placeholder='true'>
 		</u-navbar>
 		<u-toast ref="uToast"></u-toast>
 		<u-code :seconds="seconds" ref="uCode" @change="codeChange" />
@@ -11,18 +10,18 @@
 			<view class="tips-text">Vui lòng nhập mật khẩu mới của bạn</view>
 		</view>
 		<view class="form">
-			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
-				:labelStyle='labelStyle'>
-				<u-form-item label="email điện tử" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Vui lòng nhập email'
-						:placeholderStyle='placeholderStyle'>
-						<template slot='prefix'>
+			<u--form :model="form" ref="uForm" :rules='rules' labelPosition='top' labelWidth='auto'
+				:borderBottom='false' :labelStyle='labelStyle'>
+				<u-form-item label="email điện tử" prop="email" :borderBottom='false'>
+					<u-input v-model="form.email" border='none' placeholder='Vui lòng nhập email'
+						placeholderStyle='color:"#666"'>
+						<template slot=' prefix'>
 							<image class="input-icon" src="/static/images/Frame-23.png" mode=""></image>
 						</template>
 					</u-input>
 				</u-form-item>
-				<u-form-item label="Mã xác minh" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Nhập mã xác nhận'
+				<u-form-item label="Mã xác minh" prop="emailcode" :borderBottom='false'>
+					<u-input v-model="form.emailcode" border='none' placeholder='Nhập mã xác nhận'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-25.png" mode=""></image>
@@ -30,16 +29,16 @@
 					</u-input>
 					<u-button class="code-btn" slot="right" @tap="getCode">{{tips}}</u-button>
 				</u-form-item>
-				<u-form-item label="mật khẩu" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
+				<u-form-item label="mật khẩu" prop="password" :borderBottom='false'>
+					<u-input v-model="form.password" border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
 						</template>
 					</u-input>
 				</u-form-item>
-				<u-form-item label="Xác nhận mật khẩu" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Nhập lại mật khẩu mới'
+				<u-form-item label="Xác nhận mật khẩu" prop="confirmpassword" :borderBottom='false'>
+					<u-input v-model="form.confirmpassword" border='none' placeholder='Nhập lại mật khẩu mới'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
@@ -60,25 +59,58 @@
 					color: '#FFFFFF',
 					fontFamily: 'Inter, Inter',
 					fontWeight: 400,
-					fontsize: '32rpx',
 				},
 				form: {
-					name: '',
-
+					email: '',
+					emailcode: '',
+					password: '',
+					confirmpassword: '',
 				},
 				rules: {
-					name: [{
+					email: [{
+							required: true,
+							message: '请输入邮箱',
+							trigger: ['blur', 'change']
+						},
+						{
+							type: 'email',
+							message: '邮箱格式不正确',
+							trigger: ['blur', 'change']
+						}
+					],
+
+					/* 验证码 */
+					emailcode: [{
 						required: true,
-						message: '请输入姓名',
+						message: '请输入验证码',
 						trigger: ['blur', 'change']
-					}]
+					}],
+
+					/* 密码 */
+					password: [{
+						required: true,
+						message: '请输入密码',
+						trigger: ['blur', 'change']
+					}],
+
+					/* 确认密码：必填 + 与 password 实时比对 */
+					confirmpassword: [{
+							required: true,
+							message: '请再次输入密码',
+							trigger: ['blur', 'change']
+						},
+						{
+							validator: (rule, value, callback) =>
+								value === this.form.password ?
+								callback() : callback(new Error('两次输入密码不一致')),
+							trigger: ['blur', 'change']
+						}
+					]
 				},
 				tips: 'lấy',
-				// refCode: null,
-				seconds: 10,
-				placeholderStyle: {
-					color: '#666'
-				}
+				seconds: 30,
+				placeholderStyle: 'color:#666;'
+
 
 			}
 		},
@@ -87,30 +119,42 @@
 				this.tips = text;
 			},
 			getCode() {
+				if (uni.$u.test.isEmpty(this.form.email)) {
+					return uni.$u.toast('邮箱不能为空!')
+				}
+				const emailState = uni.$u.test.email(this.form.email)
+				if (!emailState) {
+					return uni.$u.toast('请输入正确邮箱!')
+				}
 				if (this.$refs.uCode.canGetCode) {
 					// 模拟向后端请求验证码
 					uni.showLoading({
 						title: '正在获取验证码'
 					})
-					setTimeout(() => {
+					const form = {
+						email: this.form.email,
+						emailmode: 2,
+					}
+					this.$request('login.sendEmailCode', form).then(res => {
 						uni.hideLoading();
-						// 这里此提示会被this.start()方法中的提示覆盖
 						uni.$u.toast('验证码已发送');
-						// 通知验证码组件内部开始倒计时
 						this.$refs.uCode.start();
-					}, 2000);
+					})
 				} else {
 					uni.$u.toast('倒计时结束后再发送');
 				}
 			},
 			submit() {
 				this.$refs.uForm.validate().then(res => {
-					uni.$u.toast('校验通过')
-				}).catch(errors => {
-					uni.$u.toast('校验失败')
+					this.$request('login.resetPasswordByEmail', this.form).then(res => {
+						uni.$u.toast('重置成功！')
+					})
 				})
 			}
 		},
+		onShow() {
+			console.log(uni.$u.test.email('19139771157@qq.com'))
+		}
 	}
 </script>
 
@@ -122,7 +166,7 @@
 
 	.app-container {
 		min-height: 100vh;
-		background-image: url('/static/images/ navbar-bg.png');
+		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;

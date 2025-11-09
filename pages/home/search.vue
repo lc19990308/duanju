@@ -4,23 +4,20 @@
 			:titleStyle='titleStyle' leftIconColor='#fff'>
 			<template slot='center'>
 				<view class="input-box">
-					<input type="text" placeholder="Tìm kiếm" />
-					<u-icon name="search" color="#8a9d9f" size="28"></u-icon>
+					<input type="text" v-model="dramaName" placeholder="Tìm kiếm" />
+					<u-icon name="search" @tap="serachList" color="#8a9d9f" size="28"></u-icon>
 				</view>
 			</template>
 		</u-navbar>
 		<view class="remove-block">
 			<view class="action-row">
 				<view class="action-text">Lịch sử tìm kiếm</view>
-				<view class="remove">
+				<view class="remove" @tap="claerHistory">
 					<u-icon name="trash" color="#FFFFFF" size="28"></u-icon>
 				</view>
 			</view>
 			<view class="remove-content">
-				<view class="remove-item">Rơi vào tình yêu</view>
-				<view class="remove-item">Bất chấp tất cả</view>
-				<view class="remove-item">Làm ơn đừng chiều chuộng tôi</view>
-				<view class="remove-item">hồi hộp</view>
+				<view class="remove-item" v-for="(item,index) in historyList" :key="index">{{item.searchKeyword}}</view>
 			</view>
 		</view>
 		<!--热搜词-->
@@ -29,28 +26,16 @@
 				<view class="action-text">
 					Tìm kiếm nóng
 				</view>
-				<view class="action-icon">
-					<u-icon name="trash" color="#FFFFFF" size="28"></u-icon>
+				<view class="action-icon" @tap="getHotKeyword(true)">
+					<u-icon name="reload" color="#FFFFFF" size="28"></u-icon>
 				</view>
 			</view>
 			<view class="hot-content">
-				<view class="hot-item">
-					<view class="hot-text">Rơi vào tình yêu</view>
-					<view class="icon">
+				<view class="hot-item" v-for="(item,index) in hotKeyWordList" :key="index" @tap="touchHotKeyword(item.dramaName)">
+					<view class="hot-text">{{item.dramaName}}</view>
+					<view class="icon" v-if="item.hotState">
 						<image class="icon-hot" src="/static/images/hot.png" mode=""></image>
 					</view>
-				</view>
-				<view class="hot-item">
-					<view class="hot-text">Bất chấp tất cả</view>
-					<view class="icon"></view>
-				</view>
-				<view class="hot-item">
-					<view class="hot-text">Làm ơn đừng chiều chuộng tôi</view>
-					<view class="icon"></view>
-				</view>
-				<view class="hot-item">
-					<view class="hot-text">hồi hộp</view>
-					<view class="icon"></view>
 				</view>
 			</view>
 		</view>
@@ -62,18 +47,21 @@
 					<image class="icon-hot" src="/static/images/hot.png" mode=""></image>
 				</view>
 			</view>
-			<view class="book-list-item" v-for="(item,index) in 3" :key="index">
+			<view class="book-list-item" v-for="(item,index) in videoList" :key="index">
 				<view class="cover">
-					<image class="tag" src="/static/images/Frame-8.png" mode=""></image>
+					<image class="cover-image" :lazy-load="true" :src="item.dramaPoster" mode=""></image>
+					<image class="tag" v-if="index === 0" src="/static/images/Frame-8.png" mode=""></image>
+					<image class="tag" v-else-if="index === 1" src="/static/images/Frame-7.png" mode=""></image>
+					<image class="tag" v-else-if="index === 2" src="/static/images/Frame-9.png" mode=""></image>
 				</view>
 				<view class="content">
-					<view class="book-title">bộ phim cổ ...</view>
+					<view class="book-title">{{item.dramaName}}</view>
 					<view class="tag">
-						<view class="tag-item">Ngọt ngào</view>
-						<view class="tag-item">dễ thương</view>
+						<view class="tag-item">{{item.classifyName}}</view>
+						<view class="tag-item">{{item.producerName}}</view>
 					</view>
 					<view class="desc">
-						Tại bất ngờ xuyên qua đến chính mình tiểu thuyết thế giới...
+						{{item.dramaDescribe}}
 					</view>
 				</view>
 			</view>
@@ -95,55 +83,65 @@
 					fontWeight: 800,
 					color: '#FFFFFF',
 				},
+				hotKeyWordList: [],
+				videoList: [],
+				dramaName:'',
+				historyList:[],
 			}
 		},
 		computed: {
 			...mapState('user', ['userInfo'])
 		},
 		methods: {
+			touchHotKeyword(dramaName){
+				this.dramaName = dramaName;
+				this.serachList();
+			},
+			//搜索
+			serachList(){
+				this.$request('serach.filmDramaMember', {
+					memberId: this.userInfo.memberId,
+					sysOrgCode: 'A01',
+					dramaName:this.dramaName,
+					pageNo: 1,
+					pageSize: 10,
+				}).then(res => {
+					console.log(res.result, 'serachList')
+					this.videoList = res.result.records;
+					this.getHistoryList();
+				
+				})
+			},
 			//获取搜索历史
 			getHistoryList() {
 				// console.log(this.userInfo,'memberId',this.$store.state.user.userInfo)
 				this.$request('serach.searchHistoryList', {
 					memberId: this.userInfo.memberId,
-					sysOrgCode: this.userInfo.sysOrgCode,
+					sysOrgCode: 'A01',
 					pageNo: 1,
 					pageSize: 10,
 				}).then(res => {
-					console.log(res.result, 'xxs')
-					// this.total = res.result.records;
-					// this.swiperList = res.result.map(item=>{
-					// 	return {
-					// 		id: item.id,
-					// 		path: '',
-					// 		image:item.dramaPoster,
-					// 	}
-					// })
+					this.historyList = res.result.records;
+					console.log(res.result, '获取搜索历史')
+
 				})
 			},
 			//获取热搜词
-			getHotKeyword() {
+			getHotKeyword(refresh = false) {
 				this.$request('serach.searchRecommendedList', {
-					sysOrgCode: this.userInfo.sysOrgCode,
+					sysOrgCode: 'A01',
+					refresh,
 				}).then(res => {
-					console.log(res.result, 'xxs')
-					// this.total = res.result.records;
-					// this.swiperList = res.result.map(item=>{
-					// 	return {
-					// 		id: item.id,
-					// 		path: '',
-					// 		image:item.dramaPoster,
-					// 	}
-					// })
+					this.hotKeyWordList = res.result;
 				})
-				// searchRecommendedList().then()
 			},
 			//获取搜索剧集
 			getVideoList() {
 				this.$request('serach.hotDramaList', {
-					sysOrgCode: this.userInfo.sysOrgCode,
+					sysOrgCode: 'A01',
 				}).then(res => {
-					console.log(res.result, 'xxs')
+					console.log(res.result, '获取搜索剧集')
+					this.videoList = res.result;
 					// this.total = res.result.records;
 					// this.swiperList = res.result.map(item=>{
 					// 	return {
@@ -152,22 +150,15 @@
 					// 		image:item.dramaPoster,
 					// 	}
 					// })
-				})
-			},
-			//查找剧集并且记录
-			getSerachList() {
-				this.$request('serach.filmDramaMember', {
-					sysOrgCode: this.userInfo.sysOrgCode,
-				}).then(res => {
-					console.log(res.result, 'xxs')
 				})
 			},
 			//清除历史
 			claerHistory() {
 				this.$request('serach.clearSearchHistory', {
-					sysOrgCode: this.userInfo.sysOrgCode,
+					sysOrgCode: 'A01',
 				}).then(res => {
 					console.log(res.result, 'xxs')
+					this.getHistoryList();
 				})
 			},
 		},
@@ -340,6 +331,12 @@
 				height: 268rpx;
 				background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 69%, rgba(0, 0, 0, 0.9) 100%);
 				border-radius: 12rpx;
+
+				.cover-image {
+					width: 100%;
+					height: 100%;
+					border-radius: 12rpx;
+				}
 
 				.tag {
 					position: absolute;

@@ -10,7 +10,7 @@
 				<image class="right-icon" src="/static/images/gift1.png" mode=""></image>
 			</view>
 			<navigator class="search-box" hover-class="none" url="/pages/home/search">
-				<input type="text" :disabled="true"  v-model='query.searchValue' placeholder="Tìm kiếm" />
+				<input type="text" :disabled="true" v-model='query.searchValue' placeholder="Tìm kiếm" />
 				<u-icon name="search" color="#999" size="28"></u-icon>
 			</navigator>
 		</view>
@@ -19,23 +19,16 @@
 				@bindItem="bindItem2">
 			</HR_swiper>
 		</view>
-		<view class="tabs">
-			<view class="tabs-item" v-for="(item,index) in cateList" :key="index">
-				{{item.classifyName}}
+		<scroll-view class="scroll-view_H" scroll-x="true">
+			<view class="tabs">
+				<view class="tabs-item" :class="query.dramaClassify === item.classifyName ? 'tabs-item_active':''" @tap="tabsChange(item)" v-for="(item,index) in cateList" :key="index">
+					{{item.classifyName}}
+				</view>
 			</view>
-<!-- 			<view class="tabs-item">
-				Võ hiệp
-			</view>
-			<view class="tabs-item">
-				Hiện đại
-			</view>
-			<view class="tabs-item">
-				hồi hộp
-			</view> -->
-		</view>
+		</scroll-view>
 		<view class="card">
 			<view class="card-item" v-for="(item,index) in list " :key="index">
-				<image class="cover" :src="item.dramaPoster" mode=""></image>
+				<image class="cover" :lazy-load="true" :src="item.dramaPoster" mode=""></image>
 				<view class="title">{{item.dramaDescribe}}</view>
 			</view>
 		</view>
@@ -57,13 +50,19 @@
 					pageSize: 9,
 					sysOrgCode: '',
 					searchValue: '',
+					dramaClassify:'',//分类id
 				},
 				total: 0,
 				list: [],
-				cateList:[],
+				cateList: [],
 			}
 		},
 		methods: {
+			tabsChange(info){
+				console.log(info.id,'info.id')
+				this.query.dramaClassify = info.id;
+				this.getVideoList();
+			},
 			change2(e) {
 				let {
 					current
@@ -79,7 +78,6 @@
 			//获取轮播图
 			getBanner() {
 				this.$request('video.carouselList').then(res => {
-					console.log(res.result, 'xxs')
 					this.swiperList = res.result.map(item => {
 						return {
 							id: item.id,
@@ -92,32 +90,14 @@
 			//获取分类列表
 			getCateList() {
 				this.$request('video.filmDlassifyList').then(res => {
-					console.log(res.result, 'filmDlassifyList')
-					// this.cateList = res.result.records;
-					console.log(this.cateList,'cateList')
-					// this.total = res.result.records;
-					// this.swiperList = res.result.map(item=>{
-					// 	return {
-					// 		id: item.id,
-					// 		path: '',
-					// 		image:item.dramaPoster,
-					// 	}
-					// })
+					this.cateList = res.result;
 				})
 			},
 			//获取列表
 			getVideoList() {
 				this.$request('video.filmDramaList', this.query).then(res => {
-					console.log(res.result.records, 'xxs')
-					this.list = this.list.concat(res.result.records);
+					this.list = res.result.records;
 					this.total = res.result.total;
-					// this.swiperList = res.result.map(item=>{
-					// 	return {
-					// 		id: item.id,
-					// 		path: '',
-					// 		image:item.dramaPoster,
-					// 	}
-					// })
 				})
 			},
 		},
@@ -194,8 +174,8 @@
 		margin: 0 34rpx;
 
 		.tabs-item {
-			width: 160rpx;
 			height: 65rpx;
+			padding: 0 32rpx;
 			margin-right: 24rpx;
 			line-height: 65rpx;
 			text-align: center;
@@ -270,7 +250,8 @@
 		color: #fff;
 	}
 
-	// ::v-deep .swiper-item-card{
-	// 	width: 342rpx !important;
-	// }
+	.scroll-view_H {
+		white-space: nowrap;
+		width: 100%;
+	}
 </style>

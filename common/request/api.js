@@ -74,6 +74,16 @@ const api = {
 			method: 'GET',
 			desc: '获取openid'
 		},
+		resetPasswordByEmail: {
+			url: '/api/sys/user/resetPasswordByEmail',
+			method: 'POST',
+			desc: '重置密码'
+		},
+		sendEmailCode: {
+			url: '/api/sys/sendEmailCode',
+			method: 'POST',
+			desc: '发送邮箱验证码'
+		},
 		// codeLogin: {
 		// 	url: '/addons/drama/user/smsLogin',
 		// 	method: 'POST',
