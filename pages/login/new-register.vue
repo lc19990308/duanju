@@ -7,16 +7,16 @@
 		<view class="form">
 			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="email điện tử" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Vui lòng nhập email'
+				<u-form-item label="email điện tử" prop="email" :borderBottom='false'>
+					<u-input v-model="form.email" border='none' placeholder='Vui lòng nhập email'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-23.png" mode=""></image>
 						</template>
 					</u-input>
 				</u-form-item>
-				<u-form-item label="Mã xác minh" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Nhập mã xác nhận'
+				<u-form-item label="Mã xác minh" prop="verificationCode" :borderBottom='false'>
+					<u-input v-model="form.verificationCode" border='none' placeholder='Nhập mã xác nhận'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-25.png" mode=""></image>
@@ -24,16 +24,8 @@
 					</u-input>
 					<u-button class="code-btn" slot="right" @tap="getCode">{{tips}}</u-button>
 				</u-form-item>
-				<u-form-item label="mật khẩu" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
-						:placeholderStyle='placeholderStyle'>
-						<template slot='prefix'>
-							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
-						</template>
-					</u-input>
-				</u-form-item>
-				<u-form-item label="mật khẩu" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Nhập mật khẩu'
+				<u-form-item label="mật khẩu" prop="password" :borderBottom='false'>
+					<u-input v-model="form.password" border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
@@ -42,7 +34,7 @@
 				</u-form-item>
 			</u--form>
 			<u-button class="submt-btn" @click="submit">đăng ký</u-button>
-			<u-button class="reset-btn" @click="submit">Đăng nhập</u-button>
+			<u-button class="reset-btn">Đăng nhập</u-button>
 		</view>
 		<view class="btn-groud">
 			<view class="btn-groud-item">
@@ -82,8 +74,9 @@
 					fontsize: '32rpx',
 				},
 				form: {
-					name: '',
-
+					email: '',
+					verificationCode:'',
+					password:'',
 				},
 				rules: {
 					name: [{
@@ -109,27 +102,53 @@
 				this.tips = text;
 			},
 			getCode() {
-				if (this.$refs.uCode.canGetCode) {
-					// 模拟向后端请求验证码
-					uni.showLoading({
-						title: '正在获取验证码'
-					})
-					setTimeout(() => {
-						uni.hideLoading();
-						// 这里此提示会被this.start()方法中的提示覆盖
-						uni.$u.toast('验证码已发送');
-						// 通知验证码组件内部开始倒计时
-						this.$refs.uCode.start();
-					}, 2000);
-				} else {
-					uni.$u.toast('倒计时结束后再发送');
+				// if (this.$refs.uCode.canGetCode) {
+				// 	// 模拟向后端请求验证码
+				// 	uni.showLoading({
+				// 		title: '正在获取验证码'
+				// 	})
+				// 	setTimeout(() => {
+				// 		uni.hideLoading();
+				// 		// 这里此提示会被this.start()方法中的提示覆盖
+				// 		uni.$u.toast('验证码已发送');
+				// 		// 通知验证码组件内部开始倒计时
+				// 		this.$refs.uCode.start();
+				// 	}, 2000);
+				// } else {
+				// 	uni.$u.toast('倒计时结束后再发送');
+				// }
+				
+				let obj = {
+					"email": this.form.email,
+					"emailmode": "1",
 				}
+				this.$request('login.sendEmailCode', obj).then(res => {
+					if(res.code === 0) {
+						this.$u.toast(res.message)
+					}else if(res.code === 500) {
+						this.$u.toast(res.message)
+					}else{
+						if(res.code === 200) {
+							this.$u.toast("发送成功")
+						}
+					}
+				})
 			},
 			submit() {
-				this.$refs.uForm.validate().then(res => {
-					uni.$u.toast('校验通过')
-				}).catch(errors => {
-					uni.$u.toast('校验失败')
+				let obj = {
+					"email": this.form.email,
+					"emailcode": this.form.verificationCode,
+				}
+				this.$request('login.registerEmail', obj).then(res => {
+					if(res.code === 0) {
+						this.$u.toast(res.message)
+					}else if(res.code === 500) {
+						this.$u.toast(res.message)
+					}else{
+						if(res.code === 200) {
+							this.$u.toast("注册成功")
+						}
+					}
 				})
 			}
 

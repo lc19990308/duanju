@@ -9,7 +9,15 @@
 				<view class="scroll_content">
 					<view class="top_card">
 						<!-- <view class="text1">{{ info.count }}人</view> -->
-						<view class="text2">{{ info.count_direct }}<br>Số lượng  {{ info.count_indirect }}<br>lợi nhuận</view>
+						<view class="text2">
+							<view class="text2_lie">
+							<span>{{ info.count_direct }}</span><br>Số lượng
+							</view>
+							<view class="text2_lie">
+								<span>{{ info.count_indirect }}</span><br>lợi nhuận
+							</view>
+							
+						</view>
 					</view>
 					<view class="content_box">
 						<view class="title">Giới thiệu trực tiếp</view>
@@ -20,11 +28,11 @@
 										<image class="image" :src="item.avatar" mode="aspectFill"></image>
 									</view>
 									<view class="info">
-										<view class="text1">{{ item.nickname }}</view>
-										<view class="text2">{{ item.createtime }}</view>
+										<view class="text1">{{ item.memberName }}</view>
+										<view class="text2">{{ item.bindTime }}</view>
 									</view>
 								</view>
-								<view class="right">+80</view>
+								<view class="right">{{ item.todayDivideAmount }}</view>
 							</view>
 						</view>
 						<view class="be_empty" v-else>null</view>
@@ -58,21 +66,25 @@
 				this.teamList()
 			},
 			teamList() {
-				this.$request('share.team', {
-					page: this.page,
-					pagesize: this.pagesize
+				this.$request('share.teamNum', {
+					memberId: '1',
 				}).then(res => {
 					if(res.code === 1) {
 						this.info = {
-							count: res.data.count,
-							count_direct: res.data.count_direct,
-							count_indirect: res.data.count_indirect
+							count_direct: res.totalExtendNumber,
+							count_indirect: res.totalProfit
 						}
-						if(res.data.reseller_user && res.data.reseller_user.length) {
-							this.list = this.list.concat(res.data.reseller_user)
-						} else {
-							this.page--
-						}
+						
+					}
+				})
+				this.$request('share.teamNew', {
+					memberId: '1',
+				}).then(res => {
+					if(res.code === 1) {
+						
+						if(res.DivideRecordByTeamVo && res.DivideRecordByTeamVo.length) {
+							this.list = this.list.concat(res.DivideRecordByTeamVo)
+						} 
 					}
 				})
 			}
@@ -82,6 +94,7 @@
 
 <style lang="scss" scoped>
 	.page_content {
+		background: #000000;
 		.main_content {
 			overflow: hidden;
 			
@@ -96,7 +109,6 @@
 			.top_card {
 				height: 220rpx;
 				border-radius: 16rpx;
-				background: linear-gradient(90deg, rgba(242, 139, 69, 1) 0%, rgba(254, 183, 135, 1) 100%);
 				position: relative;
 				display: flex;
 				flex-direction: column;
@@ -123,7 +135,24 @@
 				}
 				
 				.text2 {
+					height: 220rpx;
+					width: 100%;
 					font-size: 32rpx;
+					display: flex;
+					justify-content: space-between;
+					flex-direction: row;
+					.text2_lie {
+						width: 46%;
+						padding-top: 5%;
+						text-align: center;
+						background: linear-gradient( 186deg, rgba(255,224,157,0.4) 0%, rgba(237,194,103,0) 100%);
+						border-radius: 16rpx 16rpx 16rpx 16rpx;
+						border: 0rpx solid;
+						border-image: linear-gradient(199deg, rgba(237, 194, 103, 1), rgba(237, 194, 103, 0.2)) 1 1;
+						span {
+							color: #EDC267;
+						}
+					}
 				}
 			}
 			
@@ -133,13 +162,16 @@
 				.title {
 					font-size: 36rpx;
 					font-weight: 700;
-					color: rgba(39, 45, 47, 1);
+					color: #fff;
 				}
 				
 				.list_box {
 					.item {
-						padding: 40rpx 0;
-						border-bottom: 2rpx solid rgba(240, 240, 240, 1);
+						padding: 40rpx 20rpx;
+						margin-top: 24rpx;
+						height: 154rpx;
+						background: #2B2B2B;
+						border-radius: 20rpx 20rpx 20rpx 20rpx;
 						display: flex;
 						align-items: center;
 						justify-content: space-between;
@@ -171,13 +203,13 @@
 								.text1 {
 									font-size: 32rpx;
 									font-weight: 700;
-									color: #272D2F;
+									color: #D1D1D1;
 									margin-bottom: 12rpx;
 								}
 								
 								.text2 {
 									font-size: 24rpx;
-									color: #A5ACB6;
+									color: #D1D1D1;
 								}
 							}
 						}
@@ -185,7 +217,7 @@
 						.right {
 							font-size: 32rpx;
 							font-weight: 700;
-							color: #000;
+							color: #D1D1D1;
 						}
 					}
 				}

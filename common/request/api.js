@@ -64,6 +64,24 @@ const api = {
 	},
 	// 登录
 	login: {
+		//邮箱登录
+		loginEmail: {
+			url: '/api/sys/emailLogin',
+			method: 'POST',
+			desc: '邮箱登录'
+		},
+		//邮箱注册
+		registerEmail: {
+			url: '/api/sys/user/register',
+			method: 'POST',
+			desc: '邮箱注册'
+		},
+		//发送验证码
+		sendEmailCode: {
+			url: '/api/sys/sendEmailCode',
+			method: 'POST',
+			desc: '发送验证码'
+		},
 		wxmpLogin: {
 			url: '/api/wxApi/filmDramaMemberAdd',
 			method: 'GET',
@@ -485,6 +503,16 @@ const api = {
 			url: '/addons/drama/reseller/user',
 			method: 'GET',
 			desc: '团队'
+		},
+		teamNum: {
+			url: '/api/appApi/appDivideApi/getTeamData',
+			method: 'GET',
+			desc: '团队统计'
+		},
+		teamNew: {
+			url: '/api/appApi/appDivideApi/getTeamDataList',
+			method: 'GET',
+			desc: '团队列表'
 		},
 		brokerage: {
 			url: '/addons/drama/reseller/log',

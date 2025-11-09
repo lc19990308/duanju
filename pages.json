@@ -397,7 +397,7 @@
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false,
 						"navigationStyle": "custom"
-						
+
 					}
 				},
 				{
@@ -471,32 +471,32 @@
 		"borderStyle": "black",
 		"fontSize": 16,
 		"list": [{
-				"pagePath": "pages/home/index",
-				"text": "剧场",
-				// "iconPath": "",
-				// "selectedIconPath": "",
+				"pagePath": "pages/home/new-home",
+				"text": "Trang chủ",
+				"iconPath": "/static/images/Frame-3.png",
+				"selectedIconPath": "/static/images/Frame-20.png",
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": true
 			},
 			{
 				"pagePath": "pages/home/video",
-				"text": "精选",
-				// "iconPath": "",
-				// "selectedIconPath": "",
+				"text": "đề xuất",
+				"iconPath": "/static/images/Frame-4.png",
+				"selectedIconPath": "/static/images/Frame-19.png",
 				"navigationStyle": "custom"
 			},
 			{
 				"pagePath": "pages/home/watch",
-				"text": "追剧",
-				// "iconPath": "",
-				// "selectedIconPath": "",
+				"text": "phần thưưởng",
+				"iconPath": "/static/images/Frame-5.png",
+				"selectedIconPath": "/static/images/Frame-21.png",
 				"navigationStyle": "custom"
 			},
 			{
 				"pagePath": "pages/home/user",
-				"text": "我的",
-				// "iconPath": "",
-				// "selectedIconPath": "",
+				"text": "Cá nhân",
+				"iconPath": "/static/images/Frame-6.png",
+				"selectedIconPath": "/static/images/Frame-22.png",
 				"navigationStyle": "custom"
 			}
 		]
