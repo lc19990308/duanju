@@ -7,16 +7,16 @@
 		<view class="form">
 			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="email điện tử" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Vui lòng nhập email'
+				<u-form-item label="email điện tử" prop="email" :borderBottom='false'>
+					<u-input v-model="form.email" border='none' placeholder='Vui lòng nhập email'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-23.png" mode=""></image>
 						</template>
 					</u-input>
 				</u-form-item>
-				<u-form-item label="mật khẩu" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' placeholder='Nhập mật khẩu'
+				<u-form-item label="mật khẩu" prop="verificationCode" :borderBottom='false'>
+					<u-input v-model="form.verificationCode" border='none' placeholder='Nhập mật khẩu'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
@@ -25,7 +25,7 @@
 				</u-form-item>
 			</u--form>
 			<u-button class="submt-btn" @click="submit">Đăng nhập</u-button>
-			<u-button class="reset-btn" @click="submit">đăng ký</u-button>
+			<u-button class="reset-btn">đăng ký</u-button>
 		</view>
 		<view class="btn-groud">
 			<view class="btn-groud-item">
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+	import { mapState, mapGetters, mapMutations, mapActions } from "vuex"
 	export default {
 		data() {
 			return {
@@ -65,7 +66,8 @@
 					fontsize: '32rpx',
 				},
 				form: {
-					name: '',
+					email:'',
+					verificationCode: '',
 
 				},
 				rules: {
@@ -88,6 +90,7 @@
 			}
 		},
 		methods: {
+			...mapActions(["getUserInfo"]),
 			codeChange(text) {
 				this.tips = text;
 			},
@@ -109,10 +112,21 @@
 				}
 			},
 			submit() {
-				this.$refs.uForm.validate().then(res => {
-					uni.$u.toast('校验通过')
-				}).catch(errors => {
-					uni.$u.toast('校验失败')
+				let obj = {
+					"email": this.form.email,
+					"emailmode": "0"
+				}
+				this.$request('login.loginEmail', obj).then(res => {
+					if(res.code === 0) {
+						this.$u.toast(res.message)
+					}else if(res.code === 500) {
+						this.$u.toast(res.message)
+					}else{
+						if(res.code === 200) {
+							this.$u.toast("登录成功")
+							this.getUserInfo(res.result)
+						}
+					}
 				})
 			}
 
