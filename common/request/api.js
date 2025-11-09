@@ -70,6 +70,12 @@ const api = {
 			method: 'POST',
 			desc: '邮箱登录'
 		},
+		//发送验证码
+		sendEmailCode: {
+			url: '/api/sys/sendEmailCode',
+			method: 'POST',
+			desc: '发送验证码'
+		},
 		wxmpLogin: {
 			url: '/api/wxApi/filmDramaMemberAdd',
 			method: 'GET',
