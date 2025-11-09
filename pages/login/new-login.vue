@@ -15,8 +15,8 @@
 						</template>
 					</u-input>
 				</u-form-item>
-				<u-form-item label="mật khẩu" prop="verificationCode" :borderBottom='false'>
-					<u-input v-model="form.verificationCode" border='none' placeholder='Nhập mật khẩu'
+				<u-form-item label="mật khẩu" prop="password" :borderBottom='false'>
+					<u-input v-model="form.password" border='none' placeholder='Nhập mật khẩu'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
@@ -67,7 +67,7 @@
 				},
 				form: {
 					email:'',
-					verificationCode: '',
+					password: '',
 
 				},
 				rules: {
@@ -114,7 +114,8 @@
 			submit() {
 				let obj = {
 					"email": this.form.email,
-					"emailmode": "0"
+					"loginType": "password",
+					"password": this.form.password
 				}
 				this.$request('login.loginEmail', obj).then(res => {
 					if(res.code === 0) {

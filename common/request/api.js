@@ -66,7 +66,7 @@ const api = {
 	login: {
 		//邮箱登录
 		loginEmail: {
-			url: '/api/sys/sendEmailCode',
+			url: '/api/sys/emailLogin',
 			method: 'POST',
 			desc: '邮箱登录'
 		},
