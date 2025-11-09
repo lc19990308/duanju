@@ -137,10 +137,9 @@
 			submit() {
 				let obj = {
 					"email": this.form.email,
-					"loginType": "password",
-					"password": this.form.password
+					"emailcode": this.form.verificationCode,
 				}
-				this.$request('login.loginEmail', obj).then(res => {
+				this.$request('login.registerEmail', obj).then(res => {
 					if(res.code === 0) {
 						this.$u.toast(res.message)
 					}else if(res.code === 500) {
@@ -148,7 +147,6 @@
 					}else{
 						if(res.code === 200) {
 							this.$u.toast("注册成功")
-							this.getUserInfo(res.result)
 						}
 					}
 				})

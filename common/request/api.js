@@ -70,6 +70,12 @@ const api = {
 			method: 'POST',
 			desc: '邮箱登录'
 		},
+		//邮箱注册
+		registerEmail: {
+			url: '/api/sys/user/register',
+			method: 'POST',
+			desc: '邮箱注册'
+		},
 		//发送验证码
 		sendEmailCode: {
 			url: '/api/sys/sendEmailCode',
