@@ -2,22 +2,27 @@
 <template>
 	<view class="page_content">
 		<view class="head_content">
-			<CustomNavbar title="注册"></CustomNavbar>
+			<CustomNavbar title="đăng ký"></CustomNavbar>
 		</view>
 		<view class="main_content">
 			<view class="logo">
 				<image class="image" :src="config.system.company" mode="widthFix"></image>
+				<view class="title">
+					<view class="title-text">Truyện ngắn Monkey</view>
+				</view>
 			</view>
 			<view class="input_box">
 				<u-form ref="uForm" :model="form" :rules="rules">
 					<u-form-item prop="mobile">
 						<view class="input">
-							<u-input v-model="form.mobile" type="number" clearable placeholder="请输入手机号码"></u-input>
+							<view class="title-text">email điện tử</view>
+							<u-input v-model="form.mobile" type="number" clearable placeholder="Vui lòng nhập email"></u-input>
 						</view>
 					</u-form-item>
 					<u-form-item prop="code">
 						<view class="input">
-							<u-input v-model="form.code" type="number" clearable placeholder="请输入验证码">
+							<view class="title-text">Mã xác minh</view>
+							<u-input v-model="form.code" type="number" clearable placeholder="Nhập mã xác nhận">
 								<template slot="suffix">
 									<u-code ref="uCode" uniqueKey="register-code" :keepRunning="true" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
 									<view class="codebtn" @click="getCode">{{ login.codeTips }}</view>
@@ -27,30 +32,42 @@
 					</u-form-item>
 					<u-form-item prop="registerPassword">
 						<view class="input">
-							<u-input v-model="form.registerPassword" type="password" clearable placeholder="请输入字母+数字组合的密码"></u-input>
+							<view class="title-text">mật khẩu</view>
+							<u-input v-model="form.registerPassword" type="password" clearable placeholder="Nhập mật khẩu"></u-input>
 						</view>
 					</u-form-item>
-					<u-form-item prop="againPassword">
+					<!-- <u-form-item prop="againPassword">
 						<view class="input">
 							<u-input v-model="form.againPassword" type="password" clearable placeholder="请再次输入密码"></u-input>
 						</view>
-					</u-form-item>
+					</u-form-item> -->
 				</u-form>
 			</view>
 			<view class="button_box">
-				<u-button text="注册" :loading="buttonLoading" :customStyle="buttonStyle" @click="submitHandle" />
+				<u-button text="đăng ký" :loading="buttonLoading" :customStyle="buttonStyle" @click="submitHandle" />
+			</view>
+			<view class="button_box">
+				<u-button v-if="login.type == 1 && !login.bind" text="Đăng nhập" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
+				<!--<u-button v-if="login.type == 1 && login.bind" text="绑定手机号" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
+				<u-button v-if="login.type == 2" :text="login.type2 == 3 ? '修改密码' : '登录'" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />-->
+			</view>
+			<view class="icon_box" v-if="login.platform != 'H5' && !login.bind">
+				<view class="icon">
+					<image class="image" v-if="login.type == 1" src="/static/icons/mobile.png" mode="aspectFill" @click="login.type = 2"></image>
+					<image class="image" v-else src="/static/icons/wx.png" mode="aspectFill" @click="login.type = 1"></image>
+				</view>
 			</view>
 			<view class="check_box">
 				<u-checkbox-group @change="labelChange">
-					<u-checkbox :name="true" label="阅读并同意" labelSize="28rpx" labelColor="#333"></u-checkbox>
+					<u-checkbox :name="true" label="Tôi đã đồng ý với Thỏa thuận người dùng và Chính sách bảo mật" labelSize="28rpx" labelColor="#333"></u-checkbox>
 				</u-checkbox-group>
-				<text class="text">《服务协议》</text>
+				<!-- <text class="text">《服务协议》</text>
 				<text>和</text>
-				<text class="text">《隐私协议》</text>
+				<text class="text">《隐私协议》</text> -->
 			</view>
-			<view class="text_info">
+			<!-- <view class="text_info">
 				<text class="text" @click="redirectPath">已有账号？去登录</text>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>

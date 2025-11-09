@@ -42,22 +42,22 @@
 					</u-form-item> -->
 				</u-form>
 			</view>
-			<!-- <view class="mobile_type" v-if="login.type == 2">
-				<view class="text" v-if="login.type2 == 1">
-					<text @click="login.type2 = 2">验证码登录</text>
-					<text @click="login.type2 = 3">忘记密码？</text>
-				</view>
-				<view class="text" v-else>
-					<text @click="login.type2 = 1">密码登录</text>
-					<text v-if="login.platform == 'H5'" @click="goToRegister">还没有账号？注册</text>
-				</view>
-			</view> -->
+			
 			<view class="button_box">
 				<u-button v-if="login.type == 1 && !login.bind" text="Đăng nhập" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
 				<!--<u-button v-if="login.type == 1 && login.bind" text="绑定手机号" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
 				<u-button v-if="login.type == 2" :text="login.type2 == 3 ? '修改密码' : '登录'" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />-->
 			</view>
-			
+			<view class="mobile_type" v-if="login.type == 2">
+				<!-- <view class="text" v-if="login.type2 == 1">
+					<text @click="login.type2 = 2">验证码登录</text>
+					<text @click="login.type2 = 3">忘记密码？</text>
+				</view> -->
+				<view class="text" v-else>
+					<!-- <text @click="login.type2 = 1">密码登录</text> -->
+					<u-button v-if="login.platform == 'H5'" @click="goToRegister">đăng ký</u-button>
+				</view>
+			</view>
 			<view class="mode_text" v-if="login.platform != 'H5' && !login.bind">
 				<view class="line left"></view>
 				<view class="text">Quên mật khẩu</view>
@@ -174,21 +174,21 @@
 		computed: {
 			...mapGetters('app', ['config', "share"]),
 			navTitle() {
-				let result = '登录'
-				if(this.login.bind) {
-					result = '绑定手机号'
-				} else {
-					if(this.login.type == 2) {
-						if(this.login.type2 == 1) {
-							result = '密码登录'
-						} else if(this.login.type2 == 2) {
-							result = '验证码登录'
-						} else if(this.login.type2 == 3) {
-							result = '找回密码'
-						}
-					}
+				let result = 'Đăng nhập'
+				// if(this.login.bind) {
+				// 	result = '绑定手机号'
+				// } else {
+				// 	if(this.login.type == 2) {
+				// 		if(this.login.type2 == 1) {
+				// 			result = '密码登录'
+				// 		} else if(this.login.type2 == 2) {
+				// 			result = '验证码登录'
+				// 		} else if(this.login.type2 == 3) {
+				// 			result = '找回密码'
+				// 		}
+				// 	}
 					
-				}
+				// }
 				return result
 			}
 		},
