@@ -7,25 +7,20 @@
 		<view class="main_content">
 			<view class="logo">
 				<image class="image" :src="config.system.company" mode="widthFix"></image>
-				<view class="title">
-					<view class="title-text">Truyện ngắn Monkey</view>
-				</view>
 			</view>
 			<view class="input_box" v-if="login.type == 2 || login.bind">
 				<u-form ref="uForm" :model="form" :rules="rules">
 					<u-form-item prop="mobile">
 						<view class="input">
-							<view class="title-text">email điện tử</view>
-							<u-input v-model="form.mobile" type="number" clearable placeholder="Vui lòng nhập email"></u-input>
+							<u-input v-model="form.mobile" type="number" clearable placeholder="请输入手机号码"></u-input>
 						</view>
 					</u-form-item>
 					<u-form-item prop="password" v-if="login.type2 == 1">
 						<view class="input">
-							<view class="title-text">mật khẩu</view>
-							<u-input v-model="form.password" type="password" clearable placeholder="Nhập mật khẩu"></u-input>
+							<u-input v-model="form.password" type="password" clearable placeholder="请输入密码"></u-input>
 						</view>
 					</u-form-item>
-					<!-- <u-form-item prop="code" v-else>
+					<u-form-item prop="code" v-else>
 						<view class="input">
 							<u-input v-model="form.code" type="number" clearable placeholder="请输入验证码">
 								<template slot="suffix">
@@ -34,33 +29,40 @@
 								</template>
 							</u-input>
 						</view>
-					</u-form-item> -->
-					<!-- <u-form-item prop="newPassword" v-if="login.type2 == 3">
+					</u-form-item>
+					<u-form-item prop="newPassword" v-if="login.type2 == 3">
 						<view class="input">
 							<u-input v-model="form.newPassword" type="password" clearable placeholder="请输入新密码"></u-input>
 						</view>
-					</u-form-item> -->
+					</u-form-item>
 				</u-form>
 			</view>
-			
-			<view class="button_box">
-				<u-button v-if="login.type == 1 && !login.bind" text="Đăng nhập" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
-				<!--<u-button v-if="login.type == 1 && login.bind" text="绑定手机号" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
-				<u-button v-if="login.type == 2" :text="login.type2 == 3 ? '修改密码' : '登录'" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />-->
-			</view>
 			<view class="mobile_type" v-if="login.type == 2">
-				<!-- <view class="text" v-if="login.type2 == 1">
+				<view class="text" v-if="login.type2 == 1">
 					<text @click="login.type2 = 2">验证码登录</text>
 					<text @click="login.type2 = 3">忘记密码？</text>
-				</view> -->
+				</view>
 				<view class="text" v-else>
-					<!-- <text @click="login.type2 = 1">密码登录</text> -->
-					<u-button v-if="login.platform == 'H5'" @click="goToRegister">đăng ký</u-button>
+					<text @click="login.type2 = 1">密码登录</text>
+					<text v-if="login.platform == 'H5'" @click="goToRegister">还没有账号？注册</text>
 				</view>
 			</view>
-			<view class="mode_text" v-if="login.platform != 'H5' && !login.bind">
+			<view class="button_box">
+				<u-button v-if="login.type == 1 && !login.bind" text="登录" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
+				<u-button v-if="login.type == 1 && login.bind" text="绑定手机号" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
+				<u-button v-if="login.type == 2" :text="login.type2 == 3 ? '修改密码' : '登录'" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
+			</view>
+			<view class="check_box">
+				<u-checkbox-group @change="labelChange">
+					<u-checkbox :name="true" label="阅读并同意" labelSize="28rpx" labelColor="#333"></u-checkbox>
+				</u-checkbox-group>
+				<text class="text" @click="agreementClick(1, '用户协议')">《用户协议》</text>
+				<text>和</text>
+				<text class="text" @click="agreementClick(2, '隐私协议')">《隐私协议》</text>
+			</view>
+			<!-- <view class="mode_text" v-if="login.platform != 'H5' && !login.bind">
 				<view class="line left"></view>
-				<view class="text">Quên mật khẩu</view>
+				<view class="text">其他方式登录</view>
 				<view class="line right"></view>
 			</view>
 			<view class="icon_box" v-if="login.platform != 'H5' && !login.bind">
@@ -69,15 +71,7 @@
 					<image class="image" v-else src="/static/icons/wx.png" mode="aspectFill" @click="login.type = 1"></image>
 				</view>
 			</view>
-			<view class="check_box">
-				<u-checkbox-group @change="labelChange">
-					<u-checkbox :name="true" label="Tôi đã đồng ý với Thỏa thuận người dùng và Chính sách bảo mật" labelSize="28rpx" labelColor="#333"></u-checkbox>
-				</u-checkbox-group>
-				<!-- <text class="text" @click="agreementClick(1, '用户协议')">《用户协议》</text>
-				<text>和</text>
-				<text class="text" @click="agreementClick(2, '隐私协议')">《隐私协议》</text> -->
-			</view>
-			<!-- <view class="text_info" v-if="login.platform != 'H5' && !login.bind">
+			<view class="text_info" v-if="login.platform != 'H5' && !login.bind">
 				<text class="text" @click="goToRegister">还没有账号？注册</text>
 			</view> -->
 		</view>
@@ -174,21 +168,21 @@
 		computed: {
 			...mapGetters('app', ['config', "share"]),
 			navTitle() {
-				let result = 'Đăng nhập'
-				// if(this.login.bind) {
-				// 	result = '绑定手机号'
-				// } else {
-				// 	if(this.login.type == 2) {
-				// 		if(this.login.type2 == 1) {
-				// 			result = '密码登录'
-				// 		} else if(this.login.type2 == 2) {
-				// 			result = '验证码登录'
-				// 		} else if(this.login.type2 == 3) {
-				// 			result = '找回密码'
-				// 		}
-				// 	}
+				let result = '登录'
+				if(this.login.bind) {
+					result = '绑定手机号'
+				} else {
+					if(this.login.type == 2) {
+						if(this.login.type2 == 1) {
+							result = '密码登录'
+						} else if(this.login.type2 == 2) {
+							result = '验证码登录'
+						} else if(this.login.type2 == 3) {
+							result = '找回密码'
+						}
+					}
 					
-				// }
+				}
 				return result
 			}
 		},
