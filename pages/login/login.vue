@@ -114,14 +114,13 @@
 			submitGAList() {
 				let obj = {}
 				this.$request('login.loginGAList', obj).then(res => {
-					debugger
 					if(res.code === 0) {
 						this.$u.toast(res.message)
 					}else if(res.code === 500) {
 						this.$u.toast(res.message)
 					}else{
 						if(res.code === 200) {
-							this.$u.toast("登录成功")
+							this.$u.toast("获取成功")
 							this.getUserInfo(res.result)
 						}
 					}
@@ -130,7 +129,6 @@
 			submitGA(val) {
 				const timestamp = Date.now();
 				const timestampString = new Date(timestamp).toString();
-				debugger
 				let obj = {}
 				if(val == "apple"){
 					obj = {
