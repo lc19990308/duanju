@@ -138,6 +138,9 @@
 				let obj = {
 					"email": this.form.email,
 					"emailcode": this.form.verificationCode,
+					"username": this.form.email,
+				    "password": this.form.password,
+				    "realname": this.form.email
 				}
 				this.$request('login.registerEmail', obj).then(res => {
 					if(res.code === 0) {

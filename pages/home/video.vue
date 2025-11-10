@@ -1,8 +1,32 @@
 <template>
 	<view class="page_content">
+		
 		<view class="main_content" :style="[{ paddingTop: barHeight + 'px' }]">
+			<view class="selectionsView" v-if="selectionsCover">
+				<view class="selectionsView_title">
+					Hoàng hậu nương nương đến làm việc
+				</view>
+				<view class="selectionsView_list">
+					<view>
+						1
+					</view>
+					<view>
+						2
+						<a><image src="/static/images/Frame-30.png" mode=""></image></a>
+					</view>
+					<view>
+						3
+						<span><image src="/static/images/Frame1000001534.png" mode=""></image></span>
+					</view>
+					<view>
+						4
+						<span><image src="/static/images/Frame1000001534.png" mode=""></span>
+					</view>
+				</view>
+			</view>
 			<swiper class="swiper" circular :vertical="true" :duration="300" :current="current" @change="swiperChange">
 				<swiper-item class="swiper_item" v-for="(item, index) in videoData" :key="index">
+					
 					<view class="videos" v-if="videoIndex == index" @click="videoClick">
 						<!-- #ifdef H5 -->
 						<video class="video" :id="'video' + item.dramaId" :ref="'video' + item.id" :loop="false"
@@ -139,9 +163,11 @@
 	export default {
 		data() {
 			return {
+				selectionsCover:false,
+				
 				isIos: uni.getSystemInfoSync().osName == 'ios' ? true : false,
 				barHeight: uni.getSystemInfoSync().statusBarHeight,
-
+				
 				current: 0,
 				currentTime: 0, // 当前视频播放进度
 
@@ -566,7 +592,77 @@
 		.main_content {
 			position: relative;
 			background: #000;
-
+			.selectionsView {
+				position: absolute;
+				background: #202020;
+				border-radius: 24px 24px 0px 0px;
+				color: #D1D1D1;
+				z-index: 99999;
+				width: 100%;
+				height: 50%;
+				bottom: 0;
+				display: flex;
+				flex-direction: column;
+				left: 0;
+				.selectionsView_title {
+					font-family: Inter, Inter;
+					font-weight: bold;
+					font-size: 40rpx;
+					padding: 40rpx;
+					border-bottom: 2rpx solid #2A2A2A;
+				}
+				.selectionsView_list {
+					flex: 1;
+					width: 100%;
+					height: 100%;
+					padding-bottom: 25rpx;
+					overflow-y: auto;
+					view {
+						position: relative;
+						float: left;
+						margin-left: 1.5%;
+						margin-right: 1.5%;
+						width: 17%;
+						text-align: center;
+						margin-top: 25rpx;
+						height: 88rpx;
+						line-height: 88rpx;
+						background: #2A2A2A;
+						border-radius: 8rpx;
+						font-family: Inter, Inter;
+						font-weight: normal;
+						font-size: 30rpx;
+						color: #D1D1D1;
+						a {
+							position: absolute;
+							z-index: 999;
+							right: 0;
+							top: 0;
+							width: 100%;
+							display: flex;
+							align-content: center;
+							justify-content: center;
+							height: 100%;
+							background: #1A1A1A;
+							border-radius: 8rpx;
+							image {width: 48rpx;height: 48rpx;margin-top: 20rpx;}
+						}
+						span {
+							position: absolute;
+							z-index: 9;
+							right: 0;
+							top: 0;
+							width: 47rpx;
+							text-align: center;
+							line-height: 36rpx;
+							height: 36rpx;
+							background: #FFF7F0;
+							border-radius: 0rpx 8rpx 0rpx 8rpx;
+							image {width: 100%;height: 100%;}
+						}
+					}
+				}
+			}
 			.fs_mask {
 				width: 100%;
 				height: 100%;
@@ -592,7 +688,7 @@
 				.swiper_item {
 					position: relative;
 					color: #fff;
-
+					
 					.videos {
 						width: 100%;
 						height: 100%;

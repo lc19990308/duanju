@@ -64,6 +64,18 @@ const api = {
 	},
 	// 登录
 	login: {
+		//三方登录列表
+		loginGAList: {
+			url: '/api/sys/user/oauth2/providers',
+			method: 'GET',
+			desc: '三方登录列表'
+		},
+		//三方登录
+		loginGA: {
+			url: '/api/sys/user/oauth2/authorize',
+			method: 'POST',
+			desc: '三方登录'
+		},
 		//邮箱登录
 		loginEmail: {
 			url: '/api/sys/emailLogin',
