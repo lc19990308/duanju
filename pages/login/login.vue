@@ -29,10 +29,10 @@
 		</view>
 		<view class="btn-groud">
 			<view class="btn-groud-item">
-				<image src="/static/images/Frame-26.png" mode=""></image>
+				<image src="/static/images/Frame-26.png" mode="" @click="submitGA('google')"></image>
 			</view>
 			<view class="btn-groud-item">
-				<image src="/static/images/Frame-27.png" mode=""></image>
+				<image src="/static/images/Frame-27.png" mode="" @click="submitGA('apple')"></image>
 			</view>
 			<view class="btn-groud-item">
 				<image src="/static/images/Frame-28.png" mode=""></image>
@@ -110,6 +110,53 @@
 				} else {
 					uni.$u.toast('倒计时结束后再发送');
 				}
+			},
+			submitGAList() {
+				let obj = {}
+				this.$request('login.loginGAList', obj).then(res => {
+					debugger
+					if(res.code === 0) {
+						this.$u.toast(res.message)
+					}else if(res.code === 500) {
+						this.$u.toast(res.message)
+					}else{
+						if(res.code === 200) {
+							this.$u.toast("登录成功")
+							this.getUserInfo(res.result)
+						}
+					}
+				})
+			},
+			submitGA(val) {
+				const timestamp = Date.now();
+				const timestampString = new Date(timestamp).toString();
+				debugger
+				let obj = {}
+				if(val == "apple"){
+					obj = {
+						"provider": "apple",
+						"state": timestampString
+					}
+				}
+				if(val == "google"){
+					obj = {
+						"provider": "google",
+						"state": timestampString
+					}
+				}
+				this.$request('login.loginGA', obj).then(res => {
+					
+					if(res.code === 0) {
+						this.$u.toast(res.message)
+					}else if(res.code === 500) {
+						this.$u.toast(res.message)
+					}else{
+						if(res.code === 200) {
+							this.$u.toast("登录成功")
+							this.getUserInfo(res.result)
+						}
+					}
+				})
 			},
 			submit() {
 				let obj = {
