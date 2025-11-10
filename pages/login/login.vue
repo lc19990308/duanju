@@ -1,79 +1,55 @@
-
 <template>
-	<view class="page_content">
-		<view class="head_content">
-			<CustomNavbar :title="navTitle"></CustomNavbar>
+	<view class="app-container">
+		<view class="logo-box">
+			<image class="logo-icon" src="/static/images/logo.png" mode=""></image>
+			<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
 		</view>
-		<view class="main_content">
-			<view class="logo">
-				<image class="image" :src="config.system.company" mode="widthFix"></image>
+		<view class="form">
+			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
+				:labelStyle='labelStyle'>
+				<u-form-item label="email điện tử" prop="email" :borderBottom='false'>
+					<u-input v-model="form.email" border='none' placeholder='Vui lòng nhập email'
+						:placeholderStyle='placeholderStyle'>
+						<template slot='prefix'>
+							<image class="input-icon" src="/static/images/Frame-23.png" mode=""></image>
+						</template>
+					</u-input>
+				</u-form-item>
+				<u-form-item label="mật khẩu" prop="password" :borderBottom='false'>
+					<u-input v-model="form.password" border='none' placeholder='Nhập mật khẩu'
+						:placeholderStyle='placeholderStyle'>
+						<template slot='prefix'>
+							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
+						</template>
+					</u-input>
+				</u-form-item>
+			</u--form>
+			<u-button class="submt-btn" @click="submit">Đăng nhập</u-button>
+			<u-button class="reset-btn">đăng ký</u-button>
+		</view>
+		<view class="btn-groud">
+			<view class="btn-groud-item">
+				<image src="/static/images/Frame-26.png" mode=""></image>
 			</view>
-			<view class="input_box" v-if="login.type == 2 || login.bind">
-				<u-form ref="uForm" :model="form" :rules="rules">
-					<u-form-item prop="mobile">
-						<view class="input">
-							<u-input v-model="form.mobile" type="number" clearable placeholder="请输入手机号码"></u-input>
-						</view>
-					</u-form-item>
-					<u-form-item prop="password" v-if="login.type2 == 1">
-						<view class="input">
-							<u-input v-model="form.password" type="password" clearable placeholder="请输入密码"></u-input>
-						</view>
-					</u-form-item>
-					<u-form-item prop="code" v-else>
-						<view class="input">
-							<u-input v-model="form.code" type="number" clearable placeholder="请输入验证码">
-								<template slot="suffix">
-									<u-code ref="uCode" uniqueKey="login-code" :keepRunning="true" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
-									<view class="codebtn" @click="getCode">{{ login.codeTips }}</view>
-								</template>
-							</u-input>
-						</view>
-					</u-form-item>
-					<u-form-item prop="newPassword" v-if="login.type2 == 3">
-						<view class="input">
-							<u-input v-model="form.newPassword" type="password" clearable placeholder="请输入新密码"></u-input>
-						</view>
-					</u-form-item>
-				</u-form>
+			<view class="btn-groud-item">
+				<image src="/static/images/Frame-27.png" mode=""></image>
 			</view>
-			<view class="mobile_type" v-if="login.type == 2">
-				<view class="text" v-if="login.type2 == 1">
-					<text @click="login.type2 = 2">验证码登录</text>
-					<text @click="login.type2 = 3">忘记密码？</text>
-				</view>
-				<view class="text" v-else>
-					<text @click="login.type2 = 1">密码登录</text>
-					<text v-if="login.platform == 'H5'" @click="goToRegister">还没有账号？注册</text>
-				</view>
+			<view class="btn-groud-item">
+				<image src="/static/images/Frame-28.png" mode=""></image>
 			</view>
-			<view class="button_box">
-				<u-button v-if="login.type == 1 && !login.bind" text="登录" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
-				<u-button v-if="login.type == 1 && login.bind" text="绑定手机号" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
-				<u-button v-if="login.type == 2" :text="login.type2 == 3 ? '修改密码' : '登录'" :loading="buttonLoading" :customStyle="buttonStyle" @click="loginSubmit" />
+			<view class="btn-groud-item">
+				<image src="/static/images/Frame-29.png" mode=""></image>
 			</view>
-			<view class="check_box">
-				<u-checkbox-group @change="labelChange">
-					<u-checkbox :name="true" label="阅读并同意" labelSize="28rpx" labelColor="#333"></u-checkbox>
-				</u-checkbox-group>
-				<text class="text" @click="agreementClick(1, '用户协议')">《用户协议》</text>
-				<text>和</text>
-				<text class="text" @click="agreementClick(2, '隐私协议')">《隐私协议》</text>
+		</view>
+
+		<view class="agreement-checked">
+			<u-checkbox-group v-model="checkboxValue1" shape='circle' activeColor='#EDC267' @change="checkboxChange">
+				<u-checkbox :customStyle="{marginBottom: '8px'}" name="1" inactiveColor='#000000'>
+				</u-checkbox>
+			</u-checkbox-group>
+			<view class="agreement-tips">
+				Tôi đã đồng ý với Thỏa thuận người dùng và Chính sách bảo mật
 			</view>
-			<!-- <view class="mode_text" v-if="login.platform != 'H5' && !login.bind">
-				<view class="line left"></view>
-				<view class="text">其他方式登录</view>
-				<view class="line right"></view>
-			</view>
-			<view class="icon_box" v-if="login.platform != 'H5' && !login.bind">
-				<view class="icon">
-					<image class="image" v-if="login.type == 1" src="/static/icons/mobile.png" mode="aspectFill" @click="login.type = 2"></image>
-					<image class="image" v-else src="/static/icons/wx.png" mode="aspectFill" @click="login.type = 1"></image>
-				</view>
-			</view>
-			<view class="text_info" v-if="login.platform != 'H5' && !login.bind">
-				<text class="text" @click="goToRegister">还没有账号？注册</text>
-			</view> -->
 		</view>
 	</view>
 </template>
@@ -83,531 +59,222 @@
 	export default {
 		data() {
 			return {
-				buttonStyle: {
-					width: '100%',
-					height: '100rpx',
-					border: 'none',
-					fontSize: '28rpx',
-					color: '#fff',
-					background: 'linear-gradient(90deg, #2A82E4, #D269FF)',
-					borderRadius: '20rpx',
-					margin: '0',
-					fontWeight: 'bold'
-				},
-				buttonLoading: false,
-				login: {
-					type: 1, // 1(微信) / 2(手机号)
-					type2: 2, // 1(密码) / 2(验证码) / 3(找回密码)
-					platform: this.$utils.platforms(), // 平台(H5 / wxMiniProgram / wxOfficialAccount)
-					codeTips: '', // 验证码提示文字
-					checked: false, // 协议勾选
-					bind: false, // 需要绑定手机号(微信)
-					auth: '', // 待绑定的授权ID
+				labelStyle: {
+					color: '#FFFFFF',
+					fontFamily: 'Inter, Inter',
+					fontWeight: 400,
+					fontsize: '32rpx',
 				},
 				form: {
-					mobile: '', // 手机号
-					password: '', // 密码
-					code: '', // 验证码
-					newPassword: '', // 新密码
+					email:'',
+					password: '',
+
 				},
 				rules: {
-					mobile: [
-						{ required: true, message: '请输入手机号', trigger: ['blur', 'change'] },
-						{
-							validator: (rule, value, callback) => {
-								return uni.$u.test.mobile(value);
-							},
-							message: '手机号码不正确',
-							trigger: ['change','blur'],
-						}
-					],
-					password: [
-						{ required: true, message: '请输入密码', trigger: ['blur', 'change'] },
-						{ validator: this.$utils.checkPassword, trigger: ['change','blur'] }
-					],
-					code: [
-						{ required: true, message: '请输入验证码', trigger: ['blur', 'change'] },
-						{ min: 4, max: 6, message: '请输入4~6位验证码', trigger: ['blur', 'change'] }
-					],
-					newPassword: [
-						{ required: true, min: 6, max: 20, message: '请输入新密码', trigger: ['blur', 'change'] },
-						{ validator: this.$utils.checkPassword, trigger: ['change','blur'] }
-					],
+					name: [{
+						required: true,
+						message: '请输入姓名',
+						trigger: ['blur', 'change']
+					}]
 				},
-				configStore: this.$store.state.app.config,
+				placeholderStyle: {
+					color: '#666'
+				},
+				tips: 'lấy',
+				// refCode: null,
+				seconds: 10,
+				checkboxValue1: 1,
+				titleStyle: {
+					color: '#fff'
+				}
 			}
-		},
-		watch: {
-			"login.type": {
-				deep: true,
-				handler: function(newValue, oldValue) {
-					if(newValue == 2) {
-						this.$nextTick(() => {
-							this.$refs.uForm.setRules(this.rules)
-						})
-					}
-				}
-			},
-			"login.bind": {
-				deep: true,
-				handler: function(newValue, oldValue) {
-					if(newValue) {
-						this.$nextTick(() => {
-							this.$refs.uForm.setRules(this.rules)
-						})
-					}
-				}
-			},
-			config: {
-				deep: true,
-				handler: function(newValue, oldValue) {
-					this.configStore = newValue
-				}
-			},
-		},
-		computed: {
-			...mapGetters('app', ['config', "share"]),
-			navTitle() {
-				let result = '登录'
-				if(this.login.bind) {
-					result = '绑定手机号'
-				} else {
-					if(this.login.type == 2) {
-						if(this.login.type2 == 1) {
-							result = '密码登录'
-						} else if(this.login.type2 == 2) {
-							result = '验证码登录'
-						} else if(this.login.type2 == 3) {
-							result = '找回密码'
-						}
-					}
-					
-				}
-				return result
-			}
-		},
-		onLoad(option) {
-			// 让App端同步H5端的登录
-			// if(this.$utils.platforms() === 'H5' || this.$utils.platforms() === 'App') {
-			// 	this.login.type = 2
-			// }
-			// if(this.$utils.platforms() === 'wxOfficialAccount' && option) {
-			// 	this.wxoaAuthCallback(option)
-			// }
 		},
 		methods: {
-			...mapActions("user", ["getUserInfo"]),
-			// 查看协议
-			agreementClick(id, title) {
-				const rid = id === 1 ? this.configStore.system.user_protocol : this.configStore.system.privacy_protocol
-				if(!rid) return
-				const obj = { id: rid, title }
-				this.jumpView(`/pages/user/info/richtext?d=${encodeURIComponent(JSON.stringify(obj))}`)
-			},
-			// 登录提交
-			loginSubmit() {
-				if(!this.login.checked) {
-					this.$u.toast('请勾选并同意协议')
-					return
-				}
-				let obj = {}
-				if(this.login.type == 1) {
-					// #ifdef MP-WEIXIN
-					// 微信小程序
-					if(this.login.bind) {
-						this.bindAuthMobile(true)
-					} else {
-						this.wxmpAuth()
-					}
-					// #endif
-					// #ifdef H5
-					// 微信公众号
-					if(this.login.bind) {
-						this.bindAuthMobile(true)
-					} else {
-						this.wxoaAuth()
-					}
-					// #endif
-				} else {
-					if(this.login.type2 == 1) {
-						// 密码登录
-						this.$refs.uForm.validateField(['mobile', 'password'], errors => {
-							if(!errors.length) {
-								obj = {
-									account: this.form.mobile,
-									password: this.form.password
-								}
-								this.accountLogin(obj)
-							}
-						})
-					} else if(this.login.type2 == 2) {
-						// 验证码登录
-						this.$refs.uForm.validateField(['mobile', 'code'], errors => {
-							if(!errors.length) {
-								obj = {
-									mobile: this.form.mobile,
-									code: this.form.code,
-									platform: this.login.platform,
-									spm: this.share.spm || ''
-								}
-								this.codeLogin(obj)
-							}
-						})
-					} else {
-						// 找回密码
-						this.$refs.uForm.validateField(['mobile', 'code', 'newPassword'], errors => {
-							if(!errors.length) {
-								obj = {
-									mobile: this.form.mobile,
-									code: this.form.code,
-									password: this.form.newPassword
-								}
-								this.forgotPassword(obj)
-							}
-						})
-					}
-				}
-			},
-			// 1.账号密码登录
-			accountLogin(obj) {
-				this.$request('login.accountLogin', obj).then(res => {
-					if(res.code === 1) {
-						this.$u.toast("登录成功")
-						this.getUserInfo(res.data.token)
-						this.redirectPath()
-					}
-				})
-			},
-			// 2.验证码登录
-			codeLogin(obj) {
-				this.$request('login.codeLogin', obj).then(res => {
-					if(res.code === 1) {
-						this.$u.toast("登录成功")
-						this.getUserInfo(res.data.token)
-						this.redirectPath()
-					}
-				})
-			},
-			// 3.找回密码
-			forgotPassword(obj) {
-				this.$request('login.forgotPassword', obj).then(res => {
-					if(res.code === 1) {
-						this.$u.toast("密码修改成功")
-						this.login.type2 = 1
-					}
-				})
-			},
-			// 4.微信小程序授权
-			// wxmpAuth() {
-			// 	// #ifdef MP-WEIXIN
-			// 	const loginRequest = () => {
-			// 		uni.login({
-			// 			provider: 'weixin',
-			// 			success: success => {
-			// 				if(success.errMsg === 'login:ok') {
-			// 					this.$request('login.wxmpLogin', { code: success.code }).then(res => {
-			// 						if(res.code === 1) {
-			// 							if(res.data.token) {
-			// 								this.$u.toast("登录成功")
-			// 								this.getUserInfo(res.data.token)
-			// 								this.redirectPath()
-			// 							}
-			// 							if(res.data.user_oauth_id) {
-			// 								this.login.auth = res.data.user_oauth_id
-			// 								if(this.config.system.mobile_switch == 1) {
-			// 									this.login.bind = true
-			// 								} else {
-			// 									this.bindAuthMobile(false)
-			// 								}
-			// 							}
-			// 						}
-			// 					})
-			// 				}
-			// 			}
-			// 		})
-			// 	}
-				
-			// 	if(process.env.NODE_ENV === 'development') {
-			// 		console.log("开发环境");
-			// 		// this.getUserInfo("d436e115-c444-491c-afa6-dc36b0ff9421")
-			// 		// this.redirectPath()
-			// 		loginRequest()
-			// 	} else {
-			// 		loginRequest()
-			// 	}
-			// 	// #endif
-			// },
-			// 5.微信公众号授权
-			async wxoaAuth() {
-				// #ifdef H5
-				if (process.env.NODE_ENV === 'development') {
-					console.log("开发环境");
-					await this.getUserInfo("71067ca6-d3ca-465f-b640-eb858ca846e1")
-					this.redirectPath('wxoa')
-				} else {
-					const obj = {
-						host: this.$WXOA_CALLBACK,
-						event: 'login',
-					};
-					const payload = encodeURIComponent(JSON.stringify(obj));
-					const redirect_uri = encodeURIComponent(`${this.$BASE_URL}/addons/drama/user/wxOfficialAccountOauth/sign/${this.$SIGN}?payload=${payload}`);
-					const oauthUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.$store.state.app.appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=1`
-					const page = getCurrentPages();
-					const prevPage = page[page.length - 2]
-					const lastPage = prevPage.__page__.fullPath
-					uni.setStorageSync("lastPage", lastPage);
-					window.location.href = oauthUrl;
-				}
-				// #endif
-			},
-			// 微信公众号授权回调
-			async wxoaAuthCallback(option) {
-				if(option?.token) {
-					await this.getUserInfo(option.token)
-					this.redirectPath('wxoa')
-				}
-				if(option?.user_oauth_id) {
-					this.login.auth = option.user_oauth_id
-					if(this.config.system.mobile_switch == 1) {
-						this.login.bind = true
-					} else {
-						this.bindAuthMobile(false)
-					}
-				}
-			},
-			// 微信小程序/公众号 绑定授权手机号
-			bindAuthMobile(bind) {
-				let obj = {
-					user_oauth_id: this.login.auth,
-					spm: this.share.spm || ""
-				}
-				const api = () => {
-					this.$request('login.wxBind', obj).then(res => {
-						if(res.code === 1) {
-							this.$u.toast("绑定成功")
-							this.getUserInfo(res.data.token)
-							this.redirectPath()
-						}
-					})
-				}
-				if (!bind) return api()
-				this.$refs.uForm.validateField(["mobile", "code"], errors => {
-					if (!errors.length) {
-						obj = { ...obj, mobile: this.form.mobile, code: this.form.code }
-						api()
-					}
-				})
-			},
-			// 重定向路径
-			redirectPath(type) {
-				if(type == 'wxoa') {
-					// #ifdef H5
-					const lastPage = uni.getStorageSync('lastPage');
-					if (lastPage && lastPage.indexOf('/pages/login/login') == -1) {
-						uni.removeStorageSync('lastPage');
-						uni.switchTab({
-							url: lastPage,
-							success: () => {},
-							fail: () => {
-								uni.switchTab({
-									url: '/pages/home/index',
-									success: () => {
-										uni.navigateTo({
-											url: lastPage
-										})
-									}
-								})
-							}
-						})
-					} else {
-						uni.switchTab({
-							url: '/pages/home/user'
-						});
-					}
-					// #endif
-				} else {
-					const page = getCurrentPages()[0];
-					if(page.route.indexOf('pages/login/login') == -1) {
-						uni.navigateBack()
-					} else {
-						uni.switchTab({
-							url: '/pages/home/user'
-						});
-					}
-				}
-			},
-			// 去注册
-			goToRegister() {
-				this.jumpView('/pages/login/register')
-			},
-			// 协议勾选
-			labelChange(detail) {
-				this.login.checked = detail[0] ? detail[0] : false
-			},
-			// 验证码倒计时
+			...mapActions(["getUserInfo"]),
 			codeChange(text) {
-				this.login.codeTips = text;
+				this.tips = text;
 			},
-			// 获取验证码
 			getCode() {
-				if(!this.form.mobile) {
-					this.$u.toast("请输入手机号")
-					return
-				}
-				let event = ''
-				if(this.login.type == 1) {
-					event = 'changemobile'
-				} else {
-					if(this.login.type2 == 2) {
-						event = 'mobilelogin'
-					} else if(this.login.type2 == 3) {
-						event = 'resetpwd'
-					}
-				}
-				let obj = {
-					mobile: this.form.mobile,
-					event
-				}
-
 				if (this.$refs.uCode.canGetCode) {
+					// 模拟向后端请求验证码
 					uni.showLoading({
 						title: '正在获取验证码'
 					})
-					this.$request('login.sendCode', obj, false).then(res => {
-						if(res.code === 1) {
-							uni.hideLoading();
-							uni.$u.toast('验证码已发送');
-							this.$refs.uCode.start();
-						} else {
-							uni.hideLoading();
-							uni.$u.toast(res.msg);
-						}
-					}).catch(err => {
+					setTimeout(() => {
 						uni.hideLoading();
-						uni.$u.toast('验证码发送失败');
-					})
+						// 这里此提示会被this.start()方法中的提示覆盖
+						uni.$u.toast('验证码已发送');
+						// 通知验证码组件内部开始倒计时
+						this.$refs.uCode.start();
+					}, 2000);
 				} else {
 					uni.$u.toast('倒计时结束后再发送');
 				}
 			},
-		}
+			submit() {
+				let obj = {
+					"email": this.form.email,
+					"loginType": "password",
+					"password": this.form.password
+				}
+				this.$request('login.loginEmail', obj).then(res => {
+					if(res.code === 0) {
+						this.$u.toast(res.message)
+					}else if(res.code === 500) {
+						this.$u.toast(res.message)
+					}else{
+						if(res.code === 200) {
+							this.$u.toast("登录成功")
+							this.getUserInfo(res.result)
+						}
+					}
+				})
+			}
+
+		},
 	}
 </script>
 
 <style lang="scss" scoped>
-	.main_content {
-		padding: 60rpx;
-		overflow-y: auto;
-		
-		.logo {
-			width: 100%;
-			padding: 40rpx 100rpx 100rpx 100rpx;
-			
-			.image {
-				width: 100%;
-			}
+	page {
+		// background-image: url('/static/images/login.png');
+		// background-repeat: no-repeat;
+		// background-size: 100% 100%;
+		// background-position: 100% 100%;
+	}
+
+	.app-container {
+		background-image: url('/static/images/login.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		background-position: 100% 100%;
+		min-height: calc(100vh);
+		padding-top: 69rpx;
+		padding-bottom: 40rpx;
+	}
+
+	.logo-box {
+		.logo-icon {
+			width: 168rpx;
+			height: 168rpx;
+			margin: 0 auto;
+			border-radius: 24rpx;
 		}
-		
-		.input_box {
-			::v-deep .u-form {
-				.u-form-item__body {
-					padding: 0 0 40rpx 0 !important;
-				}
-				
-				.u-form-item__body__right__message {
-					margin-left: 0 !important;
-					line-height: 1.5em;
-					font-size: 28rpx;
-					padding: 0 10rpx 20rpx 10rpx;
-				}
-			}
-			
-			.input {
-				width: 100%;
-				
-				::v-deep .u-input {
-					height: 100rpx;
-					background: #F7F8F9;
-					border-radius: 16rpx;
-					border: none;
-					padding: 12rpx 24rpx !important;
-				}
-				
-				.codebtn {
-					font-size: 28rpx;
-					color: #333;
-				}
-			}
-		}
-		
-		.mobile_type {
-			.text {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				font-size: 28rpx;
-				color: #333;
-			}
-		}
-		
-		.button_box {
-			margin: 40rpx 0;
-		}
-		
-		.check_box {
-			display: flex;
-			align-items: center;
-			font-size: 28rpx;
-			
-			.text {
-				color: #583EF2;
-			}
-		}
-		
-		.mode_text {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			padding: 0 20rpx;
-			margin-top: 100rpx;
-			
-			.line {
-				width: 152rpx;
-				height: 2rpx;
-				background: #D5DDE0;
-			}
-			
-			.text {
-				color: #333E63;
-				font-size: 28rpx;
-			}
-		}
-		
-		.icon_box {
-			margin: 160rpx 0 80rpx 0;
-			
-			.icon {
-				width: 96rpx;
-				height: 96rpx;
-				border-radius: 50%;
-				overflow: hidden;
-				margin: 0 auto;
-				
-				.image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-		}
-		
-		.text_info {
-			text-align: center;
-			
-			.text {
-				color: #626262;
-				font-size: 28rpx;
-			}
+
+		.logo-text {
+			width: 293rpx;
+			height: 36rpx;
+			margin-top: 21rpx;
+			margin: 21rpx auto 0 auto;
 		}
 	}
 
+	.form {
+		padding: 0 36rpx;
+		margin: 55rpx 0 0 0;
+		box-sizing: border-box;
+	}
+
+	::v-deep .u-input__content {
+		background: #282828;
+		border-radius: 20rpx;
+		padding: 18rpx 20rpx;
+	}
+
+	.submt-btn {
+		width: 678rpx;
+		height: 88rpx;
+		margin: 36rpx auto 0 auto;
+		background: #EDC267;
+		border-color: #EDC267;
+		border-width: 2rpx;
+		border-style: solid;
+		border-radius: 62rpx;
+		font-family: Inter, Inter;
+		font-weight: 400;
+		font-size: 28rpx;
+		color: #000000;
+	}
+
+	.reset-btn {
+		width: 678rpx;
+		height: 88rpx;
+		margin: 36rpx auto 0 auto;
+		background: #000000;
+		border-color: #EDC267;
+		border-width: 2rpx;
+		border-style: solid;
+		border-radius: 62rpx;
+		font-family: Inter, Inter;
+		font-weight: 400;
+		font-size: 28rpx;
+		color: #EDC267;
+	}
+
+	.code-btn {
+		margin-left: 20rpx !important;
+		width: 200rpx !important;
+		height: 68rpx !important;
+		background: #282828 !important;
+		border-radius: 20rpx !important;
+		font-family: Inter, Inter;
+		font-weight: 400;
+		font-size: 28rpx;
+		color: #FFCD03;
+		box-shadow: 2rpx 2rpx 2rpx #282828;
+		border-color: #282828;
+		border-width: 2rpx;
+		border-style: solid;
+	}
+
+	::v-deep .uni-input-input {
+		color: #f7f7f7;
+	}
+
+	.input-icon {
+		width: 36rpx;
+		height: 36rpx;
+		margin-right: 24rpx;
+	}
+
+	.agreement-checked {
+		display: flex;
+		align-items: center;
+		padding: 0 57rpx 0 32rpx;
+		margin-top: 41rpx;
+
+		.agreement-tips {
+			width: 624px;
+			font-family: Inter, Inter;
+			font-weight: 400;
+			font-size: 24rpx;
+			color: #939393;
+		}
+	}
+
+	.btn-groud {
+		display: flex;
+		justify-content: center;
+		margin-top: 103rpx;
+	}
+
+	.btn-groud-item {
+		margin-right: 41rpx;
+
+		image {
+
+			width: 88rpx;
+			height: 88rpx;
+			background: #262626;
+			border-radius: 44rpx;
+		}
+	}
+
+	::v-deep .u-checkbox__icon-wrap--circle {
+		border: 2rpx solid #EDC267 !important;
+		background-color: #000 !important;
+	}
+	::v-deep .u-checkbox{
+		margin-bottom: 0rpx !important;
+	}
 </style>
