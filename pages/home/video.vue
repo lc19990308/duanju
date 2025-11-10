@@ -12,14 +12,15 @@
 					</view>
 					<view>
 						2
+						<a><image src="/static/images/Frame-30.png" mode=""></image></a>
 					</view>
 					<view>
 						3
-						<span></span>
+						<span><image src="/static/images/Frame1000001534.png" mode=""></image></span>
 					</view>
 					<view>
 						4
-						<span></span>
+						<span><image src="/static/images/Frame1000001534.png" mode=""></span>
 					</view>
 				</view>
 			</view>
@@ -632,6 +633,20 @@
 						font-weight: normal;
 						font-size: 30rpx;
 						color: #D1D1D1;
+						a {
+							position: absolute;
+							z-index: 999;
+							right: 0;
+							top: 0;
+							width: 100%;
+							display: flex;
+							align-content: center;
+							justify-content: center;
+							height: 100%;
+							background: #1A1A1A;
+							border-radius: 8rpx;
+							image {width: 48rpx;height: 48rpx;margin-top: 20rpx;}
+						}
 						span {
 							position: absolute;
 							z-index: 9;
@@ -643,6 +658,7 @@
 							height: 36rpx;
 							background: #FFF7F0;
 							border-radius: 0rpx 8rpx 0rpx 8rpx;
+							image {width: 100%;height: 100%;}
 						}
 					}
 				}
