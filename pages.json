@@ -247,7 +247,7 @@
 					"path": "integral/integralInfo",
 					"style": {
 						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
+						"enablePullDownRefresh": true,
 						"navigationBarTextStyle": "white"
 					}
 				},
@@ -263,7 +263,7 @@
 					"path": "integral/recharge-info",
 					"style": {
 						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
+						"enablePullDownRefresh": true,
 						"navigationBarTextStyle": "white"
 					}
 				},

@@ -2,23 +2,23 @@
 <template>
 	<view class="app-container">
 		<u-navbar title="Chuyển đổi" :autoBack="true" bgColor='transparent' :titleStyle='titleStyle'
-			leftIconColor='#fff' :placeholder='true' rightText='Chi tiết' />
+			leftIconColor='#fff' :placeholder='true' @rightClick="rightClick" rightText='Chi tiết' />
 		<view class="remaining">
 			<view class="remaining-text">Điểm của tôi</view>
 			<view class="value">
 				<image class="remaining-icon" src="/static/images/diamond.png" mode=""></image>
-				<text class="value-text">1200</text>
+				<text class="value-text">{{info.currency }}</text>
 			</view>
 		</view>
 		<view class="tips">
 			100 điểm tích lũy =1 vàng
 		</view>
 		<view class="form">
-			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='190' :borderBottom='false'
+			<u--form :model="form" ref="uForm" :rules='rules' labelPosition='top' labelWidth='190' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="Vui lòng nhập số điểm" prop="name" :borderBottom='false'>
-					<u-input v-model="form.name" border='none' :placeholderStyle='placeholderStyle'
-						placeholder='Chuyển đổi tối đa 12 vàng' />
+				<u-form-item label="Vui lòng nhập số điểm" prop="pointQuantity" :borderBottom='false'>
+					<u-input type='number' v-model="form.pointQuantity" border='none' clearable
+						:placeholderStyle='placeholderStyle' placeholder='Chuyển đổi tối đa 12 vàng' />
 				</u-form-item>
 			</u--form>
 			<u-button class="submt-btn" @click="submit">nộp</u-button>
@@ -27,6 +27,9 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from "vuex"
 	export default {
 		data() {
 			return {
@@ -44,21 +47,62 @@
 					fontsize: '32rpx',
 				},
 				form: {
-					name: '',
-
+					memberId: '717855590',
+					pointQuantity: '',
+					sysOrgCode: 'A01',
 				},
 				rules: {
-					name: [{
+					pointQuantity: [{
 						required: true,
-						message: '请输入姓名',
+						message: '请输入积分数量',
 						trigger: ['blur', 'change']
 					}]
 				},
+				info: {
+					exchangeId: "",
+					pointQuantity: 0,
+					exchangeRatio: 0,
+					remainingGoldCoin: 0,
+					currentPointBalance: 0,
+					goldCoinCost: 0
+				},
 			}
 		},
-		methods: {
-
+		computed: {
+			...mapState('user', ['userInfo']),
 		},
+		methods: {
+			getIntegral() {
+				// this.form.memberId = String(this.userInfo.memberId);
+				this.$request('withdraw.getBalance', {
+					memberId: this.form.memberId
+				}).then(res => {
+					this.info = res.result;
+	
+				})
+			},
+			submit() {
+				this.$refs.uForm.validate().then(res => {
+					this.$request('withdraw.goldCoinExchange', this.form, true, {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}).then(res => {
+						uni.$u.toast('操作成功！');
+						this.getIntegral();
+					})
+				})
+			},
+			rightClick() {
+				uni.$u.route({
+					url: '/pages/user/integral/integralInfo',
+					params: {
+
+					}
+				})
+			},
+		},
+		onLoad() {
+			this.getIntegral();
+		}
 	}
 </script>
 
@@ -70,7 +114,7 @@
 
 	.app-container {
 		min-height: 100vh;
-		background-image: url('/static/images/ navbar-bg.png');
+		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;
@@ -98,7 +142,8 @@
 			.value-text {
 				margin-left: 21rpx;
 			}
-			.remaining-icon{
+
+			.remaining-icon {
 				width: 48rpx;
 				height: 45rpx;
 			}

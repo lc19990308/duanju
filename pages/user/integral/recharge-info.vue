@@ -7,48 +7,62 @@
 			<view class="wallet-row">
 				<view class="wallet-item">
 					<image class="wallet-item-icon" src="/static/images/gold.png" mode=""></image>
-					<text class="wallet-value">1200</text>
+					<text class="wallet-value">{{info.totalBalance}}</text>
 				</view>
 				<view class="wallet-item">
 					<image class="wallet-item-icon" src="/static/images/diamond.png" mode=""></image>
-					<text class="wallet-value">1200</text>
+					<text class="wallet-value">{{info.currency}}</text>
 				</view>
 			</view>
 			<view class="action">
-				<view class="action-item">
-					<!-- <u-icon name="photo" color="#999" size="20"></u-icon> -->
+				<navigator class="action-item" hover-class="none" url="/pages/user/integral/integal-conversion">
 					<image class="action-item-icon" src="/static/images/Frame-40.png" mode=""></image>
 					<text class="action-item-value">nạp tiền</text>
-				</view>
-				<view class="action-item">
+				</navigator>
+				<navigator class="action-item" hover-class="none" url="/pages/user/integral/integal-conversion">
 					<image class="action-item-icon" src="/static/images/Frame-41.png" mode=""></image>
 					<text class="action-item-value">Chuyển đổi</text>
-				</view>
+				</navigator>
 			</view>
 		</view>
 		<view class="tabs">
-			<view class="tabs-item tabs-item_active">
+			<view class="tabs-item" :class="current === 0 ? 'tabs-item_active':'' " @tap="tabChange(0)">
 				điểm tích lũy
 			</view>
-			<view class="tabs-item">
+			<view class="tabs-item" :class="current === 1 ? 'tabs-item_active':'' " @tap="tabChange(1)">
 				Hồ sơ rút tiền
 			</view>
 		</view>
-		<view class="list">
-			<view class="list-item">
+		<view class="list" v-if="current === 1">
+			<view class="list-item" v-for="(item,index) in list" :key="index">
 				<view class="item-row">
-					<view class="label">Đổi 2000 điểm</view>
-					<view class="value">-50 vàng</view>
+					<view class="label"> {{item.payMethod}} </view>
+					<view class="value">¥{{item.unrealMoney}}</view>
 				</view>
 				<view class="item-row">
-					<view class="time">2024.05.20 11:20:11</view>
+					<view class="time">{{item.createTime}}</view>
 				</view>
 			</view>
 		</view>
+		<view class="list" v-else>
+			<view class="list-item" v-for="(item,index) in list" :key="index">
+				<view class="item-row">
+					<view class="label"> Unlocked {{item.dramaName}} {{item.dramaSeriesName}}</view>
+					<view class="value">-{{item.payMoney}} vàng</view>
+				</view>
+				<view class="item-row">
+					<view class="time">{{item.createTime}}</view>
+				</view>
+			</view>
+		</view>
+		<u-loadmore :status="status" />
 	</view>
 </template>
 
 <script>
+	import {
+		mapState,
+	} from "vuex"
 	export default {
 		data() {
 			return {
@@ -58,10 +72,112 @@
 					fontWeight: 800,
 					color: '#FFFFFF',
 				},
+				memberId: '717855590',
+				info: {
+					currency: 0,
+					totalBalance: 0,
+				},
+				query: {
+					sysOrgCode: 'A03A01',
+					pageNo: 1,
+					pageSize: 10,
+				},
+				list: [],
+				status: 'loadmore',
+				total: 0,
+				current: 0,
 			}
 		},
+		computed: {
+			...mapState('user', ['userInfo']),
+		},
 		methods: {
-
+			getIntegral() {
+				// this.form.memberId = String(this.userInfo.memberId);
+				this.$request('withdraw.getBalance', {
+					memberId: this.memberId
+				}).then(res => {
+					this.info = res.result;
+				})
+			},
+			//明细列表
+			getIntegralList() {
+				this.status = 'loading';
+				// this.query.memberId = String(this.userInfo.memberId);
+				this.$request('withdraw.rechargeDetailList', {
+					...this.query,
+					memberId: this.memberId
+				}).then(res => {
+					this.total = res.result.total;
+					this.list = this.list.concat(res.result.records);
+					uni.stopPullDownRefresh();
+					if (this.total === this.list.length) {
+						this.status = 'nomore'
+					} else {
+						this.status = 'loadmore'
+					}
+				})
+			},
+			//钱包明细列表
+			getWalletInfoList() {
+				this.$request('withdraw.consumptionDetailList', {
+					pageNo: this.query.pageNo,
+					pageSize: this.query.pageSize,
+					memberId: this.memberId
+				}).then(res => {
+					this.total = res.result.total;
+					this.list = this.list.concat(res.result.records);
+					uni.stopPullDownRefresh();
+					if (this.total === this.list.length) {
+						this.status = 'nomore'
+					} else {
+						this.status = 'loadmore'
+					}
+				})
+			},
+			resetQuery() {
+				this.query.pageNo = 1;
+				this.list = [];
+			},
+			tabChange(val) {
+				this.resetQuery();
+				this.current = val;
+				switch (this.current) {
+					case 0:
+						this.getWalletInfoList();
+						break;
+					case 1:
+						this.getIntegralList();
+						break;
+				}
+			},
+			getList(){
+				switch (this.current) {
+					case 0:
+						this.getWalletInfoList();
+						break;
+					case 1:
+						this.getIntegralList();
+						break
+				}
+			},
+		},
+		onLoad() {
+			this.getIntegral();
+			this.getList();
+		},
+		
+		onPullDownRefresh() {
+			console.log('onPullDownRefresh')
+			this.resetQuery();
+			this.getList();
+		},
+		onReachBottom() {
+			console.log(this.list.length < this.total,'this.list.length < this.total')
+			if (this.list.length < this.total) {
+				this.query.pageNo += 1;
+				this.getList();
+			}
 		},
 	}
 </script>
@@ -79,27 +195,32 @@
 		background-size: 100% 100%;
 		background-position: 100% 100%;
 	}
-	.wallet{
+
+	.wallet {
 		margin: 18rpx auto 0 auto;
 		padding: 36rpx;
 		box-sizing: border-box;
 		width: 678rpx;
-		background: linear-gradient( 220deg, #181818 0%, #545454 50%, #252525 100%);
+		background: linear-gradient(220deg, #181818 0%, #545454 50%, #252525 100%);
 		border-radius: 16px 16px 16px 16px;
 		border: 2rpx solid #eee;
-		.wallet-row{
+
+		.wallet-row {
 			display: flex;
 			padding-bottom: 36rpx;
 			border-bottom: 1px solid #5E5E5E;
-			.wallet-item{
+
+			.wallet-item {
 				display: flex;
 				align-items: center;
 				flex: 1;
-				.wallet-item-icon{
+
+				.wallet-item-icon {
 					width: 42rpx;
 					height: 42rpx;
 				}
-				.wallet-value{
+
+				.wallet-value {
 					margin-left: 21rpx;
 					font-family: Inter, Inter;
 					font-weight: 400;
@@ -108,18 +229,22 @@
 				}
 			}
 		}
-		.action{
+
+		.action {
 			display: flex;
 			padding-top: 19rpx;
-			.action-item{
+
+			.action-item {
 				display: flex;
 				align-items: center;
 				flex: 1;
-				.action-item-icon{
+
+				.action-item-icon {
 					width: 32rpx;
 					height: 32rpx;
 				}
-				.action-item-value{
+
+				.action-item-value {
 					font-family: Inter, Inter;
 					font-weight: 400;
 					font-size: 26rpx;
@@ -129,6 +254,7 @@
 			}
 		}
 	}
+
 	.tabs {
 		display: flex;
 		position: sticky;
@@ -155,6 +281,7 @@
 	.tabs-item_active {
 		color: #fff;
 	}
+
 	.list-item {
 		width: 678rpx;
 		margin: 16rpx auto 0 auto;
@@ -163,7 +290,7 @@
 		padding: 26rpx 24rpx;
 		border-radius: 20rpx;
 		box-shadow: 2rpx 2rpx 2rpx #2F2D34;
-	
+
 		.item-row {
 			margin-top: 17rpx;
 			display: flex;
@@ -172,6 +299,7 @@
 			font-weight: 400;
 			font-size: 30rpx;
 			color: #D1D1D1;
+
 			.time {
 				font-family: Inter, Inter;
 				font-weight: 400;
@@ -179,7 +307,7 @@
 				color: #A1A0A2;
 			}
 		}
-	
+
 		.red {
 			color: red;
 		}

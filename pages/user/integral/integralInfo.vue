@@ -1,41 +1,27 @@
 <!--积分明细-->
 <template>
 	<view class="app-container">
-		<u-navbar title="Chi tiết" :autoBack="true" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff' :placeholder='true' />
-		<view class="tabs">
-			<view class="tabs-item tabs-item_active">
-				điểm tích lũy
-			</view>
-			<view class="tabs-item">
-				Hồ sơ rút tiền
-			</view>
-		</view>
+		<u-navbar title="Chi tiết" :autoBack="true" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+			:placeholder='true' />
 		<view class="list">
-			<view class="list-item">
+			<view class="list-item" v-for="(item,index) in list" :key="index">
 				<view class="item-row">
-					<view class="label">Đổi 2000 điểm</view>
-					<view class="value">+50 vàng</view>
+					<view class="label">Đổi {{item.currencyQuantity}} điểm</view>
 				</view>
 				<view class="item-row">
-					<view class="time">2024.05.20 11:20:11</view>
-					<view class="red value">+50 vàng</view>
-				</view>
-			</view>
-			<view class="list-item">
-				<view class="item-row">
-					<view class="label">Đổi 2000 điểm</view>
-					<view class="value">+50 vàng</view>
-				</view>
-				<view class="item-row">
-					<view class="time">2024.05.20 11:20:11</view>
-					<view class="gray value">+50 vàng</view>
+					<view class="time">{{item.createTime}}</view>
+					<view class="red value">+{{item.virtualQuantity}} vàng</view>
 				</view>
 			</view>
 		</view>
+		<u-loadmore :status="status" />
 	</view>
 </template>
 
 <script>
+	import {
+		mapState,
+	} from "vuex"
 	export default {
 		data() {
 			return {
@@ -45,10 +31,53 @@
 					fontWeight: 800,
 					color: '#FFFFFF',
 				},
+				query: {
+					memberId: '717855590',
+					sysOrgCode: 'A03A01',
+					pageNo: 1,
+					pageSize: 10,
+				},
+				list: [],
+				status: 'loadmore',
+				total: 0,
 			}
 		},
+		computed: {
+			...mapState('user', ['userInfo']),
+		},
 		methods: {
-
+			//获取积分兑换金币
+			getIntegralList() {
+				this.status = 'loading';
+				// this.query.memberId = String(this.userInfo.memberId);
+				this.$request('withdraw.goldCoinExchangeDetailList', this.query).then(res => {
+					this.total = res.result.total;
+					this.list = this.list.concat(res.result.records);
+					uni.stopPullDownRefresh();
+					if (this.total === this.list.length) {
+						this.status = 'nomore'
+					}else{
+						this.status = 'loadmore'
+					}
+				})
+			},
+			resetQuery() {
+				this.query.pageNo = 1;
+				this.list = [];
+			},
+		},
+		onLoad() {
+			this.getIntegralList();
+		},
+		onPullDownRefresh() {
+			this.resetQuery();
+			this.getIntegralList();
+		},
+		onReachBottom() {
+			if (this.list.length < this.total) {
+				this.query.pageNo += 1;
+				this.getIntegralList();
+			}
 		},
 	}
 </script>
@@ -61,37 +90,10 @@
 
 	.app-container {
 		min-height: 100vh;
-		background-image: url('/static/images/ navbar-bg.png');
+		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;
-	}
-
-	.tabs {
-		display: flex;
-		position: sticky;
-		top: 0;
-		left: 0;
-		width: 100%;
-		z-index: 999;
-		padding: 0 36rpx;
-		margin-top: 16rpx;
-	}
-
-	.tabs-item {
-		flex: 1;
-		text-align: center;
-		width: 205px;
-		height: 88rpx;
-		line-height: 88rpx;
-		font-family: Inter, Inter;
-		font-weight: 400;
-		font-size: 32rpx;
-		color: #999999;
-	}
-
-	.tabs-item_active {
-		color: #fff;
 	}
 
 	.list-item {
@@ -111,6 +113,7 @@
 			font-weight: 400;
 			font-size: 30rpx;
 			color: #D1D1D1;
+
 			.time {
 				font-family: Inter, Inter;
 				font-weight: 400;
@@ -122,7 +125,8 @@
 		.red {
 			color: red;
 		}
-		.gray{
+
+		.gray {
 			color: #666666;
 		}
 	}

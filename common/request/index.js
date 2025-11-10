@@ -17,7 +17,8 @@ const getApiPath = path => {
 }
 
 // 发起请求的函数
-const request = (path, data, error = true) => {
+const request = (path, data, error = true, customHeaders = {}) => {
+	console.log(customHeaders,'customHeaders')
 	const config = {
 		'default': '',
 		'MP-WEIXIN': apiMoen.MPWEIXIN, //线上测试
@@ -57,7 +58,8 @@ const request = (path, data, error = true) => {
 				// 'Sign': SIGN || '',
 				// 'X-Tenant-Id': uni.getStorageSync('tenantId')
 				'X-Tenant-Id': apiMoen.tenantId,
-				'X-Access-Token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjI4OTQxNTAsInVzZXJuYW1lIjoiMTU4NzIzNzU0N0BxcS5jb20ifQ.VI-KZgFro8DJFpfgOuTWonli85ji-zFOGr64P438xYs',
+				'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjI4OTQxNTAsInVzZXJuYW1lIjoiMTU4NzIzNzU0N0BxcS5jb20ifQ.VI-KZgFro8DJFpfgOuTWonli85ji-zFOGr64P438xYs',
+				...customHeaders,
 				// 'X-Access-Token': uni.getStorageSync('tenantId')
 			},
 			success: res => {

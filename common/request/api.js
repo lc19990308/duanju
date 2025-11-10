@@ -546,7 +546,32 @@ const api = {
 			url: '/addons/drama/user_wallet_apply/rule',
 			method: 'GET',
 			desc: '提现规则'
-		}
+		},
+		goldCoinExchangeDetailList: {
+			url: '/api/wxApi/goldCoinExchangeDetailList',
+			method: 'GET',
+			desc: '积分兑换金币明细'
+		},
+		goldCoinExchange: {
+			url: '/api/wxApi/goldCoinExchange',
+			method: 'POST',
+			desc: '积分兑换金币'
+		},
+		getBalance: {
+			url: '/api/appDivideApi/getBalance',
+			method: 'GET',
+			desc: '获取余额'
+		},
+		rechargeDetailList: {
+			url: '/api/wxApi/rechargeDetailList',
+			method: 'GET',
+			desc: '点数储值明细列表'
+		},
+		consumptionDetailList: {
+			url: '/api/wxApi/consumptionDetailList',
+			method: 'GET',
+			desc: '我的钱包明细列表'
+		},
 	},
 	// 播放会员充值购买
 	player: {

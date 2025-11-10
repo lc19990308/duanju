@@ -65,7 +65,9 @@
 						placeholder="Vui lòng nhập câu hỏi của bạn..." />
 				</view>
 			</view>
-			<view class="input-icon"></view>
+			<view class="input-icon">
+				<image class="icon" src="/static/images/Frame-42.png" mode=""></image>
+			</view>
 		</view>
 	</view>
 </template>
@@ -140,12 +142,19 @@
 	}
 
 	.input-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 108rpx;
 		margin-left: 24rpx;
 		height: 108rpx;
 		background: linear-gradient(185deg, #262626 0%, #252525 100%);
 		border-radius: 50%;
 		border: 2rpx solid;
+		image{
+			width: 70rpx;
+			height: 70rpx;
+		}
 	}
 
 	.issue-card {
