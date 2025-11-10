@@ -213,7 +213,7 @@
 		data() {
 			return {
 				selectionsCover:false,
-				rechargeCover:true,
+				rechargeCover:false,
 				
 				isIos: uni.getSystemInfoSync().osName == 'ios' ? true : false,
 				barHeight: uni.getSystemInfoSync().statusBarHeight,
