@@ -21,7 +21,7 @@
 		</view>
 		<scroll-view class="scroll-view_H" scroll-x="true">
 			<view class="tabs">
-				<view class="tabs-item" :class="query.dramaClassify === item.classifyName ? 'tabs-item_active':''" @tap="tabsChange(item)" v-for="(item,index) in cateList" :key="index">
+				<view class="tabs-item" :class="query.dramaClassify === item.id ? 'tabs-item_active':''" @tap="tabsChange(item)" v-for="(item,index) in cateList" :key="index">
 					{{item.classifyName}}
 				</view>
 			</view>
