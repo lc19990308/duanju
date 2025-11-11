@@ -217,6 +217,16 @@ const api = {
 			method: 'PUT',
 			desc: '注销账号'
 		},
+		questionList: {
+			url: '/api/appApi/qa/questionList',
+			method: 'GET',
+			desc: '查询问题列表'
+		},
+		questionAnswer: {
+			url: '/api/appApi/qa/questionAnswer',
+			method: 'GET',
+			desc: '查询问题答案'
+		},
 	},
 	// 视频
 	video: {

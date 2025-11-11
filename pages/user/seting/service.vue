@@ -1,33 +1,31 @@
 <!--联系客服-->
 <template>
 	<view class="app-container">
-		<u-navbar title="Liên hệ h hỗ trợ khách hàng" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff' :autoBack="true" :placeholder='true' />
+		<u-navbar title="Liên hệ h hỗ trợ khách hàng" bgColor='transparent' :titleStyle='titleStyle'
+			leftIconColor='#fff' :autoBack="true" :placeholder='true' />
 
 		<view class="chat-box">
-			<view class="time">2025.01.24 16:22:34</view>
-
-			<!-- 对方消息 -->
-			<view class="chat-item left">
-				<view class="avatar">
-					<image src="/static/images/Frame.png" mode=""></image>
-				</view>
-				<view class="user-info">
-					<view class="nickname">Truyện ngắn Monkey</view>
-					<view class="msg-box">
-						Xin vui lòng để lại tin nhắn của bạn trực tiếp...
-					</view>
-				</view>
-			</view>
-
-			<!-- 自己消息 -->
-			<view class="chat-item right">
+			<view class="time">{{now()}}</view>
+			<view class="chat-item right" v-if="question">
 				<view class="avatar">
 					<image src="/static/images/Frame.png" mode=""></image>
 				</view>
 				<view class="user-info">
 					<view class="nickname">Bạn</view>
 					<view class="msg-box">
-						Tôi có một câu hỏi...
+						{{question}}
+					</view>
+				</view>
+			</view>
+			<!-- 对方消息 -->
+			<view class="chat-item left" v-if="answer">
+				<view class="avatar">
+					<image src="/static/images/Frame.png" mode=""></image>
+				</view>
+				<view class="user-info">
+					<view class="nickname">Truyện ngắn Monkey</view>
+					<view class="msg-box">
+						{{answer}}
 					</view>
 				</view>
 			</view>
@@ -39,11 +37,11 @@
 				<view class="issue-text">Câu hỏi nhanh</view>
 			</view>
 			<view class="issue-content">
-				<view class="issue-item boder-top-lr">
-					<view class="label">Nạp tiền thất bại</view>
+				<view class="issue-item" @tap="questionTap(item)" v-for="(item,index) in questionList" :key="index">
+					<view class="label">{{item.question}}</view>
 					<u-icon name="arrow-right" color="#999" size="16"></u-icon>
 				</view>
-				<view class="issue-item ">
+				<!-- 			<view class="issue-item ">
 					<view class="label">Muốn hoàn tiền</view>
 					<u-icon name="arrow-right" color="#999" size="16"></u-icon>
 				</view>
@@ -54,18 +52,18 @@
 				<view class="issue-item boder-bottom-lr">
 					<view class="label">Phim ngắn không chơi được</view>
 					<u-icon name="arrow-right" color="#999" size="16"></u-icon>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<view class="fill-box" />
 		<view class="footer-action">
 			<view class="input-boder">
 				<view class="input-box">
-					<input type="text" :placeholderStyle='placeholderStyle'
+					<input type="text" :placeholderStyle='placeholderStyle' v-model="questionValue"
 						placeholder="Vui lòng nhập câu hỏi của bạn..." />
 				</view>
 			</view>
-			<view class="input-icon">
+			<view class="input-icon" @tap="getQuestionAnswer">
 				<image class="icon" src="/static/images/Frame-42.png" mode=""></image>
 			</view>
 		</view>
@@ -73,6 +71,7 @@
 </template>
 
 <script>
+	import apiMoen from '@/utils/config.js';
 	export default {
 		data() {
 			return {
@@ -83,7 +82,62 @@
 					fontWeight: 800,
 					color: '#FFFFFF',
 				},
+				tenantId: apiMoen.tenantId,
+				total: 0,
+				questionList: [],
+				questionId: '',
+				questionValue: '',
+				question: '',
+				answer: '',
 			}
+		},
+		methods: {
+			getQuestionList() {
+				this.$request('user.questionList', {
+					tenantId: this.tenantId,
+				}).then(res => {
+					this.total = res.result.total;
+					this.questionList = res.result.records;
+					console.log(res.result.records, 'xxx')
+				})
+			},
+			getQuestionAnswer() {
+				this.$request('user.questionAnswer', {
+					tenantId: this.tenantId,
+					id: this.questionId,
+				}).then(res => {
+					// this.total = res.result.total;
+					// this.questionList = res.result.records;
+					console.log(res.result, 'xxx')
+					this.question = res.result.question;
+					this.answer = res.result.answer;
+				})
+			},
+			questionTap(info) {
+				this.questionValue = info.question;
+				this.questionId = info.id;
+				this.getQuestionAnswer();
+			},
+			/**
+			 * 获取当前时间并格式化为 YYYY-MM-DD HH:mm:ss
+			 * @returns {string} 例如：2025-11-11 14:32:05
+			 */
+			now() {
+				const d = new Date();
+				const pad = n => String(n).padStart(2, '0');
+
+				const YYYY = d.getFullYear();
+				const MM = pad(d.getMonth() + 1);
+				const DD = pad(d.getDate());
+				const hh = pad(d.getHours());
+				const mm = pad(d.getMinutes());
+				const ss = pad(d.getSeconds());
+
+				return `${YYYY}-${MM}-${DD} ${hh}:${mm}:${ss}`;
+			}
+		},
+		onLoad() {
+			this.getQuestionList()
 		}
 	}
 </script>
@@ -151,7 +205,8 @@
 		background: linear-gradient(185deg, #262626 0%, #252525 100%);
 		border-radius: 50%;
 		border: 2rpx solid;
-		image{
+
+		image {
 			width: 70rpx;
 			height: 70rpx;
 		}
@@ -207,14 +262,6 @@
 					font-size: 28rpx;
 					color: #999999;
 				}
-			}
-
-			.boder-top-lr {
-				// border-radius: 20rpx 20rpx 0 0;
-			}
-
-			.boder-bottom-lr {
-				// border-radius: 0 0 20rpx 20rpx;
 			}
 		}
 	}
