@@ -1,5 +1,6 @@
 <template>
 	<view class="app-container">
+		<web-view class="webView" v-if="showWebView" :src="webUrl"></web-view>
 		<view class="logo-box">
 			<image class="logo-icon" src="/static/images/logo.png" mode=""></image>
 			<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
@@ -59,6 +60,9 @@
 	export default {
 		data() {
 			return {
+				urlToken:'',
+				webUrl:'',
+				showWebView: false,
 				labelStyle: {
 					color: '#FFFFFF',
 					fontFamily: 'Inter, Inter',
@@ -145,14 +149,15 @@
 				this.$request('login.loginGA', obj).then(res => {
 					
 					if(res.code === 0) {
-						this.$u.toast(res.message)
-					}else if(res.code === 500) {
-						this.$u.toast(res.message)
-					}else{
-						if(res.code === 200) {
-							this.$u.toast("登录成功")
-							this.getUserInfo(res.result)
-						}
+						this.webUrl = res.result.authorizationUrl
+						this.showWebView = true;
+						let intervalId = setInterval(function() {
+						    if(this.webUrl.includes("token")){
+								let queryString = this.webUrl.split('?')[1]; 
+								this.urlToken = queryString.split('=')[1];
+								clearInterval(intervalId);
+							}
+						}, 1000);
 					}
 				})
 			},
@@ -181,6 +186,7 @@
 </script>
 
 <style lang="scss" scoped>
+	.webView {width: 100%;height: 100%;position: fixed;left: 0;top: 0;z-index: 999999;}
 	page {
 		// background-image: url('/static/images/login.png');
 		// background-repeat: no-repeat;

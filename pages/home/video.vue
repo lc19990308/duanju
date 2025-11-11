@@ -24,6 +24,55 @@
 					</view>
 				</view>
 			</view>
+			<view class="rechargeView" v-if="rechargeCover">
+				<view class="rechargeView_title">
+					Mở khóa cần 80 vàng<br><span>Số dư: 50 vàng</span>
+				</view>
+				<view class="rechargeView_list">
+					<view class="rechargeView_lists">
+						2400 vàng<br>
+						+600vàng<br>
+						$320.00
+					</view>
+					<view class="rechargeView_lists">
+						2400 vàng<br>
+						+600vàng<br>
+						$320.00
+					</view>
+					<view class="rechargeView_lists">
+						2400 vàng<br>
+						+600vàng<br>
+						$320.00
+					</view>
+					<view class="rechargeView_lists">
+						2400 vàng<br>
+						+600vàng<br>
+						$320.00
+					</view>
+					<view class="rechargeView_lists">
+						<span class="rechargeView_percentage">+30%</span>
+						<image src="/static/images/002.png" mode=""></image>
+						2400 vàng<br>
+						+600vàng<br>
+						$320.00
+					</view>
+					<view class="rechargeView_lists">
+						2400 vàng<br>
+						+600vàng<br>
+						$320.00
+					</view>
+					<view class="rechargeView_lists">
+						2400 vàng<br>
+						+600vàng<br>
+						$320.00
+					</view>
+					<view class="rechargeView_lists">
+						2400 vàng<br>
+						+600vàng<br>
+						$320.00
+					</view>
+				</view>
+			</view>
 			<swiper class="swiper" circular :vertical="true" :duration="300" :current="current" @change="swiperChange">
 				<swiper-item class="swiper_item" v-for="(item, index) in videoData" :key="index">
 					
@@ -164,6 +213,7 @@
 		data() {
 			return {
 				selectionsCover:false,
+				rechargeCover:false,
 				
 				isIos: uni.getSystemInfoSync().osName == 'ios' ? true : false,
 				barHeight: uni.getSystemInfoSync().statusBarHeight,
@@ -659,6 +709,78 @@
 							background: #FFF7F0;
 							border-radius: 0rpx 8rpx 0rpx 8rpx;
 							image {width: 100%;height: 100%;}
+						}
+					}
+				}
+			}
+			.rechargeView {
+				position: absolute;
+				background: #202020;
+				border-radius: 24px 24px 0px 0px;
+				color: #D1D1D1;
+				z-index: 99999;
+				width: 100%;
+				height: 50%;
+				bottom: 0;
+				display: flex;
+				flex-direction: column;
+				left: 0;
+				.rechargeView_title {
+					font-family: Inter, Inter;
+					font-weight: bold;
+					font-size: 40rpx;
+					padding: 40rpx;
+					border-bottom: 2rpx solid #2A2A2A;
+					span {
+						font-family: Inter, Inter;
+						font-weight: 400;
+						font-size: 28rpx;
+						color: #FFCD03;
+					}
+				}
+				.rechargeView_list {
+					flex: 1;
+					width: 100%;
+					height: 100%;
+					padding-bottom: 25rpx;
+					overflow-y: auto;
+					.rechargeView_lists {
+						position: relative;
+						float: left;
+						margin-left: 3%;
+						margin-right: 3%;
+						text-align: center;
+						margin-top: 25rpx;
+						width: 44%;
+						height: 160rpx;
+						line-height: 53rpx;
+						background: #242328;
+						border-radius: 32rpx;
+						border: 2rpx solid;
+						border-image: linear-gradient(180deg, rgba(63, 62, 64, 1), rgba(163, 161, 166, 1)) 2 2;
+						.rechargeView_percentage {
+							position: absolute;
+							z-index: 99;
+							right: 0;
+							top: 0;
+							text-align: center;
+							line-height: 40rpx;
+							width: 82rpx;
+							height: 40rpx;
+							background: linear-gradient( 180deg, #EDC267 0%, #60D2FF 100%);
+							border-radius: 0rpx 16rpx 0rpx 16rpx;
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 22rpx;
+							color: #000000;
+						}
+						image {
+							width: 96rpx;
+							height: 79rpx;
+							position: absolute;
+							z-index: 99;
+							right: 10rpx;
+							bottom: 10rpx;
 						}
 					}
 				}
