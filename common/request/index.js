@@ -63,37 +63,37 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				// 'X-Access-Token': uni.getStorageSync('tenantId')
 			},
 			success: res => {
-				// if(res.statusCode === 200) {
-				// 	if(res.data.code != 1 && res.data.code != 1314 && error) {
-				// 		uni.showToast({
-				// 			title: res.data.msg || `error => ${BASE_URL || 'NULL'} => ${SIGN || 'NULL'}`,
-				// 			icon: 'none',
-				// 			mask: true,
-				// 			duration: 3000
-				// 		})
-				// 	}
-				// } else if (res.statusCode === 401){
-				// 	if(res.data.code === 401) {
-				// 		store.dispatch('user/logout')
+				if(res.statusCode === 200) {
+					if(res.data.code != 1 && res.data.code != 1314 && error) {
+						uni.showToast({
+							title: res.data.msg || `error => ${BASE_URL || 'NULL'} => ${SIGN || 'NULL'}`,
+							icon: 'none',
+							mask: true,
+							duration: 3000
+						})
+					}
+				} else if (res.statusCode === 401){
+					if(res.data.code === 401) {
+						store.dispatch('user/logout')
 
-				// 		uni.showModal({
-				// 			title: '系统提示',
-				// 			content: '本操作需要您进行登录验证',
-				// 			success: res => {
-				// 				if(res.confirm) {
-				// 					uni.navigateTo({
-				// 						url: '/pages/login/login'
-				// 					})
-				// 				}
-				// 			}
-				// 		})
-				// 	}
-				// } else {
-				// 	uni.showToast({
-				// 		title: res.statusCode.toString(),
-				// 		icon: 'none'
-				// 	})
-				// }
+						uni.showModal({
+							title: '系统提示',
+							content: '本操作需要您进行登录验证',
+							success: res => {
+								if(res.confirm) {
+									uni.navigateTo({
+										url: '/pages/login/login'
+									})
+								}
+							}
+						})
+					}
+				} else {
+					uni.showToast({
+						title: res.statusCode.toString(),
+						icon: 'none'
+					})
+				}
 
 				resolve(res.data)
 			},
@@ -107,7 +107,7 @@ const request = (path, data, error = true, customHeaders = {}) => {
 					title: `服务器开小差 => ${BASE_URL || 'NULL'} => ${SIGN || 'NULL'}`,
 					icon: 'none'
 				})
-				// reject(err)
+				reject(err)
 			}
 		})
 	})

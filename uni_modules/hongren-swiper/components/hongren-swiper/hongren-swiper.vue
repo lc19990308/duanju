@@ -1,36 +1,53 @@
 <template name="HR_swiper">
 	<view class="">
 		<block v-if="type=='swiper1'">
-			<swiper class="swiper1" :style="s_style" indicator-dots circular :duration="1000" :current="current" @change="change">
+			<swiper class="swiper1" :style="s_style" indicator-dots circular :duration="1000" :current="current"
+				@change="change">
 				<block v-for="(item,index) in swiperList" :key="index">
 					<swiper-item @click="swiperItemTap" :data-item="item">
 						<view class="swiper1_item">
-							<image class="autoImage" :src="'https://preview.qiantucdn.com/58pic/20220317/58PIC58PICU58PICdqwCdHPxfhf1Q_PIC2018_PIC2018.jpg!w1024_new_small_1'" mode="widthFix"></image>
-							<div class="swiperSlot"><slot></slot></div>
+							<image class="autoImage"
+								:src="'https://preview.qiantucdn.com/58pic/20220317/58PIC58PICU58PICdqwCdHPxfhf1Q_PIC2018_PIC2018.jpg!w1024_new_small_1'"
+								mode="widthFix"></image>
+							<div class="swiperSlot">
+								<slot></slot>
+							</div>
 						</view>
 					</swiper-item>
 				</block>
 			</swiper>
 		</block>
 		<block v-if="type=='swiper2'">
-			<swiper class="swiper2" :style="s_style" :duration="1000" autoplay circular :current="current" @change="change" previous-margin="175rpx" next-margin="175rpx">
+			<swiper class="swiper2" :style="s_style" :duration="1000" autoplay circular :current="current"
+				@change="change" previous-margin="175rpx" next-margin="175rpx">
 				<block v-for="(item,index) in swiperList" :key="index">
 					<swiper-item @click="swiperItemTap" :data-item="item">
-						<view class="swiper2_item" :class="current==index?'swiper2_active':''">
-							<image class="autoImage" :src="'https://preview.qiantucdn.com/58pic/42/89/27/96558PICB2zdR658PIC3sUT58PICd_PIC2018.jpg!qt_w320_webp'" mode="widthFix"></image>
-							<div class="swiperSlot"><slot></slot></div>
+						<view class="swiper2_item" :class="{
+    swiper2_active: current == index,
+    swiper2_left: current > index,
+    swiper2_right: current < index
+  }">
+							<image class="autoImage" :src="item.image" mode="widthFix"></image>
+							<div class="swiperSlot">
+								<slot></slot>
+							</div>
 						</view>
 					</swiper-item>
 				</block>
 			</swiper>
 		</block>
 		<block v-if="type=='swiper3'">
-			<swiper class="swiper3" :style="s_style" :duration="1000" autoplay circular :current="current" previous-margin="175rpx" next-margin="175rpx" @change="change">
+			<swiper class="swiper3" :style="s_style" :duration="1000" autoplay circular :current="current"
+				previous-margin="175rpx" next-margin="175rpx" @change="change">
 				<block v-for="(item,index) in swiperList" :key="index">
 					<swiper-item @click="swiperItemTap" :data-item="item">
 						<view class="swiper3_item" :class="current==index?'swiper3_active':''">
-							<image class="autoImage" :src="'https://preview.qiantucdn.com/58pic/20220317/58PIC58PICU58PICdqwCdHPxfhf1Q_PIC2018_PIC2018.jpg!w1024_new_small_1'" mode="widthFix"></image>
-							<div class="swiperSlot"><slot></slot></div>
+							<image class="autoImage"
+								:src="'https://preview.qiantucdn.com/58pic/20220317/58PIC58PICU58PICdqwCdHPxfhf1Q_PIC2018_PIC2018.jpg!w1024_new_small_1'"
+								mode="widthFix"></image>
+							<div class="swiperSlot">
+								<slot></slot>
+							</div>
 						</view>
 					</swiper-item>
 				</block>
@@ -49,7 +66,7 @@
 	 */
 	export default {
 		name: "HR_swiper",
-		props: ["s_type","s_list","s_current","s_style"],
+		props: ["s_type", "s_list", "s_current", "s_style"],
 		computed: {
 			style() {
 				return {}
@@ -57,42 +74,48 @@
 		},
 		data() {
 			return {
-				type: this.s_type,//控制弹窗模板、控制弹窗显示隐藏true/false
-				swiperList:this.s_list,
-				current:this.s_current?this.s_current:0,
+				type: this.s_type, //控制弹窗模板、控制弹窗显示隐藏true/false
+				swiperList: this.s_list,
+				current: this.s_current ? this.s_current : 0,
 			};
 		},
 		methods: {
-			swiperItemTap(evt){
-				this.$emit('bindItem',evt)
+			swiperItemTap(evt) {
+				this.$emit('bindItem', evt)
 			},
 			change(e) {
 				this.current = e.target.current
-				this.$emit('bindChange',e)
+				this.$emit('bindChange', e)
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
-	.swiperSlot{
+	.swiperSlot {
 		position: absolute;
-		width: 100%;height: 100%;
-		top: 0;left: 0;right: 0;bottom: 0;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		z-index: 2;
 	}
-	
-	swiper-item{
+
+	swiper-item {
 		position: relative;
 	}
-	.swiper3{
+
+	.swiper3 {
 		position: relative;
 		width: 100%;
 		height: 400rpx;
 		display: flex;
 		align-items: center;
-		swiper-item{
-			.swiper3_item{
+
+		swiper-item {
+			.swiper3_item {
 				position: absolute;
 				top: 100rpx;
 				bottom: 100rpx;
@@ -108,14 +131,16 @@
 			}
 		}
 	}
-	.swiper2{
+
+	.swiper2 {
 		position: relative;
 		width: 100%;
 		height: 600rpx;
 		display: flex;
 		align-items: center;
-		swiper-item{
-			.swiper2_item{
+
+		swiper-item {
+			.swiper2_item {
 				position: absolute;
 				top: 0rpx;
 				bottom: 0rpx;
@@ -128,7 +153,8 @@
 				transition: all 0.5s ease;
 				transform: scale(0.8);
 				overflow: hidden;
-				image{
+
+				image {
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -137,15 +163,28 @@
 			}
 		}
 	}
-	.swiper2_active,.swiper3_active{
+	.swiper2_left {
+		transform: scale(0.9) rotateY(-40deg) !important;
+	}
+	
+	.swiper2_right {
+		transform: scale(0.9) rotateY(40deg) !important;
+		
+	}
+
+
+	.swiper2_active,
+	.swiper3_active {
 		transform: scale(1) !important;
 	}
-	.swiper1{
+
+	.swiper1 {
 		position: relative;
 		width: 100%;
 		height: 500rpx;
-		swiper-item{
-			.swiper1_item{
+
+		swiper-item {
+			.swiper1_item {
 				position: relative;
 				width: 100%;
 				display: flex;
@@ -155,6 +194,7 @@
 			}
 		}
 	}
+
 	.autoImage {
 		position: relative;
 		width: auto;
@@ -164,6 +204,10 @@
 		border-radius: 2rpx;
 		/* 小程序image与image之间的空隙解决 */
 		vertical-align: top;
+	}
+
+	::v-deep .uni-swiper-slides {
+		height: 456rpx !important;
 	}
 </style>
 <!-- 

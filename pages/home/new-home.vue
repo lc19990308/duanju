@@ -21,7 +21,8 @@
 		</view>
 		<scroll-view class="scroll-view_H" scroll-x="true">
 			<view class="tabs">
-				<view class="tabs-item" :class="query.dramaClassify === item.id ? 'tabs-item_active':''" @tap="tabsChange(item)" v-for="(item,index) in cateList" :key="index">
+				<view class="tabs-item" :class="query.dramaClassify === item.id ? 'tabs-item_active':''"
+					@tap="tabsChange(item)" v-for="(item,index) in cateList" :key="index">
 					{{item.classifyName}}
 				</view>
 			</view>
@@ -44,13 +45,23 @@
 		},
 		data() {
 			return {
-				swiperList: [],
+				swiperList: [
+					// {
+					// 	image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=1200&fit=crop'
+					// },
+					// {
+					// 	image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=1200&fit=crop'
+					// },
+					// {
+					// 	image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=1200&fit=crop'
+					// }
+				],
 				query: {
 					pageNo: 1,
 					pageSize: 9,
 					sysOrgCode: '',
 					searchValue: '',
-					dramaClassify:'',//分类id
+					dramaClassify: '', //分类id
 				},
 				total: 0,
 				list: [],
@@ -58,8 +69,8 @@
 			}
 		},
 		methods: {
-			tabsChange(info){
-				console.log(info.id,'info.id')
+			tabsChange(info) {
+				console.log(info.id, 'info.id')
 				this.query.dramaClassify = info.id;
 				this.getVideoList();
 			},
