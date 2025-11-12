@@ -51,6 +51,17 @@
 				<u-button class="invite-btn">GO</u-button>
 			</view>
 		</view>
+		<view class="rewardCover" v-if="rewardCover">
+			<view class="rewardCover_t">Mời bạn bè</view>
+			<view class="rewardCover_info">
+				<image src="/static/images/gift.png" class="rewardCover_info_img" mode=""></image>
+				
+			</view>
+			<view class="rewardCover_bottom">
+				<image src="/static/images/Frame-44.png" mode=""></image>
+				<span>Tạo liên kết</span>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -59,7 +70,7 @@
 	export default {
 		data() {
 			return {
-				
+				rewardCover:true,
 			}
 		},
 		onLoad() {
@@ -266,6 +277,67 @@
 					line-height: 65rpx;
 					background: linear-gradient( 90deg, #3EF2FF 0%, #FFE23E 100%);
 					border-radius: 94rpx;
+				}
+			}
+		}
+		.rewardCover {
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			z-index: 99999;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			background-color: #000;
+			background-image: url(/static/images/yqpy.png);
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center center;
+			.rewardCover_t {
+				width: 100%;
+				float: left;
+				text-align: center;
+				margin-top: 80rpx;
+				margin-bottom: 70rpx;
+				font-family: Inter, Inter;
+				font-weight: bold;
+				font-size: 40rpx;
+				color: #FFCD03;
+			}
+			.rewardCover_info {
+				position: relative;
+				width: 100%;
+				float: left;
+				height: 842rpx;
+				background-image: url(/static/images/Frame1000001593.png);
+				background-repeat: no-repeat;
+				background-size: auto 100%;
+				background-position: center bottom;
+				.rewardCover_info_img {
+					width: 300rpx;
+					height: 300rpx;
+					position: absolute;
+					z-index: 9;
+					right: 1%;
+					top: -100rpx;
+				}
+			}
+			.rewardCover_bottom {
+				margin-top: 50rpx;
+				width: 100%;
+				float: left;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				font-family: Inter, Inter;
+				font-weight: 400;
+				font-size: 24rpx;
+				color: #D1D1D1;
+				image {
+					width: 88rpx;
+					height: 88rpx;
+					margin-bottom: 32rpx;
 				}
 			}
 		}
