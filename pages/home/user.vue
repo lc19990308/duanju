@@ -1,12 +1,8 @@
 <template>
 	<view class="page_content">
-		<!-- <view class="head_content">
-			<CustomNavbar :left="0" title="我的"></CustomNavbar>
-			
-		</view> -->
+		
 		<view class="infoBox">
-			<image class="imagess" v-if="allocatProgram.avatarLogo" :src="allocatProgram.avatarLogo" mode="aspectFill"></image>
-			<view class="navbar">{{allocatProgram.programName || '剧友'}}</view>
+			
 			<view class="userinfo_box" v-if="userInfoStore">
 				<view class="avatar">
 					<image class="imageloog" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo" mode=""></image>
@@ -21,7 +17,7 @@
 							mode="widthFix" @click="openVip"></image>
 					</view> -->
 					<view class="msg">
-						<text class="membername">{{ userInfoStore.memberName || '剧友'}}</text>
+						<text class="membername">{{ userInfoStore.memberName || 'Visitor'}}</text>
 						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
 					<view class="msg">
@@ -30,7 +26,9 @@
 						<text class="text" v-if="userInfoStore.activate=='已开通' && userInfoStore.rechargeVal">VIP会员{{userInfoStore.expireTime}}到期</text>
 						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
+					
 				</view>
+				<u-button class="user-btn">Đăng nhập</u-button>
 				<!-- <image class="arrow" src="/static/icons/arrow.png" mode="widthFix"></image> -->
 			</view>
 			<view class="userinfo_box" v-else >
@@ -71,7 +69,7 @@
 			</view>
 			<view class="moinublock">
 				<view class="oinuntlist">
-					历史记录
+					Xem lịch sử
 					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
 				</view>
 				<view class="list">
@@ -84,19 +82,13 @@
 							</view>
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
-								<u--text :lines="1" size="24rpx" align="left" :text="item.dramaName || '剧目名称'"></u--text>
+								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'bộ phim cổ ...'"></u--text>
 							</view>
 						</view>
 						<!-- <view class="" style="width: 20px;">
 							查看更多
 						</view> -->
 					</u-scroll-list>
-				</view>
-			</view>
-			<view class="card_box">
-				<view class="oinuntlist">
-					功能列表
-					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
 				</view>
 				<view class="dalisewier">
 					<view class="item" @click="jumpView(`/${item.url}`)" v-for="(item,index) in videoList" v-if="item.functionStatus == 1">
@@ -110,8 +102,8 @@
 						</view>
 					</view>
 				</view>
-
 			</view>
+			
 			<view class="menu_box">
 				<view class="item" v-for="(item, index) in menuList" :key="item.id"
 					@click="menuItemClick(item.rid, item.text, item.path)">
@@ -574,14 +566,14 @@
 	.page_content {
 		position: relative;
 		overflow-y: auto;
-		// .head_content {
-		// 	padding: 88rpx 40rpx 0 40rpx;
-
-		// }
+		background-image: url(/static/images/navbar-bg.png);
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 		.infoBox {
-			padding: 108rpx 32rpx 48rpx 32rpx;
-			background-color: #62472A;
 			position: relative;
+			padding-left: 36rpx;
+			padding-top: 80rpx;
 			.imagess{
 				width: 100%;
 				position: absolute;
@@ -641,7 +633,6 @@
 				.info {
 					flex: 1;
 					margin-left: 32rpx;
-
 					.nickname {
 						display: flex;
 
@@ -679,15 +670,26 @@
 						}
 					}
 				}
+				.user-btn {
+					width: 202rpx;
+					height: 65rpx;
+					margin-right: 36rpx;
+					text-align: center;
+					line-height: 65rpx;
+					border-radius: 94rpx;
+					background-color: transparent;
+					font-family: Inter, Inter;
+					font-weight: 400;
+					font-size: 27rpx;
+					color: #FFCD03;
+					border: 2rpx solid #FFCD03;
+				}
 			}
 		}
 
 		.main_content {
 			padding: 0 32rpx 152rpx 32rpx;
 			
-			background-color: #f2f5f7;
-
-
 			.vip_card {
 				border-radius: 8rpx;
 				overflow: hidden;
@@ -818,7 +820,7 @@
 			.oinuntlist {
 				font-size: 28rpx;
 				font-weight: 800;
-				color: #4D4D4D;
+				color: #fff;
 				position: relative;
 
 				image {
@@ -834,9 +836,8 @@
 			.moinublock {
 				border-radius: 8rpx;
 				padding: 36rpx 24rpx 0 24rpx;
-				background: #fff;
+				background: transparent;
 				margin-top: 24rpx;
-
 				.list {
 					margin-top: 15rpx;
 				}
@@ -851,7 +852,6 @@
 				.title {
 					width: 100%;
 					margin-top: 8rpx;
-					
 				}
 			}
 
@@ -911,12 +911,11 @@
 			}
 
 			.menu_box {
-				display: none;
 				background: #fff;
 				border-radius: 8rpx;
 				padding: 30rpx 40rpx;
 				margin-top: 40rpx;
-				background: linear-gradient(141.96deg, #EE7F33 0%, #FFB98A 100%);
+				background: transparent;
 
 				.item {
 					display: flex;
