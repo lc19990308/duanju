@@ -75,14 +75,15 @@
 				<view class="list">
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
 						<view v-for="(item, index) in mounList" :key="index" style="position: relative;" @click="abunbtn(item)">
-							<view class="mouns">
+							<!-- <view class="mouns">
 								<view class="count">
 									<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>{{item.totalPlay || '0'}}
 								</view>
-							</view>
+							</view> -->
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
 								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'bộ phim cổ ...'"></u--text>
+								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
 							</view>
 						</view>
 						<!-- <view class="" style="width: 20px;">
