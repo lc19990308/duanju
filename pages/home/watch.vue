@@ -48,14 +48,21 @@
 						<br><image src="/static/images/gold.png" mode=""></image><span>+100</span><i>Vàng</i>
 					</view>
 				</view>
-				<u-button class="invite-btn">GO</u-button>
+				<u-button class="invite-btn" @click="goBtn">GO</u-button>
 			</view>
 		</view>
 		<view class="rewardCover" v-if="rewardCover">
+			<a @click="closeBtn" class="returnBtn"><</a>
 			<view class="rewardCover_t">Mời bạn bè</view>
 			<view class="rewardCover_info">
 				<image src="/static/images/gift.png" class="rewardCover_info_img" mode=""></image>
-				
+				<view class="rewardCover_info_t">
+					<image src="/static/images/Frame-39.png" mode=""></image>
+					<view>
+						<span>SimoonLee</span><br>ID 66666666
+					</view>
+				</view>
+				<image src="/static/images/QR_code.png" class="QR_code" mode=""></image>
 			</view>
 			<view class="rewardCover_bottom">
 				<image src="/static/images/Frame-44.png" mode=""></image>
@@ -70,7 +77,7 @@
 	export default {
 		data() {
 			return {
-				rewardCover:true,
+				rewardCover:false,
 			}
 		},
 		onLoad() {
@@ -81,7 +88,12 @@
 			
 		},
 		methods: {
-			
+			goBtn() {
+				this.rewardCover = true
+			},
+			closeBtn() {
+				this.rewardCover = false
+			},
 		}
 	}
 </script>
@@ -293,11 +305,20 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-position: center center;
+			.returnBtn {
+				position: fixed;
+				z-index: 999999;
+				left: 34rpx;
+				top: 34rpx;
+				font-size: 50rpx;
+				color: #fff;
+				font-family: 宋体;
+			}
 			.rewardCover_t {
 				width: 100%;
 				float: left;
 				text-align: center;
-				margin-top: 80rpx;
+				margin-top: 188rpx;
 				margin-bottom: 70rpx;
 				font-family: Inter, Inter;
 				font-weight: bold;
@@ -309,6 +330,9 @@
 				width: 100%;
 				float: left;
 				height: 842rpx;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 				background-image: url(/static/images/Frame1000001593.png);
 				background-repeat: no-repeat;
 				background-size: auto 100%;
@@ -320,6 +344,35 @@
 					z-index: 9;
 					right: 1%;
 					top: -100rpx;
+				}
+				.rewardCover_info_t {
+					margin-top: 100rpx;
+					display: flex;
+					flex-direction: row;
+					margin-bottom: 30rpx;
+					font-family: Inter, Inter;
+					font-weight: 400;
+					font-size: 24rpx;
+					line-height: 50rpx;
+					color: #333333;
+					image {
+						width: 100rpx;
+						height: 100rpx;
+						border-radius: 50%;
+						margin-right: 24rpx;
+					}
+					view {
+						span {
+							font-family: Inter, Inter;
+							font-weight: bold;
+							font-size: 30rpx;
+							color: #333333;
+						}
+					}
+				}
+				.QR_code {
+					width: 168rpx;
+					height: 168rpx;
 				}
 			}
 			.rewardCover_bottom {
