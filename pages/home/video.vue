@@ -29,47 +29,50 @@
 					Mở khóa cần 80 vàng<br><span>Số dư: 50 vàng</span>
 				</view>
 				<view class="rechargeView_list">
-					<view class="rechargeView_lists">
-						2400 vàng<br>
-						+600vàng<br>
-						$320.00
+					<view class="rechargeView_lists top1">
+						<image src="/static/images/002.png" mode=""></image>
+						<view class="rechargeView_cen">+600vàng</view>
+						<view class="rechargeView_bottom">$320.00</view>
+					</view>
+					<view class="rechargeView_lists top2">
+						<image src="/static/images/003.png" mode=""></image>
+						<view class="rechargeView_cen">+600vàng</view>
+						<view class="rechargeView_bottom">$320.00</view>
+					</view>
+					<view class="rechargeView_lists top3">
+						<span class="rechargeView_percentage">+30%</span>
+						<view class="rechargeView_top">2400 vàng</view>
+						<view class="rechargeView_cen">+600vàng</view>
+						<view class="rechargeView_bottom">$320.00</view>
 					</view>
 					<view class="rechargeView_lists">
-						2400 vàng<br>
-						+600vàng<br>
-						$320.00
-					</view>
-					<view class="rechargeView_lists">
-						2400 vàng<br>
-						+600vàng<br>
-						$320.00
-					</view>
-					<view class="rechargeView_lists">
-						2400 vàng<br>
-						+600vàng<br>
-						$320.00
+						<view class="rechargeView_top">2400 vàng</view>
+						<view class="rechargeView_cen">+600vàng</view>
+						<view class="rechargeView_bottom">$320.00</view>
 					</view>
 					<view class="rechargeView_lists">
 						<span class="rechargeView_percentage">+30%</span>
-						<image src="/static/images/002.png" mode=""></image>
-						2400 vàng<br>
-						+600vàng<br>
-						$320.00
+						<view class="rechargeView_top">2400 vàng</view>
+						<view class="rechargeView_cen">+600vàng</view>
+						<view class="rechargeView_bottom">$320.00</view>
 					</view>
 					<view class="rechargeView_lists">
-						2400 vàng<br>
-						+600vàng<br>
-						$320.00
+						<span class="rechargeView_percentage">+30%</span>
+						<view class="rechargeView_top">2400 vàng</view>
+						<view class="rechargeView_cen">+600vàng</view>
+						<view class="rechargeView_bottom">$320.00</view>
 					</view>
 					<view class="rechargeView_lists">
-						2400 vàng<br>
-						+600vàng<br>
-						$320.00
+						<span class="rechargeView_percentage">+30%</span>
+						<view class="rechargeView_top">2400 vàng</view>
+						<view class="rechargeView_cen">+600vàng</view>
+						<view class="rechargeView_bottom">$320.00</view>
 					</view>
+					
 					<view class="rechargeView_lists">
-						2400 vàng<br>
-						+600vàng<br>
-						$320.00
+						<view class="rechargeView_top">2400 vàng</view>
+						<view class="rechargeView_cen">+600vàng</view>
+						<view class="rechargeView_bottom">$320.00</view>
 					</view>
 				</view>
 			</view>
@@ -755,7 +758,7 @@
 						height: 160rpx;
 						line-height: 53rpx;
 						background: #242328;
-						border-radius: 32rpx;
+						border-radius: 16rpx !important;
 						border: 2rpx solid;
 						border-image: linear-gradient(180deg, rgba(63, 62, 64, 1), rgba(163, 161, 166, 1)) 2 2;
 						.rechargeView_percentage {
@@ -781,6 +784,67 @@
 							z-index: 99;
 							right: 10rpx;
 							bottom: 10rpx;
+						}
+						.rechargeView_top {
+							font-family: Inter, Inter;
+							font-weight: normal;
+							font-size: 32rpx;
+							color: #D1D1D1;
+							span {
+								font-size: 26rpx;
+							}
+						}
+						.rechargeView_cen {
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 26rpx;
+							color: #FFCD03;
+						}
+						.rechargeView_bottom {
+							background: #3F3E40;
+							font-family: Inter, Inter;
+							font-weight: normal;
+							font-size: 30rpx;
+							color: #D1D1D1;
+						}
+					}
+					.rechargeView_lists.top1 {
+						text-align: left;
+						padding-left: 20rpx;
+						padding-top: 20rpx;
+						background: linear-gradient( 186deg, rgba(255,224,157,0.4) 0%, rgba(237,194,103,0) 100%);
+						border-radius: 16rpx;
+						border: 2rpx solid #EDC267;
+						.rechargeView_bottom {
+							background: transparent;
+							font-family: Inter, Inter;
+							font-weight: bold;
+							font-size: 36rpx;
+							color: #EDC267;
+						}
+					}
+					.rechargeView_lists.top2 {
+						text-align: left;
+						padding-left: 20rpx;
+						padding-top: 20rpx;
+						background: linear-gradient( 186deg, rgba(255,148,122,0.4) 0%, rgba(255,148,122,0) 100%);
+						border-radius: 16rpx;
+						border: 2rpx solid #FF947A;
+						.rechargeView_top {
+							color: #FF947A;
+						}
+						.rechargeView_bottom {
+							background: transparent;
+							font-family: Inter, Inter;
+							font-weight: bold;
+							font-size: 36rpx;
+							color: #FF947A;
+						}
+					}
+					.rechargeView_lists.top3 {
+						.rechargeView_bottom {
+							background: #EDC267;
+							color: #000;
 						}
 					}
 				}
