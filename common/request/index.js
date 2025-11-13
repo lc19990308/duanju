@@ -64,7 +64,7 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				// 'X-Access-Token': uni.getStorageSync('tenantId')
 			},
 			success: res => {
-				if (res.data.code === 200) {
+				if (res.data.code === 200 || res.data.code === 0) {
 					resolve(res.data)
 				} else if (res.data.code === 401) {
 					store.dispatch('user/logout')

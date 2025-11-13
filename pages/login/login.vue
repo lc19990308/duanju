@@ -6,7 +6,7 @@
 			<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
 		</view>
 		<view class="form">
-			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
+			<u--form :model="form" ref="uForm" :rules='rules' labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
 				<u-form-item label="email điện tử" prop="email" :borderBottom='false'>
 					<u-input v-model="form.email" border='none' placeholder='Vui lòng nhập email'
@@ -42,10 +42,9 @@
 				<image src="/static/images/Frame-29.png" mode=""></image>
 			</view>
 		</view>
-
 		<view class="agreement-checked">
-			<u-checkbox-group v-model="checkboxValue1" shape='circle' activeColor='#EDC267' @change="checkboxChange">
-				<u-checkbox :customStyle="{marginBottom: '8px'}" name="1" inactiveColor='#000000'>
+			<u-checkbox-group shape='circle' activeColor='#EDC267' @change="checkboxChange">
+				<u-checkbox :checked='checked' :customStyle="{marginBottom: '8px'}" name="1" inactiveColor='#000000'>
 				</u-checkbox>
 			</u-checkbox-group>
 			<view class="agreement-tips">
@@ -56,6 +55,7 @@
 </template>
 
 <script>
+	let that;
 	import {
 		mapState,
 		mapGetters,
@@ -75,14 +75,25 @@
 					fontsize: '32rpx',
 				},
 				form: {
-					email: 'lc19990308@163.com',
-					password: '123456',
+					email: '',
+					password: '',
 
 				},
 				rules: {
-					name: [{
+					email: [{
+							required: true,
+							message: '请输入邮箱',
+							trigger: ['blur', 'change']
+						},
+						{
+							type: 'email',
+							message: '邮箱格式不正确',
+							trigger: ['blur', 'change']
+						}
+					],
+					password: [{
 						required: true,
-						message: '请输入姓名',
+						message: '请输入密码',
 						trigger: ['blur', 'change']
 					}]
 				},
@@ -92,7 +103,7 @@
 				tips: 'lấy',
 				// refCode: null,
 				seconds: 10,
-				checkboxValue1: 1,
+				checked: false,
 				titleStyle: {
 					color: '#fff'
 				}
@@ -161,27 +172,40 @@
 				})
 			},
 			submit() {
+				if (!this.checked) {
+					return uni.showToast({
+						title: '请同意用户协议！',
+						icon: 'none'
+					})
+				}
 				let obj = {
 					"email": this.form.email,
 					"loginType": "password",
 					"password": this.form.password
 				}
-				this.$request('login.loginEmail', obj).then(res => {
-					if (res.code === 200) {
-						this.$u.toast("登录成功")
-						this.getUserInfo(res.result.token).then(resp => {
-							setTimeout(()=>{
-								uni.reLaunch({
-									url:'/'
-								})
-							},500)
-						})
 
-					}
+				that.$refs.uForm.validate().then(res => {
+					that.$request('login.loginEmail', obj).then(res => {
+						if (res.code === 200) {
+							that.$u.toast("登录成功")
+							that.getUserInfo(res.result.token).then(resp => {
+								setTimeout(() => {
+									uni.reLaunch({
+										url: '/'
+									})
+								}, 500)
+							})
+						}
+					})
 				})
+			},
+			checkboxChange() {
+				this.checked = !this.checked;
 			}
-
 		},
+		onLoad() {
+			that = this;
+		}
 	}
 </script>
 
