@@ -1,6 +1,6 @@
 <template>
 	<view class="act">
-		<view class="act_money">
+		<!-- <view class="act_money">
 			<view class="money" :style="{width:width}" @click="selectMember(index,item)"
 				v-for="(item,index) in memberList" :key="index" :class="{ 'active': activeIndex === index }">
 				<u-cell :border="false">
@@ -22,7 +22,7 @@
 					</view>
 				</u-cell>
 			</view>
-		</view>
+		</view> -->
 		<!-- #ifndef MP-WEIXIN -->
 		<!-- <view class="paytype">
 			<view class="box" :class="item.value == payDefValue ? 'active':''" v-for="item in payType"
@@ -37,9 +37,9 @@
 			:linethrough="linethrough" :activeIndex="activeIndex" :activeIndexPay="activeIndexPay"></WenTag> -->
 		<view class="act_equity">
 			<view class="equity_title">
-				会员尊享权益
+				Thành viên xem phim miễn phí
 			</view>
-			<view class="equity">
+			<!-- <view class="equity">
 				<view class="equity_box" v-for="(item,index) in equityList" :key="index">
 					<view class="equity_left">
 						<image class="img" :src="item.equityIcon" mode="aspectFit"></image>
@@ -53,10 +53,21 @@
 						</view>
 					</view>
 				</view>
-			</view>
+			</view> -->
+		</view>
+		<view class="act_but">
+			<button class="but" @click="handleToActive">Mở thành viên</button>
 		</view>
 		<view class="act_prompt">
-			<view class="pro_title">
+			<view>Vui lòng đọc kỹ các điều khoản sau trước khi mua</view>
+			1. Để trở thành thành viên, người dùng phải điền đầy đủ, chính xác và đầy đủ thông tin đăng ký theo quy trình đăng ký do Nền tảng cung cấp, bao gồm nhưng không giới hạn ở tên người dùng, mật khẩu, thông tin chứng minh thư hợp lệ, địa chỉ email, số điện thoại di động, v.v.
+			<br>
+			<br>2. Người dùng cam kết rằng thông tin đăng ký mà họ cung cấp là trung thực và hợp lệ và tự chịu trách nhiệm về mọi hậu quả phát sinh từ việc cung cấp thông tin sai lệch.
+			<br>
+			<br>3. Nền tảng có quyền xem xét đơn đăng ký của người dùng và có quyền từ chối hoặc đình chỉ việc phê duyệt đơn đăng ký, đặc biệt đối với các ứng dụng có thể vi phạm luật pháp và quy định, quy tắc của Nền tảng hoặc có nguy cơ bảo mật.
+			<br>
+			<br>4. Người dùng được coi là đồng ý với tất cả các điều khoản của Ghi chú này và trở thành thành viên của Nền tảng này sau khi hoàn tất đăng ký và kích hoạt Tài khoản.
+			<!-- <view class="pro_title">
 				温馨提示
 			</view>
 			<view class="text">
@@ -80,11 +91,9 @@
 				6.开通VIP会员代表您已同意<navigator url="/pages/user/about/about" hover-class="navigator-hover">
 					<span class="tt">《用户协议》</span>和<span class="tt">《隐私政策》</span>.
 				</navigator>
-			</view>
+			</view> -->
 		</view>
-		<view class="act_but">
-			<button class="but" @click="handleToActive">立即充值</button>
-		</view>
+		
 		<!-- 统一支付组件，注意：vue3下ref不可以等于组件名，因此这里ref="pay" 而不能是 ref="uniPay" -->
 		<uni-pay ref="pay" :adpid="adpid" return-url="/pages/order-detail/order-detail" logo="/static/logo.png"
 			@success="onSuccess" @create="onCreate"></uni-pay>
@@ -596,9 +605,9 @@
 	}
 
 	.act {
-		width: 90%;
+		width: 100%;
 		margin: auto;
-
+		background-color: #000;
 		&_equity {
 			.equity {
 				display: flex;
@@ -759,5 +768,29 @@
 			color: #686868;
 			margin-left: 5rpx;
 		}
+	}
+	.act_prompt {
+		color: #d1d1d1;
+		padding: 0 40rpx;
+	}
+	
+	.act_but {
+		padding: 0 40rpx;
+		.but {
+			height: 88rpx;
+			background: #EDC267;
+			border-radius: 62rpx;
+			font-family: Inter, Inter;
+			font-weight: 400;
+			font-size: 28rpx;
+			color: #000000;
+		}
+	}
+	.equity_title {
+		padding: 0 40rpx;
+		font-family: Inter, Inter;
+		font-weight: bold;
+		font-size: 36rpx;
+		color: #D1D1D1;
 	}
 </style>
