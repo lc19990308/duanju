@@ -47,9 +47,9 @@
 </template>
 
 <script>
-	import {
-		mapState,
-	} from "vuex"
+	// import {
+	// 	mapState,
+	// } from "vuex"
 	import apis from '@/utils/config.js'
 	import apiMoen from '@/utils/config.js';
 	export default {
@@ -101,9 +101,9 @@
 				total:0,
 			}
 		},
-		computed: {
-			...mapState('user', ['uid']),
-		},
+		// computed: {
+		// 	...mapState('user', ['uid']),
+		// },
 		methods: {
 			tabChange(val) {
 				this.query.pageNo = 1;
@@ -116,22 +116,23 @@
 				}
 			},
 			uploadImage() {
+				let that = this;
 				uni.chooseImage({
 					success: (chooseImageRes) => {
 						const tempFilePaths = chooseImageRes.tempFilePaths;
 						uni.uploadFile({
-							url: `${this.api}/api/appApi/uploadFile`, //仅为示例，非真实的接口地址
+							url: `${that.api}/api/appApi/uploadFile`, //仅为示例，非真实的接口地址
 							filePath: tempFilePaths[0],
 							name: 'file',
 							formData: {
-								createBy: this.form.createBy
+								createBy: that.form.createBy
 							},
 							header: {
 								'X-Tenant-Id': apiMoen.tenantId
 							},
 							success: (uploadFileRes) => {
 								const res = JSON.parse(uploadFileRes.data);
-								this.form.picture.push({
+								that.form.picture.push({
 									picture: res.result.savePath
 								})
 							}
@@ -162,11 +163,9 @@
 				})
 			},
 		},
-		onShow() {
-			this.form.createBy = this.uid;
-			this.query.createBy = this.uid;
-		},
 		onLoad() {
+			this.form.createBy = uni.getStorageSync('id');
+			this.query.createBy = uni.getStorageSync('id');
 			this.getList();
 		},
 		onPullDownRefresh() {

@@ -58,7 +58,14 @@
 			submitForm() {
 				if (this.confirmed) {
 					this.$request('user.deleteAccount').then(res => {
-						this.$u.toast('操作成功！')
+						uni.clearStorageSync();
+						setTimeout(()=>{
+							uni.reLaunch({
+								url:'/pages/login/login'
+							})
+							this.$u.toast('操作成功！')
+						},500)
+						
 					})
 				}else{
 					this.$u.toast('请确认删除账户协议！')
