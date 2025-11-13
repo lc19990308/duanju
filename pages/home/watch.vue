@@ -1,524 +1,398 @@
 <template>
 	<view class="page_content">
-		<view class="head_content">
-			<view class="tabs_box">
-				<u-tabs :scrollable="false" :lineWidth="0" :list="contentList" :current="contentCurrent"
-					:activeStyle="tabsActiveStyle" :inactiveStyle="tabsInactiveStyle" lineColor="#000"
-					@change="changeContent($event, 1)" />
+		<view class="reward_t">
+			Tiền vàng của tôi<br><span>100</span>
+		</view>
+		<view class="reward_list">
+			<image src="/static/images/gold.png" class="goldImg" mode=""></image>
+			<view class="reward_list_t">Đăng ký đến ngày <span>2</span></view>
+			<view class="reward_lists">
+				<view class="reward_list_info end">
+					<view><image src="/static/images/gold.png" mode=""></image><span>+50</span></view>
+					<span class="reward_list_info_t">Ngày 1</span>
+				</view>
+				<view class="reward_list_info end">
+					<view><image src="/static/images/gold.png" mode=""></image><span>+50</span></view>
+					<span class="reward_list_info_t">Ngày 2</span>
+				</view>
+				<view class="reward_list_info on">
+					<view><image src="/static/images/gold.png" mode=""></image><span>+50</span></view>
+					<span class="reward_list_info_t">Hôm nay</span>
+				</view>
+				<view class="reward_list_info">
+					<view><image src="/static/images/gold.png" mode=""></image><span>+50</span></view>
+					<span class="reward_list_info_t">Ngày 4</span>
+				</view>
+				<view class="reward_list_info">
+					<view><image src="/static/images/gold.png" mode=""></image><span>+50</span></view>
+					<span class="reward_list_info_t">Ngày 5</span>
+				</view>
+				<view class="reward_list_info">
+					<view><image src="/static/images/gold.png" mode=""></image><span>+50</span></view>
+					<span class="reward_list_info_t">Ngày 6</span>
+				</view>
+				<view class="reward_list_info">
+					<view><image src="/static/images/gold.png" mode=""></image><span>+50</span></view>
+					<span class="reward_list_info_t">Ngày 7</span>
+				</view>
+			</view>
+			<u-button class="reward-btn">Đăng ký ngay</u-button>
+		</view>
+		<view class="invite">
+			<view class="invite_t">Mời bạn bè</view>
+			<view class="invite_info">
+				<view class="invite_infos">
+					<image src="/static/images/Frame-31.png" class="invite_info_img" mode=""></image>
+					<view class="invite_info_left">
+						<view>Mời bạn bè</view>
+						<br><image src="/static/images/gold.png" mode=""></image><span>+100</span><i>Vàng</i>
+					</view>
+				</view>
+				<u-button class="invite-btn" @click="goBtn">GO</u-button>
 			</view>
 		</view>
-		<view class="main_content" v-if="contentList && contentList.length">
-			<swiper style="height: 100%" :skip-hidden-item-layout="true" :current="contentCurrent"
-				@change="changeContent($event, 2)">
-				<swiper-item style="height: 100%;" v-for="(item, index) in contentList" :key="item.id">
-					<scroll-view style="height: 100%" :scroll-y="true" :refresher-enabled="true"
-						:refresher-threshold="100" :refresher-triggered="refreshStatus"
-						@refresherrefresh="refreshHandle" @scrolltolower="bottomHandle" @scroll="scrollHandle">
-						<view class="content_box">
-							<view class="boxTitle" v-if="contentCurrent == 0">
-								<view class="text">正在追{{item.total}}部短剧</view>
-								<view class="icon">
-									<!-- <u-icon name="edit-pen" color="#000000" size="26"></u-icon>编辑 -->
-								</view>
-							</view>
-							<view class="boxTitle" v-if="contentCurrent == 1">
-								<view class="text">共浏览了{{item.total}}部短剧</view>
-								<!-- <view class="icon">
-									<u-icon name="edit-pen" color="#000000" size="26"></u-icon>编辑
-								</view> -->
-							</view>
-							<view class="list" v-if="videoList.length > 0 && contentCurrent == 0">
-								<view class="item" v-for="(lItem, lIndex) in item.list" :key="lIndex"
-									@click="openVideoDetail(lItem)">
-									<view class="img">
-										<image class="image" :src="lItem.dramaPoster" mode="aspectFill"></image>
-										<view class="count">
-											<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>
-											{{lItem.totalPlay}}
-										</view>
-									</view>
-									<view class="info">
-										<view class="title u-line-1">{{ lItem.dramaName}}</view>
-										<view class="text">观看至第{{ lItem.dramaSeries }}集</view>
-									</view>
-								</view>
-							</view>
-							<view class="lists" v-else-if="videoList.length > 0 && contentCurrent == 1">
-								<view class="item" v-for="(lItem, lIndex) in item.list" :key="lIndex"
-									@click="HistoriCalcatchUp(lItem)">
-									<view class="img">
-										<image class="image" :src="lItem.dramaPoster" mode="aspectFill"></image>
-									</view>
-									<view class="info">
-										<view class="title u-line-1">{{ lItem.dramaName }}</view>
-										<!-- <view class="text1 u-line-2">{{ lItem.video.description }}</view> -->
-										<view class="text2">观看至第{{ lItem.dramaSeries }}集</view>
-									</view>
-									<view class="btns">
-										<view class="button" v-if="indexId == 2"
-											:class="{ collect: lItem.is_favorite == 1 }" hover-class="active"
-											:hover-start-time="0" :hover-stay-time="200">
-											<!-- @click.stop="handleCollect(lItem.vid, lItem.is_favorite, lIndex)" -->
-											<u-icon :name="lItem.is_favorite == 1 ? 'star-fill' : 'star'" color="#eee"
-												size="18"></u-icon>
-											<text class="text">{{ lItem.is_favorite == 1 ? '已追剧' : '前往追剧' }}</text>
-										</view>
-									</view>
-								</view>
-							</view>
-							<view class="nodata" v-else>
-								<u-empty mode="data" icon="http://cdn.uviewui.com/uview/empty/data.png" />
-							</view>
-						</view>
-					</scroll-view>
-				</swiper-item>
-			</swiper>
+		<view class="rewardCover" v-if="rewardCover">
+			<a @click="closeBtn" class="returnBtn"><</a>
+			<view class="rewardCover_t">Mời bạn bè</view>
+			<view class="rewardCover_info">
+				<image src="/static/images/gift.png" class="rewardCover_info_img" mode=""></image>
+				<view class="rewardCover_info_t">
+					<image src="/static/images/Frame-39.png" mode=""></image>
+					<view>
+						<span>SimoonLee</span><br>ID 66666666
+					</view>
+				</view>
+				<image src="/static/images/QR_code.png" class="QR_code" mode=""></image>
+			</view>
+			<view class="rewardCover_bottom">
+				<image src="/static/images/Frame-44.png" mode=""></image>
+				<span>Tạo liên kết</span>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	const PlayerManager = require("../../utils/playerManager.js");
-	// const playletPlugin = requirePlugin("playlet-plugin");
-	let playletPlugin;
 	
-	// 检查当前是否在小程序环境中
-	if (typeof wx !== 'undefined' && wx.getSystemInfo) {
-	    try {
-	        // 在小程序中执行 requirePlugin
-	        playletPlugin = requirePlugin("playlet-plugin");
-	    } catch (error) {
-	        console.error('Failed to requirePlugin in WeChat Mini Program:', error);
-	    }
-	} else {
-	    // 在其他环境中的处理
-	    console.log('This code is executed only in WeChat Mini Program environment.');
-	}
 	export default {
 		data() {
 			return {
-				navbarTitle: '',
-				tabsActiveStyle: {
-					color: '#000',
-					fontSize: '40rpx',
-					fontWeight: 'bold',
-				},
-				tabsInactiveStyle: {
-					color: '#666666',
-					fontSize: '32rpx',
-				},
-				contentList: [{
-						id: 1,
-						name: '在追',
-						type: 'log',
-						list: [],
-						page: 1,
-						pagesize: 10,
-						status: 'loadmore',
-						total: 0,
-					},
-					{
-						id: 2,
-						name: '历史',
-						type: 'favorite',
-						list: [],
-						page: 1,
-						pagesize: 10,
-						status: 'loadmore',
-						total: 0,
-					},
-				],
-				contentCurrent: 0,
-				refreshStatus: true,
-				isRefresh: false,
-				videoList: [{
-						id: 1,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
-					},
-					{
-						id: 2,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
-					},
-					{
-						id: 3,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
-					},
-				],
-				indexId: 1
+				rewardCover:false,
 			}
 		},
 		onLoad() {
-			var memberId = uni.getStorageSync('id')
-			if(!memberId){
-				uni.redirectTo({
-					url:'/pages/user/login/login'
-				})
-				return
-			}
-			// this.getPlayRecordList()
+			
 			
 		},
 		onShow() {
-			this.getFilmLikeCollectList()
-			this.getFilmViewHistoryList()
+			
 		},
 		methods: {
-			// 追剧跳转
-			openVideoDetail(lItem) {
-				var omim = JSON.stringify(lItem)
-				uni.navigateTo({
-					url: '/pages/video/videoDetails?item=' + encodeURIComponent(omim)
-				})
+			goBtn() {
+				this.rewardCover = true
 			},
-			// 历史跳转
-			HistoriCalcatchUp(lItem) {
-				var omim = JSON.stringify(lItem)
-				uni.navigateTo({
-					url: '/pages/video/videoDetails?item=' + encodeURIComponent(omim)
-				})
+			closeBtn() {
+				this.rewardCover = false
 			},
-			// 获取追剧列表
-			getFilmLikeCollectList() {
-				this.$request('video.filmLikeCollectList', {
-					memberId: uni.getStorageSync('id')
-				}).then(res => {
-					console.log(res,
-						"2追剧列表11111111111111111111111111111111111111111111111111111111111111111111111")
-					if (res.code == 200) {
-						this.contentList[0].list = res.result
-						this.contentList[0].total = res.result.length
-					}
-				})
-			},
-			// 获取观看历史列表
-			getFilmViewHistoryList() {
-				this.$request('video.filmViewHistoryList', {
-					memberId: uni.getStorageSync('id')
-				}).then(res => {
-					console.log(res,
-						"观看历史列表11111111111111111111111111111111111111111111111111111111111111111111111")
-					if (res.code == 200) {
-						this.contentList[1].list = res.result
-						this.contentList[1].total = res.result.length
-					}
-				})
-			},
-			// 	收藏
-			// handleCollect(vid, collect, index) {
-			// 	if (collect == 0) {
-			// 		const obj = {
-			// 			vid,
-			// 			type: 'favorite'
-			// 		}
-			// 		this.$request('video.addRecord', obj, false).then(res => {
-			// 			if (res.code === 1) {
-			// 				this.contentList[this.contentCurrent].list[index].is_favorite = 1
-			// 			}
-			// 		})
-			// 	} else {
-			// 		const obj = {
-			// 			ids: vid,
-			// 			type: 'favorite'
-			// 		}
-			// 		this.$request('video.deleteRecord', obj, false).then(res => {
-			// 			if (res.code === 1) {
-			// 				this.contentList[this.contentCurrent].list[index].is_favorite = 0
-			// 			}
-			// 		})
-			// 	}
-			// },
-			// 获取播放记录
-			// getPlayRecordList() {
-			// 	const obj = {
-			// 		type: this.contentList[this.contentCurrent].type,
-			// 		page: this.contentList[this.contentCurrent].page,
-			// 		pagesize: this.contentList[this.contentCurrent].pagesize
-			// 	}
-			// 	this.contentList[this.contentCurrent].status = 'loading'
-			// 	this.$request('video.getRecord', obj).then(res => {
-			// 		if (res.code === 1) {
-			// 			if (res.data && res.data.length) {
-			// 				this.contentList[this.contentCurrent].list = this.contentList[this.contentCurrent].list
-			// 					.concat(res.data)
-			// 				if (res.data.length < this.contentList[this.contentCurrent].pagesize) {
-			// 					this.contentList[this.contentCurrent].status = 'nomore'
-			// 				} else {
-			// 					this.contentList[this.contentCurrent].status = 'loadmore'
-			// 				}
-			// 			} else {
-			// 				this.contentList[this.contentCurrent].page > 1 && this.contentList[this.contentCurrent]
-			// 					.page--
-			// 				const timer = setTimeout(() => {
-			// 					this.contentList[this.contentCurrent].status = 'nomore'
-			// 					clearTimeout(timer)
-			// 				}, 500)
-			// 			}
-			// 		}
-			// 		this.refreshStatus = false
-			// 		this.isRefresh = false
-			// 	}).catch(err => {
-			// 		this.refreshStatus = false
-			// 		this.isRefresh = false
-			// 	})
-			// },
-			// 下拉刷新
-			refreshHandle() {
-				this.refreshStatus = true
-				if (this.contentCurrent == 0) {
-					if (!this.isRefresh) {
-						this.isRefresh = true
-						this.contentList[this.contentCurrent].page = 1
-						this.contentList[this.contentCurrent].list = []
-						this.getFilmLikeCollectList();
-						setTimeout(() => {
-							if (this.isRefresh) { // 仅在确保当前正在刷新状态下执行退出刷新状态的操作
-								this.refreshStatus = false; // 退出刷新状态
-								this.isRefresh = false
-							}
-						}, 1000); // 2秒后退出刷新状态
-					}
-				} else {
-					if (!this.isRefresh) {
-						this.isRefresh = true
-						this.contentList[this.contentCurrent].page = 1
-						this.contentList[this.contentCurrent].list = []
-						this.getFilmViewHistoryList()
-						setTimeout(() => {
-							if (this.isRefresh) { // 仅在确保当前正在刷新状态下执行退出刷新状态的操作
-								this.refreshStatus = false; // 退出刷新状态
-								this.isRefresh = false
-							}
-						}, 1000); // 2秒后退出刷新状态
-					}
-				}
-			},
-			// 滚动监听
-			scrollHandle(e) {
-
-			},
-			// 触底滚动
-			bottomHandle() {
-				this.contentList[this.contentCurrent].page++
-				if (this.contentCurrent == 0) {
-					this.getFilmLikeCollectList();
-				} else {
-					this.getFilmViewHistoryList()
-				}
-			},
-			// 切换分类
-			changeContent(e, i) {
-				this.indexId = i
-				const current = i === 1 ? e.index : e.detail.current
-				if (this.contentCurrent === current) {
-					return;
-				}
-				this.contentCurrent = current
-				// if (current == this.contentCurrent) return
-				if (this.contentCurrent == 0) {
-					this.getFilmLikeCollectList();
-				} else {
-					this.getFilmViewHistoryList()
-				}
-			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.page_content {
-		overflow: hidden;
-
-		.head_content {
-			margin-top: 88rpx;
-
-			.tabs_box {
-				// padding: 0 100rpx;
+		background: #000;
+		padding: 0 40rpx;
+		.reward_t {
+			font-family: Inter, Inter;
+			font-weight: bold;
+			font-size: 36rpx;
+			color: #D1D1D1;
+			margin-top: 20rpx;
+			line-height: 70rpx;
+			span {
+				font-family: Inter, Inter;
+				font-weight: bold;
+				font-size: 40rpx;
+				color: #FFCD03;
 			}
 		}
-
-		.main_content {
-			overflow: hidden;
-
-			.content_box {
-				padding: 40rpx 40rpx 60rpx 40rpx;
-
-				.boxTitle {
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					margin-bottom: 48rpx;
-
-					.text {
-						font-size: 32rpx;
-						color: #5C5C5C;
-					}
-
-					.icon {
-						display: flex;
-						color: #000;
-						align-items: center;
-					}
+		.reward_list {
+			padding: 0 20rpx;
+			margin-top: 30rpx;
+			position: relative;
+			width: 100%;
+			height: 680rpx;
+			background-image: url('/static/images/Frame1000001530.png');
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			.goldImg {
+				position: absolute;
+				z-index: 9;
+				right: 0;
+				top: -180rpx;
+				width: 265rpx;
+				height: 254rpx;
+			}
+			.reward_list_t {
+				padding: 0 30rpx;
+				line-height: 90rpx;
+				font-family: Inter, Inter;
+				font-weight: 400;
+				font-size: 26rpx;
+				color: #D1D1D1;
+				span {
+					font-size: 32rpx;
+					color: #FFCD03;
+					margin-left: 20rpx;
 				}
-
-				.list {
-					display: grid;
-					grid-template-columns: 1fr 1fr 1fr;
-					grid-gap: 12rpx;
-
-					.item {
+			}
+			.reward_lists {
+				width: 100%;
+				float: left;
+				margin-bottom: 20rpx;
+				.reward_list_info {
+					float: left;
+					width: 21%;
+					margin: 0 2%;
+					margin-bottom: 20rpx;
+					view {
+						float: left;
 						width: 100%;
-
-						.img {
-							width: 100%;
-							height: 282rpx;
-							border-radius: 16rpx;
-							overflow: hidden;
-							position: relative;
-
-							.image {
-								width: 100%;
-								height: 100%;
-							}
-
-							.count {
-								position: absolute;
-								left: 24rpx;
-								bottom: 24rpx;
-								color: #fff;
-								display: flex;
-								align-items: center;
-								font-size: 28rpx;
-							}
-						}
-
-						.info {
-							margin-top: 16rpx;
-
-							.title {
-								font-size: 28rpx;
-								color: #111;
-								font-weight: 700;
-							}
-
-							.text {
-								font-size: 24rpx;
-								color: #666;
-								margin-top: 4rpx;
-							}
-						}
-					}
-				}
-
-				.lists {
-
-					.item {
-						margin-bottom: 40rpx;
-						display: flex;
-						align-items: center;
-
-						.img {
-							width: 216rpx;
-							height: 282rpx;
-							border-radius: 20rpx;
-							overflow: hidden;
-
-							.image {
-								width: 100%;
-								height: 100%;
-							}
-						}
-
-						.info {
-							flex: 1;
+						height: 143rpx;
+						border: 2rpx solid #383838;
+						background: #383838;
+						border-radius: 16rpx;
+						text-align: center;
+						image {
+							width: 62rpx;
+							height: 59rpx;
+							margin-top: 30rpx;
+							margin-left: 50%;
 							margin-left: 40rpx;
-
-							.title {
-								font-size: 32rpx;
-								color: #000000;
-								font-weight: 700;
-							}
-
-							.text1 {
-								height: 68rpx;
-								font-size: 24rpx;
-								color: #666;
-								margin-top: 4rpx;
-								line-height: 34rpx;
-								margin: 10rpx 0;
-							}
-
-							.text2 {
-								font-size: 28rpx;
-								color: #858585;
-								margin-top: 4rpx;
-							}
-
-
 						}
-
-						.btns {
-							margin-top: 20rpx;
-							display: flex;
-							align-items: center;
-							justify-content: space-between;
-
-							.button {
-								padding-right: 10rpx;
-								padding-left: 16rpx;
-								height: 60rpx;
-								display: flex;
-								align-items: center;
-								justify-content: center;
-								font-size: 28rpx;
-								background: #FF0066;
-								border-radius: 60rpx;
-								color: #fff;
-
-								&.collect {
-									opacity: 0.6;
-								}
-
-								&.active {
-									background: rgba(#000, 0.9);
-								}
-
-								.text {
-									margin-left: 8rpx;
-									padding-right: 16rpx;
-								}
-							}
+						span {
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 28rpx;
+							color: #FFCD03;
+						}
+					}
+					.reward_list_info_t {
+						margin-top: 20rpx;
+						width: 100%;
+						float: left;
+						text-align: center;
+						font-family: Inter, Inter;
+						font-weight: 400;
+						font-size: 26rpx;
+						color: #D1D1D1;
+					}
+				}
+				.reward_list_info.end {
+					view {
+						background: rgba(255,205,3,0.2);
+						border-radius: 16rpx;
+						border: 2rpx solid #FFCD03;
+						span {
+							color: #D1D1D1;
 						}
 					}
 				}
-
-				.nodata {
-					padding: 15vh 0;
+				.reward_list_info.on {
+					.reward_list_info_t {
+						color: #FFCD03;
+					}
+				}
+			}
+			.reward-btn {
+				height: 88rpx;
+				background: linear-gradient( 90deg, #3EF2FF 0%, #FFE23E 100%);
+				border-radius: 94rpx;
+				font-family: Inter, Inter;
+				font-weight: 400;
+				font-size: 27rpx;
+				color: #000000;
+			}
+		}
+		.invite {
+			width: 100%;
+			float: left;
+			.invite_t {
+				width: 100%;
+				float: left;
+				line-height: 60rpx;
+				font-family: Inter, Inter;
+				font-weight: 400;
+				font-size: 28rpx;
+				margin-top: 30rpx;
+				color: #FFFFFF;
+			}
+			.invite_info {
+				width: 100%;
+				height: 141rpx;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				background: linear-gradient( 185deg, #262626 0%, #252525 100%);
+				border-radius: 20rpx;
+				border: 2rpx solid;
+				border-image: linear-gradient(135deg, rgba(233, 233, 233, 0.2), rgba(233, 233, 233, 1), rgba(233, 233, 233, 0.2)) 1 1;
+				.invite_infos {
+					width: 70%;
+					.invite_info_img {
+						float: left;
+						margin-left: 32rpx;
+						margin-top: 27rpx;
+						width: 88rpx;
+						height: 88rpx;
+					}
+					.invite_info_left {
+						margin-left: 130rpx;
+						line-height: 26rpx;
+						margin-top: 30rpx;
+						font-family: Inter, Inter;
+						font-weight: 400;
+						font-size: 28rpx;
+						color: #FFFFFF;
+						
+						image {
+							width: 36rpx;
+							height: 34rpx;
+							float: left;
+						}
+						span {
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 26rpx;
+							margin: 0 10rpx;
+							color: #FFCD03;
+						}
+						i {
+							font-style: normal;
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 26rpx;
+							color: #999999;
+						  }
+					}
+				}
+				.invite-btn {
+					width: 106rpx;
+					height: 65rpx;
+					text-align: center;
+					font-family: Inter, Inter;
+					font-weight: bold;
+					font-size: 27rpx;
+					color: #000000;
+					margin-top: 38rpx;
+					margin-right: 36rpx;
+					line-height: 65rpx;
+					background: linear-gradient( 90deg, #3EF2FF 0%, #FFE23E 100%);
+					border-radius: 94rpx;
 				}
 			}
 		}
-	}
-
-	::v-deep .u-tabs__wrapper__nav,
-	.u-tabs {
-		flex-direction: unset !important;
-	}
-
-	::v-deep .u-tabs__wrapper__nav__item {
-		white-space: nowrap;
+		.rewardCover {
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			z-index: 99999;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			background-color: #000;
+			background-image: url(/static/images/yqpy.png);
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center center;
+			.returnBtn {
+				position: fixed;
+				z-index: 999999;
+				left: 34rpx;
+				top: 34rpx;
+				font-size: 50rpx;
+				color: #fff;
+				font-family: 宋体;
+			}
+			.rewardCover_t {
+				width: 100%;
+				float: left;
+				text-align: center;
+				margin-top: 188rpx;
+				margin-bottom: 70rpx;
+				font-family: Inter, Inter;
+				font-weight: bold;
+				font-size: 40rpx;
+				color: #FFCD03;
+			}
+			.rewardCover_info {
+				position: relative;
+				width: 100%;
+				float: left;
+				height: 842rpx;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				background-image: url(/static/images/Frame1000001593.png);
+				background-repeat: no-repeat;
+				background-size: auto 100%;
+				background-position: center bottom;
+				.rewardCover_info_img {
+					width: 300rpx;
+					height: 300rpx;
+					position: absolute;
+					z-index: 9;
+					right: 1%;
+					top: -100rpx;
+				}
+				.rewardCover_info_t {
+					margin-top: 100rpx;
+					display: flex;
+					flex-direction: row;
+					margin-bottom: 30rpx;
+					font-family: Inter, Inter;
+					font-weight: 400;
+					font-size: 24rpx;
+					line-height: 50rpx;
+					color: #333333;
+					image {
+						width: 100rpx;
+						height: 100rpx;
+						border-radius: 50%;
+						margin-right: 24rpx;
+					}
+					view {
+						span {
+							font-family: Inter, Inter;
+							font-weight: bold;
+							font-size: 30rpx;
+							color: #333333;
+						}
+					}
+				}
+				.QR_code {
+					width: 168rpx;
+					height: 168rpx;
+				}
+			}
+			.rewardCover_bottom {
+				margin-top: 50rpx;
+				width: 100%;
+				float: left;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				font-family: Inter, Inter;
+				font-weight: 400;
+				font-size: 24rpx;
+				color: #D1D1D1;
+				image {
+					width: 88rpx;
+					height: 88rpx;
+					margin-bottom: 32rpx;
+				}
+			}
+		}
 	}
 </style>

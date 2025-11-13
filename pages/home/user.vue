@@ -1,12 +1,8 @@
 <template>
 	<view class="page_content">
-		<!-- <view class="head_content">
-			<CustomNavbar :left="0" title="我的"></CustomNavbar>
-			
-		</view> -->
+		
 		<view class="infoBox">
-			<image class="imagess" v-if="allocatProgram.avatarLogo" :src="allocatProgram.avatarLogo" mode="aspectFill"></image>
-			<view class="navbar">{{allocatProgram.programName || '剧友'}}</view>
+			
 			<view class="userinfo_box" v-if="userInfoStore">
 				<view class="avatar">
 					<image class="imageloog" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo" mode=""></image>
@@ -21,7 +17,7 @@
 							mode="widthFix" @click="openVip"></image>
 					</view> -->
 					<view class="msg">
-						<text class="membername">{{ userInfoStore.memberName || '剧友'}}</text>
+						<text class="membername">{{ userInfoStore.memberName || 'Visitor'}}</text>
 						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
 					<view class="msg">
@@ -30,7 +26,9 @@
 						<text class="text" v-if="userInfoStore.activate=='已开通' && userInfoStore.rechargeVal">VIP会员{{userInfoStore.expireTime}}到期</text>
 						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
+					
 				</view>
+				<u-button class="user-btn">Đăng nhập</u-button>
 				<!-- <image class="arrow" src="/static/icons/arrow.png" mode="widthFix"></image> -->
 			</view>
 			<view class="userinfo_box" v-else >
@@ -47,7 +45,31 @@
 		</view>
 		<view class="main_content">
 			<!-- VIP充值 -->
-			<view class="vip_card" v-if="userInfoStore.rechargeVal">
+			<!-- <view class="integral_box" v-if="userInfoStore.rechargeVal" > -->
+			<view class="integral_box">
+				<view class="integral_box_t" @click="recharbtn">
+					<view>Ví của tôi</view>
+					<span>></span>
+				</view>
+				<view class="integral_box_info">
+					<view class="right">
+						<text class="text">Vàng</text>
+						<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
+						<text class="text usable">{{ userInfoStore.totalBalance || 0 }}</text>
+						<!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
+					</view>
+					<view class="right">
+						<text class="text">điểm tích lũy</text>
+						<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
+						<text class="text usable">{{ userInfoStore.totalBalance || 0 }}</text>
+						<!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
+					</view>
+					<view class="left" @click="recharbtn">nạp tiền</view>
+				</view>
+				
+			</view>
+			<!-- <view class="vip_card" v-if="userInfoStore.rechargeVal"> -->
+			<view class="vip_card">
 				<image class="imagssl" :src="userInfoStore.backgRound" mode="scaleToFill"></image>
 				<view class="vip_box">
 					<view class="left" @click="openVip">
@@ -60,43 +82,29 @@
 					</view>
 				</view>
 			</view>
-			<view class="integral_box" v-if="userInfoStore.rechargeVal" >
-				<view class="right">
-					<text class="text">帐户余额:</text>
-					<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
-					<text class="text usable">{{ userInfoStore.totalBalance || 0 }}</text>
-					<text class="text">{{userInfoStore.currencyName || '' }}</text>
-				</view>
-				<view class="left" @click="recharbtn">充值</view>
-			</view>
 			<view class="moinublock">
 				<view class="oinuntlist">
-					历史记录
+					Xem lịch sử
 					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
 				</view>
 				<view class="list">
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
 						<view v-for="(item, index) in mounList" :key="index" style="position: relative;" @click="abunbtn(item)">
-							<view class="mouns">
+							<!-- <view class="mouns">
 								<view class="count">
 									<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>{{item.totalPlay || '0'}}
 								</view>
-							</view>
+							</view> -->
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
-								<u--text :lines="1" size="24rpx" align="left" :text="item.dramaName || '剧目名称'"></u--text>
+								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'bộ phim cổ ...'"></u--text>
+								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
 							</view>
 						</view>
 						<!-- <view class="" style="width: 20px;">
 							查看更多
 						</view> -->
 					</u-scroll-list>
-				</view>
-			</view>
-			<view class="card_box">
-				<view class="oinuntlist">
-					功能列表
-					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
 				</view>
 				<view class="dalisewier">
 					<view class="item" @click="jumpView(`/${item.url}`)" v-for="(item,index) in videoList" v-if="item.functionStatus == 1">
@@ -110,23 +118,24 @@
 						</view>
 					</view>
 				</view>
-
-			</view>
-			<view class="menu_box">
-				<view class="item" v-for="(item, index) in menuList" :key="item.id"
-					@click="menuItemClick(item.rid, item.text, item.path)">
-					<view class="left">
-						<view class="icon">
-							<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix"></image>
+				<view class="menu_box">
+					<view class="item" v-for="(item, index) in menuList" :key="item.id"
+						@click="menuItemClick(item.rid, item.text, item.path)">
+						<view class="left">
+							<view class="icon">
+								<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix"></image>
+							</view>
+							<view class="text">{{ item.text }}</view>
 						</view>
-						<view class="text">{{ item.text }}</view>
-					</view>
-					<view class="right">
-						<u-icon name="arrow-right" color="#fff" size="12" :bold="true"></u-icon>
-						<!-- <image class="image" src="/static/icons/arrow.png" mode="widthFix"></image> -->
+						<view class="right">
+							<u-icon name="arrow-right" color="#fff" size="12" :bold="true"></u-icon>
+							<!-- <image class="image" src="/static/icons/arrow.png" mode="widthFix"></image> -->
+						</view>
 					</view>
 				</view>
 			</view>
+			
+			
 			<view class="copyright" v-if="copyrightData.length" @click="debugClick">
 				<view class="item" v-for="(item, index) in copyrightData" :key="index">
 					<image class="image" v-if="item.image" :src="item.image" mode="widthFix"></image>
@@ -574,14 +583,14 @@
 	.page_content {
 		position: relative;
 		overflow-y: auto;
-		// .head_content {
-		// 	padding: 88rpx 40rpx 0 40rpx;
-
-		// }
+		background-image: url(/static/images/navbar-bg.png);
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 		.infoBox {
-			padding: 108rpx 32rpx 48rpx 32rpx;
-			background-color: #62472A;
 			position: relative;
+			padding-left: 36rpx;
+			padding-top: 80rpx;
 			.imagess{
 				width: 100%;
 				position: absolute;
@@ -641,7 +650,6 @@
 				.info {
 					flex: 1;
 					margin-left: 32rpx;
-
 					.nickname {
 						display: flex;
 
@@ -679,21 +687,33 @@
 						}
 					}
 				}
+				.user-btn {
+					width: 202rpx;
+					height: 65rpx;
+					margin-right: 36rpx;
+					text-align: center;
+					line-height: 65rpx;
+					border-radius: 94rpx;
+					background-color: transparent;
+					font-family: Inter, Inter;
+					font-weight: 400;
+					font-size: 27rpx;
+					color: #FFCD03;
+					border: 2rpx solid #FFCD03;
+				}
 			}
 		}
 
 		.main_content {
-			padding: 0 32rpx 152rpx 32rpx;
-			
-			background-color: #f2f5f7;
-
-
 			.vip_card {
-				border-radius: 8rpx;
-				overflow: hidden;
 				margin-top: 24rpx;
+				margin: 0 40rpx;
 				position: relative;
-				height: 204rpx;
+				height: 141rpx;
+				background: linear-gradient( 220deg, #181818 0%, #545454 50%, #252525 100%);
+				border-radius: 20rpx;
+				border: 2rpx solid;
+				border-image: linear-gradient(135deg, rgba(255, 237, 192, 0.2), rgba(255, 237, 192, 1), rgba(255, 237, 192, 0.2)) 1 1;
 				.imagssl{
 					width: 100%;
 					height: 204rpx;
@@ -769,56 +789,87 @@
 			}
 
 			.integral_box {
-				margin-top: 24rpx;
-				height: 112rpx;
-				background: #fff;
+				height: 260rpx;
 				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				color: #4D4D4D;
+				flex-direction: column;
+				color: #fff;
+				background-image: url(/static/images/Frame1000001530-1.png);
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
 				padding: 0 24rpx;
 				font-size: 28rpx;
 				font-weight: 600;
 				border-radius: 8rpx;
-
-				.left {
-					color: #fff;
-					border-radius: 68rpx;
-					width: 144rpx;
-					height: 68rpx;
+				margin: 0rpx 40rpx;
+				margin-top: 20rpx;
+				.integral_box_t {
+					height: 100rpx;
+					line-height: 100rpx;
+					padding-top: 20rpx;
+					border-bottom: 2rpx solid #fff;
+					margin-bottom: 40rpx;
+					font-family: Inter, Inter;
+					font-weight: 400;
 					font-size: 28rpx;
-					background-color: #FF0066;
-					line-height: 68rpx;
-					text-align: center;
+					color: #FFFFFF;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					span {
+						font-family: 宋体;
+					}
 				}
-
-				.right {
+				.integral_box_info {
 					display: flex;
 					align-items: center;
-
-					.image {
-						width: 30rpx;
-						margin-right: 8rpx;
-						margin-left: 12rpx;
-					}
-
-					.text {
-						font-size: 28rpx;
+					justify-content: space-between;
+					.left {
+						width: 171rpx;
+						height: 65rpx;
+						background: #DBB006;
+						border-radius: 94rpx;
+						line-height: 65rpx;
+						text-align: center;
+						font-family: Inter, Inter;
 						font-weight: bold;
+						font-size: 27rpx;
+						color: #000000;
 					}
-					.usable{
-						margin-left: 12rpx;
-						margin-right: 8rpx;
-						font-size: 36rpx;
-						color: #000;
+					
+					.right {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+					
+						.image {
+							width: 30rpx;
+							margin-right: 8rpx;
+							margin-left: 12rpx;
+						}
+					
+						.text {
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 26rpx;
+							color: #FFFFFF;
+						}
+						.usable{
+							margin-left: 12rpx;
+							margin-right: 8rpx;
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 36rpx;
+							color: #FFCD03;
+						}
 					}
 				}
+				
 			}
 
 			.oinuntlist {
 				font-size: 28rpx;
 				font-weight: 800;
-				color: #4D4D4D;
+				color: #fff;
 				position: relative;
 
 				image {
@@ -833,10 +884,15 @@
 
 			.moinublock {
 				border-radius: 8rpx;
-				padding: 36rpx 24rpx 0 24rpx;
-				background: #fff;
+				padding: 36rpx 40rpx 0 40rpx;
+				background: transparent;
 				margin-top: 24rpx;
-
+				margin: 30rpx 32rpx;
+				background: linear-gradient( 185deg, #262626 0%, #252525 100%);
+				border: 0rpx solid;
+				border-image: linear-gradient(135deg, rgba(233, 233, 233, 0.2), rgba(233, 233, 233, 1), rgba(233, 233, 233, 0.2)) 1 1;
+				border-radius: 20rpx;
+				
 				.list {
 					margin-top: 15rpx;
 				}
@@ -851,7 +907,6 @@
 				.title {
 					width: 100%;
 					margin-top: 8rpx;
-					
 				}
 			}
 
@@ -911,12 +966,11 @@
 			}
 
 			.menu_box {
-				display: none;
 				background: #fff;
 				border-radius: 8rpx;
-				padding: 30rpx 40rpx;
+				padding: 30rpx 0rpx;
 				margin-top: 40rpx;
-				background: linear-gradient(141.96deg, #EE7F33 0%, #FFB98A 100%);
+				background: transparent;
 
 				.item {
 					display: flex;
