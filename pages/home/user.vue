@@ -61,7 +61,7 @@
 					<view class="right">
 						<text class="text">điểm tích lũy</text>
 						<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
-						<text class="text usable">{{ userInfoStore.totalBalance || 0 }}</text>
+						<text class="text usables">{{ userInfoStore.totalBalance || 0 }}</text>
 						<!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
 					</view>
 					<view class="left" @click="recharbtn">nạp tiền</view>
@@ -70,14 +70,23 @@
 			</view>
 			<!-- <view class="vip_card" v-if="userInfoStore.rechargeVal"> -->
 			<view class="vip_card">
-				<image class="imagssl" :src="userInfoStore.backgRound" mode="scaleToFill"></image>
+				<!-- <image class="imagssl" :src="userInfoStore.backgRound" mode="scaleToFill"></image> -->
 				<view class="vip_box">
 					<view class="left" @click="openVip">
 						<view class="line1">
+							<view class="vipBox">
+								<image src="/static/images/Frame-39.png" mode="aspectFill"></image>
+								<view>
+									<span>Thành viên mở</span><br>Xem phần tiếp theo miễn phí
+								</view>
+							</view>
 							<!-- <image class="backgLogo" :src="userInfoStore.backgLogo" mode="aspectFill"></image> -->
 							<!-- <view class="kaitong">{{userInfoStore.activate}}</view> -->
 						</view>
-						<view class="line2">{{userInfoStore.remarks || ''}}<u-icon name="arrow-right" color="$uni-text-color-vip" size="14"></u-icon>
+						<view class="line2">
+							
+							<!-- {{userInfoStore.remarks || ''}}<u-icon name="arrow-right" color="$uni-text-color-vip" size="14"></u-icon> -->
+							<image src="/static/images/Frame1000001522-1.png" class="arrowRight" mode="aspectFill"></image>
 						</view>
 					</view>
 				</view>
@@ -98,7 +107,7 @@
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
 								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'bộ phim cổ ...'"></u--text>
-								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
+								<u--text :lines="1" size="24rpx" color="#6f6f6f" align="left" :text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
 							</view>
 						</view>
 						<!-- <view class="" style="width: 20px;">
@@ -241,52 +250,47 @@
 						id: 1,
 						img: '/static/icons/list_2.png',
 						width: '32rpx',
-						text: '邀请好友',
+						text: 'Mời bạn bè',//邀请好友
 						rid: '',
 						path: '/pages/user/share/poster'
 					},
 					// #endif
 					{
-						id: 7,
-						img: '/static/icons/list_2.png',
+						id: 8,
+						img: '/static/icons/list_5.png',
 						width: '28rpx',
-						text: '获取积分',
+						text: 'Bộ sưu tập của tôi',//我的收藏
+						rid: ''
+					},
+					{
+						id: 7,
+						img: '/static/icons/list_3.png',
+						width: '28rpx',
+						text: 'ngôn ngữ',//语言
 						rid: '',
 						path: '/pages/user/integral/task'
 					},
+					
 					{
 						id: 2,
 						img: '/static/icons/list_4.png',
 						width: '28rpx',
-						text: '用户协议',
-						rid: ''
-					},
-					{
-						id: 3,
-						img: '/static/icons/list_2.png',
-						width: '28rpx',
-						text: '隐私协议',
-						rid: ''
-					},
-					{
-						id: 4,
-						img: '/static/icons/list_3.png',
-						width: '28rpx',
-						text: '法律声明',
-						rid: ''
+						text: 'đội của tôi',//我的团队
+						rid: '',
+						path: '/pages/user/share/team'
 					},
 					{
 						id: 5,
-						img: '/static/icons/list_5.png',
+						img: '/static/icons/list_3.png',
 						width: '32rpx',
-						text: '联系我们',
+						text: 'Liên hệ Hỗ trợ',//联系我们
 						rid: ''
 					},
 					{
 						id: 6,
-						img: '/static/icons/list_3.png',
+						img: '/static/icons/list_1.png',
 						width: '28rpx',
-						text: '关于我们',
+						text: 'thiết lập',//设置
 						rid: ''
 					},
 				],
@@ -706,10 +710,10 @@
 
 		.main_content {
 			.vip_card {
-				margin-top: 24rpx;
+				
 				margin: 0 40rpx;
+				margin-top: 24rpx;
 				position: relative;
-				height: 141rpx;
 				background: linear-gradient( 220deg, #181818 0%, #545454 50%, #252525 100%);
 				border-radius: 20rpx;
 				border: 2rpx solid;
@@ -746,10 +750,34 @@
 						width: 100%;
 
 						.line1 {
-							font-size: 32rpx;
-							font-weight: bold;
+							
 							display: flex;
 							align-items: center;
+							justify-content: center;
+							.vipBox {
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								view {
+									flex: 1;
+									font-family: Inter, Inter;
+									font-weight: 400;
+									font-size: 26rpx;
+									line-height: 44rpx;
+									color: #999999;
+									span {
+										font-family: Inter, Inter;
+										font-weight: 400;
+										font-size: 28rpx;
+										color: #FFCD03;
+									}
+								}
+								image {
+									margin-right: 30rpx;
+									width: 97rpx;
+									height: 97rpx;
+								}
+							}
 							.backgLogo{
 								width: 30rpx;
 								height: 40rpx;
@@ -771,11 +799,16 @@
 							font-size: 28rpx;
 							display: flex;
 							align-items: center;
+							justify-content: center;
 							color: #fff;
-
-							::v-deep .u-icon {
-								margin-top: 6rpx;
+							
+							.arrowRight {
+								width: 54rpx;
+								height: 54rpx;
 							}
+							// ::v-deep .u-icon {
+							// 	margin-top: 6rpx;
+							// }
 						}
 					}
 
@@ -859,6 +892,24 @@
 							font-family: Inter, Inter;
 							font-weight: 400;
 							font-size: 36rpx;
+							background-image: url(/static/images/image73.png);
+							background-position: left center;
+							background-repeat: no-repeat;
+							padding-left: 40rpx;
+							background-size: 28rpx 27rpx;
+							color: #FFCD03;
+						}
+						.usables{
+							margin-left: 12rpx;
+							margin-right: 8rpx;
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 36rpx;
+							background-image: url(/static/images/diamond.png);
+							background-position: left center;
+							background-repeat: no-repeat;
+							padding-left: 40rpx;
+							background-size: 32rpx 30rpx;
 							color: #FFCD03;
 						}
 					}
@@ -969,7 +1020,6 @@
 				background: #fff;
 				border-radius: 8rpx;
 				padding: 30rpx 0rpx;
-				margin-top: 40rpx;
 				background: transparent;
 
 				.item {
