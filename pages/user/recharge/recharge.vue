@@ -15,7 +15,9 @@
 			</view>
 		</view>
 		<view class="act_prompt">
-			<view class="bot_title">
+			Gợi ý:<br>
+			Monkey Short cung cấp nội dung miễn phí và trả phí cho tất cả mọi người. Bạn có thể quyết định nội dung cần giải mã. Thanh toán là không bắt buộc và giá trị lưu trữ không hỗ trợ hoàn lại tiền. Nếu tiền dự trữ chưa được ghi vào tài khoản của ông, xin vui lòng thoát khỏi bang của tôi.
+			<!-- <view class="bot_title">
 				温馨提示
 			</view>
 			<view class="text">
@@ -38,7 +40,7 @@
 				6.充值代表您已同意<navigator url="/pages/user/about/about" hover-class="navigator-hover">
 					<span class="tt">《用户协议》</span>和<span class="tt">《隐私政策》</span>.
 				</navigator>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
