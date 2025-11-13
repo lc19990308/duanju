@@ -209,10 +209,11 @@
 						const tenantId = res.result.tenantId
 						const memberName = res.result.memberName
 						const sysOrgCode = res.result.sysOrgCode
+						const memberId = res.result.memberId
 						uni.setStorageSync('id', id)
 						uni.setStorageSync('tenantId', tenantId)
 						uni.setStorageSync('sysOrgCode', sysOrgCode)
-						console.log("登录111", res)
+						uni.setStorageSync('memberId', memberId)
 						// this.longinopenid()
 						// uni.switchTab({
 						// 	url: '/pages/home/index'

@@ -32,7 +32,7 @@
 					color: '#FFFFFF',
 				},
 				query: {
-					memberId: '717855590',
+					memberId:uni.getStorageSync('memberId') || '',
 					sysOrgCode: 'A03A01',
 					pageNo: 1,
 					pageSize: 10,
@@ -49,7 +49,6 @@
 			//获取积分兑换金币
 			getIntegralList() {
 				this.status = 'loading';
-				// this.query.memberId = String(this.userInfo.memberId);
 				this.$request('withdraw.goldCoinExchangeDetailList', this.query).then(res => {
 					this.total = res.result.total;
 					this.list = this.list.concat(res.result.records);

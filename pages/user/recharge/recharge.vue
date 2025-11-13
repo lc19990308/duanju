@@ -65,6 +65,7 @@
 				userCode: '',
 				falishui: {},
 				openid:'ogvdF6U0Z36PmXdEg7QQEO6Tfh1w',
+				memberId:uni.getStorageSync('memberId') || '',
 			};
 		},
 		onLoad() {
@@ -80,7 +81,7 @@
 			// 查询会员信息
 			filmDramaMember() {
 				var data = {
-					memberId: uni.getStorageSync('id'),
+					memberId: this.memberId,
 				}
 				// return 
 				this.$request('player.filmDramaMember', data).then(res => {
@@ -90,7 +91,7 @@
 			// 查询充值设置
 			getAllocatRechargeList() {
 				this.$request('wchatapi.allocatRechargeList', {
-					memberId: uni.getStorageSync('tenantId'),
+					memberId: this.memberId,
 					sysOrgCode: uni.getStorageSync('sysOrgCode'),
 				}).then(res => {
 					if (res != 200 && res.message != "") {
@@ -149,7 +150,7 @@
 				this.money = item.money
 				var data = {
 					rechargeId: item.id, //充值套餐id
-					memberId: uni.getStorageSync('id'), //会员id
+					memberId: this.memberId,
 					sysOrgCode: uni.getStorageSync('sysOrgCode'), //租户id
 					tenantId: uni.getStorageSync('tenantId'), //运营主体公司id
 					platformType: 2,

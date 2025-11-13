@@ -47,7 +47,7 @@
 					fontsize: '32rpx',
 				},
 				form: {
-					memberId: '717855590',
+					memberId:uni.getStorageSync('memberId') || '',
 					pointQuantity: '',
 					sysOrgCode: 'A01',
 				},
@@ -73,7 +73,6 @@
 		},
 		methods: {
 			getIntegral() {
-				// this.form.memberId = String(this.userInfo.memberId);
 				this.$request('withdraw.getBalance', {
 					memberId: this.form.memberId
 				}).then(res => {

@@ -5,7 +5,7 @@ import apiMoen from '../../utils/config.js';
 // 	SIGN
 // } from '@/env.js';
 import store from '@/common/store/index.js'
-
+console.log(store.state.user.token,'token')
 // 组装接口路径
 const getApiPath = path => {
 	let apiArray = path.split("."),
@@ -18,7 +18,7 @@ const getApiPath = path => {
 
 // 发起请求的函数
 const request = (path, data, error = true, customHeaders = {}) => {
-	console.log(customHeaders,'customHeaders')
+	console.log(customHeaders, 'customHeaders')
 	const config = {
 		'default': '',
 		'MP-WEIXIN': apiMoen.MPWEIXIN, //线上测试
@@ -58,44 +58,34 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				// 'Sign': SIGN || '',
 				// 'X-Tenant-Id': uni.getStorageSync('tenantId')
 				'X-Tenant-Id': apiMoen.tenantId,
-				'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjI4OTQxNTAsInVzZXJuYW1lIjoiMTU4NzIzNzU0N0BxcS5jb20ifQ.VI-KZgFro8DJFpfgOuTWonli85ji-zFOGr64P438xYs',
+				// 'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjI4OTQxNTAsInVzZXJuYW1lIjoiMTU4NzIzNzU0N0BxcS5jb20ifQ.VI-KZgFro8DJFpfgOuTWonli85ji-zFOGr64P438xYs',
+				'X-Access-Token':store.state.user.token,
 				...customHeaders,
 				// 'X-Access-Token': uni.getStorageSync('tenantId')
 			},
 			success: res => {
-				if(res.statusCode === 200) {
-					if(res.data.code != 1 && res.data.code != 1314 && error) {
-						uni.showToast({
-							title: res.data.msg || `error => ${BASE_URL || 'NULL'} => ${SIGN || 'NULL'}`,
-							icon: 'none',
-							mask: true,
-							duration: 3000
-						})
-					}
-				} else if (res.statusCode === 401){
-					if(res.data.code === 401) {
-						store.dispatch('user/logout')
-
-						uni.showModal({
-							title: '系统提示',
-							content: '本操作需要您进行登录验证',
-							success: res => {
-								if(res.confirm) {
-									uni.navigateTo({
-										url: '/pages/login/login'
-									})
-								}
+				if (res.data.code === 200) {
+					resolve(res.data)
+				} else if (res.data.code === 401) {
+					store.dispatch('user/logout')
+					uni.showModal({
+						title: '系统提示',
+						content: '本操作需要您进行登录验证',
+						success: res => {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: '/pages/login/login'
+								})
 							}
-						})
-					}
+						}
+					})
 				} else {
 					uni.showToast({
-						title: res.statusCode.toString(),
+						title: res.data.message,
 						icon: 'none'
 					})
+					reject(res);
 				}
-
-				resolve(res.data)
 			},
 			fail: err => {
 				// uni.showToast({

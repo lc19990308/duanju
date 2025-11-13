@@ -54,6 +54,7 @@
 				},
 				list: [],
 				page: 1,
+				memberId:uni.getStorageSync('memberId') || '',
 				pagesize: 10
 			}
 		},
@@ -67,7 +68,7 @@
 			},
 			teamList() {
 				this.$request('share.teamNum', {
-					memberId: '1',
+					memberId: this.memberId,
 				}).then(res => {
 					if(res.code === 1) {
 						this.info = {
@@ -78,7 +79,7 @@
 					}
 				})
 				this.$request('share.teamNew', {
-					memberId: '1',
+					memberId: this.memberId,
 				}).then(res => {
 					if(res.code === 1) {
 						

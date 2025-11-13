@@ -72,7 +72,7 @@
 					fontWeight: 800,
 					color: '#FFFFFF',
 				},
-				memberId: '717855590',
+				memberId:uni.getStorageSync('memberId') || '',
 				info: {
 					currency: 0,
 					totalBalance: 0,
@@ -93,7 +93,6 @@
 		},
 		methods: {
 			getIntegral() {
-				// this.form.memberId = String(this.userInfo.memberId);
 				this.$request('withdraw.getBalance', {
 					memberId: this.memberId
 				}).then(res => {
@@ -103,7 +102,6 @@
 			//明细列表
 			getIntegralList() {
 				this.status = 'loading';
-				// this.query.memberId = String(this.userInfo.memberId);
 				this.$request('withdraw.rechargeDetailList', {
 					...this.query,
 					memberId: this.memberId
@@ -168,7 +166,6 @@
 		},
 		
 		onPullDownRefresh() {
-			console.log('onPullDownRefresh')
 			this.resetQuery();
 			this.getList();
 		},

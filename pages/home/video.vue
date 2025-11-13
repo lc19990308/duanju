@@ -259,6 +259,7 @@
 
 		},
 		onLoad() {
+			console.log('video 页面')
 			const memberId = uni.getStorageSync('id')
 			if (!memberId) {
 				uni.redirectTo({

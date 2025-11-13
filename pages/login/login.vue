@@ -56,12 +56,17 @@
 </template>
 
 <script>
-	import { mapState, mapGetters, mapMutations, mapActions } from "vuex"
+	import {
+		mapState,
+		mapGetters,
+		mapMutations,
+		mapActions
+	} from "vuex"
 	export default {
 		data() {
 			return {
-				urlToken:'',
-				webUrl:'',
+				urlToken: '',
+				webUrl: '',
 				showWebView: false,
 				labelStyle: {
 					color: '#FFFFFF',
@@ -70,8 +75,8 @@
 					fontsize: '32rpx',
 				},
 				form: {
-					email:'',
-					password: '',
+					email: 'lc19990308@163.com',
+					password: '123456',
 
 				},
 				rules: {
@@ -94,7 +99,7 @@
 			}
 		},
 		methods: {
-			...mapActions(["getUserInfo"]),
+			...mapActions('user', ['getUserInfo']),
 			codeChange(text) {
 				this.tips = text;
 			},
@@ -118,15 +123,9 @@
 			submitGAList() {
 				let obj = {}
 				this.$request('login.loginGAList', obj).then(res => {
-					if(res.code === 0) {
-						this.$u.toast(res.message)
-					}else if(res.code === 500) {
-						this.$u.toast(res.message)
-					}else{
-						if(res.code === 200) {
-							this.$u.toast("获取成功")
-							this.getUserInfo(res.result)
-						}
+					if (res.code === 200) {
+						this.$u.toast("获取成功")
+						this.getUserInfo(res.result)
 					}
 				})
 			},
@@ -134,26 +133,26 @@
 				const timestamp = Date.now();
 				const timestampString = new Date(timestamp).toString();
 				let obj = {}
-				if(val == "apple"){
+				if (val == "apple") {
 					obj = {
 						"provider": "apple",
 						"state": timestampString
 					}
 				}
-				if(val == "google"){
+				if (val == "google") {
 					obj = {
 						"provider": "google",
 						"state": timestampString
 					}
 				}
 				this.$request('login.loginGA', obj).then(res => {
-					
-					if(res.code === 0) {
+
+					if (res.code === 0) {
 						this.webUrl = res.result.authorizationUrl
 						this.showWebView = true;
 						let intervalId = setInterval(function() {
-						    if(this.webUrl.includes("token")){
-								let queryString = this.webUrl.split('?')[1]; 
+							if (this.webUrl.includes("token")) {
+								let queryString = this.webUrl.split('?')[1];
 								this.urlToken = queryString.split('=')[1];
 								clearInterval(intervalId);
 							}
@@ -168,15 +167,16 @@
 					"password": this.form.password
 				}
 				this.$request('login.loginEmail', obj).then(res => {
-					if(res.code === 0) {
-						this.$u.toast(res.message)
-					}else if(res.code === 500) {
-						this.$u.toast(res.message)
-					}else{
-						if(res.code === 200) {
-							this.$u.toast("登录成功")
-							this.getUserInfo(res.result)
-						}
+					if (res.code === 200) {
+						this.$u.toast("登录成功")
+						this.getUserInfo(res.result.token).then(resp => {
+							setTimeout(()=>{
+								uni.reLaunch({
+									url:'/'
+								})
+							},500)
+						})
+
 					}
 				})
 			}
@@ -186,7 +186,15 @@
 </script>
 
 <style lang="scss" scoped>
-	.webView {width: 100%;height: 100%;position: fixed;left: 0;top: 0;z-index: 999999;}
+	.webView {
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		left: 0;
+		top: 0;
+		z-index: 999999;
+	}
+
 	page {
 		// background-image: url('/static/images/login.png');
 		// background-repeat: no-repeat;
@@ -325,7 +333,8 @@
 		border: 2rpx solid #EDC267 !important;
 		background-color: #000 !important;
 	}
-	::v-deep .u-checkbox{
+
+	::v-deep .u-checkbox {
 		margin-bottom: 0rpx !important;
 	}
 </style>

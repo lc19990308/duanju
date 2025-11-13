@@ -1,7 +1,9 @@
-
 import request from 'common/request/index.js'
-import { BASE_URL, SIGN } from '@/env.js';
-import store from '..'
+import {
+	BASE_URL,
+	SIGN
+} from '@/env.js';
+import store from '../index.js'
 
 export default {
 	namespaced: true,
@@ -33,22 +35,19 @@ export default {
 	},
 	actions: {
 		// 获取用户信息
-		async getUserInfo({ commit, dispatch, getters, state }, token = "") {
+		async getUserInfo({
+			commit,
+			dispatch,
+			getters,
+			state
+		}, token = "") {
 			const result = await new Promise((resolve, reject) => {
 				token && commit("setToken", token)
-				request("user.info")
+				request("user.getUserInfo")
 					.then(res => {
-						if (res.code === 1) {
-							commit("setUserInfo", res.data)
-							commit("setUsable", res.data.usable)
-							commit("setUid", res.data.user_id)
-							if(!store.state.app.jwx) {
-								store.dispatch("app/getWxShareConfigInfo")
-							}
-							resolve(res)
-						} else {
-							reject(res)
-						}
+						commit("setUserInfo", res.result.userInfo)
+						commit("setUid", res.result.userInfo.id)
+						resolve(res)
 					})
 					.catch(err => {
 						reject(err)
@@ -57,10 +56,15 @@ export default {
 			return result
 		},
 		// 清除权限
-		async logout({ commit, dispatch, getters, state }) {
+		async logout({
+			commit,
+			dispatch,
+			getters,
+			state
+		}) {
 			commit("setToken", "")
 			commit("setUserInfo", "")
-			if(store.state.app.jwx) {
+			if (store.state.app.jwx) {
 				store.dispatch("app/getWxShareConfigInfo")
 			}
 		}

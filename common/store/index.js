@@ -22,18 +22,18 @@ const store = new Vuex.Store({
 				setItem: (key, value) => uni.setStorageSync(key, value),
 				removeItem: key => uni.removeStorageSync(key)
 			},
-			// reducer(val) {
-			// 	return {
-			// 		app: {
-			// 			config: val.app.config,
-			// 			appid: val.app.appid,
-			// 		},
-			// 		user: {
-			// 			token: val.user.token,
-			// 			userInfo: val.user.userInfo,
-			// 		}
-			// 	}
-			// }
+			reducer(val) {
+				return {
+					app: {
+						config: val.app.config,
+						appid: val.app.appid,
+					},
+					user: {
+						token: val.user.token,
+						userInfo: val.user.userInfo,
+					}
+				}
+			}
 		})
 	],
 	modules

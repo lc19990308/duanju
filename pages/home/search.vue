@@ -87,6 +87,8 @@
 				videoList: [],
 				dramaName:'',
 				historyList:[],
+				memberId:uni.getStorageSync('memberId') || '',
+				sysOrgCode:uni.getStorageSync('sysOrgCode') || '',
 			}
 		},
 		computed: {
@@ -100,7 +102,7 @@
 			//搜索
 			serachList(){
 				this.$request('serach.filmDramaMember', {
-					memberId: this.userInfo.memberId,
+					memberId: this.memberId,
 					sysOrgCode: 'A01',
 					dramaName:this.dramaName,
 					pageNo: 1,
@@ -114,15 +116,13 @@
 			},
 			//获取搜索历史
 			getHistoryList() {
-				// console.log(this.userInfo,'memberId',this.$store.state.user.userInfo)
 				this.$request('serach.searchHistoryList', {
-					memberId: this.userInfo.memberId,
+					memberId: this.memberId,
 					sysOrgCode: 'A01',
 					pageNo: 1,
 					pageSize: 10,
 				}).then(res => {
 					this.historyList = res.result.records;
-					console.log(res.result, '获取搜索历史')
 
 				})
 			},
@@ -140,16 +140,7 @@
 				this.$request('serach.hotDramaList', {
 					sysOrgCode: 'A01',
 				}).then(res => {
-					console.log(res.result, '获取搜索剧集')
 					this.videoList = res.result;
-					// this.total = res.result.records;
-					// this.swiperList = res.result.map(item=>{
-					// 	return {
-					// 		id: item.id,
-					// 		path: '',
-					// 		image:item.dramaPoster,
-					// 	}
-					// })
 				})
 			},
 			//清除历史
@@ -157,7 +148,6 @@
 				this.$request('serach.clearSearchHistory', {
 					sysOrgCode: 'A01',
 				}).then(res => {
-					console.log(res.result, 'xxs')
 					this.getHistoryList();
 				})
 			},
