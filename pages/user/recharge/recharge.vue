@@ -1,7 +1,7 @@
 <template>
 	<view class="centert-lsty">
 		<view class="mon-list">
-			<view class="moinuns-view" v-for="(item,index) in goldList.list" :class="index==activeIndex?'m-ativoe':''"
+			<!-- <view class="moinuns-view" v-for="(item,index) in goldList.list" :class="index==activeIndex?'m-ativoe':''"
 				@click="handleToActive(index,item)">
 				<view class="mv-ones">
 					<view class="">
@@ -11,6 +11,46 @@
 				</view>
 				<view class="mv-two">
 					额外赠送{{item.giftCoins}}{{falishui.currencyName}}
+				</view>
+			</view> -->
+			<view class="rechargeView_title">
+				<span>Số dư: 50 vàng</span>
+			</view>
+			<view class="rechargeView_list">
+				<view class="rechargeView_lists top3">
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				
+				<view class="rechargeView_lists">
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
 				</view>
 			</view>
 		</view>
