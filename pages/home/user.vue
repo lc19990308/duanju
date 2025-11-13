@@ -115,18 +115,18 @@
 						</view> -->
 					</u-scroll-list>
 				</view>
-				<view class="dalisewier">
+				<!-- <view class="dalisewier">
 					<view class="item" @click="jumpView(`/${item.url}`)" v-for="(item,index) in videoList" v-if="item.functionStatus == 1">
-						<!-- <view class="icon">
+						<view class="icon">
 							<image class="image" :src="item.img" mode="aspectFill"></image>
-						</view> -->
-						<!-- <view class="text">{{ item.text }}</view> -->
+						</view>
+						<view class="text">{{ item.text }}</view>
 						<view class="vlist" :key="item.id" >
 							<image class="video-pic" :src="item.img" mode="widthFix"></image>
 							<view style="color: #000;" class="text">{{ item.text }}</view>
 						</view>
 					</view>
-				</view>
+				</view> -->
 				<view class="menu_box">
 					<view class="item" v-for="(item, index) in menuList" :key="item.id"
 						@click="menuItemClick(item.rid, item.text, item.path)">
