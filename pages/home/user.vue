@@ -45,7 +45,31 @@
 		</view>
 		<view class="main_content">
 			<!-- VIP充值 -->
-			<view class="vip_card" v-if="userInfoStore.rechargeVal">
+			<!-- <view class="integral_box" v-if="userInfoStore.rechargeVal" > -->
+			<view class="integral_box">
+				<view class="integral_box_t" @click="recharbtn">
+					<view>Ví của tôi</view>
+					<span>></span>
+				</view>
+				<view class="integral_box_info">
+					<view class="right">
+						<text class="text">Vàng</text>
+						<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
+						<text class="text usable">{{ userInfoStore.totalBalance || 0 }}</text>
+						<!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
+					</view>
+					<view class="right">
+						<text class="text">điểm tích lũy</text>
+						<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
+						<text class="text usable">{{ userInfoStore.totalBalance || 0 }}</text>
+						<!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
+					</view>
+					<view class="left" @click="recharbtn">nạp tiền</view>
+				</view>
+				
+			</view>
+			<!-- <view class="vip_card" v-if="userInfoStore.rechargeVal"> -->
+			<view class="vip_card">
 				<image class="imagssl" :src="userInfoStore.backgRound" mode="scaleToFill"></image>
 				<view class="vip_box">
 					<view class="left" @click="openVip">
@@ -57,15 +81,6 @@
 						</view>
 					</view>
 				</view>
-			</view>
-			<view class="integral_box" v-if="userInfoStore.rechargeVal" >
-				<view class="right">
-					<text class="text">帐户余额:</text>
-					<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
-					<text class="text usable">{{ userInfoStore.totalBalance || 0 }}</text>
-					<text class="text">{{userInfoStore.currencyName || '' }}</text>
-				</view>
-				<view class="left" @click="recharbtn">充值</view>
 			</view>
 			<view class="moinublock">
 				<view class="oinuntlist">
@@ -103,23 +118,24 @@
 						</view>
 					</view>
 				</view>
-			</view>
-			
-			<view class="menu_box">
-				<view class="item" v-for="(item, index) in menuList" :key="item.id"
-					@click="menuItemClick(item.rid, item.text, item.path)">
-					<view class="left">
-						<view class="icon">
-							<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix"></image>
+				<view class="menu_box">
+					<view class="item" v-for="(item, index) in menuList" :key="item.id"
+						@click="menuItemClick(item.rid, item.text, item.path)">
+						<view class="left">
+							<view class="icon">
+								<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix"></image>
+							</view>
+							<view class="text">{{ item.text }}</view>
 						</view>
-						<view class="text">{{ item.text }}</view>
-					</view>
-					<view class="right">
-						<u-icon name="arrow-right" color="#fff" size="12" :bold="true"></u-icon>
-						<!-- <image class="image" src="/static/icons/arrow.png" mode="widthFix"></image> -->
+						<view class="right">
+							<u-icon name="arrow-right" color="#fff" size="12" :bold="true"></u-icon>
+							<!-- <image class="image" src="/static/icons/arrow.png" mode="widthFix"></image> -->
+						</view>
 					</view>
 				</view>
 			</view>
+			
+			
 			<view class="copyright" v-if="copyrightData.length" @click="debugClick">
 				<view class="item" v-for="(item, index) in copyrightData" :key="index">
 					<image class="image" v-if="item.image" :src="item.image" mode="widthFix"></image>
@@ -689,14 +705,15 @@
 		}
 
 		.main_content {
-			padding: 0 32rpx 152rpx 32rpx;
-			
 			.vip_card {
-				border-radius: 8rpx;
-				overflow: hidden;
 				margin-top: 24rpx;
+				margin: 0 40rpx;
 				position: relative;
-				height: 204rpx;
+				height: 141rpx;
+				background: linear-gradient( 220deg, #181818 0%, #545454 50%, #252525 100%);
+				border-radius: 20rpx;
+				border: 2rpx solid;
+				border-image: linear-gradient(135deg, rgba(255, 237, 192, 0.2), rgba(255, 237, 192, 1), rgba(255, 237, 192, 0.2)) 1 1;
 				.imagssl{
 					width: 100%;
 					height: 204rpx;
@@ -772,50 +789,81 @@
 			}
 
 			.integral_box {
-				margin-top: 24rpx;
-				height: 112rpx;
-				background: #fff;
+				height: 260rpx;
 				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				color: #4D4D4D;
+				flex-direction: column;
+				color: #fff;
+				background-image: url(/static/images/Frame1000001530-1.png);
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
 				padding: 0 24rpx;
 				font-size: 28rpx;
 				font-weight: 600;
 				border-radius: 8rpx;
-
-				.left {
-					color: #fff;
-					border-radius: 68rpx;
-					width: 144rpx;
-					height: 68rpx;
+				margin: 0rpx 40rpx;
+				margin-top: 20rpx;
+				.integral_box_t {
+					height: 100rpx;
+					line-height: 100rpx;
+					padding-top: 20rpx;
+					border-bottom: 2rpx solid #fff;
+					margin-bottom: 40rpx;
+					font-family: Inter, Inter;
+					font-weight: 400;
 					font-size: 28rpx;
-					background-color: #FF0066;
-					line-height: 68rpx;
-					text-align: center;
+					color: #FFFFFF;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					span {
+						font-family: 宋体;
+					}
 				}
-
-				.right {
+				.integral_box_info {
 					display: flex;
 					align-items: center;
-
-					.image {
-						width: 30rpx;
-						margin-right: 8rpx;
-						margin-left: 12rpx;
-					}
-
-					.text {
-						font-size: 28rpx;
+					justify-content: space-between;
+					.left {
+						width: 171rpx;
+						height: 65rpx;
+						background: #DBB006;
+						border-radius: 94rpx;
+						line-height: 65rpx;
+						text-align: center;
+						font-family: Inter, Inter;
 						font-weight: bold;
+						font-size: 27rpx;
+						color: #000000;
 					}
-					.usable{
-						margin-left: 12rpx;
-						margin-right: 8rpx;
-						font-size: 36rpx;
-						color: #000;
+					
+					.right {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+					
+						.image {
+							width: 30rpx;
+							margin-right: 8rpx;
+							margin-left: 12rpx;
+						}
+					
+						.text {
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 26rpx;
+							color: #FFFFFF;
+						}
+						.usable{
+							margin-left: 12rpx;
+							margin-right: 8rpx;
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 36rpx;
+							color: #FFCD03;
+						}
 					}
 				}
+				
 			}
 
 			.oinuntlist {
@@ -836,9 +884,15 @@
 
 			.moinublock {
 				border-radius: 8rpx;
-				padding: 36rpx 24rpx 0 24rpx;
+				padding: 36rpx 40rpx 0 40rpx;
 				background: transparent;
 				margin-top: 24rpx;
+				margin: 30rpx 32rpx;
+				background: linear-gradient( 185deg, #262626 0%, #252525 100%);
+				border: 0rpx solid;
+				border-image: linear-gradient(135deg, rgba(233, 233, 233, 0.2), rgba(233, 233, 233, 1), rgba(233, 233, 233, 0.2)) 1 1;
+				border-radius: 20rpx;
+				
 				.list {
 					margin-top: 15rpx;
 				}
@@ -914,7 +968,7 @@
 			.menu_box {
 				background: #fff;
 				border-radius: 8rpx;
-				padding: 30rpx 40rpx;
+				padding: 30rpx 0rpx;
 				margin-top: 40rpx;
 				background: transparent;
 
