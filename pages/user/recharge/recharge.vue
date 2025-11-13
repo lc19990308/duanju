@@ -1,7 +1,7 @@
 <template>
 	<view class="centert-lsty">
 		<view class="mon-list">
-			<view class="moinuns-view" v-for="(item,index) in goldList.list" :class="index==activeIndex?'m-ativoe':''"
+			<!-- <view class="moinuns-view" v-for="(item,index) in goldList.list" :class="index==activeIndex?'m-ativoe':''"
 				@click="handleToActive(index,item)">
 				<view class="mv-ones">
 					<view class="">
@@ -12,10 +12,52 @@
 				<view class="mv-two">
 					额外赠送{{item.giftCoins}}{{falishui.currencyName}}
 				</view>
+			</view> -->
+			<view class="rechargeView_title">
+				<span>Số dư: 50 vàng</span>
+			</view>
+			<view class="rechargeView_list">
+				<view class="rechargeView_lists top3">
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
+				
+				<view class="rechargeView_lists">
+					<view class="rechargeView_top">2400 vàng</view>
+					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_bottom">$320.00</view>
+				</view>
 			</view>
 		</view>
 		<view class="act_prompt">
-			<view class="bot_title">
+			Gợi ý:<br>
+			Monkey Short cung cấp nội dung miễn phí và trả phí cho tất cả mọi người. Bạn có thể quyết định nội dung cần giải mã. Thanh toán là không bắt buộc và giá trị lưu trữ không hỗ trợ hoàn lại tiền. Nếu tiền dự trữ chưa được ghi vào tài khoản của ông, xin vui lòng thoát khỏi bang của tôi.
+			<!-- <view class="bot_title">
 				温馨提示
 			</view>
 			<view class="text">
@@ -38,7 +80,7 @@
 				6.充值代表您已同意<navigator url="/pages/user/about/about" hover-class="navigator-hover">
 					<span class="tt">《用户协议》</span>和<span class="tt">《隐私政策》</span>.
 				</navigator>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
