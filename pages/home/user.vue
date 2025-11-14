@@ -159,13 +159,13 @@
 					<!-- #endif -->
 				</view>
 			</view>
-			<view class="alert_box"
-				v-if="platform != 'H5' && token && userInfoStore && configStore.system.mobile_switch == 1">
+			<!-- <view class="alert_box"
+				v-if="platform != 'H5' && token && userInfoStore">
 				<view class="item" v-if="!userInfoStore.verification.mobile">
 					<text class="text">您还没有绑定手机号</text>
 					<text class="btn" @click="alertBindButton('mobile')">去绑定</text>
 				</view>
-			</view>
+			</view> -->
 			<u-modal :show="cdkey.show" :title="cdkey.title" :showCancelButton="true" @confirm="cdkeyConfirm"
 				@cancel="cdkey.show = false">
 				<view style="width: 100%;">
@@ -181,15 +181,15 @@
 	import apiMoen from '../../utils/config.js';
 	const PlayerManager = require("../../utils/playerManager.js");
 	// const playletPlugin = requirePlugin("playlet-plugin");
-	let playletPlugin;
+	// let playletPlugin;
 	
 	// 检查当前是否在小程序环境中
 	if (typeof wx !== 'undefined' && wx.getSystemInfo) {
 	    try {
 	        // 在小程序中执行 requirePlugin
-	        playletPlugin = requirePlugin("playlet-plugin");
+	        // playletPlugin = requirePlugin("playlet-plugin");
 	    } catch (error) {
-	        console.error('Failed to requirePlugin in WeChat Mini Program:', error);
+	        // console.error('Failed to requirePlugin in WeChat Mini Program:', error);
 	    }
 	} else {
 	    // 在其他环境中的处理
@@ -213,7 +213,7 @@
 					width: '100%',
 					height: '100%',
 					border: 'none',
-					fontSize: '24rpx',
+					// fontSize: '24rpx',
 					color: '#DF9B45',
 					background: '#fff',
 					borderRadius: '8rpx',
