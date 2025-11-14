@@ -252,7 +252,7 @@
 						width: '32rpx',
 						text: 'Mời bạn bè',//邀请好友
 						rid: '',
-						path: '/pages/user/share/poster'
+						path: '/pages/home/watchs'
 					},
 					// #endif
 					{
