@@ -92,7 +92,7 @@
 				</view>
 			</view>
 			<view class="moinublock">
-				<view class="oinuntlist">
+				<view class="oinuntlist" @click="menuItemClicks">
 					Xem lịch sử
 					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
 				</view>
@@ -427,6 +427,11 @@
 			menuItemClick(val){
 				uni.redirectTo({
 					url: val.path
+				})
+			},
+			menuItemClicks(){
+				uni.redirectTo({
+					url: "/pages/home/history"
 				})
 			},
 			// 获取设备

@@ -78,6 +78,14 @@
 			}
 		},
 		{
+			"path": "pages/home/history",
+			"style": {
+				"navigationBarTitleText": "history",
+				"enablePullDownRefresh": false
+		
+			}
+		},
+		{
 			"path": "pages/home/user",
 			"style": {
 				"navigationBarTitleText": "",
