@@ -19,38 +19,38 @@
 			<view class="rechargeView_list">
 				<view class="rechargeView_lists top3">
 					<span class="rechargeView_percentage">+30%</span>
-					<view class="rechargeView_top">2400 vàng</view>
-					<view class="rechargeView_cen">+600vàng</view>
+					<view class="rechargeView_top">1800 vàng</view>
+					<view class="rechargeView_cen">+540vàng</view>
+					<view class="rechargeView_bottom">$590.00</view>
+				</view>
+				<view class="rechargeView_lists">
+					<view class="rechargeView_top">1000 vàng</view>
+					<view class="rechargeView_cen">+540vàng</view>
 					<view class="rechargeView_bottom">$320.00</view>
 				</view>
 				<view class="rechargeView_lists">
-					<view class="rechargeView_top">2400 vàng</view>
-					<view class="rechargeView_cen">+600vàng</view>
-					<view class="rechargeView_bottom">$320.00</view>
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">1500 vàng</view>
+					<view class="rechargeView_cen">+225vàng</view>
+					<view class="rechargeView_bottom">$490.00</view>
 				</view>
 				<view class="rechargeView_lists">
 					<span class="rechargeView_percentage">+30%</span>
 					<view class="rechargeView_top">2400 vàng</view>
 					<view class="rechargeView_cen">+600vàng</view>
-					<view class="rechargeView_bottom">$320.00</view>
+					<view class="rechargeView_bottom">$790.00</view>
 				</view>
 				<view class="rechargeView_lists">
-					<span class="rechargeView_percentage">+30%</span>
-					<view class="rechargeView_top">2400 vàng</view>
-					<view class="rechargeView_cen">+600vàng</view>
-					<view class="rechargeView_bottom">$320.00</view>
-				</view>
-				<view class="rechargeView_lists">
-					<span class="rechargeView_percentage">+30%</span>
-					<view class="rechargeView_top">2400 vàng</view>
-					<view class="rechargeView_cen">+600vàng</view>
-					<view class="rechargeView_bottom">$320.00</view>
+					<view class="rechargeView_top">3000 vàng</view>
+					<view class="rechargeView_cen">+1200vàng</view>
+					<view class="rechargeView_bottom">$900.00</view>
 				</view>
 				
 				<view class="rechargeView_lists">
-					<view class="rechargeView_top">2400 vàng</view>
-					<view class="rechargeView_cen">+600vàng</view>
-					<view class="rechargeView_bottom">$320.00</view>
+					<span class="rechargeView_percentage">+30%</span>
+					<view class="rechargeView_top">5000 vàng</view>
+					<view class="rechargeView_cen">+2500vàng</view>
+					<view class="rechargeView_bottom">$1,490.00</view>
 				</view>
 			</view>
 		</view>
