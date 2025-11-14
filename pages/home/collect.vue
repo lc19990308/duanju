@@ -86,9 +86,9 @@
 	if (typeof wx !== 'undefined' && wx.getSystemInfo) {
 	    try {
 	        // 在小程序中执行 requirePlugin
-	        playletPlugin = requirePlugin("playlet-plugin");
+	        // playletPlugin = requirePlugin("playlet-plugin");
 	    } catch (error) {
-	        console.error('Failed to requirePlugin in WeChat Mini Program:', error);
+	        // console.error('Failed to requirePlugin in WeChat Mini Program:', error);
 	    }
 	} else {
 	    // 在其他环境中的处理
@@ -100,12 +100,12 @@
 				navbarTitle: '',
 				tabsActiveStyle: {
 					color: '#000',
-					fontSize: '40rpx',
+					// fontSize: '40rpx',
 					fontWeight: 'bold',
 				},
 				tabsInactiveStyle: {
 					color: '#666666',
-					fontSize: '32rpx',
+					// fontSize: '32rpx',
 				},
 				contentList: [{
 						id: 1,

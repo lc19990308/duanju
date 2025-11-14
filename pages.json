@@ -394,8 +394,9 @@
 				{
 					"path": "activate/activate",
 					"style": {
-						"navigationBarTitleText": "开通会员",
-						"enablePullDownRefresh": false,
+						"navigationBarTitleText": "Thành viên",
+						"navigationBarTextStyle": "white",
+						"navigationBarBackgroundColor": "#000",
 						"navigationStyle": "default"
 					}
 				},
@@ -418,10 +419,10 @@
 				{
 					"path": "recharge/recharge",
 					"style": {
-						"navigationBarTitleText": "充值",
-						// "enablePullDownRefresh": false,
-						"navigationStyle": "default",
-						"navigationBarBackgroundColor": "#FFFFFF"
+						"navigationBarTitleText": "Cửa hàng",
+						"navigationBarTextStyle": "white",  
+						"navigationBarBackgroundColor": "#000",
+						"navigationStyle": "default"
 					}
 				}
 			]

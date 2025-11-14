@@ -129,7 +129,7 @@
 				</view> -->
 				<view class="menu_box">
 					<view class="item" v-for="(item, index) in menuList" :key="item.id"
-						@click="menuItemClick(item.rid, item.text, item.path)">
+						@click="menuItemClick(item)">
 						<view class="left">
 							<view class="icon">
 								<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix"></image>
@@ -256,14 +256,15 @@
 					},
 					// #endif
 					{
-						id: 8,
+						id: 2,
 						img: '/static/icons/list_5.png',
 						width: '28rpx',
 						text: 'Bộ sưu tập của tôi',//我的收藏
-						rid: ''
+						rid: '',
+						path: '/pages/user/share/collect'
 					},
 					{
-						id: 7,
+						id: 3,
 						img: '/static/icons/list_3.png',
 						width: '28rpx',
 						text: 'ngôn ngữ',//语言
@@ -272,7 +273,7 @@
 					},
 					
 					{
-						id: 2,
+						id: 4,
 						img: '/static/icons/list_4.png',
 						width: '28rpx',
 						text: 'đội của tôi',//我的团队
@@ -421,6 +422,11 @@
 			recharbtn(){
 				uni.navigateTo({
 					url:'../user/recharge/recharge'
+				})
+			},
+			menuItemClick(val){
+				uni.redirectTo({
+					url: val.path
 				})
 			},
 			// 获取设备
