@@ -336,7 +336,7 @@
 
 <style scoped lang="scss">
 	@import 'episode-listing.scss';
-
+.Plot {background-color: #000;height: 100%;color: #fff;}
 	.Plot-details {
 		z-index: 9;
 		padding: 20rpx;
