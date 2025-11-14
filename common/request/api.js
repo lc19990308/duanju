@@ -527,12 +527,12 @@ const api = {
 			desc: '团队'
 		},
 		teamNum: {
-			url: '/api/appApi/appDivideApi/getTeamData',
+			url: '/api/appDivideApi/getTeamData',
 			method: 'GET',
 			desc: '团队统计'
 		},
 		teamNew: {
-			url: '/api/appApi/appDivideApi/getTeamDataList',
+			url: '/api/appDivideApi/getTeamDataList',
 			method: 'GET',
 			desc: '团队列表'
 		},
