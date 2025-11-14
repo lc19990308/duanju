@@ -99,12 +99,12 @@
 			return {
 				navbarTitle: '',
 				tabsActiveStyle: {
-					color: '#000',
+					color: '#fff',
 					// fontSize: '40rpx',
 					fontWeight: 'bold',
 				},
 				tabsInactiveStyle: {
-					color: '#666666',
+					color: '#999',
 					// fontSize: '32rpx',
 				},
 				contentList: [{
@@ -342,7 +342,8 @@
 <style lang="scss" scoped>
 	.page_content {
 		overflow: hidden;
-
+		background-color: #000;
+		color: #fff;
 		.head_content {
 			margin-top: 88rpx;
 
@@ -365,12 +366,12 @@
 
 					.text {
 						font-size: 32rpx;
-						color: #5C5C5C;
+						color: #fff;
 					}
 
 					.icon {
 						display: flex;
-						color: #000;
+						color: #fff;
 						align-items: center;
 					}
 				}
@@ -411,13 +412,13 @@
 
 							.title {
 								font-size: 28rpx;
-								color: #111;
+								color: #fff;
 								font-weight: 700;
 							}
 
 							.text {
 								font-size: 24rpx;
-								color: #666;
+								color: #fff;
 								margin-top: 4rpx;
 							}
 						}
@@ -449,14 +450,14 @@
 
 							.title {
 								font-size: 32rpx;
-								color: #000000;
+								color: #fff;
 								font-weight: 700;
 							}
 
 							.text1 {
 								height: 68rpx;
 								font-size: 24rpx;
-								color: #666;
+								color: #fff;
 								margin-top: 4rpx;
 								line-height: 34rpx;
 								margin: 10rpx 0;
@@ -464,7 +465,7 @@
 
 							.text2 {
 								font-size: 28rpx;
-								color: #858585;
+								color: #fff;
 								margin-top: 4rpx;
 							}
 

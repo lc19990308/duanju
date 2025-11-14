@@ -1,128 +1,184 @@
 <template>
-	<view class="page_content">
-
-		<view class="infoBox">
-
-			<view class="userinfo_box" v-if="userInfoStore">
-				<view class="avatar">
-					<image class="imageloog" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo" mode="">
-					</image>
-					<!-- <image class="imageloog"  src="/static/images/avatar.png" mode=""></image> -->
-					<image class="image" v-if="userInfoStore.themeLogo" :src="userInfoStore.themeLogo"
-						mode="aspectFill"></image>
-					<image class="image" v-else src="/static/images/avatar.png" mode="aspectFill"></image>
-				</view>
-				<navigator class="info" url="/pages/user/account/changeUserName" hover-class="none">
-					<!-- <view class="nickname">
+  <view class="page_content">
+    <view class="infoBox">
+      <view class="userinfo_box" v-if="userInfoStore">
+        <view class="avatar">
+          <image
+            class="imageloog"
+            v-if="userInfoStore.backgLogo"
+            :src="userInfoStore.backgLogo"
+            mode=""
+          >
+          </image>
+          <!-- <image class="imageloog"  src="/static/images/avatar.png" mode=""></image> -->
+          <image
+            class="image"
+            v-if="userInfoStore.themeLogo"
+            :src="userInfoStore.themeLogo"
+            mode="aspectFill"
+          ></image>
+          <image
+            class="image"
+            v-else
+            src="/static/images/avatar.png"
+            mode="aspectFill"
+          ></image>
+        </view>
+        <navigator
+          class="info"
+          url="/pages/user/account/changeUserName"
+          hover-class="none"
+        >
+          <!-- <view class="nickname">
 											<text class="text">{{ userInfoStore.nickname }}</text>
 											<image class="image" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo"
 												mode="widthFix" @click="openVip"></image>
 										</view> -->
-					<view class="msg">
-						<text class="membername">{{ userInfoStore.memberName || 'Visitor'}}</text>
-						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
-					</view>
-					<view class="msg">
-						<text class="text"
-							v-if="userInfoStore.activate !='已开通'">ID：{{ userInfoStore.memberId || '000001'}}</text>
-						<!-- <text class="text" style="margin: 0 16rpx;" v-if="userInfoStore.activate=='已开通'"></text> -->
-						<text class="text"
-							v-if="userInfoStore.activate=='已开通' && userInfoStore.rechargeVal">VIP会员{{userInfoStore.expireTime}}到期</text>
-						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
-					</view>
-				</navigator>
-				<u-button class="user-btn">Đăng nhập</u-button>
-				<!-- <image class="arrow" src="/static/icons/arrow.png" mode="widthFix"></image> -->
-			</view>
-			<view class="userinfo_box" v-else>
-				<view class="avatar">
-					<image class="image" src="/static/images/avatar.png" mode="aspectFill"></image>
-				</view>
-				<view class="info">
-					<view class="nickname">
-						<text class="text">{{memberName}}</text>
-					</view>
-					<view class="msg"></view>
-				</view>
-			</view>
-		</view>
-		<view class="main_content">
-			<!-- VIP充值 -->
-			<!-- <view class="integral_box" v-if="userInfoStore.rechargeVal" > -->
-			<view class="integral_box">
-				<view class="integral_box_t" @click="recharbtn">
-					<view>Ví của tôi</view>
-					<span>></span>
-				</view>
-				<view class="integral_box_info">
-					<view class="right">
-						<text class="text">Vàng</text>
-						<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
-						<text class="text usable">{{ userInfoStore.totalBalance || 0 }}</text>
-						<!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
-					</view>
-					<view class="right">
-						<text class="text">điểm tích lũy</text>
-						<!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
-						<text class="text usables">{{ userInfoStore.totalBalance || 0 }}</text>
-						<!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
-					</view>
-					<view class="left" @click="recharbtn">nạp tiền</view>
-				</view>
-
-			</view>
-			<!-- <view class="vip_card" v-if="userInfoStore.rechargeVal"> -->
-			<view class="vip_card">
-				<!-- <image class="imagssl" :src="userInfoStore.backgRound" mode="scaleToFill"></image> -->
-				<view class="vip_box">
-					<view class="left" @click="openVip">
-						<view class="line1">
-							<view class="vipBox">
-								<image src="/static/images/Frame-39.png" mode="aspectFill"></image>
-								<view>
-									<span>Thành viên mở</span><br>Xem phần tiếp theo miễn phí
-								</view>
-							</view>
-							<!-- <image class="backgLogo" :src="userInfoStore.backgLogo" mode="aspectFill"></image> -->
-							<!-- <view class="kaitong">{{userInfoStore.activate}}</view> -->
-						</view>
-						<view class="line2">
-
-							<!-- {{userInfoStore.remarks || ''}}<u-icon name="arrow-right" color="$uni-text-color-vip" size="14"></u-icon> -->
-							<image src="/static/images/Frame1000001522-1.png" class="arrowRight" mode="aspectFill">
-							</image>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="moinublock">
-				<view class="oinuntlist">
-					Xem lịch sử
-					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
-				</view>
-				<view class="list">
-					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
-						<view v-for="(item, index) in mounList" :key="index" style="position: relative;"
-							@click="abunbtn(item)">
-							<!-- <view class="mouns">
+          <view class="msg">
+            <text class="membername">{{
+              userInfoStore.memberName || "Visitor"
+            }}</text>
+            <!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
+          </view>
+          <view class="msg">
+            <text class="text" v-if="userInfoStore.activate != '已开通'"
+              >ID：{{ userInfoStore.memberId || "000001" }}</text
+            >
+            <!-- <text class="text" style="margin: 0 16rpx;" v-if="userInfoStore.activate=='已开通'"></text> -->
+            <text
+              class="text"
+              v-if="
+                userInfoStore.activate == '已开通' && userInfoStore.rechargeVal
+              "
+              >VIP会员{{ userInfoStore.expireTime }}到期</text
+            >
+            <!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
+          </view>
+        </navigator>
+        <u-button class="user-btn">Đăng nhập</u-button>
+        <!-- <image class="arrow" src="/static/icons/arrow.png" mode="widthFix"></image> -->
+      </view>
+      <view class="userinfo_box" v-else>
+        <view class="avatar">
+          <image
+            class="image"
+            src="/static/images/avatar.png"
+            mode="aspectFill"
+          ></image>
+        </view>
+        <view class="info">
+          <view class="nickname">
+            <text class="text">{{ memberName }}</text>
+          </view>
+          <view class="msg"></view>
+        </view>
+      </view>
+    </view>
+    <view class="main_content">
+      <!-- VIP充值 -->
+      <!-- <view class="integral_box" v-if="userInfoStore.rechargeVal" > -->
+      <view class="integral_box">
+        <view class="integral_box_t" @click="recharbtn">
+          <view>Ví của tôi</view>
+          <span>></span>
+        </view>
+        <view class="integral_box_info">
+          <view class="right">
+            <text class="text">Vàng</text>
+            <!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
+            <text class="text usable">{{
+              userInfoStore.totalBalance || 0
+            }}</text>
+            <!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
+          </view>
+          <view class="right">
+            <text class="text">điểm tích lũy</text>
+            <!-- <image class="image" src="/static/icons/integral.png" mode=""></image> -->
+            <text class="text usables">{{
+              userInfoStore.totalBalance || 0
+            }}</text>
+            <!-- <text class="text">{{userInfoStore.currencyName || '' }}</text> -->
+          </view>
+          <view class="left" @click="recharbtn">nạp tiền</view>
+        </view>
+      </view>
+      <!-- <view class="vip_card" v-if="userInfoStore.rechargeVal"> -->
+      <view class="vip_card">
+        <!-- <image class="imagssl" :src="userInfoStore.backgRound" mode="scaleToFill"></image> -->
+        <view class="vip_box">
+          <view class="left" @click="openVip">
+            <view class="line1">
+              <view class="vipBox">
+                <image
+                  src="/static/images/Frame-39.png"
+                  mode="aspectFill"
+                ></image>
+                <view>
+                  <span>Thành viên mở</span><br />Xem phần tiếp theo miễn phí
+                </view>
+              </view>
+              <!-- <image class="backgLogo" :src="userInfoStore.backgLogo" mode="aspectFill"></image> -->
+              <!-- <view class="kaitong">{{userInfoStore.activate}}</view> -->
+            </view>
+            <view class="line2">
+              <!-- {{userInfoStore.remarks || ''}}<u-icon name="arrow-right" color="$uni-text-color-vip" size="14"></u-icon> -->
+              <image
+                src="/static/images/Frame1000001522-1.png"
+                class="arrowRight"
+                mode="aspectFill"
+              >
+              </image>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="moinublock">
+        <view class="oinuntlist" @click="menuItemClicks">
+          <view> Xem lịch sử </view>
+          <span>></span>
+          <!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
+        </view>
+        <view class="list">
+          <u-scroll-list
+            :indicator="false"
+            @right="handleToRight"
+            :indicatorActiveColor="'#f2f5f7'"
+          >
+            <view
+              v-for="(item, index) in mounList"
+              :key="index"
+              style="position: relative"
+              @click="abunbtn(item)"
+            >
+              <!-- <view class="mouns">
 								<view class="count">
 									<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>{{item.totalPlay || '0'}}
 								</view>
 							</view> -->
-							<image class="img" :src="item.dramaPoster"></image>
-							<view class="title">
-								<u--text :lines="1" size="24rpx" color="#fff" align="left"
-									:text="item.dramaName || 'bộ phim cổ ...'"></u--text>
-								<u--text :lines="1" size="24rpx" color="#6f6f6f" align="left"
-									:text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
-							</view>
-						</view>
-						<!-- <view class="" style="width: 20px;">
+              <image class="img" :src="item.dramaPoster"></image>
+              <view class="title">
+                <u--text
+                  :lines="1"
+                  size="24rpx"
+                  color="#fff"
+                  align="left"
+                  :text="item.dramaName || 'bộ phim cổ ...'"
+                ></u--text>
+                <u--text
+                  :lines="1"
+                  size="24rpx"
+                  color="#6f6f6f"
+                  align="left"
+                  :text="item.dramaName || 'Tập 1 / 45 Tập'"
+                ></u--text>
+              </view>
+            </view>
+            <!-- <view class="" style="width: 20px;">
 							查看更多
 						</view> -->
-					</u-scroll-list>
-				</view>
-				<!-- <view class="dalisewier">
+          </u-scroll-list>
+        </view>
+        <!-- <view class="dalisewier">
 					<view class="item" @click="jumpView(`/${item.url}`)" v-for="(item,index) in videoList" v-if="item.functionStatus == 1">
 						<view class="icon">
 							<image class="image" :src="item.img" mode="aspectFill"></image>
@@ -134,1028 +190,1109 @@
 						</view>
 					</view>
 				</view> -->
-				<view class="menu_box">
-					<view class="item" v-for="(item, index) in menuList" :key="item.id" @click="menuItemClick(item)">
-						<view class="left">
-							<view class="icon">
-								<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix">
-								</image>
-							</view>
-							<view class="text">{{ item.text }}</view>
-						</view>
-						<view class="right">
-							<u-icon name="arrow-right" color="#fff" size="12" :bold="true"></u-icon>
-							<!-- <image class="image" src="/static/icons/arrow.png" mode="widthFix"></image> -->
-						</view>
-					</view>
-				</view>
-			</view>
+        <view class="menu_box">
+          <view
+            class="item"
+            v-for="(item, index) in menuList"
+            :key="item.id"
+            @click="menuItemClick(item)"
+          >
+            <view class="left">
+              <view class="icon">
+                <image
+                  class="image"
+                  :src="item.img"
+                  :style="{ width: item.width }"
+                  mode="widthFix"
+                >
+                </image>
+              </view>
+              <view class="text">{{ item.text }}</view>
+            </view>
+            <view class="right">
+              <u-icon
+                name="arrow-right"
+                color="#fff"
+                size="12"
+                :bold="true"
+              ></u-icon>
+              <!-- <image class="image" src="/static/icons/arrow.png" mode="widthFix"></image> -->
+            </view>
+          </view>
+        </view>
+      </view>
 
-
-			<view class="copyright" v-if="copyrightData.length" @click="debugClick">
-				<view class="item" v-for="(item, index) in copyrightData" :key="index">
-					<image class="image" v-if="item.image" :src="item.image" mode="widthFix"></image>
-					<!-- #ifdef MP-WEIXIN -->
-					<text class="text">{{ item.name }}</text>
-					<!-- #endif -->
-					<!-- #ifdef H5 -->
-					<a v-if="item.url" :href="item.url" target="_blank" rel="">
-						<text class="text">{{ item.name }}</text>
-					</a>
-					<text v-else class="text">{{ item.name }}</text>
-					<!-- #endif -->
-				</view>
-			</view>
-			<!-- <view class="alert_box"
+      <view class="copyright" v-if="copyrightData.length" @click="debugClick">
+        <view class="item" v-for="(item, index) in copyrightData" :key="index">
+          <image
+            class="image"
+            v-if="item.image"
+            :src="item.image"
+            mode="widthFix"
+          ></image>
+          <!-- #ifdef MP-WEIXIN -->
+          <text class="text">{{ item.name }}</text>
+          <!-- #endif -->
+          <!-- #ifdef H5 -->
+          <a v-if="item.url" :href="item.url" target="_blank" rel="">
+            <text class="text">{{ item.name }}</text>
+          </a>
+          <text v-else class="text">{{ item.name }}</text>
+          <!-- #endif -->
+        </view>
+      </view>
+      <!-- <view class="alert_box"
 				v-if="platform != 'H5' && token && userInfoStore">
 				<view class="item" v-if="!userInfoStore.verification.mobile">
 					<text class="text">您还没有绑定手机号</text>
 					<text class="btn" @click="alertBindButton('mobile')">去绑定</text>
 				</view>
 			</view> -->
-			<u-modal :show="cdkey.show" :title="cdkey.title" :showCancelButton="true" @confirm="cdkeyConfirm"
-				@cancel="cdkey.show = false">
-				<view style="width: 100%;">
-					<u-input v-model="cdkey.value" :customStyle="inputStyle" clearable placeholder="请输入兑换码"
-						@change="inputChange" @blur="inputChange"></u-input>
-				</view>
-			</u-modal>
-		</view>
-	</view>
+      <u-modal
+        :show="cdkey.show"
+        :title="cdkey.title"
+        :showCancelButton="true"
+        @confirm="cdkeyConfirm"
+        @cancel="cdkey.show = false"
+      >
+        <view style="width: 100%">
+          <u-input
+            v-model="cdkey.value"
+            :customStyle="inputStyle"
+            clearable
+            placeholder="请输入兑换码"
+            @change="inputChange"
+            @blur="inputChange"
+          ></u-input>
+        </view>
+      </u-modal>
+    </view>
+  </view>
 </template>
 
 <script>
-	import apiMoen from '../../utils/config.js';
-	const PlayerManager = require("../../utils/playerManager.js");
-	// const playletPlugin = requirePlugin("playlet-plugin");
-	// let playletPlugin;
+import apiMoen from "../../utils/config.js";
+const PlayerManager = require("../../utils/playerManager.js");
+// const playletPlugin = requirePlugin("playlet-plugin");
+// let playletPlugin;
 
-	// 检查当前是否在小程序环境中
-	if (typeof wx !== 'undefined' && wx.getSystemInfo) {
-		try {
-			// 在小程序中执行 requirePlugin
-			// playletPlugin = requirePlugin("playlet-plugin");
-		} catch (error) {
-			// console.error('Failed to requirePlugin in WeChat Mini Program:', error);
-		}
-	} else {
-		// 在其他环境中的处理
-		console.log('This code is executed only in WeChat Mini Program environment.');
-	}
-	import {
-		mapState,
-		mapGetters,
-		mapMutations,
-		mapActions
-	} from "vuex"
-	export default {
-		data() {
-			return {
-				allocatProgram: {},
-				tenantId: null,
-				sysOrgCode: null,
-				memberId: null,
-				memberName: null,
-				buttonStyle: {
-					width: '100%',
-					height: '100%',
-					border: 'none',
-					// fontSize: '24rpx',
-					color: '#DF9B45',
-					background: '#fff',
-					borderRadius: '8rpx',
-					fontWeight: 'bold'
-				},
-				cardList: [{
-						id: 1,
-						img: '/static/icons/menu_2.png',
-						text: '观看记录',
-						path: '/pages/video/record'
-					},
-					{
-						id: 2,
-						img: '/static/icons/menu_3.png',
-						text: '申请分销商',
-						path: '/pages/user/dealer/index'
-					},
-					{
-						id: 3,
-						img: '/static/icons/menu_4.png',
-						text: '分享赚钱',
-						path: '/pages/user/share/index'
-					},
-					{
-						id: 4,
-						img: '/static/icons/menu_1.png',
-						text: '卡密兑换',
-						path: ''
-					},
-				],
-				menuList: [
-					// #ifndef APP-PLUS
-					{
-						id: 1,
-						img: '/static/images/Frame-34.png',
-						width: '32rpx',
-						text: 'Mời bạn bè', //邀请好友
-						rid: '',
-						path: '/pages/user/share/poster'
-					},
-					// #endif
-					{
-						id: 2,
-						img: '/static/images/Frame-35.png',
-						width: '28rpx',
-						text: 'đội của tôi', //我的团队
-						rid: '',
-						path: '/pages/user/share/team'
-					},
-					{
-						id: 3,
-						img: '/static/images/Frame-36.png',
-						width: '28rpx',
-						text: 'ngôn ngữ', //语言
-						rid: '',
-						path: '/pages/user/seting/setLanguage'
-					},
+// 检查当前是否在小程序环境中
+if (typeof wx !== "undefined" && wx.getSystemInfo) {
+  try {
+    // 在小程序中执行 requirePlugin
+    // playletPlugin = requirePlugin("playlet-plugin");
+  } catch (error) {
+    // console.error('Failed to requirePlugin in WeChat Mini Program:', error);
+  }
+} else {
+  // 在其他环境中的处理
+  console.log("This code is executed only in WeChat Mini Program environment.");
+}
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+export default {
+  data() {
+    return {
+      allocatProgram: {},
+      tenantId: null,
+      sysOrgCode: null,
+      memberId: null,
+      memberName: null,
+      buttonStyle: {
+        width: "100%",
+        height: "100%",
+        border: "none",
+        // fontSize: '24rpx',
+        color: "#DF9B45",
+        background: "#fff",
+        borderRadius: "8rpx",
+        fontWeight: "bold",
+      },
+      cardList: [
+        {
+          id: 1,
+          img: "/static/icons/menu_2.png",
+          text: "观看记录",
+          path: "/pages/video/record",
+        },
+        {
+          id: 2,
+          img: "/static/icons/menu_3.png",
+          text: "申请分销商",
+          path: "/pages/user/dealer/index",
+        },
+        {
+          id: 3,
+          img: "/static/icons/menu_4.png",
+          text: "分享赚钱",
+          path: "/pages/user/share/index",
+        },
+        {
+          id: 4,
+          img: "/static/icons/menu_1.png",
+          text: "卡密兑换",
+          path: "",
+        },
+      ],
+      menuList: [
+        // #ifndef APP-PLUS
+        {
+          id: 1,
+          img: "/static/images/Frame-34.png",
+          width: "32rpx",
+          text: "Mời bạn bè", //邀请好友
+          rid: "",
+          path: "/pages/home/watchs",
+        },
+        // #endif
+        {
+          id: 2,
+          img: "/static/images/Frame-35.png",
+          width: "28rpx",
+          text: "đội của tôi", //我的团队
+          text: "Bộ sưu tập của tôi", //我的收藏
+          rid: "",
+          path: "/pages/home/collect",
+        },
+        {
+          id: 3,
+          img: "/static/icons/list_3.png",
+          width: "28rpx",
+          text: "ngôn ngữ", //语言
+          rid: "",
+          path: "/pages/user/integral/task",
+        },
 
-					{
-						id: 4,
-						img: '/static/images/Frame-37.png',
-						width: '28rpx',
-						text: 'Liên hệ Hỗ trợ', //客服
-						rid: '',
-						path: '/pages/user/seting/opinion'
-					},
-					{
-						id: 5,
-						img: '/static/images/Frame-38.png',
-						width: '32rpx',
-						text: 'thiết lập', //联系我们
-						rid: '',
-						path: '/pages/user/seting/seting'
-					},
-					// {
-					// 	id: 6,
-					// 	img: '/static/icons/list_1.png',
-					// 	width: '28rpx',
-					// 	text: 'thiết lập',//设置
-					// 	rid: ''
-					// },
-				],
-				copyrightData: this.$store.state.app.copyright || [], // 版权说明
-				platform: this.$utils.platforms(),
-				configStore: this.$store.state.app.config,
-				userInfoStore: {},
-				debug: {
-					count: 0,
-					timer: null
-				},
-				cdkey: {
-					show: false,
-					title: '卡密兑换',
-					value: '',
-				},
-				VipListmu: {},
-				inputStyle: {},
-				platform: '',
-				videoList: [],
-				mounList: [{
-					id: 1,
-					image: '../../static/01.jpg',
-					name: '测试',
-					es: '100集',
-					description: '穿越',
-					number: '1000'
-				}, {
-					id: 1,
-					image: '../../static/01.jpg',
-					name: '测试',
-					es: '100集',
-					description: '穿越',
-					number: '1000'
-				}, {
-					id: 1,
-					image: '../../static/01.jpg',
-					name: '测试测试测试',
-					es: '100集',
-					description: '穿越',
-					number: '1000'
-				}, {
-					id: 1,
-					image: '../../static/01.jpg',
-					name: '测试测试测试测试测试测试测试测试测试',
-					es: '100集',
-					description: '穿越',
-					number: '1000'
-				}]
-			}
-		},
-		computed: {
-			...mapGetters("user", ["token", "userInfo"]),
-			...mapGetters("app", ["config", "copyright", "richtext", "iosIsPay"]),
-		},
-		watch: {
-			config: {
-				deep: true,
-				handler: function(newValue, oldValue) {
-					this.configStore = newValue
-				}
-			},
-			userInfo: {
-				deep: true,
-				handler: function(newValue, oldValue) {
-					// this.userInfoStore = newValue
-				}
-			},
-			copyright(newValue, oldValue) {
-				this.copyrightData = newValue
-			},
-			richtext(newValue, oldValue) {
-				newValue && this.initMenuList(newValue)
-			}
-		},
-		onPullDownRefresh() {
-			// if(this.token) {
-			// 	this.getUserInfo().then(res => {
-			// 		uni.stopPullDownRefresh()
-			// 	}).catch(err => {
-			// 		uni.stopPullDownRefresh()
-			// 	})
-			// } else {
-			// 	uni.stopPullDownRefresh()
-			// }
-		},
-		onLoad() {
-			const systemInfo = uni.getSystemInfoSync();
-			let platform;
+        {
+          id: 4,
+          img: "/static/icons/list_4.png",
+          width: "28rpx",
+          text: "đội của tôi", //我的团队
+          rid: "",
+          path: "/pages/user/share/team",
+        },
+        {
+          id: 3,
+          img: "/static/images/Frame-36.png",
+          width: "28rpx",
+          text: "ngôn ngữ", //语言
+          rid: "",
+          path: "/pages/user/seting/setLanguage",
+        },
 
-			if (systemInfo.platform === 'android') {
-				this.platform = 'Android';
-			} else if (systemInfo.platform === 'ios') {
-				this.platform = 'iOS';
-			}
+        {
+          id: 4,
+          img: "/static/images/Frame-37.png",
+          width: "28rpx",
+          text: "Liên hệ Hỗ trợ", //客服
+          rid: "",
+          path: "/pages/user/seting/opinion",
+        },
+        {
+          id: 5,
+          img: "/static/images/Frame-38.png",
+          width: "32rpx",
+          text: "thiết lập", //联系我们
+          rid: "",
+          path: "/pages/user/seting/seting",
+        },
+        // {
+        // 	id: 6,
+        // 	img: '/static/icons/list_1.png',
+        // 	width: '28rpx',
+        // 	text: 'thiết lập',//设置
+        // 	rid: ''
+        // },
+      ],
+      copyrightData: this.$store.state.app.copyright || [], // 版权说明
+      platform: this.$utils.platforms(),
+      configStore: this.$store.state.app.config,
+      userInfoStore: {},
+      debug: {
+        count: 0,
+        timer: null,
+      },
+      cdkey: {
+        show: false,
+        title: "卡密兑换",
+        value: "",
+      },
+      VipListmu: {},
+      inputStyle: {},
+      platform: "",
+      videoList: [],
+      mounList: [
+        {
+          id: 1,
+          image: "../../static/01.jpg",
+          name: "测试",
+          es: "100集",
+          description: "穿越",
+          number: "1000",
+        },
+        {
+          id: 1,
+          image: "../../static/01.jpg",
+          name: "测试",
+          es: "100集",
+          description: "穿越",
+          number: "1000",
+        },
+        {
+          id: 1,
+          image: "../../static/01.jpg",
+          name: "测试测试测试",
+          es: "100集",
+          description: "穿越",
+          number: "1000",
+        },
+        {
+          id: 1,
+          image: "../../static/01.jpg",
+          name: "测试测试测试测试测试测试测试测试测试",
+          es: "100集",
+          description: "穿越",
+          number: "1000",
+        },
+      ],
+    };
+  },
+  computed: {
+    ...mapGetters("user", ["token", "userInfo"]),
+    ...mapGetters("app", ["config", "copyright", "richtext", "iosIsPay"]),
+  },
+  watch: {
+    config: {
+      deep: true,
+      handler: function (newValue, oldValue) {
+        this.configStore = newValue;
+      },
+    },
+    userInfo: {
+      deep: true,
+      handler: function (newValue, oldValue) {
+        // this.userInfoStore = newValue
+      },
+    },
+    copyright(newValue, oldValue) {
+      this.copyrightData = newValue;
+    },
+    richtext(newValue, oldValue) {
+      newValue && this.initMenuList(newValue);
+    },
+  },
+  onPullDownRefresh() {
+    // if(this.token) {
+    // 	this.getUserInfo().then(res => {
+    // 		uni.stopPullDownRefresh()
+    // 	}).catch(err => {
+    // 		uni.stopPullDownRefresh()
+    // 	})
+    // } else {
+    // 	uni.stopPullDownRefresh()
+    // }
+  },
+  onLoad() {
+    const systemInfo = uni.getSystemInfoSync();
+    let platform;
 
-			console.log(this.platform); // 输出设备平台信息
-			uni.$on('updateUserInfo', () => {
-				// this.getUserInfo()
-			})
+    if (systemInfo.platform === "android") {
+      this.platform = "Android";
+    } else if (systemInfo.platform === "ios") {
+      this.platform = "iOS";
+    }
 
-			this.tenantId = apiMoen.tenantId
-			this.sysOrgCode = apiMoen.sysOrgCode
+    console.log(this.platform); // 输出设备平台信息
+    uni.$on("updateUserInfo", () => {
+      // this.getUserInfo()
+    });
 
+    this.tenantId = apiMoen.tenantId;
+    this.sysOrgCode = apiMoen.sysOrgCode;
 
-			this.memberId = uni.getStorageSync('id')
-			this.id = uni.getStorageSync('id')
-			if (!this.memberId) {
-				uni.redirectTo({
-					url: '/pages/user/login/login'
-				})
-				return
-			}
-			this.handleTovideoList()
-			this.richtext && this.initMenuList(this.richtext)
-			this.getAllocatProgram()
-			this.getDeviceid()
-		},
-		onShow() {
-			this.handleToFilmDramaMember()
-			this.handleToFilmViewHistoryList()
-		},
-		onUnload() {
-			uni.$off('updateUserInfo')
-		},
-		methods: {
-			...mapActions('user', ['getUserInfo']),
-			recharbtn() {
-				uni.navigateTo({
-					url: '../user/recharge/recharge'
-				})
-			},
-			menuItemClick(val) {
-				uni.navigateTo({
-					url: val.path
-				})
-			},
-			// 获取设备
-			getDeviceid() {
-				// 获取设备品牌、型号、设备 id 、系统名称、osVersion
-				const {
-					deviceBrand,
-					deviceModel,
-					deviceId,
-					osName,
-					osVersion
-				} = uni.getSystemInfoSync();
-				console.log("获取设备品牌、型号、设备 id 、系统名称、osVersion", deviceBrand, deviceModel, deviceId, osName, osVersion);
-			},
-			abunbtn(item) {
-
-				this.$myGlobalMethod(item.dramaId); // 调用全局方法
-			},
-			// 调试
-			debugClick() {
-				// #ifdef MP-WEIXIN
-				const env = wx.getAccountInfoSync().miniProgram.envVersion
-				if (env != "release") {
-					clearTimeout(this.debug.timer);
-					this.debug.count++;
-					this.debug.timer = setTimeout(() => {
-						if (this.debug.count >= 5) {
-							uni.showModal({
-								title: '配置信息',
-								content: `
+    this.memberId = uni.getStorageSync("id");
+    this.id = uni.getStorageSync("id");
+    if (!this.memberId) {
+      uni.redirectTo({
+        url: "/pages/user/login/login",
+      });
+      return;
+    }
+    this.handleTovideoList();
+    this.richtext && this.initMenuList(this.richtext);
+    this.getAllocatProgram();
+    this.getDeviceid();
+  },
+  onShow() {
+    this.handleToFilmDramaMember();
+    this.handleToFilmViewHistoryList();
+  },
+  onUnload() {
+    uni.$off("updateUserInfo");
+  },
+  methods: {
+    ...mapActions("user", ["getUserInfo"]),
+    recharbtn() {
+      uni.navigateTo({
+        url: "../user/recharge/recharge",
+      });
+    },
+    menuItemClick(val) {
+      uni.navigateTo({
+        url: val.path,
+      });
+    },
+    menuItemClicks() {
+      uni.redirectTo({
+        url: "/pages/home/history",
+      });
+    },
+    // 获取设备
+    getDeviceid() {
+      // 获取设备品牌、型号、设备 id 、系统名称、osVersion
+      const { deviceBrand, deviceModel, deviceId, osName, osVersion } =
+        uni.getSystemInfoSync();
+      console.log(
+        "获取设备品牌、型号、设备 id 、系统名称、osVersion",
+        deviceBrand,
+        deviceModel,
+        deviceId,
+        osName,
+        osVersion
+      );
+    },
+    abunbtn(item) {
+      this.$myGlobalMethod(item.dramaId); // 调用全局方法
+    },
+    // 调试
+    debugClick() {
+      // #ifdef MP-WEIXIN
+      const env = wx.getAccountInfoSync().miniProgram.envVersion;
+      if (env != "release") {
+        clearTimeout(this.debug.timer);
+        this.debug.count++;
+        this.debug.timer = setTimeout(() => {
+          if (this.debug.count >= 5) {
+            uni.showModal({
+              title: "配置信息",
+              content: `
 									(env => ${env}) -
 									(domain => ${this.$BASE_URL}) -
 									(sign => ${this.$SIGN})
-								`
-							})
-						}
-						this.debug.count = 0;
-					}, 500);
-				}
-				// #endif
-			},
-			alertBindButton(type) {
-				if (type == 'wxmp') {
-					console.log("绑定微信小程序");
-				} else if (type == 'wxoa') {
-					console.log("绑定微信公众号");
-				} else if (type == 'mobile') {
-					console.log("绑定手机号");
-					this.jumpView('/pages/user/info/index')
-				}
-			},
-			// 复制
-			copyText(info) {
-				uni.setClipboardData({
-					data: String(info),
-					success: () => {
-						this.$u.toast('复制成功')
-					}
-				});
-			},
-			// 充值会员中心
-			openVip() {
-				uni.navigateTo({
-					url: "/pages/user/activate/activate"
-				})
-
-			},
-			// 小程序信息查询
-			getAllocatProgram() {
-				this.$request('common.allocatProgram', {
-					tenantId: uni.getStorageSync('tenantId'),
-					sysOrgCode: uni.getStorageSync('sysOrgCode'),
-					appId: uni.getStorageSync('srcAppid'),
-				}).then(res => {
-					if (res != 200 && res.message != "") {
-						uni.showToast({
-							title: res.message,
-							icon: 'error',
-							duration: 2000,
-							position: 'top'
-						});
-					}
-					this.allocatProgram = res.result
-					console.log('小程序信息查询:', res);
-				})
-			},
-			//功能列表
-			handleTovideoList() {
-				this.$request('wchatapi.allocatFunctionList', {
-					tenantId: this.tenantId,
-					sysOrgCode: this.sysOrgCode
-				}).then(res => {
-					console.log("功能列表", res);
-					if (res.code == 200) {
-						this.videoList = res.result.map(it => ({
-							id: it.id,
-							img: it.functionLogo,
-							width: '28rpx',
-							text: it.functionName,
-							url: it.functionUrl,
-							functionStatus: it.functionStatus
-						}))
-						console.log(this.videoList);
-					}
-				}).catch(res => {
-					console.log(res);
-				})
-			},
-			//会员信息
-			handleToFilmDramaMember() {
-				this.$request('wchatapi.filmDramaMember', {
-					memberId: this.memberId
-				}).then(res => {
-					if (res.code == 200) {
-						this.memberName = res.result.memberName
-						this.VipListmu = res.result
-						this.userInfoStore = res.result
-					}
-					console.log("会员信息", res);
-				}).catch(res => {
-					console.log(res);
-				})
-			},
-			//历史记录
-			handleToFilmViewHistoryList() {
-				this.$request('wchatapi.filmViewHistoryList', {
-					memberId: this.memberId
-				}).then(res => {
-					if (res.code == 200) {
-						console.log(res);
-						this.mounList = res.result
-					}
-				}).catch(res => {
-					console.log(res);
-				})
-			},
-			//向左滑触发right
-			handleToRight() {
-				console.log('11111111111111111111111')
-			},
-		}
-	}
+								`,
+            });
+          }
+          this.debug.count = 0;
+        }, 500);
+      }
+      // #endif
+    },
+    alertBindButton(type) {
+      if (type == "wxmp") {
+        console.log("绑定微信小程序");
+      } else if (type == "wxoa") {
+        console.log("绑定微信公众号");
+      } else if (type == "mobile") {
+        console.log("绑定手机号");
+        this.jumpView("/pages/user/info/index");
+      }
+    },
+    // 复制
+    copyText(info) {
+      uni.setClipboardData({
+        data: String(info),
+        success: () => {
+          this.$u.toast("复制成功");
+        },
+      });
+    },
+    // 充值会员中心
+    openVip() {
+      uni.navigateTo({
+        url: "/pages/user/activate/activate",
+      });
+    },
+    // 小程序信息查询
+    getAllocatProgram() {
+      this.$request("common.allocatProgram", {
+        tenantId: uni.getStorageSync("tenantId"),
+        sysOrgCode: uni.getStorageSync("sysOrgCode"),
+        appId: uni.getStorageSync("srcAppid"),
+      }).then((res) => {
+        if (res != 200 && res.message != "") {
+          uni.showToast({
+            title: res.message,
+            icon: "error",
+            duration: 2000,
+            position: "top",
+          });
+        }
+        this.allocatProgram = res.result;
+        console.log("小程序信息查询:", res);
+      });
+    },
+    //功能列表
+    handleTovideoList() {
+      this.$request("wchatapi.allocatFunctionList", {
+        tenantId: this.tenantId,
+        sysOrgCode: this.sysOrgCode,
+      })
+        .then((res) => {
+          console.log("功能列表", res);
+          if (res.code == 200) {
+            this.videoList = res.result.map((it) => ({
+              id: it.id,
+              img: it.functionLogo,
+              width: "28rpx",
+              text: it.functionName,
+              url: it.functionUrl,
+              functionStatus: it.functionStatus,
+            }));
+            console.log(this.videoList);
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+    //会员信息
+    handleToFilmDramaMember() {
+      this.$request("wchatapi.filmDramaMember", {
+        memberId: this.memberId,
+      })
+        .then((res) => {
+          if (res.code == 200) {
+            this.memberName = res.result.memberName;
+            this.VipListmu = res.result;
+            this.userInfoStore = res.result;
+          }
+          console.log("会员信息", res);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+    //历史记录
+    handleToFilmViewHistoryList() {
+      this.$request("wchatapi.filmViewHistoryList", {
+        memberId: this.memberId,
+      })
+        .then((res) => {
+          if (res.code == 200) {
+            console.log(res);
+            this.mounList = res.result;
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+    //向左滑触发right
+    handleToRight() {
+      console.log("11111111111111111111111");
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-	.mouns {
-		width: 100%;
-		// height: 282rpx;
-		border-radius: 16rpx;
-		// overflow: hidden;
-		position: absolute;
-		left: 10rpx;
-		bottom: 50rpx;
-
-		.image {
-			width: 100%;
-			height: 100%;
-		}
-
-		.count {
-			// position: absolute;
-			left: 24rpx;
-			bottom: 24rpx;
-			color: #fff;
-			display: flex;
-			align-items: center;
-			font-size: 24rpx;
-		}
-	}
-
-	.page_content {
-		position: relative;
-		overflow-y: auto;
-		background-image: url(/static/images/navbar-bg.png);
-		background-position: center center;
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-
-		.infoBox {
-			position: relative;
-			padding-left: 36rpx;
-			padding-top: 80rpx;
-
-			.imagess {
-				width: 100%;
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				z-index: 1;
-			}
-
-			.navbar {
-				font-size: 48rpx;
-				font-weight: bold;
-				margin-bottom: 46rpx;
-				color: #fff;
-				position: relative;
-				z-index: 2;
-			}
-
-			.userinfo_box {
-				position: relative;
-				z-index: 2;
-				display: flex;
-				align-items: center;
-				position: relative;
-
-				.arrow {
-					position: absolute;
-					top: 50%;
-					right: 0;
-					transform: translateY(-50%) rotate(0deg);
-					width: 44rpx;
-				}
-
-				.avatar {
-					width: 104rpx;
-					height: 104rpx;
-					border-radius: 50%;
-					border: 2rpx solid #fff;
-					// overflow: hidden;
-					position: relative;
-
-					.image {
-						width: 100%;
-						height: 100%;
-						border-radius: 50%;
-					}
-
-					.imageloog {
-						position: absolute;
-						top: -8rpx;
-						right: 0;
-						width: 40rpx;
-						height: 40rpx;
-
-					}
-				}
-
-				.info {
-					flex: 1;
-					margin-left: 32rpx;
-
-					.nickname {
-						display: flex;
-
-						.text {
-							font-size: 34rpx;
-							color: #fff;
-							font-weight: 900;
-						}
-
-						.image {
-							width: 52rpx;
-							margin-left: 8rpx;
-						}
-					}
-
-					.msg {
-						.membername {
-							font-size: 36rpx;
-							margin-top: 20rpx;
-							color: #fff;
-							font-weight: bold;
-						}
-
-						.text {
-							color: $uni-text-color-inverse;
-							font-size: 24rpx;
-							margin-top: 0;
-						}
-
-						.copy {
-							color: #5E5E5E;
-							margin-left: 8rpx;
-							text-decoration: underline;
-							display: inline-block;
-						}
-					}
-				}
-
-				.user-btn {
-					width: 202rpx;
-					height: 65rpx;
-					margin-right: 36rpx;
-					text-align: center;
-					line-height: 65rpx;
-					border-radius: 94rpx;
-					background-color: transparent;
-					font-family: Inter, Inter;
-					font-weight: 400;
-					font-size: 27rpx;
-					color: #FFCD03;
-					border: 2rpx solid #FFCD03;
-				}
-			}
-		}
-
-		.main_content {
-			.vip_card {
-
-				margin: 0 40rpx;
-				margin-top: 24rpx;
-				position: relative;
-				background: linear-gradient(220deg, #181818 0%, #545454 50%, #252525 100%);
-				border-radius: 20rpx;
-				border: 2rpx solid;
-				border-image: linear-gradient(135deg, rgba(255, 237, 192, 0.2), rgba(255, 237, 192, 1), rgba(255, 237, 192, 0.2)) 1 1;
-
-				.imagssl {
-					width: 100%;
-					height: 204rpx;
-					position: absolute;
-					top: 0;
-					left: 0;
-					right: 0;
-					bottom: 0;
-					z-index: 1;
-				}
-
-				.vip_box {
-					position: relative;
-					z-index: 2;
-					width: 100%;
-					padding: 32rpx 24rpx;
-					box-sizing: border-box;
-					// background: #DF9B45;
-					// background-image: url('~@/static/images/vip_bg.png');
-					background-size: 100% 100%;
-					background-repeat: no-repeat;
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-
-					.left {
-						color: #fff;
-						display: flex;
-						justify-content: space-between;
-						align-items: center;
-						width: 100%;
-
-						.line1 {
-
-							display: flex;
-							align-items: center;
-							justify-content: center;
-
-							.vipBox {
-								display: flex;
-								align-items: center;
-								justify-content: center;
-
-								view {
-									flex: 1;
-									font-family: Inter, Inter;
-									font-weight: 400;
-									font-size: 26rpx;
-									line-height: 44rpx;
-									color: #999999;
-
-									span {
-										font-family: Inter, Inter;
-										font-weight: 400;
-										font-size: 28rpx;
-										color: #FFCD03;
-									}
-								}
-
-								image {
-									margin-right: 30rpx;
-									width: 97rpx;
-									height: 97rpx;
-								}
-							}
-
-							.backgLogo {
-								width: 30rpx;
-								height: 40rpx;
-							}
-
-							.kaitong {
-								font-size: 24rpx;
-								margin-left: 124rpx;
-								padding: 0 16rpx;
-								background-color: #FDE1CB;
-								color: #62472A;
-								font-weight: 400;
-								border-radius: 8rpx;
-								line-height: 40rpx;
-								text-align: center;
-							}
-						}
-
-						.line2 {
-							font-size: 28rpx;
-							display: flex;
-							align-items: center;
-							justify-content: center;
-							color: #fff;
-
-							.arrowRight {
-								width: 54rpx;
-								height: 54rpx;
-							}
-
-							// ::v-deep .u-icon {
-							// 	margin-top: 6rpx;
-							// }
-						}
-					}
-
-					.right {
-						// width: 156rpx;
-						// height: 60rpx;
-					}
-				}
-
-
-			}
-
-			.integral_box {
-				height: 260rpx;
-				display: flex;
-				flex-direction: column;
-				color: #fff;
-				background-image: url(/static/images/Frame1000001530-1.png);
-				background-repeat: no-repeat;
-				background-size: 100% 100%;
-				padding: 0 24rpx;
-				font-size: 28rpx;
-				font-weight: 600;
-				border-radius: 8rpx;
-				margin: 0rpx 40rpx;
-				margin-top: 20rpx;
-
-				.integral_box_t {
-					height: 100rpx;
-					line-height: 100rpx;
-					padding-top: 20rpx;
-					border-bottom: 2rpx solid #fff;
-					margin-bottom: 40rpx;
-					font-family: Inter, Inter;
-					font-weight: 400;
-					font-size: 28rpx;
-					color: #FFFFFF;
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-
-					span {
-						font-family: 宋体;
-					}
-				}
-
-				.integral_box_info {
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-
-					.left {
-						width: 171rpx;
-						height: 65rpx;
-						background: #DBB006;
-						border-radius: 94rpx;
-						line-height: 65rpx;
-						text-align: center;
-						font-family: Inter, Inter;
-						font-weight: bold;
-						font-size: 27rpx;
-						color: #000000;
-					}
-
-					.right {
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-
-						.image {
-							width: 30rpx;
-							margin-right: 8rpx;
-							margin-left: 12rpx;
-						}
-
-						.text {
-							font-family: Inter, Inter;
-							font-weight: 400;
-							font-size: 26rpx;
-							color: #FFFFFF;
-						}
-
-						.usable {
-							margin-left: 12rpx;
-							margin-right: 8rpx;
-							font-family: Inter, Inter;
-							font-weight: 400;
-							font-size: 36rpx;
-							background-image: url(/static/images/image73.png);
-							background-position: left center;
-							background-repeat: no-repeat;
-							padding-left: 40rpx;
-							background-size: 28rpx 27rpx;
-							color: #FFCD03;
-						}
-
-						.usables {
-							margin-left: 12rpx;
-							margin-right: 8rpx;
-							font-family: Inter, Inter;
-							font-weight: 400;
-							font-size: 36rpx;
-							background-image: url(/static/images/diamond.png);
-							background-position: left center;
-							background-repeat: no-repeat;
-							padding-left: 40rpx;
-							background-size: 32rpx 30rpx;
-							color: #FFCD03;
-						}
-					}
-				}
-
-			}
-
-			.oinuntlist {
-				font-size: 28rpx;
-				font-weight: 800;
-				color: #fff;
-				position: relative;
-
-				image {
-					width: 26rpx;
-					height: 26rpx;
-					position: absolute;
-					top: 50%;
-					right: 0;
-					transform: translateY(-50%);
-				}
-			}
-
-			.moinublock {
-				border-radius: 8rpx;
-				padding: 36rpx 40rpx 0 40rpx;
-				background: transparent;
-				margin-top: 24rpx;
-				margin: 30rpx 32rpx;
-				background: linear-gradient(185deg, #262626 0%, #252525 100%);
-				border: 0rpx solid;
-				border-image: linear-gradient(135deg, rgba(233, 233, 233, 0.2), rgba(233, 233, 233, 1), rgba(233, 233, 233, 0.2)) 1 1;
-				border-radius: 20rpx;
-
-				.list {
-					margin-top: 15rpx;
-				}
-
-				.img {
-					width: 164rpx;
-					height: 218rpx;
-					border-radius: 12rpx;
-					margin-right: 16rpx;
-				}
-
-				.title {
-					width: 100%;
-					margin-top: 8rpx;
-				}
-			}
-
-			.card_box {
-				border-radius: 8rpx;
-				padding-top: 32rpx;
-				background: #fff;
-				padding-left: 24rpx;
-				min-height: 200rpx;
-				margin-top: 24rpx;
-				padding-bottom: 32rpx;
-
-				.dalisewier {
-					display: flex;
-					padding-top: 20rpx;
-					flex-wrap: wrap;
-					margin-left: 20rpx;
-				}
-
-				.vlist {
-
-					// margin-right: 64rpx;
-					image {
-						width: 60rpx;
-						height: 60rpx;
-						display: block;
-						margin: auto;
-						overflow: hidden;
-					}
-				}
-
-				.item {
-					margin-right: 72rpx;
-					margin-bottom: 20rpx;
-
-					.icon {
-						width: 84rpx;
-						height: 84rpx;
-						margin: 0 auto;
-
-						.image {
-							width: 100%;
-							height: 100%;
-						}
-					}
-
-					.text {
-						font-size: 24rpx;
-						color: #999;
-						color: #fff;
-						text-align: center;
-						margin-top: 8rpx;
-					}
-				}
-
-				.item:nth-child(4n) {
-					margin-right: 0rpx;
-				}
-			}
-
-			.menu_box {
-				background: #fff;
-				border-radius: 8rpx;
-				padding: 30rpx 0rpx;
-				background: transparent;
-
-				.item {
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					padding: 28rpx 0;
-
-					.left {
-						display: flex;
-						align-items: center;
-
-						.icon {
-							width: 36rpx;
-							height: 36rpx;
-							display: flex;
-							align-items: center;
-							justify-content: center;
-
-							.image {
-								width: 100%;
-							}
-						}
-
-						.text {
-							font-size: 28rpx;
-							// color: #333;
-							color: #fff;
-							margin-left: 40rpx;
-							font-weight: bold;
-						}
-					}
-
-					.right {
-						.image {
-							width: 32rpx;
-						}
-					}
-				}
-			}
-
-			.copyright {
-				margin-top: 60rpx;
-
-				.item {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					line-height: 36rpx;
-
-					a {
-						text-decoration: none;
-					}
-
-					.image {
-						width: 30rpx;
-						margin-right: 8rpx;
-					}
-
-					.text {
-						font-size: 24rpx;
-						color: rgba(#999, 0.5);
-					}
-				}
-			}
-
-			.alert_box {
-				width: 100%;
-				padding: 0 40rpx;
-				position: absolute;
-				bottom: 20rpx;
-				left: 0;
-
-				.item {
-					padding: 20rpx;
-					border-radius: 20rpx;
-					background: rgba(0, 0, 0, 0.9);
-					color: #fff;
-					font-size: 28rpx;
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-
-					.text {}
-
-					.btn {
-						background: #C78021;
-						padding: 8rpx 20rpx;
-						border-radius: 10rpx;
-					}
-				}
-			}
-		}
-	}
+.mouns {
+  width: 100%;
+  // height: 282rpx;
+  border-radius: 16rpx;
+  // overflow: hidden;
+  position: absolute;
+  left: 10rpx;
+  bottom: 50rpx;
+
+  .image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .count {
+    // position: absolute;
+    left: 24rpx;
+    bottom: 24rpx;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-size: 24rpx;
+  }
+}
+
+.page_content {
+  position: relative;
+  overflow-y: auto;
+  background-image: url(/static/images/navbar-bg.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  .infoBox {
+    position: relative;
+    padding-left: 36rpx;
+    padding-top: 80rpx;
+
+    .imagess {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+    }
+
+    .navbar {
+      font-size: 48rpx;
+      font-weight: bold;
+      margin-bottom: 46rpx;
+      color: #fff;
+      position: relative;
+      z-index: 2;
+    }
+
+    .userinfo_box {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      .arrow {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%) rotate(0deg);
+        width: 44rpx;
+      }
+
+      .avatar {
+        width: 104rpx;
+        height: 104rpx;
+        border-radius: 50%;
+        border: 2rpx solid #fff;
+        // overflow: hidden;
+        position: relative;
+
+        .image {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+
+        .imageloog {
+          position: absolute;
+          top: -8rpx;
+          right: 0;
+          width: 40rpx;
+          height: 40rpx;
+        }
+      }
+
+      .info {
+        flex: 1;
+        margin-left: 32rpx;
+
+        .nickname {
+          display: flex;
+
+          .text {
+            font-size: 34rpx;
+            color: #fff;
+            font-weight: 900;
+          }
+
+          .image {
+            width: 52rpx;
+            margin-left: 8rpx;
+          }
+        }
+
+        .msg {
+          .membername {
+            font-size: 36rpx;
+            margin-top: 20rpx;
+            color: #fff;
+            font-weight: bold;
+          }
+
+          .text {
+            color: $uni-text-color-inverse;
+            font-size: 24rpx;
+            margin-top: 0;
+          }
+
+          .copy {
+            color: #5e5e5e;
+            margin-left: 8rpx;
+            text-decoration: underline;
+            display: inline-block;
+          }
+        }
+      }
+
+      .user-btn {
+        width: 202rpx;
+        height: 65rpx;
+        margin-right: 36rpx;
+        text-align: center;
+        line-height: 65rpx;
+        border-radius: 94rpx;
+        background-color: transparent;
+        font-family: Inter, Inter;
+        font-weight: 400;
+        font-size: 27rpx;
+        color: #ffcd03;
+        border: 2rpx solid #ffcd03;
+      }
+    }
+  }
+
+  .main_content {
+    .vip_card {
+      margin: 0 40rpx;
+      margin-top: 24rpx;
+      position: relative;
+      background: linear-gradient(
+        220deg,
+        #181818 0%,
+        #545454 50%,
+        #252525 100%
+      );
+      border-radius: 20rpx;
+      border: 2rpx solid;
+      border-image: linear-gradient(
+          135deg,
+          rgba(255, 237, 192, 0.2),
+          rgba(255, 237, 192, 1),
+          rgba(255, 237, 192, 0.2)
+        )
+        1 1;
+
+      .imagssl {
+        width: 100%;
+        height: 204rpx;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+
+      .vip_box {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        padding: 32rpx 24rpx;
+        box-sizing: border-box;
+        // background: #DF9B45;
+        // background-image: url('~@/static/images/vip_bg.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .left {
+          color: #fff;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+
+          .line1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .vipBox {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              view {
+                flex: 1;
+                font-family: Inter, Inter;
+                font-weight: 400;
+                font-size: 26rpx;
+                line-height: 44rpx;
+                color: #999999;
+
+                span {
+                  font-family: Inter, Inter;
+                  font-weight: 400;
+                  font-size: 28rpx;
+                  color: #ffcd03;
+                }
+              }
+
+              image {
+                margin-right: 30rpx;
+                width: 97rpx;
+                height: 97rpx;
+              }
+            }
+
+            .backgLogo {
+              width: 30rpx;
+              height: 40rpx;
+            }
+
+            .kaitong {
+              font-size: 24rpx;
+              margin-left: 124rpx;
+              padding: 0 16rpx;
+              background-color: #fde1cb;
+              color: #62472a;
+              font-weight: 400;
+              border-radius: 8rpx;
+              line-height: 40rpx;
+              text-align: center;
+            }
+          }
+
+          .line2 {
+            font-size: 28rpx;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+
+            .arrowRight {
+              width: 54rpx;
+              height: 54rpx;
+            }
+
+            // ::v-deep .u-icon {
+            // 	margin-top: 6rpx;
+            // }
+          }
+        }
+
+        .right {
+          // width: 156rpx;
+          // height: 60rpx;
+        }
+      }
+    }
+
+    .integral_box {
+      height: 260rpx;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      background-image: url(/static/images/Frame1000001530-1.png);
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      padding: 0 24rpx;
+      font-size: 28rpx;
+      font-weight: 600;
+      border-radius: 8rpx;
+      margin: 0rpx 40rpx;
+      margin-top: 20rpx;
+
+      .integral_box_t {
+        height: 100rpx;
+        line-height: 100rpx;
+        padding-top: 20rpx;
+        border-bottom: 2rpx solid #fff;
+        margin-bottom: 40rpx;
+        font-family: Inter, Inter;
+        font-weight: 400;
+        font-size: 28rpx;
+        color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        span {
+          font-family: 宋体;
+        }
+      }
+
+      .integral_box_info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .left {
+          width: 171rpx;
+          height: 65rpx;
+          background: #dbb006;
+          border-radius: 94rpx;
+          line-height: 65rpx;
+          text-align: center;
+          font-family: Inter, Inter;
+          font-weight: bold;
+          font-size: 27rpx;
+          color: #000000;
+        }
+
+        .right {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .image {
+            width: 30rpx;
+            margin-right: 8rpx;
+            margin-left: 12rpx;
+          }
+
+          .text {
+            font-family: Inter, Inter;
+            font-weight: 400;
+            font-size: 26rpx;
+            color: #ffffff;
+          }
+
+          .usable {
+            margin-left: 12rpx;
+            margin-right: 8rpx;
+            font-family: Inter, Inter;
+            font-weight: 400;
+            font-size: 36rpx;
+            background-image: url(/static/images/image73.png);
+            background-position: left center;
+            background-repeat: no-repeat;
+            padding-left: 40rpx;
+            background-size: 28rpx 27rpx;
+            color: #ffcd03;
+          }
+
+          .usables {
+            margin-left: 12rpx;
+            margin-right: 8rpx;
+            font-family: Inter, Inter;
+            font-weight: 400;
+            font-size: 36rpx;
+            background-image: url(/static/images/diamond.png);
+            background-position: left center;
+            background-repeat: no-repeat;
+            padding-left: 40rpx;
+            background-size: 32rpx 30rpx;
+            color: #ffcd03;
+          }
+        }
+      }
+    }
+
+    .oinuntlist {
+      font-size: 28rpx;
+      background-image: url(/static/icons/list_2.png);
+      background-position: left center;
+      padding-left: 80rpx;
+      background-repeat: no-repeat;
+      background-size: 30rpx 30rpx;
+      font-weight: 800;
+      color: #fff;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      line-height: 100rpx;
+      image {
+        width: 26rpx;
+        height: 26rpx;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+      }
+      span {
+        font-family: 宋体;
+        font-size: 30rpx;
+      }
+    }
+
+    .moinublock {
+      border-radius: 8rpx;
+      padding: 36rpx 40rpx 0 40rpx;
+      background: transparent;
+      margin-top: 24rpx;
+      margin: 30rpx 32rpx;
+      background: linear-gradient(185deg, #262626 0%, #252525 100%);
+      border: 0rpx solid;
+      border-image: linear-gradient(
+          135deg,
+          rgba(233, 233, 233, 0.2),
+          rgba(233, 233, 233, 1),
+          rgba(233, 233, 233, 0.2)
+        )
+        1 1;
+      border-radius: 20rpx;
+
+      .list {
+        margin-top: 15rpx;
+      }
+
+      .img {
+        width: 164rpx;
+        height: 218rpx;
+        border-radius: 12rpx;
+        margin-right: 16rpx;
+      }
+
+      .title {
+        width: 100%;
+        margin-top: 8rpx;
+      }
+    }
+
+    .card_box {
+      border-radius: 8rpx;
+      padding-top: 32rpx;
+      background: #fff;
+      padding-left: 24rpx;
+      min-height: 200rpx;
+      margin-top: 24rpx;
+      padding-bottom: 32rpx;
+
+      .dalisewier {
+        display: flex;
+        padding-top: 20rpx;
+        flex-wrap: wrap;
+        margin-left: 20rpx;
+      }
+
+      .vlist {
+        // margin-right: 64rpx;
+        image {
+          width: 60rpx;
+          height: 60rpx;
+          display: block;
+          margin: auto;
+          overflow: hidden;
+        }
+      }
+
+      .item {
+        margin-right: 72rpx;
+        margin-bottom: 20rpx;
+
+        .icon {
+          width: 84rpx;
+          height: 84rpx;
+          margin: 0 auto;
+
+          .image {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .text {
+          font-size: 24rpx;
+          color: #999;
+          color: #fff;
+          text-align: center;
+          margin-top: 8rpx;
+        }
+      }
+
+      .item:nth-child(4n) {
+        margin-right: 0rpx;
+      }
+    }
+
+    .menu_box {
+      background: #fff;
+      border-radius: 8rpx;
+      padding: 30rpx 0rpx;
+      background: transparent;
+
+      .item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 28rpx 0;
+
+        .left {
+          display: flex;
+          align-items: center;
+
+          .icon {
+            width: 36rpx;
+            height: 36rpx;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .image {
+              width: 100%;
+            }
+          }
+
+          .text {
+            font-size: 28rpx;
+            // color: #333;
+            color: #fff;
+            margin-left: 40rpx;
+            font-weight: bold;
+          }
+        }
+
+        .right {
+          .image {
+            width: 32rpx;
+          }
+        }
+      }
+    }
+
+    .copyright {
+      margin-top: 60rpx;
+
+      .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 36rpx;
+
+        a {
+          text-decoration: none;
+        }
+
+        .image {
+          width: 30rpx;
+          margin-right: 8rpx;
+        }
+
+        .text {
+          font-size: 24rpx;
+          color: rgba(#999, 0.5);
+        }
+      }
+    }
+
+    .alert_box {
+      width: 100%;
+      padding: 0 40rpx;
+      position: absolute;
+      bottom: 20rpx;
+      left: 0;
+
+      .item {
+        padding: 20rpx;
+        border-radius: 20rpx;
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        font-size: 28rpx;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .text {
+        }
+
+        .btn {
+          background: #c78021;
+          padding: 8rpx 20rpx;
+          border-radius: 10rpx;
+        }
+      }
+    }
+  }
+}
 </style>

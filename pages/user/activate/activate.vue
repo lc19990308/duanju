@@ -36,9 +36,9 @@
 		<!-- <WenTag :memberlist="memberList" @active="handleToActive" @activepay="handleToactivePay" :width="width"
 			:linethrough="linethrough" :activeIndex="activeIndex" :activeIndexPay="activeIndexPay"></WenTag> -->
 		<view class="activate_t">
-			<image src="/static/images/Frame1000001588.png" mode=""></image>
+			<image src="/static/images/avatar.png" mode=""></image>
 			<view>
-				<span>Visitor</span><br>
+				<span>剧友-959472947</span><br>
 				Thành viên chưa mở
 			</view>
 		</view>
@@ -49,18 +49,18 @@
 			<view class="rechargeView_list">
 				<view class="rechargeView_lists top1">
 					<image src="/static/images/002.png" mode=""></image>
-					<view class="rechargeView_cen">+600vàng</view>
-					<view class="rechargeView_bottom">$320.00</view>
+					<view class="rechargeView_cen">Thành viên tuần</view>
+					<view class="rechargeView_bottom">$98.00</view>
 				</view>
 				<view class="rechargeView_lists top2">
 					<image src="/static/images/003.png" mode=""></image>
-					<view class="rechargeView_cen">+600vàng</view>
-					<view class="rechargeView_bottom">$320.00</view>
+					<view class="rechargeView_cen">Thành viên tháng</view>
+					<view class="rechargeView_bottom">$98.00</view>
 				</view>
 				<view class="rechargeView_lists top3">
 					<image src="/static/images/001.png" mode=""></image>
-					<view class="rechargeView_cen">+600vàng</view>
-					<view class="rechargeView_bottom">$320.00</view>
+					<view class="rechargeView_cen">Thành viên năm</view>
+					<view class="rechargeView_bottom">$128.00</view>
 				</view>
 			</view>
 			<!-- <view class="equity">
