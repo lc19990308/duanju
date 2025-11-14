@@ -65,8 +65,10 @@
 		{
 			"path": "pages/home/watchs",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "phần thưưởng",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#000",
+				"navigationStyle": "default"
 			}
 		},
 		{

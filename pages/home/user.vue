@@ -346,41 +346,30 @@ export default {
         // #endif
         {
           id: 2,
-          img: "/static/images/Frame-35.png",
+          img: "/static/images/Frame-32.png",
           width: "28rpx",
-          text: "đội của tôi", //我的团队
           text: "Bộ sưu tập của tôi", //我的收藏
           rid: "",
           path: "/pages/home/collect",
         },
-        {
-          id: 3,
-          img: "/static/icons/list_3.png",
-          width: "28rpx",
-          text: "ngôn ngữ", //语言
-          rid: "",
-          path: "/pages/user/integral/task",
-        },
-
+		{
+		  id: 3,
+		  img: "/static/images/Frame-36.png",
+		  width: "28rpx",
+		  text: "ngôn ngữ", //语言
+		  rid: "",
+		  path: "/pages/user/seting/setLanguage",
+		},
         {
           id: 4,
-          img: "/static/icons/list_4.png",
+          img: "/static/images/Frame-35.png",
           width: "28rpx",
           text: "đội của tôi", //我的团队
           rid: "",
           path: "/pages/user/share/team",
         },
         {
-          id: 3,
-          img: "/static/images/Frame-36.png",
-          width: "28rpx",
-          text: "ngôn ngữ", //语言
-          rid: "",
-          path: "/pages/user/seting/setLanguage",
-        },
-
-        {
-          id: 4,
+          id: 5,
           img: "/static/images/Frame-37.png",
           width: "28rpx",
           text: "Liên hệ Hỗ trợ", //客服
@@ -388,7 +377,7 @@ export default {
           path: "/pages/user/seting/opinion",
         },
         {
-          id: 5,
+          id: 6,
           img: "/static/images/Frame-38.png",
           width: "32rpx",
           text: "thiết lập", //联系我们
@@ -396,7 +385,7 @@ export default {
           path: "/pages/user/seting/seting",
         },
         // {
-        // 	id: 6,
+        // 	id: 7,
         // 	img: '/static/icons/list_1.png',
         // 	width: '28rpx',
         // 	text: 'thiết lập',//设置
@@ -1081,7 +1070,7 @@ export default {
 
     .oinuntlist {
       font-size: 28rpx;
-      background-image: url(/static/icons/list_2.png);
+      background-image: url(/static/images/Frame-33.png);
       background-position: left center;
       padding-left: 80rpx;
       background-repeat: no-repeat;
