@@ -261,7 +261,7 @@
 						width: '28rpx',
 						text: 'Bộ sưu tập của tôi',//我的收藏
 						rid: '',
-						path: '/pages/user/share/collect'
+						path: '/pages/home/collect'
 					},
 					{
 						id: 3,
