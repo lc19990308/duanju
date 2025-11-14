@@ -16,19 +16,20 @@
 		<view class="form" v-if="current === 0">
 			<u--form :model="form" ref="uForm" :rules='rules' labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="email điện tử" prop="name" :borderBottom='false'>
+				<u-form-item label="email điện tử" prop="content" :borderBottom='false'>
 					<u--textarea v-model="form.content" :placeholderStyle='placeholderStyle'
 						placeholder="Vui lòng mô tả chi tiết câu hỏi và phản hồi của bạn"></u--textarea>
 				</u-form-item>
-				<u-form-item label="mật khẩu" prop="name" :borderBottom='false'>
-					<view class="upload-box" v-if="form.picture.length === 0" @tap="uploadImage">
-						<view class="upload-item">
+				<u-form-item label="mật khẩu" :borderBottom='false'>
+					<view class="upload-box">
+						<view class="upload-item" @tap="uploadImage">
 							<image class="icon" src="/static/images/Frame-45.png" mode=""></image>
 						</view>
-					</view>
-					<view class="upload-box" v-else>
-						<view class="upload-item" v-for="(item,index) in form.picture" :key='index'>
-							<image class="cover" :src="item.picture" mode=""></image>
+						<view class="upload-item" @tap.stop="removeItem(index)" v-for="(item,index) in form.picture"
+							:key='index'>
+							<image @tap.stop="perviewImage(item,index)" class="cover" :src="item.picture" mode="">
+							</image>
+							<u-icon class="close-icon" name="close-circle" color="#fff" size="28"></u-icon>
 						</view>
 					</view>
 				</u-form-item>
@@ -97,8 +98,8 @@
 					createBy: '',
 					tenantId: apiMoen.tenantId,
 				},
-				list:[],
-				total:0,
+				list: [],
+				total: 0,
 			}
 		},
 		// computed: {
@@ -142,10 +143,19 @@
 			},
 			submit() {
 				this.$refs.uForm.validate().then(res => {
+					let imageList = [];
+					this.form.picture.map((item) => {
+						imageList.push(item.picture)
+					})
 					this.$request('user.addFeedback', {
-						...this.form,
+						content: this.form.content,
+						createBy: this.form.createBy,
+						tenantId: this.form.tenantId,
+						picture: imageList.join(','),
 					}).then(res => {
+						uni.$u.toast('操作成功！');
 						this.resetForm();
+
 					})
 				})
 			},
@@ -162,6 +172,19 @@
 					this.total = res.result.total;
 				})
 			},
+			removeItem(index) {
+				this.form.picture.splice(index, 1);
+			},
+			perviewImage(item, index) {
+				let imageList = [];
+				this.form.picture.map((item) => {
+					imageList.push(item.picture)
+				})
+				uni.previewImage({
+					urls:imageList,
+					current: index,
+				});
+			}
 		},
 		onLoad() {
 			this.form.createBy = uni.getStorageSync('id');
@@ -174,8 +197,8 @@
 			this.getList();
 		},
 		onReachBottom() {
-			if(this.total < this.list.length){
-				this.query.total+=1;
+			if (this.total < this.list.length) {
+				this.query.total += 1;
 				this.getList();
 			}
 		}
@@ -234,9 +257,11 @@
 	::v-deep .u-textarea {
 		background: #282828;
 	}
-	::v-deep .uni-textarea-textarea{
+
+	::v-deep .uni-textarea-textarea {
 		color: #fff;
 	}
+
 	::v-deep .uni-input-input {
 		color: #f7f7f7;
 	}
@@ -248,25 +273,40 @@
 	}
 
 	.upload-box {
+		display: flex;
+		flex-wrap: wrap;
 		margin-top: 12rpx;
 
 		.upload-item {
+			position: relative;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			width: 256rpx;
-			height: 256rpx;
+			width: 176rpx;
+			height: 176rpx;
+			margin-right: 20rpx;
+			margin-top: 20rpx;
 			background: #282828;
 			border-radius: 40rpx;
 
 			.icon {
-				width: 112rpx;
-				height: 112rpx;
+				width: 92rpx;
+				height: 92rpx;
 			}
 
 			.cover {
 				width: 100%;
 				height: 100%;
+				border-radius: 40rpx;
+			}
+
+			.close-icon {
+				position: absolute;
+				right: 0;
+				top: 0;
+				z-index: 999;
+				width: 32rpx;
+				height: 32rpx;
 			}
 		}
 	}

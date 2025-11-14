@@ -28,7 +28,7 @@
 			</view>
 		</scroll-view>
 		<view class="card">
-			<view class="card-item" v-for="(item,index) in list " :key="index">
+			<view class="card-item" @tap="vidoeInfo(item)" v-for="(item,index) in list " :key="index">
 				<image class="cover" :lazy-load="true" :src="item.dramaPoster" mode=""></image>
 				<view class="title">{{item.dramaDescribe}}</view>
 			</view>
@@ -59,9 +59,10 @@
 				query: {
 					pageNo: 1,
 					pageSize: 9,
-					sysOrgCode: '',
+					sysOrgCode: uni.getStorageSync('sysOrgCode') || '',
 					searchValue: '',
 					dramaClassify: '', //分类id
+					tenantld:uni.getStorageSync('tenantId') || '',
 				},
 				total: 0,
 				list: [],
@@ -106,11 +107,16 @@
 			},
 			//获取列表
 			getVideoList() {
-				this.$request('video.filmDramaList', this.query).then(res => {
-					this.list = res.result.records;
-					this.total = res.result.total;
+				this.$request('video.videList', this.query).then(res => {
+					this.list = res.result;
+					// this.total = res.result.total;
 				})
 			},
+			vidoeInfo(item){
+				uni.navigateTo({
+					url:`/pages/video/videoDetails?item=${JSON.stringify(item)}`
+				})
+			}
 		},
 		onLoad() {
 			this.getBanner();

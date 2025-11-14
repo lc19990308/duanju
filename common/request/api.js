@@ -325,8 +325,8 @@ const api = {
 			method: 'GET',
 			desc: '剧集分类列表'
 		},
-		filmDramaList: {
-			url: '/api/appApi/filmDramaList',
+		videList: {
+			url: '/api/wxApi/filmDramaList',
 			method: 'GET',
 			desc: '分类剧集列表'
 		},
