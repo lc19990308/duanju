@@ -1,37 +1,40 @@
 <template>
 	<view class="page_content">
-		
+
 		<view class="infoBox">
-			
+
 			<view class="userinfo_box" v-if="userInfoStore">
 				<view class="avatar">
-					<image class="imageloog" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo" mode=""></image>
+					<image class="imageloog" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo" mode="">
+					</image>
 					<!-- <image class="imageloog"  src="/static/images/avatar.png" mode=""></image> -->
-					<image class="image" v-if="userInfoStore.themeLogo" :src="userInfoStore.themeLogo" mode="aspectFill"></image>
+					<image class="image" v-if="userInfoStore.themeLogo" :src="userInfoStore.themeLogo"
+						mode="aspectFill"></image>
 					<image class="image" v-else src="/static/images/avatar.png" mode="aspectFill"></image>
 				</view>
-				<view class="info">
+				<navigator class="info" url="/pages/user/account/changeUserName" hover-class="none">
 					<!-- <view class="nickname">
-						<text class="text">{{ userInfoStore.nickname }}</text>
-						<image class="image" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo"
-							mode="widthFix" @click="openVip"></image>
-					</view> -->
+											<text class="text">{{ userInfoStore.nickname }}</text>
+											<image class="image" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo"
+												mode="widthFix" @click="openVip"></image>
+										</view> -->
 					<view class="msg">
 						<text class="membername">{{ userInfoStore.memberName || 'Visitor'}}</text>
 						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
 					<view class="msg">
-						<text class="text" v-if="userInfoStore.activate !='已开通'">ID：{{ userInfoStore.memberId || '000001'}}</text>
+						<text class="text"
+							v-if="userInfoStore.activate !='已开通'">ID：{{ userInfoStore.memberId || '000001'}}</text>
 						<!-- <text class="text" style="margin: 0 16rpx;" v-if="userInfoStore.activate=='已开通'"></text> -->
-						<text class="text" v-if="userInfoStore.activate=='已开通' && userInfoStore.rechargeVal">VIP会员{{userInfoStore.expireTime}}到期</text>
+						<text class="text"
+							v-if="userInfoStore.activate=='已开通' && userInfoStore.rechargeVal">VIP会员{{userInfoStore.expireTime}}到期</text>
 						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
-					
-				</view>
+				</navigator>
 				<u-button class="user-btn">Đăng nhập</u-button>
 				<!-- <image class="arrow" src="/static/icons/arrow.png" mode="widthFix"></image> -->
 			</view>
-			<view class="userinfo_box" v-else >
+			<view class="userinfo_box" v-else>
 				<view class="avatar">
 					<image class="image" src="/static/images/avatar.png" mode="aspectFill"></image>
 				</view>
@@ -66,7 +69,7 @@
 					</view>
 					<view class="left" @click="recharbtn">nạp tiền</view>
 				</view>
-				
+
 			</view>
 			<!-- <view class="vip_card" v-if="userInfoStore.rechargeVal"> -->
 			<view class="vip_card">
@@ -84,9 +87,10 @@
 							<!-- <view class="kaitong">{{userInfoStore.activate}}</view> -->
 						</view>
 						<view class="line2">
-							
+
 							<!-- {{userInfoStore.remarks || ''}}<u-icon name="arrow-right" color="$uni-text-color-vip" size="14"></u-icon> -->
-							<image src="/static/images/Frame1000001522-1.png" class="arrowRight" mode="aspectFill"></image>
+							<image src="/static/images/Frame1000001522-1.png" class="arrowRight" mode="aspectFill">
+							</image>
 						</view>
 					</view>
 				</view>
@@ -98,7 +102,8 @@
 				</view>
 				<view class="list">
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
-						<view v-for="(item, index) in mounList" :key="index" style="position: relative;" @click="abunbtn(item)">
+						<view v-for="(item, index) in mounList" :key="index" style="position: relative;"
+							@click="abunbtn(item)">
 							<!-- <view class="mouns">
 								<view class="count">
 									<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>{{item.totalPlay || '0'}}
@@ -106,8 +111,10 @@
 							</view> -->
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
-								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'bộ phim cổ ...'"></u--text>
-								<u--text :lines="1" size="24rpx" color="#6f6f6f" align="left" :text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
+								<u--text :lines="1" size="24rpx" color="#fff" align="left"
+									:text="item.dramaName || 'bộ phim cổ ...'"></u--text>
+								<u--text :lines="1" size="24rpx" color="#6f6f6f" align="left"
+									:text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
 							</view>
 						</view>
 						<!-- <view class="" style="width: 20px;">
@@ -128,11 +135,11 @@
 					</view>
 				</view> -->
 				<view class="menu_box">
-					<view class="item" v-for="(item, index) in menuList" :key="item.id"
-						@click="menuItemClick(item)">
+					<view class="item" v-for="(item, index) in menuList" :key="item.id" @click="menuItemClick(item)">
 						<view class="left">
 							<view class="icon">
-								<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix"></image>
+								<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix">
+								</image>
 							</view>
 							<view class="text">{{ item.text }}</view>
 						</view>
@@ -143,8 +150,8 @@
 					</view>
 				</view>
 			</view>
-			
-			
+
+
 			<view class="copyright" v-if="copyrightData.length" @click="debugClick">
 				<view class="item" v-for="(item, index) in copyrightData" :key="index">
 					<image class="image" v-if="item.image" :src="item.image" mode="widthFix"></image>
@@ -182,18 +189,18 @@
 	const PlayerManager = require("../../utils/playerManager.js");
 	// const playletPlugin = requirePlugin("playlet-plugin");
 	// let playletPlugin;
-	
+
 	// 检查当前是否在小程序环境中
 	if (typeof wx !== 'undefined' && wx.getSystemInfo) {
-	    try {
-	        // 在小程序中执行 requirePlugin
-	        // playletPlugin = requirePlugin("playlet-plugin");
-	    } catch (error) {
-	        // console.error('Failed to requirePlugin in WeChat Mini Program:', error);
-	    }
+		try {
+			// 在小程序中执行 requirePlugin
+			// playletPlugin = requirePlugin("playlet-plugin");
+		} catch (error) {
+			// console.error('Failed to requirePlugin in WeChat Mini Program:', error);
+		}
 	} else {
-	    // 在其他环境中的处理
-	    console.log('This code is executed only in WeChat Mini Program environment.');
+		// 在其他环境中的处理
+		console.log('This code is executed only in WeChat Mini Program environment.');
 	}
 	import {
 		mapState,
@@ -204,7 +211,7 @@
 	export default {
 		data() {
 			return {
-				allocatProgram:{},
+				allocatProgram: {},
 				tenantId: null,
 				sysOrgCode: null,
 				memberId: null,
@@ -248,52 +255,53 @@
 					// #ifndef APP-PLUS
 					{
 						id: 1,
-						img: '/static/icons/list_2.png',
+						img: '/static/images/Frame-34.png',
 						width: '32rpx',
-						text: 'Mời bạn bè',//邀请好友
+						text: 'Mời bạn bè', //邀请好友
 						rid: '',
 						path: '/pages/user/share/poster'
 					},
 					// #endif
 					{
 						id: 2,
-						img: '/static/icons/list_5.png',
+						img: '/static/images/Frame-35.png',
 						width: '28rpx',
-						text: 'Bộ sưu tập của tôi',//我的收藏
-						rid: '',
-						path: '/pages/user/share/collect'
-					},
-					{
-						id: 3,
-						img: '/static/icons/list_3.png',
-						width: '28rpx',
-						text: 'ngôn ngữ',//语言
-						rid: '',
-						path: '/pages/user/integral/task'
-					},
-					
-					{
-						id: 4,
-						img: '/static/icons/list_4.png',
-						width: '28rpx',
-						text: 'đội của tôi',//我的团队
+						text: 'đội của tôi', //我的团队
 						rid: '',
 						path: '/pages/user/share/team'
 					},
 					{
-						id: 5,
-						img: '/static/icons/list_3.png',
-						width: '32rpx',
-						text: 'Liên hệ Hỗ trợ',//联系我们
-						rid: ''
+						id: 3,
+						img: '/static/images/Frame-36.png',
+						width: '28rpx',
+						text: 'ngôn ngữ', //语言
+						rid: '',
+						path: '/pages/user/seting/setLanguage'
+					},
+
+					{
+						id: 4,
+						img: '/static/images/Frame-37.png',
+						width: '28rpx',
+						text: 'Liên hệ Hỗ trợ', //客服
+						rid: '',
+						path: '/pages/user/seting/opinion'
 					},
 					{
-						id: 6,
-						img: '/static/icons/list_1.png',
-						width: '28rpx',
-						text: 'thiết lập',//设置
-						rid: ''
+						id: 5,
+						img: '/static/images/Frame-38.png',
+						width: '32rpx',
+						text: 'thiết lập', //联系我们
+						rid: '',
+						path: '/pages/user/seting/seting'
 					},
+					// {
+					// 	id: 6,
+					// 	img: '/static/icons/list_1.png',
+					// 	width: '28rpx',
+					// 	text: 'thiết lập',//设置
+					// 	rid: ''
+					// },
 				],
 				copyrightData: this.$store.state.app.copyright || [], // 版权说明
 				platform: this.$utils.platforms(),
@@ -308,9 +316,9 @@
 					title: '卡密兑换',
 					value: '',
 				},
-				VipListmu:{},
+				VipListmu: {},
 				inputStyle: {},
-				platform:'',
+				platform: '',
 				videoList: [],
 				mounList: [{
 					id: 1,
@@ -381,27 +389,27 @@
 		onLoad() {
 			const systemInfo = uni.getSystemInfoSync();
 			let platform;
-			 
+
 			if (systemInfo.platform === 'android') {
-			  this.platform = 'Android';
+				this.platform = 'Android';
 			} else if (systemInfo.platform === 'ios') {
-			  this.platform = 'iOS';
+				this.platform = 'iOS';
 			}
-			 
+
 			console.log(this.platform); // 输出设备平台信息
 			uni.$on('updateUserInfo', () => {
 				// this.getUserInfo()
 			})
-			
+
 			this.tenantId = apiMoen.tenantId
 			this.sysOrgCode = apiMoen.sysOrgCode
-			
-			
+
+
 			this.memberId = uni.getStorageSync('id')
 			this.id = uni.getStorageSync('id')
-			if(!this.memberId){
+			if (!this.memberId) {
 				uni.redirectTo({
-					url:'/pages/user/login/login'
+					url: '/pages/user/login/login'
 				})
 				return
 			}
@@ -419,24 +427,30 @@
 		},
 		methods: {
 			...mapActions('user', ['getUserInfo']),
-			recharbtn(){
+			recharbtn() {
 				uni.navigateTo({
-					url:'../user/recharge/recharge'
+					url: '../user/recharge/recharge'
 				})
 			},
-			menuItemClick(val){
-				uni.redirectTo({
+			menuItemClick(val) {
+				uni.navigateTo({
 					url: val.path
 				})
 			},
 			// 获取设备
-			getDeviceid(){
+			getDeviceid() {
 				// 获取设备品牌、型号、设备 id 、系统名称、osVersion
-				const {deviceBrand, deviceModel, deviceId, osName, osVersion} = uni.getSystemInfoSync();
-				console.log("获取设备品牌、型号、设备 id 、系统名称、osVersion",deviceBrand, deviceModel, deviceId, osName, osVersion);
+				const {
+					deviceBrand,
+					deviceModel,
+					deviceId,
+					osName,
+					osVersion
+				} = uni.getSystemInfoSync();
+				console.log("获取设备品牌、型号、设备 id 、系统名称、osVersion", deviceBrand, deviceModel, deviceId, osName, osVersion);
 			},
-			abunbtn(item){
-				
+			abunbtn(item) {
+
 				this.$myGlobalMethod(item.dramaId); // 调用全局方法
 			},
 			// 调试
@@ -483,10 +497,10 @@
 			},
 			// 充值会员中心
 			openVip() {
-				 uni.navigateTo({
-				        url: "/pages/user/activate/activate"
-				    })
-				
+				uni.navigateTo({
+					url: "/pages/user/activate/activate"
+				})
+
 			},
 			// 小程序信息查询
 			getAllocatProgram() {
@@ -513,7 +527,7 @@
 					tenantId: this.tenantId,
 					sysOrgCode: this.sysOrgCode
 				}).then(res => {
-					console.log("功能列表",res);
+					console.log("功能列表", res);
 					if (res.code == 200) {
 						this.videoList = res.result.map(it => ({
 							id: it.id,
@@ -521,7 +535,7 @@
 							width: '28rpx',
 							text: it.functionName,
 							url: it.functionUrl,
-							functionStatus:it.functionStatus
+							functionStatus: it.functionStatus
 						}))
 						console.log(this.videoList);
 					}
@@ -539,7 +553,7 @@
 						this.VipListmu = res.result
 						this.userInfoStore = res.result
 					}
-					console.log("会员信息",res);
+					console.log("会员信息", res);
 				}).catch(res => {
 					console.log(res);
 				})
@@ -574,12 +588,12 @@
 		position: absolute;
 		left: 10rpx;
 		bottom: 50rpx;
-	
+
 		.image {
 			width: 100%;
 			height: 100%;
 		}
-	
+
 		.count {
 			// position: absolute;
 			left: 24rpx;
@@ -590,6 +604,7 @@
 			font-size: 24rpx;
 		}
 	}
+
 	.page_content {
 		position: relative;
 		overflow-y: auto;
@@ -597,11 +612,13 @@
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
+
 		.infoBox {
 			position: relative;
 			padding-left: 36rpx;
 			padding-top: 80rpx;
-			.imagess{
+
+			.imagess {
 				width: 100%;
 				position: absolute;
 				top: 0;
@@ -610,6 +627,7 @@
 				bottom: 0;
 				z-index: 1;
 			}
+
 			.navbar {
 				font-size: 48rpx;
 				font-weight: bold;
@@ -647,19 +665,21 @@
 						height: 100%;
 						border-radius: 50%;
 					}
-					.imageloog{
+
+					.imageloog {
 						position: absolute;
 						top: -8rpx;
 						right: 0;
 						width: 40rpx;
 						height: 40rpx;
-						
+
 					}
 				}
 
 				.info {
 					flex: 1;
 					margin-left: 32rpx;
+
 					.nickname {
 						display: flex;
 
@@ -676,13 +696,13 @@
 					}
 
 					.msg {
-						.membername{
+						.membername {
 							font-size: 36rpx;
 							margin-top: 20rpx;
 							color: #fff;
 							font-weight: bold;
 						}
-						
+
 						.text {
 							color: $uni-text-color-inverse;
 							font-size: 24rpx;
@@ -697,6 +717,7 @@
 						}
 					}
 				}
+
 				.user-btn {
 					width: 202rpx;
 					height: 65rpx;
@@ -716,15 +737,16 @@
 
 		.main_content {
 			.vip_card {
-				
+
 				margin: 0 40rpx;
 				margin-top: 24rpx;
 				position: relative;
-				background: linear-gradient( 220deg, #181818 0%, #545454 50%, #252525 100%);
+				background: linear-gradient(220deg, #181818 0%, #545454 50%, #252525 100%);
 				border-radius: 20rpx;
 				border: 2rpx solid;
 				border-image: linear-gradient(135deg, rgba(255, 237, 192, 0.2), rgba(255, 237, 192, 1), rgba(255, 237, 192, 0.2)) 1 1;
-				.imagssl{
+
+				.imagssl {
 					width: 100%;
 					height: 204rpx;
 					position: absolute;
@@ -734,6 +756,7 @@
 					bottom: 0;
 					z-index: 1;
 				}
+
 				.vip_box {
 					position: relative;
 					z-index: 2;
@@ -747,7 +770,7 @@
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
-					
+
 					.left {
 						color: #fff;
 						display: flex;
@@ -756,14 +779,16 @@
 						width: 100%;
 
 						.line1 {
-							
+
 							display: flex;
 							align-items: center;
 							justify-content: center;
+
 							.vipBox {
 								display: flex;
 								align-items: center;
 								justify-content: center;
+
 								view {
 									flex: 1;
 									font-family: Inter, Inter;
@@ -771,6 +796,7 @@
 									font-size: 26rpx;
 									line-height: 44rpx;
 									color: #999999;
+
 									span {
 										font-family: Inter, Inter;
 										font-weight: 400;
@@ -778,16 +804,19 @@
 										color: #FFCD03;
 									}
 								}
+
 								image {
 									margin-right: 30rpx;
 									width: 97rpx;
 									height: 97rpx;
 								}
 							}
-							.backgLogo{
+
+							.backgLogo {
 								width: 30rpx;
 								height: 40rpx;
 							}
+
 							.kaitong {
 								font-size: 24rpx;
 								margin-left: 124rpx;
@@ -800,18 +829,19 @@
 								text-align: center;
 							}
 						}
-						
+
 						.line2 {
 							font-size: 28rpx;
 							display: flex;
 							align-items: center;
 							justify-content: center;
 							color: #fff;
-							
+
 							.arrowRight {
 								width: 54rpx;
 								height: 54rpx;
 							}
+
 							// ::v-deep .u-icon {
 							// 	margin-top: 6rpx;
 							// }
@@ -841,6 +871,7 @@
 				border-radius: 8rpx;
 				margin: 0rpx 40rpx;
 				margin-top: 20rpx;
+
 				.integral_box_t {
 					height: 100rpx;
 					line-height: 100rpx;
@@ -854,14 +885,17 @@
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
+
 					span {
 						font-family: 宋体;
 					}
 				}
+
 				.integral_box_info {
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
+
 					.left {
 						width: 171rpx;
 						height: 65rpx;
@@ -874,25 +908,26 @@
 						font-size: 27rpx;
 						color: #000000;
 					}
-					
+
 					.right {
 						display: flex;
 						flex-direction: column;
 						align-items: center;
-					
+
 						.image {
 							width: 30rpx;
 							margin-right: 8rpx;
 							margin-left: 12rpx;
 						}
-					
+
 						.text {
 							font-family: Inter, Inter;
 							font-weight: 400;
 							font-size: 26rpx;
 							color: #FFFFFF;
 						}
-						.usable{
+
+						.usable {
 							margin-left: 12rpx;
 							margin-right: 8rpx;
 							font-family: Inter, Inter;
@@ -905,7 +940,8 @@
 							background-size: 28rpx 27rpx;
 							color: #FFCD03;
 						}
-						.usables{
+
+						.usables {
 							margin-left: 12rpx;
 							margin-right: 8rpx;
 							font-family: Inter, Inter;
@@ -920,7 +956,7 @@
 						}
 					}
 				}
-				
+
 			}
 
 			.oinuntlist {
@@ -945,11 +981,11 @@
 				background: transparent;
 				margin-top: 24rpx;
 				margin: 30rpx 32rpx;
-				background: linear-gradient( 185deg, #262626 0%, #252525 100%);
+				background: linear-gradient(185deg, #262626 0%, #252525 100%);
 				border: 0rpx solid;
 				border-image: linear-gradient(135deg, rgba(233, 233, 233, 0.2), rgba(233, 233, 233, 1), rgba(233, 233, 233, 0.2)) 1 1;
 				border-radius: 20rpx;
-				
+
 				.list {
 					margin-top: 15rpx;
 				}
@@ -975,14 +1011,16 @@
 				min-height: 200rpx;
 				margin-top: 24rpx;
 				padding-bottom: 32rpx;
+
 				.dalisewier {
 					display: flex;
 					padding-top: 20rpx;
 					flex-wrap: wrap;
 					margin-left: 20rpx;
 				}
-				
+
 				.vlist {
+
 					// margin-right: 64rpx;
 					image {
 						width: 60rpx;
@@ -992,11 +1030,11 @@
 						overflow: hidden;
 					}
 				}
-				
+
 				.item {
 					margin-right: 72rpx;
 					margin-bottom: 20rpx;
-					
+
 					.icon {
 						width: 84rpx;
 						height: 84rpx;

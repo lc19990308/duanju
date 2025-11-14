@@ -3,9 +3,13 @@
 		<u-navbar title="" :autoBack="true" :fixed='true' :placeholder='true' bgColor='transparent'
 			:titleStyle='titleStyle' leftIconColor='#fff'>
 			<template slot='center'>
-				<view class="input-box">
+<!-- 				<view class="input-box" @tap="serachList">
 					<input type="text" v-model="dramaName" placeholder="Tìm kiếm" />
-					<u-icon name="search" @tap="serachList" color="#8a9d9f" size="28"></u-icon>
+					<u-icon name="search" color="#8a9d9f" size="28"></u-icon>
+				</view> -->
+				<view class="input-box" >
+					<input type="text" v-model="dramaName" placeholder="Tìm kiếm" />
+					<u-icon @tap="serachList" name="search" color="#8a9d9f" size="28"></u-icon>
 				</view>
 			</template>
 		</u-navbar>
@@ -17,7 +21,7 @@
 				</view>
 			</view>
 			<view class="remove-content">
-				<view class="remove-item" v-for="(item,index) in historyList" :key="index">{{item.searchKeyword}}</view>
+				<view class="remove-item" @tap="historySerach(item)" v-for="(item,index) in historyList" :key="index">{{item.searchKeyword}}</view>
 			</view>
 		</view>
 		<!--热搜词-->
@@ -31,7 +35,8 @@
 				</view>
 			</view>
 			<view class="hot-content">
-				<view class="hot-item" v-for="(item,index) in hotKeyWordList" :key="index" @tap="touchHotKeyword(item.dramaName)">
+				<view class="hot-item" v-for="(item,index) in hotKeyWordList" :key="index"
+					@tap="touchHotKeyword(item.dramaName)">
 					<view class="hot-text">{{item.dramaName}}</view>
 					<view class="icon" v-if="item.hotState">
 						<image class="icon-hot" src="/static/images/hot.png" mode=""></image>
@@ -47,7 +52,7 @@
 					<image class="icon-hot" src="/static/images/hot.png" mode=""></image>
 				</view>
 			</view>
-			<view class="book-list-item" v-for="(item,index) in videoList" :key="index">
+			<view class="book-list-item" @tap="videoInfo(item)" v-for="(item,index) in videoList" :key="index">
 				<view class="cover">
 					<image class="cover-image" :lazy-load="true" :src="item.dramaPoster" mode=""></image>
 					<image class="tag" v-if="index === 0" src="/static/images/Frame-8.png" mode=""></image>
@@ -85,40 +90,40 @@
 				},
 				hotKeyWordList: [],
 				videoList: [],
-				dramaName:'',
-				historyList:[],
-				memberId:uni.getStorageSync('memberId') || '',
-				sysOrgCode:uni.getStorageSync('sysOrgCode') || '',
+				dramaName: '',
+				historyList: [],
+				memberId: uni.getStorageSync('memberId') || '',
+				sysOrgCode: uni.getStorageSync('sysOrgCode') || '',
 			}
 		},
 		computed: {
 			...mapState('user', ['userInfo'])
 		},
 		methods: {
-			touchHotKeyword(dramaName){
+			touchHotKeyword(dramaName) {
 				this.dramaName = dramaName;
 				this.serachList();
 			},
 			//搜索
-			serachList(){
+			serachList() {
 				this.$request('serach.filmDramaMember', {
 					memberId: this.memberId,
-					sysOrgCode: 'A01',
-					dramaName:this.dramaName,
+					sysOrgCode: this.sysOrgCode,
+					dramaName: this.dramaName,
 					pageNo: 1,
 					pageSize: 10,
 				}).then(res => {
 					console.log(res.result, 'serachList')
 					this.videoList = res.result.records;
 					this.getHistoryList();
-				
+
 				})
 			},
 			//获取搜索历史
 			getHistoryList() {
 				this.$request('serach.searchHistoryList', {
 					memberId: this.memberId,
-					sysOrgCode: 'A01',
+					sysOrgCode: this.sysOrgCode,
 					pageNo: 1,
 					pageSize: 10,
 				}).then(res => {
@@ -129,7 +134,7 @@
 			//获取热搜词
 			getHotKeyword(refresh = false) {
 				this.$request('serach.searchRecommendedList', {
-					sysOrgCode: 'A01',
+					sysOrgCode: this.sysOrgCode,
 					refresh,
 				}).then(res => {
 					this.hotKeyWordList = res.result;
@@ -138,7 +143,7 @@
 			//获取搜索剧集
 			getVideoList() {
 				this.$request('serach.hotDramaList', {
-					sysOrgCode: 'A01',
+					sysOrgCode: this.sysOrgCode,
 				}).then(res => {
 					this.videoList = res.result;
 				})
@@ -146,11 +151,21 @@
 			//清除历史
 			claerHistory() {
 				this.$request('serach.clearSearchHistory', {
-					sysOrgCode: 'A01',
+					sysOrgCode: this.sysOrgCode,
+					memberId:this.memberId,
 				}).then(res => {
 					this.getHistoryList();
 				})
 			},
+			historySerach(info){
+				this.dramaName = info.searchKeyword;
+				this.serachList();
+			},
+			videoInfo(item){
+				uni.redirectTo({
+					url:`/pages/video/videoDetails?item=${JSON.stringify(item)}`
+				})
+			}
 		},
 		onLoad() {
 			this.getHistoryList();

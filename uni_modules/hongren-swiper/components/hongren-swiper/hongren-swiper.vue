@@ -6,9 +6,7 @@
 				<block v-for="(item,index) in swiperList" :key="index">
 					<swiper-item @click="swiperItemTap" :data-item="item">
 						<view class="swiper1_item">
-							<image class="autoImage"
-								:src="'https://preview.qiantucdn.com/58pic/20220317/58PIC58PICU58PICdqwCdHPxfhf1Q_PIC2018_PIC2018.jpg!w1024_new_small_1'"
-								mode="widthFix"></image>
+							<image class="autoImage" :src="item.image" mode="widthFix"></image>
 							<div class="swiperSlot">
 								<slot></slot>
 							</div>
@@ -163,13 +161,14 @@
 			}
 		}
 	}
+
 	.swiper2_left {
 		transform: scale(0.9) rotateY(-40deg) !important;
 	}
-	
+
 	.swiper2_right {
 		transform: scale(0.9) rotateY(40deg) !important;
-		
+
 	}
 
 

@@ -1,7 +1,7 @@
 <template>
 	<view class="app-container">
 		<u-navbar title="Thay đổi tên" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff'
-			:autoBack="true" :placeholder='true' >
+			:autoBack="true" :placeholder='true'>
 		</u-navbar>
 		<view class="agreement">
 			<view class="agreement-item">
@@ -57,17 +57,19 @@
 			},
 			submitForm() {
 				if (this.confirmed) {
-					this.$request('user.deleteAccount').then(res => {
+					this.$request('user.deleteAccount', {
+						confirmed: this.confirmed,
+					}).then(res => {
 						uni.clearStorageSync();
-						setTimeout(()=>{
+						this.$u.toast('操作成功！')
+						setTimeout(() => {
 							uni.reLaunch({
-								url:'/pages/login/login'
+								url: '/pages/login/login'
 							})
-							this.$u.toast('操作成功！')
-						},500)
-						
+						}, 500)
+
 					})
-				}else{
+				} else {
 					this.$u.toast('请确认删除账户协议！')
 				}
 			},

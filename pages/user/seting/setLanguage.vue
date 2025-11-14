@@ -4,8 +4,8 @@
 			leftIconColor='#fff' :autoBack="true" :placeholder='true' />
 		<view class="issue-card">
 			<u-radio-group v-model="value" iconPlacement="right">
-				<u-radio activeColor="#FFCD03" label='思休' labelColor='#d1d1d1'></u-radio>
-				<u-radio activeColor="#FFCD03" label="思休" labelColor='#d1d1d1'></u-radio>
+				<u-radio activeColor="#FFCD03" name='Tiếng Anh' label='Tiếng Anh' labelColor='#d1d1d1'></u-radio>
+				<u-radio activeColor="#FFCD03" name='Việt Nam' label="Việt Nam" labelColor='#d1d1d1'></u-radio>
 			</u-radio-group>
 		</view>
 		<u-button class="submt-btn" @click="submit">đăng ký</u-button>
@@ -16,7 +16,7 @@
 	export default {
 		data() {
 			return {
-				value: -1,
+				value: '',
 				titleStyle: {
 					color: '#fff',
 					fontFamily: 'PingFang SC, PingFang SC',
@@ -26,7 +26,16 @@
 			}
 		},
 		methods: {
-
+			submit(){
+				if(this.value){
+					setTimeout(()=>{
+						uni.$u.toast('操作成功！');
+						uni.navigateBack()
+					},500)
+				}else{
+					uni.$u.toast('请选择语言设置！');
+				}
+			}
 		},
 	}
 </script>

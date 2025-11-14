@@ -24,6 +24,7 @@
 				</u-form-item>
 			</u--form>
 		</view>
+		<image class="avatar" :src="form.avatar" mode=""></image>
 	</view>
 </template>
 
@@ -64,15 +65,15 @@
 			getUserInfo() {
 				this.$request('user.getUserInfo').then(res => {
 					const result = res.result.userInfo;
-					console.log(result,'result')
+					console.log(result, 'result')
 					this.form = {
-						realname:result.realname,
-						avatar:result.avatar || '',
+						realname: result.realname,
+						avatar: result.avatar || '',
 					}
 				})
 			},
 			rightClick() {
-				this.$request('user.appUpdateProfile',{
+				this.$request('user.appUpdateProfile', {
 					...this.form
 				}).then(res => {
 					this.$u.toast('操作成功！')
@@ -96,7 +97,7 @@
 							success: (uploadFileRes) => {
 								const res = JSON.parse(uploadFileRes.data);
 								this.form.avatar = res.result.savePath;
-								console.log(this.form.avatar,'avatar')
+								console.log(this.form.avatar, 'avatar')
 							}
 						});
 					}
@@ -149,6 +150,12 @@
 				height: 168rpx;
 				border-radius: 50%;
 				opacity: .5;
+
+				image {
+					width: 166rpx;
+					height: 166rpx;
+					border-radius: 50%;
+				}
 			}
 		}
 

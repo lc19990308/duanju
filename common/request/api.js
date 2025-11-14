@@ -7,7 +7,7 @@ const api = {
 			desc: '登录'
 		},
 		memberAccountNumberAdd: {
-			url: '/api/wxApi/memberAccountNumberAdd',
+			url: '/api/appApi/memberAccountNumberAdd',
 			method: 'GET',
 			desc: '登录'
 		},
@@ -214,7 +214,7 @@ const api = {
 		},
 		deleteAccount: {
 			url: '/api/sys/user/deleteAccount',
-			method: 'PUT',
+			method: 'POST',
 			desc: '注销账号'
 		},
 		questionList: {
@@ -669,6 +669,23 @@ const api = {
 			desc: '热门剧集推荐API'
 		},
 	},
+	sign:{
+		memberGoldCoin: {
+			url: '/api/appSignInApi/memberGoldCoin',
+			method: 'GET',
+			desc: '金币余额查询API'
+		},
+		signinManageList: {
+			url: '/api/appSignInApi/signinManageList',
+			method: 'GET',
+			desc: '金币余额查询API'
+		},
+		addSigninWelfare: {
+			url: '/api/appSignInApi/addSigninWelfare',
+			method: 'GET',
+			desc: '立即签到API'
+		},
+	}
 }
 
 export default api;

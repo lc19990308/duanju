@@ -97,6 +97,7 @@
 							image: item.dramaPoster,
 						}
 					})
+					console.log(this.swiperList,'xx')
 				})
 			},
 			//获取分类列表
