@@ -32,7 +32,7 @@
 			</view>
 		</view>
 		<view class="rewardCover" v-if="rewardCover">
-			<a @click="closeBtn" class="returnBtn"></a>
+			<a @click="closeBtn" class="returnBtn"><</a>
 			<view class="rewardCover_t">Mời bạn bè</view>
 			<view class="rewardCover_info">
 				<image src="/static/images/gift.png" class="rewardCover_info_img" mode=""></image>
