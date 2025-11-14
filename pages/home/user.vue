@@ -93,7 +93,10 @@
 			</view>
 			<view class="moinublock">
 				<view class="oinuntlist" @click="menuItemClicks">
-					Xem lịch sử
+					<view>
+						Xem lịch sử
+					</view>
+					<span>></span>
 					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
 				</view>
 				<view class="list">
@@ -930,10 +933,17 @@
 
 			.oinuntlist {
 				font-size: 28rpx;
+				background-image: url(/static/icons/list_2.png);
+				background-position: left center;
+				padding-left: 80rpx;
+				background-repeat: no-repeat;
+				background-size: 30rpx 30rpx;
 				font-weight: 800;
 				color: #fff;
 				position: relative;
-
+				display: flex;
+				justify-content: space-between;
+				line-height: 100rpx;
 				image {
 					width: 26rpx;
 					height: 26rpx;
@@ -941,6 +951,10 @@
 					top: 50%;
 					right: 0;
 					transform: translateY(-50%);
+				}
+				span {
+					font-family: 宋体;
+					font-size: 30rpx;
 				}
 			}
 
