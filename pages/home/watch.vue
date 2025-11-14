@@ -128,7 +128,7 @@
 
 	.app-container {
 
-		padding: 0 40rpx;
+		padding: 80rpx 40rpx;
 
 		.reward_t {
 			font-family: Inter, Inter;
@@ -261,7 +261,7 @@
 		.invite {
 			width: 100%;
 			float: left;
-
+			padding-bottom: 180rpx;
 			.invite_t {
 				width: 100%;
 				float: left;
