@@ -336,8 +336,10 @@
 				{
 					"path": "share/team",
 					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
+						"navigationBarTitleText": "đội của tôi",
+						"navigationBarTextStyle": "white",
+						"navigationBarBackgroundColor": "#000",
+						"navigationStyle": "default"
 					}
 				},
 				{
