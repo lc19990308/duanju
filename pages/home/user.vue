@@ -1120,7 +1120,7 @@ export default {
         width: 164rpx;
         height: 218rpx;
         border-radius: 12rpx;
-        margin-right: 16rpx;
+        margin-right: 40rpx;
       }
 
       .title {
