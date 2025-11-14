@@ -72,16 +72,19 @@
 		{
 			"path": "pages/home/collect",
 			"style": {
-				"navigationBarTitleText": "collect",
-				"enablePullDownRefresh": false
-		
+				"navigationBarTitleText": "Bộ sưu tập của tôi",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#000",
+				"navigationStyle": "default"
 			}
 		},
 		{
 			"path": "pages/home/history",
 			"style": {
-				"navigationBarTitleText": "history",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "Xem lịch sử",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#000",
+				"navigationStyle": "default"
 		
 			}
 		},
@@ -200,7 +203,8 @@
 					"path": "details",
 					"style": {
 						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
+						"navigationBarTextStyle": "white",
+						"navigationBarBackgroundColor": "#000",
 						"navigationStyle": "default"
 					}
 				},

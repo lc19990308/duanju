@@ -1,86 +1,47 @@
 <template>
 	<view class="page_content">
-		<view class="head_content">
-			<view class="tabs_box">
-				<u-tabs :scrollable="false" :lineWidth="0" :list="contentList" :current="contentCurrent"
-					:activeStyle="tabsActiveStyle" :inactiveStyle="tabsInactiveStyle" lineColor="#000"
-					@change="changeContent($event, 1)" />
-			</view>
-		</view>
-		<view class="main_content" v-if="contentList && contentList.length">
-			<swiper style="height: 100%" :skip-hidden-item-layout="true" :current="contentCurrent"
-				@change="changeContent($event, 2)">
-				<swiper-item style="height: 100%;" v-for="(item, index) in contentList" :key="item.id">
-					<scroll-view style="height: 100%" :scroll-y="true" :refresher-enabled="true"
-						:refresher-threshold="100" :refresher-triggered="refreshStatus"
-						@refresherrefresh="refreshHandle" @scrolltolower="bottomHandle" @scroll="scrollHandle">
-						<view class="content_box">
-							<view class="boxTitle" v-if="contentCurrent == 0">
-								<view class="text">正在追{{item.total}}部短剧</view>
-								<view class="icon">
-									<!-- <u-icon name="edit-pen" color="#000000" size="26"></u-icon>编辑 -->
+		
+		
+		<view class="main_content">
+			<!-- VIP充值 -->
+			<!-- <view class="integral_box" v-if="userInfoStore.rechargeVal" > -->
+			
+			<view class="moinublock">
+				
+				<view class="list">
+					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
+						<view v-for="(item, index) in mounList" :key="index" style="position: relative;" @click="abunbtn(item)">
+							<!-- <view class="mouns">
+								<view class="count">
+									<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>{{item.totalPlay || '0'}}
 								</view>
-							</view>
-							<view class="boxTitle" v-if="contentCurrent == 1">
-								<view class="text">共浏览了{{item.total}}部短剧</view>
-								<!-- <view class="icon">
-									<u-icon name="edit-pen" color="#000000" size="26"></u-icon>编辑
-								</view> -->
-							</view>
-							<view class="list" v-if="videoList.length > 0 && contentCurrent == 0">
-								<view class="item" v-for="(lItem, lIndex) in item.list" :key="lIndex"
-									@click="openVideoDetail(lItem)">
-									<view class="img">
-										<image class="image" :src="lItem.dramaPoster" mode="aspectFill"></image>
-										<view class="count">
-											<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>
-											{{lItem.totalPlay}}
-										</view>
-									</view>
-									<view class="info">
-										<view class="title u-line-1">{{ lItem.dramaName}}</view>
-										<view class="text">观看至第{{ lItem.dramaSeries }}集</view>
-									</view>
-								</view>
-							</view>
-							<view class="lists" v-else-if="videoList.length > 0 && contentCurrent == 1">
-								<view class="item" v-for="(lItem, lIndex) in item.list" :key="lIndex"
-									@click="HistoriCalcatchUp(lItem)">
-									<view class="img">
-										<image class="image" :src="lItem.dramaPoster" mode="aspectFill"></image>
-									</view>
-									<view class="info">
-										<view class="title u-line-1">{{ lItem.dramaName }}</view>
-										<!-- <view class="text1 u-line-2">{{ lItem.video.description }}</view> -->
-										<view class="text2">观看至第{{ lItem.dramaSeries }}集</view>
-									</view>
-									<view class="btns">
-										<view class="button" v-if="indexId == 2"
-											:class="{ collect: lItem.is_favorite == 1 }" hover-class="active"
-											:hover-start-time="0" :hover-stay-time="200">
-											<!-- @click.stop="handleCollect(lItem.vid, lItem.is_favorite, lIndex)" -->
-											<u-icon :name="lItem.is_favorite == 1 ? 'star-fill' : 'star'" color="#eee"
-												size="18"></u-icon>
-											<text class="text">{{ lItem.is_favorite == 1 ? '已追剧' : '前往追剧' }}</text>
-										</view>
-									</view>
-								</view>
-							</view>
-							<view class="nodata" v-else>
-								<u-empty mode="data" icon="http://cdn.uviewui.com/uview/empty/data.png" />
+							</view> -->
+							<image class="star" src="/static/images/Frame-16.png"></image>
+							<image class="img" :src="item.dramaPoster"></image>
+							<view class="title">
+								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'bộ phim cổ ...'"></u--text>
+								<u--text :lines="1" size="24rpx" color="#6f6f6f" align="left" :text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
 							</view>
 						</view>
-					</scroll-view>
-				</swiper-item>
-			</swiper>
+						<!-- <view class="" style="width: 20px;">
+							查看更多
+						</view> -->
+					</u-scroll-list>
+				</view>
+				
+			</view>
+			
+			
+			
 		</view>
 	</view>
 </template>
 
 <script>
+	import apiMoen from '../../utils/config.js';
 	const PlayerManager = require("../../utils/playerManager.js");
 	// const playletPlugin = requirePlugin("playlet-plugin");
-	let playletPlugin;
+	// let playletPlugin;
 	
 	// 检查当前是否在小程序环境中
 	if (typeof wx !== 'undefined' && wx.getSystemInfo) {
@@ -94,432 +55,944 @@
 	    // 在其他环境中的处理
 	    console.log('This code is executed only in WeChat Mini Program environment.');
 	}
+	import {
+		mapState,
+		mapGetters,
+		mapMutations,
+		mapActions
+	} from "vuex"
 	export default {
 		data() {
 			return {
-				navbarTitle: '',
-				tabsActiveStyle: {
-					color: '#fff',
-					// fontSize: '40rpx',
-					fontWeight: 'bold',
+				allocatProgram:{},
+				tenantId: null,
+				sysOrgCode: null,
+				memberId: null,
+				memberName: null,
+				buttonStyle: {
+					width: '100%',
+					height: '100%',
+					border: 'none',
+					// fontSize: '24rpx',
+					color: '#DF9B45',
+					background: '#fff',
+					borderRadius: '8rpx',
+					fontWeight: 'bold'
 				},
-				tabsInactiveStyle: {
-					color: '#999',
-					// fontSize: '32rpx',
-				},
-				contentList: [{
+				cardList: [{
 						id: 1,
-						name: '在追',
-						type: 'log',
-						list: [],
-						page: 1,
-						pagesize: 10,
-						status: 'loadmore',
-						total: 0,
+						img: '/static/icons/menu_2.png',
+						text: '观看记录',
+						path: '/pages/video/record'
 					},
 					{
 						id: 2,
-						name: '历史',
-						type: 'favorite',
-						list: [],
-						page: 1,
-						pagesize: 10,
-						status: 'loadmore',
-						total: 0,
-					},
-				],
-				contentCurrent: 0,
-				refreshStatus: true,
-				isRefresh: false,
-				videoList: [{
-						id: 1,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
-					},
-					{
-						id: 2,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
+						img: '/static/icons/menu_3.png',
+						text: '申请分销商',
+						path: '/pages/user/dealer/index'
 					},
 					{
 						id: 3,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
+						img: '/static/icons/menu_4.png',
+						text: '分享赚钱',
+						path: '/pages/user/share/index'
+					},
+					{
+						id: 4,
+						img: '/static/icons/menu_1.png',
+						text: '卡密兑换',
+						path: ''
 					},
 				],
-				indexId: 1
+				menuList: [
+					// #ifndef APP-PLUS
+					{
+						id: 1,
+						img: '/static/icons/list_2.png',
+						width: '32rpx',
+						text: 'Mời bạn bè',//邀请好友
+						rid: '',
+						path: '/pages/home/watchs'
+					},
+					// #endif
+					{
+						id: 2,
+						img: '/static/icons/list_5.png',
+						width: '28rpx',
+						text: 'Bộ sưu tập của tôi',//我的收藏
+						rid: '',
+						path: '/pages/home/collect'
+					},
+					{
+						id: 3,
+						img: '/static/icons/list_3.png',
+						width: '28rpx',
+						text: 'ngôn ngữ',//语言
+						rid: '',
+						path: '/pages/user/integral/task'
+					},
+					
+					{
+						id: 4,
+						img: '/static/icons/list_4.png',
+						width: '28rpx',
+						text: 'đội của tôi',//我的团队
+						rid: '',
+						path: '/pages/user/share/team'
+					},
+					{
+						id: 5,
+						img: '/static/icons/list_3.png',
+						width: '32rpx',
+						text: 'Liên hệ Hỗ trợ',//联系我们
+						rid: ''
+					},
+					{
+						id: 6,
+						img: '/static/icons/list_1.png',
+						width: '28rpx',
+						text: 'thiết lập',//设置
+						rid: ''
+					},
+				],
+				copyrightData: this.$store.state.app.copyright || [], // 版权说明
+				platform: this.$utils.platforms(),
+				configStore: this.$store.state.app.config,
+				userInfoStore: {},
+				debug: {
+					count: 0,
+					timer: null
+				},
+				cdkey: {
+					show: false,
+					title: '卡密兑换',
+					value: '',
+				},
+				VipListmu:{},
+				inputStyle: {},
+				platform:'',
+				videoList: [],
+				mounList: [{
+					id: 1,
+					image: '../../static/01.jpg',
+					name: '测试',
+					es: '100集',
+					description: '穿越',
+					number: '1000'
+				}, {
+					id: 1,
+					image: '../../static/01.jpg',
+					name: '测试',
+					es: '100集',
+					description: '穿越',
+					number: '1000'
+				}, {
+					id: 1,
+					image: '../../static/01.jpg',
+					name: '测试测试测试',
+					es: '100集',
+					description: '穿越',
+					number: '1000'
+				}, {
+					id: 1,
+					image: '../../static/01.jpg',
+					name: '测试测试测试测试测试测试测试测试测试',
+					es: '100集',
+					description: '穿越',
+					number: '1000'
+				}]
 			}
 		},
+		computed: {
+			...mapGetters("user", ["token", "userInfo"]),
+			...mapGetters("app", ["config", "copyright", "richtext", "iosIsPay"]),
+		},
+		watch: {
+			config: {
+				deep: true,
+				handler: function(newValue, oldValue) {
+					this.configStore = newValue
+				}
+			},
+			userInfo: {
+				deep: true,
+				handler: function(newValue, oldValue) {
+					// this.userInfoStore = newValue
+				}
+			},
+			copyright(newValue, oldValue) {
+				this.copyrightData = newValue
+			},
+			richtext(newValue, oldValue) {
+				newValue && this.initMenuList(newValue)
+			}
+		},
+		onPullDownRefresh() {
+			// if(this.token) {
+			// 	this.getUserInfo().then(res => {
+			// 		uni.stopPullDownRefresh()
+			// 	}).catch(err => {
+			// 		uni.stopPullDownRefresh()
+			// 	})
+			// } else {
+			// 	uni.stopPullDownRefresh()
+			// }
+		},
 		onLoad() {
-			var memberId = uni.getStorageSync('id')
-			if(!memberId){
+			const systemInfo = uni.getSystemInfoSync();
+			let platform;
+			 
+			if (systemInfo.platform === 'android') {
+			  this.platform = 'Android';
+			} else if (systemInfo.platform === 'ios') {
+			  this.platform = 'iOS';
+			}
+			 
+			console.log(this.platform); // 输出设备平台信息
+			uni.$on('updateUserInfo', () => {
+				// this.getUserInfo()
+			})
+			
+			this.tenantId = apiMoen.tenantId
+			this.sysOrgCode = apiMoen.sysOrgCode
+			
+			
+			this.memberId = uni.getStorageSync('id')
+			this.id = uni.getStorageSync('id')
+			if(!this.memberId){
 				uni.redirectTo({
 					url:'/pages/user/login/login'
 				})
 				return
 			}
-			// this.getPlayRecordList()
-			
+			this.handleTovideoList()
+			this.richtext && this.initMenuList(this.richtext)
+			this.getAllocatProgram()
+			this.getDeviceid()
 		},
 		onShow() {
-			this.getFilmLikeCollectList()
-			this.getFilmViewHistoryList()
+			this.handleToFilmDramaMember()
+			this.handleToFilmViewHistoryList()
+		},
+		onUnload() {
+			uni.$off('updateUserInfo')
 		},
 		methods: {
-			// 追剧跳转
-			openVideoDetail(lItem) {
-				var omim = JSON.stringify(lItem)
+			...mapActions('user', ['getUserInfo']),
+			recharbtn(){
 				uni.navigateTo({
-					url: '/pages/video/videoDetails?item=' + encodeURIComponent(omim)
+					url:'../user/recharge/recharge'
 				})
 			},
-			// 历史跳转
-			HistoriCalcatchUp(lItem) {
-				var omim = JSON.stringify(lItem)
-				uni.navigateTo({
-					url: '/pages/video/videoDetails?item=' + encodeURIComponent(omim)
+			menuItemClick(val){
+				uni.redirectTo({
+					url: val.path
 				})
 			},
-			// 获取追剧列表
-			getFilmLikeCollectList() {
-				this.$request('video.filmLikeCollectList', {
-					memberId: uni.getStorageSync('id')
+			menuItemClicks(){
+				uni.redirectTo({
+					url: "/pages/home/history"
+				})
+			},
+			// 获取设备
+			getDeviceid(){
+				// 获取设备品牌、型号、设备 id 、系统名称、osVersion
+				const {deviceBrand, deviceModel, deviceId, osName, osVersion} = uni.getSystemInfoSync();
+				console.log("获取设备品牌、型号、设备 id 、系统名称、osVersion",deviceBrand, deviceModel, deviceId, osName, osVersion);
+			},
+			abunbtn(item){
+				
+				this.$myGlobalMethod(item.dramaId); // 调用全局方法
+			},
+			// 调试
+			debugClick() {
+				// #ifdef MP-WEIXIN
+				const env = wx.getAccountInfoSync().miniProgram.envVersion
+				if (env != "release") {
+					clearTimeout(this.debug.timer);
+					this.debug.count++;
+					this.debug.timer = setTimeout(() => {
+						if (this.debug.count >= 5) {
+							uni.showModal({
+								title: '配置信息',
+								content: `
+									(env => ${env}) -
+									(domain => ${this.$BASE_URL}) -
+									(sign => ${this.$SIGN})
+								`
+							})
+						}
+						this.debug.count = 0;
+					}, 500);
+				}
+				// #endif
+			},
+			alertBindButton(type) {
+				if (type == 'wxmp') {
+					console.log("绑定微信小程序");
+				} else if (type == 'wxoa') {
+					console.log("绑定微信公众号");
+				} else if (type == 'mobile') {
+					console.log("绑定手机号");
+					this.jumpView('/pages/user/info/index')
+				}
+			},
+			// 复制
+			copyText(info) {
+				uni.setClipboardData({
+					data: String(info),
+					success: () => {
+						this.$u.toast('复制成功')
+					}
+				});
+			},
+			// 充值会员中心
+			openVip() {
+				 uni.navigateTo({
+				        url: "/pages/user/activate/activate"
+				    })
+				
+			},
+			// 小程序信息查询
+			getAllocatProgram() {
+				this.$request('common.allocatProgram', {
+					tenantId: uni.getStorageSync('tenantId'),
+					sysOrgCode: uni.getStorageSync('sysOrgCode'),
+					appId: uni.getStorageSync('srcAppid'),
 				}).then(res => {
-					console.log(res,
-						"2追剧列表11111111111111111111111111111111111111111111111111111111111111111111111")
-					if (res.code == 200) {
-						this.contentList[0].list = res.result
-						this.contentList[0].total = res.result.length
+					if (res != 200 && res.message != "") {
+						uni.showToast({
+							title: res.message,
+							icon: 'error',
+							duration: 2000,
+							position: 'top'
+						});
 					}
+					this.allocatProgram = res.result
+					console.log('小程序信息查询:', res);
 				})
 			},
-			// 获取观看历史列表
-			getFilmViewHistoryList() {
-				this.$request('video.filmViewHistoryList', {
-					memberId: uni.getStorageSync('id')
+			//功能列表
+			handleTovideoList() {
+				this.$request('wchatapi.allocatFunctionList', {
+					tenantId: this.tenantId,
+					sysOrgCode: this.sysOrgCode
 				}).then(res => {
-					console.log(res,
-						"观看历史列表11111111111111111111111111111111111111111111111111111111111111111111111")
+					console.log("功能列表",res);
 					if (res.code == 200) {
-						this.contentList[1].list = res.result
-						this.contentList[1].total = res.result.length
+						this.videoList = res.result.map(it => ({
+							id: it.id,
+							img: it.functionLogo,
+							width: '28rpx',
+							text: it.functionName,
+							url: it.functionUrl,
+							functionStatus:it.functionStatus
+						}))
+						console.log(this.videoList);
 					}
+				}).catch(res => {
+					console.log(res);
 				})
 			},
-			// 	收藏
-			// handleCollect(vid, collect, index) {
-			// 	if (collect == 0) {
-			// 		const obj = {
-			// 			vid,
-			// 			type: 'favorite'
-			// 		}
-			// 		this.$request('video.addRecord', obj, false).then(res => {
-			// 			if (res.code === 1) {
-			// 				this.contentList[this.contentCurrent].list[index].is_favorite = 1
-			// 			}
-			// 		})
-			// 	} else {
-			// 		const obj = {
-			// 			ids: vid,
-			// 			type: 'favorite'
-			// 		}
-			// 		this.$request('video.deleteRecord', obj, false).then(res => {
-			// 			if (res.code === 1) {
-			// 				this.contentList[this.contentCurrent].list[index].is_favorite = 0
-			// 			}
-			// 		})
-			// 	}
-			// },
-			// 获取播放记录
-			// getPlayRecordList() {
-			// 	const obj = {
-			// 		type: this.contentList[this.contentCurrent].type,
-			// 		page: this.contentList[this.contentCurrent].page,
-			// 		pagesize: this.contentList[this.contentCurrent].pagesize
-			// 	}
-			// 	this.contentList[this.contentCurrent].status = 'loading'
-			// 	this.$request('video.getRecord', obj).then(res => {
-			// 		if (res.code === 1) {
-			// 			if (res.data && res.data.length) {
-			// 				this.contentList[this.contentCurrent].list = this.contentList[this.contentCurrent].list
-			// 					.concat(res.data)
-			// 				if (res.data.length < this.contentList[this.contentCurrent].pagesize) {
-			// 					this.contentList[this.contentCurrent].status = 'nomore'
-			// 				} else {
-			// 					this.contentList[this.contentCurrent].status = 'loadmore'
-			// 				}
-			// 			} else {
-			// 				this.contentList[this.contentCurrent].page > 1 && this.contentList[this.contentCurrent]
-			// 					.page--
-			// 				const timer = setTimeout(() => {
-			// 					this.contentList[this.contentCurrent].status = 'nomore'
-			// 					clearTimeout(timer)
-			// 				}, 500)
-			// 			}
-			// 		}
-			// 		this.refreshStatus = false
-			// 		this.isRefresh = false
-			// 	}).catch(err => {
-			// 		this.refreshStatus = false
-			// 		this.isRefresh = false
-			// 	})
-			// },
-			// 下拉刷新
-			refreshHandle() {
-				this.refreshStatus = true
-				if (this.contentCurrent == 0) {
-					if (!this.isRefresh) {
-						this.isRefresh = true
-						this.contentList[this.contentCurrent].page = 1
-						this.contentList[this.contentCurrent].list = []
-						this.getFilmLikeCollectList();
-						setTimeout(() => {
-							if (this.isRefresh) { // 仅在确保当前正在刷新状态下执行退出刷新状态的操作
-								this.refreshStatus = false; // 退出刷新状态
-								this.isRefresh = false
-							}
-						}, 1000); // 2秒后退出刷新状态
+			//会员信息
+			handleToFilmDramaMember() {
+				this.$request('wchatapi.filmDramaMember', {
+					memberId: this.memberId
+				}).then(res => {
+					if (res.code == 200) {
+						this.memberName = res.result.memberName
+						this.VipListmu = res.result
+						this.userInfoStore = res.result
 					}
-				} else {
-					if (!this.isRefresh) {
-						this.isRefresh = true
-						this.contentList[this.contentCurrent].page = 1
-						this.contentList[this.contentCurrent].list = []
-						this.getFilmViewHistoryList()
-						setTimeout(() => {
-							if (this.isRefresh) { // 仅在确保当前正在刷新状态下执行退出刷新状态的操作
-								this.refreshStatus = false; // 退出刷新状态
-								this.isRefresh = false
-							}
-						}, 1000); // 2秒后退出刷新状态
+					console.log("会员信息",res);
+				}).catch(res => {
+					console.log(res);
+				})
+			},
+			//历史记录
+			handleToFilmViewHistoryList() {
+				this.$request('wchatapi.filmViewHistoryList', {
+					memberId: this.memberId
+				}).then(res => {
+					if (res.code == 200) {
+						console.log(res);
+						this.mounList = res.result
 					}
-				}
+				}).catch(res => {
+					console.log(res);
+				})
 			},
-			// 滚动监听
-			scrollHandle(e) {
-
+			//向左滑触发right
+			handleToRight() {
+				console.log('11111111111111111111111')
 			},
-			// 触底滚动
-			bottomHandle() {
-				this.contentList[this.contentCurrent].page++
-				if (this.contentCurrent == 0) {
-					this.getFilmLikeCollectList();
-				} else {
-					this.getFilmViewHistoryList()
-				}
-			},
-			// 切换分类
-			changeContent(e, i) {
-				this.indexId = i
-				const current = i === 1 ? e.index : e.detail.current
-				if (this.contentCurrent === current) {
-					return;
-				}
-				this.contentCurrent = current
-				// if (current == this.contentCurrent) return
-				if (this.contentCurrent == 0) {
-					this.getFilmLikeCollectList();
-				} else {
-					this.getFilmViewHistoryList()
-				}
-			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.mouns {
+		width: 100%;
+		// height: 282rpx;
+		border-radius: 16rpx;
+		// overflow: hidden;
+		position: absolute;
+		left: 10rpx;
+		bottom: 50rpx;
+	
+		.image {
+			width: 100%;
+			height: 100%;
+		}
+	
+		.count {
+			// position: absolute;
+			left: 24rpx;
+			bottom: 24rpx;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			font-size: 24rpx;
+		}
+	}
 	.page_content {
-		overflow: hidden;
+		position: relative;
+		overflow-y: auto;
 		background-color: #000;
-		color: #fff;
-		.head_content {
-			margin-top: 88rpx;
+		.infoBox {
+			position: relative;
+			padding-left: 36rpx;
+			padding-top: 80rpx;
+			.imagess{
+				width: 100%;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 1;
+			}
+			.navbar {
+				font-size: 48rpx;
+				font-weight: bold;
+				margin-bottom: 46rpx;
+				color: #fff;
+				position: relative;
+				z-index: 2;
+			}
 
-			.tabs_box {
-				// padding: 0 100rpx;
+			.userinfo_box {
+				position: relative;
+				z-index: 2;
+				display: flex;
+				align-items: center;
+				position: relative;
+
+				.arrow {
+					position: absolute;
+					top: 50%;
+					right: 0;
+					transform: translateY(-50%) rotate(0deg);
+					width: 44rpx;
+				}
+
+				.avatar {
+					width: 104rpx;
+					height: 104rpx;
+					border-radius: 50%;
+					border: 2rpx solid #fff;
+					// overflow: hidden;
+					position: relative;
+
+					.image {
+						width: 100%;
+						height: 100%;
+						border-radius: 50%;
+					}
+					.imageloog{
+						position: absolute;
+						top: -8rpx;
+						right: 0;
+						width: 40rpx;
+						height: 40rpx;
+						
+					}
+				}
+
+				.info {
+					flex: 1;
+					margin-left: 32rpx;
+					.nickname {
+						display: flex;
+
+						.text {
+							font-size: 34rpx;
+							color: #fff;
+							font-weight: 900;
+						}
+
+						.image {
+							width: 52rpx;
+							margin-left: 8rpx;
+						}
+					}
+
+					.msg {
+						.membername{
+							font-size: 36rpx;
+							margin-top: 20rpx;
+							color: #fff;
+							font-weight: bold;
+						}
+						
+						.text {
+							color: $uni-text-color-inverse;
+							font-size: 24rpx;
+							margin-top: 0;
+						}
+
+						.copy {
+							color: #5E5E5E;
+							margin-left: 8rpx;
+							text-decoration: underline;
+							display: inline-block;
+						}
+					}
+				}
+				.user-btn {
+					width: 202rpx;
+					height: 65rpx;
+					margin-right: 36rpx;
+					text-align: center;
+					line-height: 65rpx;
+					border-radius: 94rpx;
+					background-color: transparent;
+					font-family: Inter, Inter;
+					font-weight: 400;
+					font-size: 27rpx;
+					color: #FFCD03;
+					border: 2rpx solid #FFCD03;
+				}
 			}
 		}
 
 		.main_content {
-			overflow: hidden;
-
-			.content_box {
-				padding: 40rpx 40rpx 60rpx 40rpx;
-
-				.boxTitle {
+			.vip_card {
+				
+				margin: 0 40rpx;
+				margin-top: 24rpx;
+				position: relative;
+				background: linear-gradient( 220deg, #181818 0%, #545454 50%, #252525 100%);
+				border-radius: 20rpx;
+				border: 2rpx solid;
+				border-image: linear-gradient(135deg, rgba(255, 237, 192, 0.2), rgba(255, 237, 192, 1), rgba(255, 237, 192, 0.2)) 1 1;
+				.imagssl{
+					width: 100%;
+					height: 204rpx;
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					z-index: 1;
+				}
+				.vip_box {
+					position: relative;
+					z-index: 2;
+					width: 100%;
+					padding: 32rpx 24rpx;
+					box-sizing: border-box;
+					// background: #DF9B45;
+					// background-image: url('~@/static/images/vip_bg.png');
+					background-size: 100% 100%;
+					background-repeat: no-repeat;
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
-					margin-bottom: 48rpx;
-
-					.text {
-						font-size: 32rpx;
+					
+					.left {
 						color: #fff;
-					}
-
-					.icon {
 						display: flex;
-						color: #fff;
+						justify-content: space-between;
 						align-items: center;
-					}
-				}
-
-				.list {
-					display: grid;
-					grid-template-columns: 1fr 1fr 1fr;
-					grid-gap: 12rpx;
-
-					.item {
 						width: 100%;
 
-						.img {
-							width: 100%;
-							height: 282rpx;
-							border-radius: 16rpx;
-							overflow: hidden;
-							position: relative;
-
-							.image {
-								width: 100%;
-								height: 100%;
-							}
-
-							.count {
-								position: absolute;
-								left: 24rpx;
-								bottom: 24rpx;
-								color: #fff;
-								display: flex;
-								align-items: center;
-								font-size: 28rpx;
-							}
-						}
-
-						.info {
-							margin-top: 16rpx;
-
-							.title {
-								font-size: 28rpx;
-								color: #fff;
-								font-weight: 700;
-							}
-
-							.text {
-								font-size: 24rpx;
-								color: #fff;
-								margin-top: 4rpx;
-							}
-						}
-					}
-				}
-
-				.lists {
-
-					.item {
-						margin-bottom: 40rpx;
-						display: flex;
-						align-items: center;
-
-						.img {
-							width: 216rpx;
-							height: 282rpx;
-							border-radius: 20rpx;
-							overflow: hidden;
-
-							.image {
-								width: 100%;
-								height: 100%;
-							}
-						}
-
-						.info {
-							flex: 1;
-							margin-left: 40rpx;
-
-							.title {
-								font-size: 32rpx;
-								color: #fff;
-								font-weight: 700;
-							}
-
-							.text1 {
-								height: 68rpx;
-								font-size: 24rpx;
-								color: #fff;
-								margin-top: 4rpx;
-								line-height: 34rpx;
-								margin: 10rpx 0;
-							}
-
-							.text2 {
-								font-size: 28rpx;
-								color: #fff;
-								margin-top: 4rpx;
-							}
-
-
-						}
-
-						.btns {
-							margin-top: 20rpx;
+						.line1 {
+							
 							display: flex;
 							align-items: center;
-							justify-content: space-between;
-
-							.button {
-								padding-right: 10rpx;
-								padding-left: 16rpx;
-								height: 60rpx;
+							justify-content: center;
+							.vipBox {
 								display: flex;
 								align-items: center;
 								justify-content: center;
-								font-size: 28rpx;
-								background: #FF0066;
-								border-radius: 60rpx;
-								color: #fff;
-
-								&.collect {
-									opacity: 0.6;
+								view {
+									flex: 1;
+									font-family: Inter, Inter;
+									font-weight: 400;
+									font-size: 26rpx;
+									line-height: 44rpx;
+									color: #999999;
+									span {
+										font-family: Inter, Inter;
+										font-weight: 400;
+										font-size: 28rpx;
+										color: #FFCD03;
+									}
 								}
-
-								&.active {
-									background: rgba(#000, 0.9);
-								}
-
-								.text {
-									margin-left: 8rpx;
-									padding-right: 16rpx;
+								image {
+									margin-right: 30rpx;
+									width: 97rpx;
+									height: 97rpx;
 								}
 							}
+							.backgLogo{
+								width: 30rpx;
+								height: 40rpx;
+							}
+							.kaitong {
+								font-size: 24rpx;
+								margin-left: 124rpx;
+								padding: 0 16rpx;
+								background-color: #FDE1CB;
+								color: #62472A;
+								font-weight: 400;
+								border-radius: 8rpx;
+								line-height: 40rpx;
+								text-align: center;
+							}
 						}
+						
+						.line2 {
+							font-size: 28rpx;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							color: #fff;
+							
+							.arrowRight {
+								width: 54rpx;
+								height: 54rpx;
+							}
+							// ::v-deep .u-icon {
+							// 	margin-top: 6rpx;
+							// }
+						}
+					}
+
+					.right {
+						// width: 156rpx;
+						// height: 60rpx;
 					}
 				}
 
-				.nodata {
-					padding: 15vh 0;
+
+			}
+
+			.integral_box {
+				height: 260rpx;
+				display: flex;
+				flex-direction: column;
+				color: #fff;
+				background-image: url(/static/images/Frame1000001530-1.png);
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+				padding: 0 24rpx;
+				font-size: 28rpx;
+				font-weight: 600;
+				border-radius: 8rpx;
+				margin: 0rpx 40rpx;
+				margin-top: 20rpx;
+				.integral_box_t {
+					height: 100rpx;
+					line-height: 100rpx;
+					padding-top: 20rpx;
+					border-bottom: 2rpx solid #fff;
+					margin-bottom: 40rpx;
+					font-family: Inter, Inter;
+					font-weight: 400;
+					font-size: 28rpx;
+					color: #FFFFFF;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					span {
+						font-family: 宋体;
+					}
+				}
+				.integral_box_info {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					.left {
+						width: 171rpx;
+						height: 65rpx;
+						background: #DBB006;
+						border-radius: 94rpx;
+						line-height: 65rpx;
+						text-align: center;
+						font-family: Inter, Inter;
+						font-weight: bold;
+						font-size: 27rpx;
+						color: #000000;
+					}
+					
+					.right {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+					
+						.image {
+							width: 30rpx;
+							margin-right: 8rpx;
+							margin-left: 12rpx;
+						}
+					
+						.text {
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 26rpx;
+							color: #FFFFFF;
+						}
+						.usable{
+							margin-left: 12rpx;
+							margin-right: 8rpx;
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 36rpx;
+							background-image: url(/static/images/image73.png);
+							background-position: left center;
+							background-repeat: no-repeat;
+							padding-left: 40rpx;
+							background-size: 28rpx 27rpx;
+							color: #FFCD03;
+						}
+						.usables{
+							margin-left: 12rpx;
+							margin-right: 8rpx;
+							font-family: Inter, Inter;
+							font-weight: 400;
+							font-size: 36rpx;
+							background-image: url(/static/images/diamond.png);
+							background-position: left center;
+							background-repeat: no-repeat;
+							padding-left: 40rpx;
+							background-size: 32rpx 30rpx;
+							color: #FFCD03;
+						}
+					}
+				}
+				
+			}
+
+			.oinuntlist {
+				font-size: 28rpx;
+				background-image: url(/static/icons/list_2.png);
+				background-position: left center;
+				padding-left: 80rpx;
+				background-repeat: no-repeat;
+				background-size: 30rpx 30rpx;
+				font-weight: 800;
+				color: #fff;
+				position: relative;
+				display: flex;
+				justify-content: space-between;
+				line-height: 100rpx;
+				image {
+					width: 26rpx;
+					height: 26rpx;
+					position: absolute;
+					top: 50%;
+					right: 0;
+					transform: translateY(-50%);
+				}
+				span {
+					font-family: 宋体;
+					font-size: 30rpx;
+				}
+			}
+
+			.moinublock {
+				border-radius: 8rpx;
+				padding: 36rpx;
+				background: transparent;
+				margin-top: 24rpx;
+				
+				.list {
+					margin-top: 15rpx;
+				}
+
+				.img {
+					width: 164rpx;
+					height: 218rpx;
+					border-radius: 12rpx;
+					margin-right: 40rpx;
+				}
+				.star {
+					width: 40rpx;
+					height: 40rpx;
+					position: absolute;
+					top: 0;
+					right: 40rpx;
+					z-index: 999;
+				}
+				.title {
+					width: 100%;
+					margin-top: 8rpx;
+				}
+			}
+
+			.card_box {
+				border-radius: 8rpx;
+				padding-top: 32rpx;
+				background: #fff;
+				padding-left: 24rpx;
+				min-height: 200rpx;
+				margin-top: 24rpx;
+				padding-bottom: 32rpx;
+				.dalisewier {
+					display: flex;
+					padding-top: 20rpx;
+					flex-wrap: wrap;
+					margin-left: 20rpx;
+				}
+				
+				.vlist {
+					// margin-right: 64rpx;
+					image {
+						width: 60rpx;
+						height: 60rpx;
+						display: block;
+						margin: auto;
+						overflow: hidden;
+					}
+				}
+				
+				.item {
+					margin-right: 72rpx;
+					margin-bottom: 20rpx;
+					
+					.icon {
+						width: 84rpx;
+						height: 84rpx;
+						margin: 0 auto;
+
+						.image {
+							width: 100%;
+							height: 100%;
+						}
+					}
+
+					.text {
+						font-size: 24rpx;
+						color: #999;
+						color: #fff;
+						text-align: center;
+						margin-top: 8rpx;
+					}
+				}
+
+				.item:nth-child(4n) {
+					margin-right: 0rpx;
+				}
+			}
+
+			.menu_box {
+				background: #fff;
+				border-radius: 8rpx;
+				padding: 30rpx 0rpx;
+				background: transparent;
+
+				.item {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					padding: 28rpx 0;
+
+					.left {
+						display: flex;
+						align-items: center;
+
+						.icon {
+							width: 36rpx;
+							height: 36rpx;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+
+							.image {
+								width: 100%;
+							}
+						}
+
+						.text {
+							font-size: 28rpx;
+							// color: #333;
+							color: #fff;
+							margin-left: 40rpx;
+							font-weight: bold;
+						}
+					}
+
+					.right {
+						.image {
+							width: 32rpx;
+						}
+					}
+				}
+			}
+
+			.copyright {
+				margin-top: 60rpx;
+
+				.item {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					line-height: 36rpx;
+
+					a {
+						text-decoration: none;
+					}
+
+					.image {
+						width: 30rpx;
+						margin-right: 8rpx;
+					}
+
+					.text {
+						font-size: 24rpx;
+						color: rgba(#999, 0.5);
+					}
+				}
+			}
+
+			.alert_box {
+				width: 100%;
+				padding: 0 40rpx;
+				position: absolute;
+				bottom: 20rpx;
+				left: 0;
+
+				.item {
+					padding: 20rpx;
+					border-radius: 20rpx;
+					background: rgba(0, 0, 0, 0.9);
+					color: #fff;
+					font-size: 28rpx;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					.text {}
+
+					.btn {
+						background: #C78021;
+						padding: 8rpx 20rpx;
+						border-radius: 10rpx;
+					}
 				}
 			}
 		}
-	}
-
-	::v-deep .u-tabs__wrapper__nav,
-	.u-tabs {
-		flex-direction: unset !important;
-	}
-
-	::v-deep .u-tabs__wrapper__nav__item {
-		white-space: nowrap;
 	}
 </style>

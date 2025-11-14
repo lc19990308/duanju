@@ -410,6 +410,7 @@
 			// },
 			// 获取剧集列表
 			getHandpickList(dramaSeries) {
+				
 				this.isonuns = false
 				// var data = {
 				// 	id:'100909'
