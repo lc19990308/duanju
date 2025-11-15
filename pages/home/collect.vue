@@ -10,17 +10,17 @@
 				
 				<view class="list">
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
-						<view v-for="(item, index) in mounList" :key="index" style="position: relative;" @click="abunbtn(item)">
+						<view v-for="(item, index) in contentList" :key="index" style="position: relative;" @click="abunbtn(item)">
 							<!-- <view class="mouns">
 								<view class="count">
 									<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>{{item.totalPlay || '0'}}
 								</view>
 							</view> -->
-							<image class="star" src="/static/images/Frame-16.png"></image>
+							<image class="star" @click="handleCollect(item,index)" src="/static/images/Frame-16.png"></image>
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
-								<u--text :lines="1" size="24rpx" color="#fff" align="left" :text="item.dramaName || 'bộ phim cổ ...'"></u--text>
-								<u--text :lines="1" size="24rpx" color="#6f6f6f" align="left" :text="item.dramaName || 'Tập 1 / 45 Tập'"></u--text>
+								<u--text :lines="1" size="26rpx" color="#fff" align="left" :text="item.dramaName || 'bộ phim cổ ...'"></u--text>
+								<view class="title_num">Tập <u--text :lines="1" color="#fff" align="left" style="margin-left: 20rpx;" :text="item.totalPlay || '0'"></u--text></view>
 							</view>
 						</view>
 						<!-- <view class="" style="width: 20px;">
@@ -168,6 +168,7 @@
 					title: '卡密兑换',
 					value: '',
 				},
+				contentList: [],
 				VipListmu:{},
 				inputStyle: {},
 				platform:'',
@@ -269,6 +270,7 @@
 			this.richtext && this.initMenuList(this.richtext)
 			this.getAllocatProgram()
 			this.getDeviceid()
+			this.getFilmLikeCollectList()
 		},
 		onShow() {
 			this.handleToFilmDramaMember()
@@ -279,6 +281,35 @@
 		},
 		methods: {
 			...mapActions('user', ['getUserInfo']),
+			getFilmLikeCollectList() {
+				this.$request('video.filmLikeCollectList', {
+					memberId: uni.getStorageSync('id')
+				}).then(res => {
+					
+					if (res.code == 200) {
+						this.contentList = res.result
+						console.log(this.contentList,"2追剧列表11111111111111111111111111111111111111111111111111111111111111111111111")
+					}
+				})
+			},
+			handleCollect(item, index) {
+				const obj = {
+					secondType: 3, //操作分类 1播放、2点赞、3收藏、4转发
+					calculateType: 2, //计算分类 1加、2减
+					memberId: uni.getStorageSync('id'), //会员ID
+					dramaId: item.dramaId, //剧目ID
+					dramaSeries: 1, //剧集集数
+					tenantId: uni.getStorageSync('tenantId'), //租户ID
+					sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门编码
+				}
+				this.$request('video.likes', obj).then(res => {
+					
+					if (res.code === 200) {
+						
+						this.getFilmLikeCollectList()
+					}
+				})
+			},
 			recharbtn(){
 				uni.navigateTo({
 					url:'../user/recharge/recharge'
@@ -839,6 +870,14 @@
 				.title {
 					width: 100%;
 					margin-top: 8rpx;
+					line-height: 40rpx;
+					.title_num {
+						display: flex;
+						font-family: Inter, Inter;
+						font-weight: 400;
+						font-size: 26rpx;
+						color: #FFCD03;
+					}
 				}
 			}
 

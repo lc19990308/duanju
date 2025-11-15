@@ -6,7 +6,7 @@
 		<!-- 剧集列表 -->
 		<view class="episode-listing">
 			<uv-popup round=20 ref="popups" mode="bottom" @change="change" custom-style="min-height: 1000rpx;">
-				<view>
+				<view class="actor-boxs">
 					<view class="actor-box">
 						<view class="actor-head">
 							<image :src="filmDrama.dramaPoster" mode="aspectFill"></image>

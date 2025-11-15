@@ -78,14 +78,18 @@
 							<image class="image" :src="`/static/icons/collect_${item.video.is_favorite ? 1 : 0 }.png`" mode="widthFix"></image>
 							<text class="text" :class="{ active: item.video.is_favorite }">{{ item.video.favorites }}</text>
 						</view> -->
-						<view class="item" @click="shareToFacebook">
-							<button class="btn" open-type="share">
+						<view class="item" style="position: relative;">
+							<button class="btn" open-type="share" @click="shareBtn">
 								<!-- 转发 -->
 								<image class="image"
 									src="https://baixoss.oss-cn-shenzhen.aliyuncs.com/bx_video/panpan/jxico/share-forward-fill.svg"
 									mode="widthFix"></image>
 								<text class="text">{{ item.transMitCount || "转发" }}</text>
 							</button>
+							<view v-if="shareShow" class="shareView">
+								<view @click="shareToTwitter">Twitter</view>
+								<view @click="shareToFacebook">Facebook</view>
+							</view>
 						</view>
 						<!-- #ifdef MP-WEIXIN -->
 						
@@ -175,6 +179,7 @@
 	export default {
 		data() {
 			return {
+				shareShow:false,
 				DisableTouch:false,
 				parentDramaId: '',
 				isIos: uni.getSystemInfoSync().osName == 'ios' ? true : false,
@@ -290,6 +295,9 @@
 		//     };
 		// },
 		methods: {
+			shareBtn(){
+				this.shareShow = !this.shareShow
+			},
 			// 获取当前页面URL
 			getCurrentUrl() {
 			    return window.location.href;
@@ -1259,7 +1267,19 @@
 						.item {
 							margin-bottom: 40rpx;
 							text-align: center;
-
+							.shareView {
+								position: absolute;
+								width: 200rpx;
+								height: 100rpx;
+								line-height: 50rpx;
+								text-align: center;
+								top: 10rpx;
+								left: -220rpx;
+								z-index: 999;
+								color: #fff;
+								background-color: #000;
+								border-radius: 20rpx;
+							}
 							&:last-child {
 								margin-bottom: 0;
 							}
