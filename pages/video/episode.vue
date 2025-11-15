@@ -316,8 +316,8 @@
 					// 选中免费剧集及已解锁剧集显示样式
 					return {
 						...this.styles,
-						backgroundColor: 'rgba(25, 185, 204, 0.1)',
-						color: "#19B9CC",
+						backgroundColor: '#1A1A1A',
+						color: "#fff",
 					};
 					// } else if (item.dramaSeries === sid && item.uploadStatus == 1) {
 				}

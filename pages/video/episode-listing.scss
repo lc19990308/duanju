@@ -61,8 +61,8 @@
 			.drama-num-box{
 				width: calc(16.666% - 10px); /* 六分之一宽度减去间隙，根据需要调整间隙 */
 			    height: 100rpx; /* 或者其他你需要的高度 */
-			    background-color: #F2F5F7;
-			    color: #000; /* 文本颜色应该设置为与背景色对比明显的颜色 */
+			    background: #ccc;
+			    color: #fff; /* 文本颜色应该设置为与背景色对比明显的颜色 */
 			    margin: 5px; /* 为了创建间隙，可以设置margin */
 			    box-sizing: border-box; /* 确保padding和border不会影响最终计算的宽度 */
 			    display: flex; /* 将 .drama-num-box 设置为 Flex 布局 */
