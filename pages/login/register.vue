@@ -1,5 +1,6 @@
 <template>
 	<view class="app-container">
+		<web-view class="webView" v-if="showWebView" :src="webUrl"></web-view>
 		<view class="logo-box">
 			<image class="logo-icon" src="/static/images/logo.png" mode=""></image>
 			<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
@@ -34,14 +35,14 @@
 				</u-form-item>
 			</u--form>
 			<u-button class="submt-btn" @click="submit">đăng ký</u-button>
-			<u-button class="reset-btn">Đăng nhập</u-button>
+			<u-button class="reset-btn" @click="reset">Đăng nhập</u-button>
 		</view>
 		<view class="btn-groud">
 			<view class="btn-groud-item">
-				<image src="/static/images/Frame-26.png" mode=""></image>
+				<image src="/static/images/Frame-26.png" mode="" @click="submitGA('google')"></image>
 			</view>
 			<view class="btn-groud-item">
-				<image src="/static/images/Frame-27.png" mode=""></image>
+				<image src="/static/images/Frame-27.png" mode="" @click="submitGA('apple')"></image>
 			</view>
 			<view class="btn-groud-item">
 				<image src="/static/images/Frame-28.png" mode=""></image>
@@ -67,6 +68,9 @@
 	export default {
 		data() {
 			return {
+				urlToken: '',
+				webUrl: '',
+				showWebView: false,
 				labelStyle: {
 					color: '#FFFFFF',
 					fontFamily: 'Inter, Inter',
@@ -134,6 +138,37 @@
 					}
 				})
 			},
+			submitGA(val) {
+				const timestamp = Date.now();
+				const timestampString = new Date(timestamp).toString();
+				let obj = {}
+				if (val == "apple") {
+					obj = {
+						"provider": "apple",
+						"state": timestampString
+					}
+				}
+				if (val == "google") {
+					obj = {
+						"provider": "google",
+						"state": timestampString
+					}
+				}
+				this.$request('login.loginGA', obj).then(res => {
+			
+					if (res.code === 0) {
+						this.webUrl = res.result.authorizationUrl
+						this.showWebView = true;
+						let intervalId = setInterval(function() {
+							if (this.webUrl.includes("token")) {
+								let queryString = this.webUrl.split('?')[1];
+								this.urlToken = queryString.split('=')[1];
+								clearInterval(intervalId);
+							}
+						}, 1000);
+					}
+				})
+			},
 			submit() {
 				let obj = {
 					"email": this.form.email,
@@ -153,13 +188,25 @@
 						}
 					}
 				})
-			}
-
+			},
+			reset() {
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},
 		},
 	}
 </script>
 
 <style lang="scss" scoped>
+	.webView {
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		left: 0;
+		top: 0;
+		z-index: 999999;
+	}
 	page {
 		// background-image: url('/static/images/login.png');
 		// background-repeat: no-repeat;

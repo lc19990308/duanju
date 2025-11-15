@@ -26,7 +26,7 @@
 				</u-form-item>
 			</u--form>
 			<u-button class="submt-btn" @click="submit">Đăng nhập</u-button>
-			<u-button class="reset-btn">đăng ký</u-button>
+			<u-button class="reset-btn" @click="reset">đăng ký</u-button>
 		</view>
 		<view class="btn-groud">
 			<view class="btn-groud-item">
@@ -197,6 +197,11 @@
 							})
 						}
 					})
+				})
+			},
+			reset() {
+				uni.reLaunch({
+					url: '/pages/login/register'
 				})
 			},
 			checkboxChange() {
