@@ -63,7 +63,7 @@
 								mode="widthFix"></image>
 							<text class="text" v-if="numLikes.likeTotal != 0"
 								:class="{ active: numLikes.likeStatus }">{{ numLikes.likeTotal }}</text>
-							<text class="text" v-else>点赞</text>
+							<text class="text" v-else>喜欢</text>
 						</view>
 						<!-- 追剧 -->
 						<view class="item" @click="bingeWatch(item,3)">
@@ -72,13 +72,12 @@
 								mode="widthFix"></image>
 							<text class="text" v-if="numLikes.collectTotal != 0"
 								:class="{ active: numLikes.collectStatus }">{{ numLikes.collectTotal }}</text>
-							<text class="text" v-else>追剧</text>
+							<text class="text" v-else>收藏</text>
 						</view>
 						<!-- <view class="item" @click="handleCollect(item.vid, index)">
 							<image class="image" :src="`/static/icons/collect_${item.video.is_favorite ? 1 : 0 }.png`" mode="widthFix"></image>
 							<text class="text" :class="{ active: item.video.is_favorite }">{{ item.video.favorites }}</text>
 						</view> -->
-						<!-- #ifdef MP-WEIXIN -->
 						<view class="item">
 							<button class="btn" open-type="share">
 								<!-- 转发 -->
@@ -88,6 +87,8 @@
 								<text class="text">{{ item.transMitCount || "转发" }}</text>
 							</button>
 						</view>
+						<!-- #ifdef MP-WEIXIN -->
+						
 						<!-- #endif -->
 					</view>
 					<view class="infobox" v-if="!isDrag && videoIndex == index">

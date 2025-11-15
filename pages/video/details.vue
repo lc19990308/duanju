@@ -368,7 +368,8 @@
 					line-height: 30rpx;
 
 					.drama-name {
-						color: $uni-text-color;
+						// color: $uni-text-color;
+						color: #fff;
 						font-weight: bold;
 						font-size: 36rpx;
 						margin-bottom: 28rpx;
