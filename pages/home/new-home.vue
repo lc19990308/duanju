@@ -46,15 +46,6 @@
 		data() {
 			return {
 				swiperList: [
-					// {
-					// 	image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=1200&fit=crop'
-					// },
-					// {
-					// 	image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=1200&fit=crop'
-					// },
-					// {
-					// 	image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=1200&fit=crop'
-					// }
 				],
 				query: {
 					pageNo: 1,

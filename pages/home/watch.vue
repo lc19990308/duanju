@@ -6,15 +6,18 @@
 		<view class="reward_list">
 			<image src="/static/images/gold.png" class="goldImg" mode=""></image>
 			<view class="reward_list_t">Đăng ký đến ngày <span>2</span></view>
-			<view class="reward_lists">
-				<view class="reward_list_info" :class="[item.receiveStatus  ? 'end':'',todayIndex === index ? 'on':''] "
-					v-for="(item,index) in signList" :key="index">
-					<view>
-						<image src="/static/images/gold.png" mode=""></image><span>+{{item.currencyQuantity}}</span>
+			<scroll-view scroll-y="true" class="scroll-Y">
+				<view class="reward_lists">
+					<view class="reward_list_info"
+						:class="[item.receiveStatus  ? 'end':'',todayIndex === index ? 'on':''] "
+						v-for="(item,index) in signList" :key="index">
+						<view>
+							<image src="/static/images/gold.png" mode=""></image><span>+{{item.currencyQuantity}}</span>
+						</view>
+						<span class="reward_list_info_t">{{item.signInName}}</span>
 					</view>
-					<span class="reward_list_info_t">{{item.signInName}}</span>
 				</view>
-			</view>
+			</scroll-view>
 			<u-button class="reward-btn" @tap="rewardSign">Đăng ký ngay</u-button>
 		</view>
 		<view class="invite">
@@ -31,28 +34,36 @@
 				<u-button class="invite-btn" @click="goBtn">GO</u-button>
 			</view>
 		</view>
-		<view class="rewardCover" v-if="rewardCover">
-			<a @click="closeBtn" class="returnBtn"><</a>
+		<view class="rewardCover" v-if="rewardCover" @tap="closeBtn">
 			<view class="rewardCover_t">Mời bạn bè</view>
 			<view class="rewardCover_info">
 				<image src="/static/images/gift.png" class="rewardCover_info_img" mode=""></image>
 				<view class="rewardCover_info_t">
 					<image src="/static/images/Frame-39.png" mode=""></image>
 					<view>
-						<span>SimoonLee</span><br>ID 66666666
+						<span>SimoonLee</span><br>ID {{memberId}}
 					</view>
 				</view>
-				<image src="/static/images/QR_code.png" class="QR_code" mode=""></image>
+				<!-- <image src="/static/images/QR_code.png" class="QR_code" mode=""></image> -->
+				<view class="canvas">
+					<canvas canvas-id="qrcode" :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
+				</view>
 			</view>
 			<view class="rewardCover_bottom">
 				<image src="/static/images/Frame-44.png" mode=""></image>
 				<span>Tạo liên kết</span>
 			</view>
 		</view>
+		<!-- 		<view class="canvas">
+			<canvas canvas-id="qrcode" :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
+		</view> -->
 	</view>
 </template>
 
 <script>
+	import {
+		uQRCode
+	} from '@/uni_modules/cc-defineNewQRCode/components/cc-defineNewQRCode/common/uqrcode.js'
 	export default {
 		data() {
 			return {
@@ -61,18 +72,21 @@
 				memberId: uni.getStorageSync('id') || '',
 				totalPrice: 0,
 				signList: [],
-				signInId:'',
-				todayIndex:'',
+				signInId: '',
+				todayIndex: '',
+				qrcodeText: '',
+				// 二维码尺寸
+				qrcodeSize: 84,
+
+				// 最终生成的二维码图片
+				qrcodeSrc: '',
 			}
-		},
-		onLoad() {
-
-
 		},
 		onShow() {
 			this.getMoeny();
 			this.getSigninManageList();
 			this.todayIndex = this.getTodayDate() - 1;
+			this.qrcodeText = `${window.location.origin}/pages/login/register?bindMemberId=${this.memberId}`
 		},
 		methods: {
 			//获取金币余额
@@ -97,24 +111,47 @@
 
 				})
 			},
-			rewardSign(){
+			rewardSign() {
 				this.$request('sign.addSigninWelfare', {
 					memberId: this.memberId,
 					sysOrgCode: this.sysOrgCode,
-					signInId:this.signList[this.todayIndex].id,
+					signInId: this.signList[this.todayIndex].id,
 				}).then(res => {
 					this.getSigninManageList();
-				
+
 				})
 			},
-			getTodayDate(){
+			getTodayDate() {
 				return new Date().getDate()
 			},
 			goBtn() {
 				this.rewardCover = true
+				this.$nextTick(() => {
+					this.make();
+				})
 			},
 			closeBtn() {
 				this.rewardCover = false
+			},
+			make() {
+				uni.showLoading({
+					title: '二维码生成中',
+					mask: true
+				})
+				// console.log(uQRCode,'uQRCode.make')
+				uQRCode.make({
+					canvasId: 'qrcode',
+					text: this.qrcodeText,
+					size: this.qrcodeSize,
+					margin: 10,
+					success(res) {
+						console.log(res, 'xx')
+					},
+					complete: () => {
+						uni.hideLoading()
+					}
+
+				})
 			},
 
 		}
@@ -124,10 +161,12 @@
 <style lang="scss" scoped>
 	page {
 		background: #000;
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 	}
 
 	.app-container {
-
 		padding: 80rpx 40rpx;
 
 		.reward_t {
@@ -160,7 +199,7 @@
 				position: absolute;
 				z-index: 9;
 				right: 0;
-				top: -180rpx;
+				top: -170rpx;
 				width: 265rpx;
 				height: 254rpx;
 			}
@@ -183,6 +222,7 @@
 			.reward_lists {
 				width: 100%;
 				float: left;
+				height: 415rpx;
 				margin-bottom: 20rpx;
 
 				.reward_list_info {
@@ -248,6 +288,8 @@
 			}
 
 			.reward-btn {
+				margin-top: 20rpx;
+				margin-bottom: 20rpx;
 				height: 88rpx;
 				background: linear-gradient(90deg, #3EF2FF 0%, #FFE23E 100%);
 				border-radius: 94rpx;
@@ -262,6 +304,7 @@
 			width: 100%;
 			float: left;
 			padding-bottom: 180rpx;
+
 			.invite_t {
 				width: 100%;
 				float: left;

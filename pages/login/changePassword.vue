@@ -116,6 +116,7 @@
 		},
 		methods: {
 			codeChange(text) {
+				console.log(text,'xx')
 				this.tips = text;
 			},
 			getCode() {
@@ -148,6 +149,12 @@
 				this.$refs.uForm.validate().then(res => {
 					this.$request('login.resetPasswordByEmail', this.form).then(res => {
 						uni.$u.toast('重置成功！')
+						setTimeout(()=>{
+							uni.clearStorageSync();
+							uni.redirectTo({
+								url:'/pages/login/login'
+							})
+						},500)
 					})
 				})
 			}
@@ -213,7 +220,7 @@
 		border-radius: 20rpx !important;
 		font-family: Inter, Inter;
 		font-weight: 400;
-		font-size: 28rpx;
+		font-size: 22rpx;
 		color: #FFCD03;
 		box-shadow: 2rpx 2rpx 2rpx #282828;
 		border-color: #282828;
