@@ -17,13 +17,13 @@
 				<span>Số dư: 50 vàng</span>
 			</view>
 			<view class="rechargeView_list">
-				<view class="rechargeView_lists top3">
+				<view class="rechargeView_lists top3" v-for="(item,index) in goldList" @click="handleToActive(index,item)">
 					<span class="rechargeView_percentage">+30%</span>
-					<view class="rechargeView_top">1800 vàng</view>
-					<view class="rechargeView_cen">+540vàng</view>
-					<view class="rechargeView_bottom">$590.00</view>
+					<view class="rechargeView_top">{{item.rechargeCoins}} vàng</view>
+					<view class="rechargeView_cen">+{{item.giftCoins}} vàng</view>
+					<view class="rechargeView_bottom">${{item.actualReceipt}}</view>
 				</view>
-				<view class="rechargeView_lists">
+				<!-- <view class="rechargeView_lists">
 					<view class="rechargeView_top">1000 vàng</view>
 					<view class="rechargeView_cen">+540vàng</view>
 					<view class="rechargeView_bottom">$320.00</view>
@@ -51,7 +51,7 @@
 					<view class="rechargeView_top">5000 vàng</view>
 					<view class="rechargeView_cen">+2500vàng</view>
 					<view class="rechargeView_bottom">$1,490.00</view>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<view class="act_prompt">
@@ -155,7 +155,7 @@
 				}).then(res => {
 					console.log(res, "res1111111账户充值套餐列表");
 					if (res.code == 200) {
-						this.goldList = res.result
+						this.goldList = res.result.list
 					}
 				}).catch(res => {
 					console.log(res);

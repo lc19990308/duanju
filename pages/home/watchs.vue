@@ -52,7 +52,6 @@
 			</view>
 		</view>
 		<view class="rewardCover" v-if="rewardCover">
-			<a @click="closeBtn" class="returnBtn"><</a>
 			<view class="rewardCover_t">Mời bạn bè</view>
 			<view class="rewardCover_info">
 				<image src="/static/images/gift.png" class="rewardCover_info_img" mode=""></image>
@@ -88,12 +87,12 @@
 			
 		},
 		methods: {
-			goBtn() {
-				this.rewardCover = true
-			},
-			closeBtn() {
-				this.rewardCover = false
-			},
+			// goBtn() {
+			// 	this.rewardCover = true
+			// },
+			// closeBtn() {
+			// 	this.rewardCover = false
+			// },
 		}
 	}
 </script>
@@ -103,6 +102,7 @@
 		background: #000;
 		padding: 0 40rpx;
 		.reward_t {
+			opacity: 0;
 			font-family: Inter, Inter;
 			font-weight: bold;
 			font-size: 36rpx;
@@ -117,6 +117,7 @@
 			}
 		}
 		.reward_list {
+			opacity: 0;
 			padding: 0 20rpx;
 			margin-top: 30rpx;
 			position: relative;
@@ -215,6 +216,7 @@
 			}
 		}
 		.invite {
+			opacity: 0;
 			width: 100%;
 			float: left;
 			.invite_t {
@@ -294,11 +296,10 @@
 		}
 		.rewardCover {
 			width: 100%;
-			height: 100%;
 			position: fixed;
 			z-index: 99999;
 			left: 0;
-			top: 0;
+			top: 90rpx;
 			bottom: 0;
 			background-color: #000;
 			background-image: url(/static/images/yqpy.png);
@@ -318,7 +319,7 @@
 				width: 100%;
 				float: left;
 				text-align: center;
-				margin-top: 188rpx;
+				margin-top: 120rpx;
 				margin-bottom: 70rpx;
 				font-family: Inter, Inter;
 				font-weight: bold;
