@@ -78,7 +78,7 @@
 							<image class="image" :src="`/static/icons/collect_${item.video.is_favorite ? 1 : 0 }.png`" mode="widthFix"></image>
 							<text class="text" :class="{ active: item.video.is_favorite }">{{ item.video.favorites }}</text>
 						</view> -->
-						<view class="item">
+						<view class="item" @click="shareToFacebook">
 							<button class="btn" open-type="share">
 								<!-- 转发 -->
 								<image class="image"
@@ -290,6 +290,102 @@
 		//     };
 		// },
 		methods: {
+			// 获取当前页面URL
+			getCurrentUrl() {
+			    return window.location.href;
+			},
+			// 分享到 X (Twitter)
+			shareToTwitter() {
+			    const url = encodeURIComponent(this.getCurrentUrl());
+			    const text = "test"
+			    
+			    // 检测是否为移动设备
+			    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+			    
+			    if (isMobile) {
+			        // 移动端：优先尝试打开Twitter app，如果未安装则打开网页版
+			        const twitterAppUrl = `twitter://post?message=${text} ${url}`;
+			        const twitterWebUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+			        
+			        // 尝试打开app，如果失败则打开网页
+			        const iframe = document.createElement('iframe');
+			        iframe.style.display = 'none';
+			        iframe.src = twitterAppUrl;
+			        document.body.appendChild(iframe);
+			        
+			        setTimeout(() => {
+			            document.body.removeChild(iframe);
+			            // 如果app未打开，则打开网页版
+			            window.open(twitterWebUrl, '_blank');
+			        }, 500);
+			    } else {
+			        // 桌面端：直接打开Twitter网页版
+			        const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+			        window.open(twitterUrl, '_blank', 'width=550,height=420');
+			    }
+			},
+			
+			// 分享到 Facebook
+			shareToFacebook() {
+			    const url = encodeURIComponent(this.getCurrentUrl());
+			    
+			    // 检测是否为移动设备
+			    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+			    
+			    if (isMobile) {
+			        // 移动端：优先尝试打开Facebook app
+			        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+			        const isAndroid = /Android/i.test(navigator.userAgent);
+			        
+			        let facebookAppUrl;
+			        if (isIOS) {
+			            facebookAppUrl = `fb://share?href=${url}`;
+			        } else if (isAndroid) {
+			            facebookAppUrl = `fb://facewebmodal/f?href=${url}`;
+			        }
+			        
+			        const facebookWebUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+			        
+			        if (facebookAppUrl) {
+			            // 尝试打开app
+			            const iframe = document.createElement('iframe');
+			            iframe.style.display = 'none';
+			            iframe.src = facebookAppUrl;
+			            document.body.appendChild(iframe);
+			            
+			            setTimeout(() => {
+			                document.body.removeChild(iframe);
+			                // 如果app未打开，则打开网页版
+			                window.open(facebookWebUrl, '_blank');
+			            }, 500);
+			        } else {
+			            // 直接打开网页版
+			            window.open(facebookWebUrl, '_blank');
+			        }
+			    } else {
+			        // 桌面端：直接打开Facebook网页版
+			        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+			        window.open(facebookUrl, '_blank', 'width=550,height=420');
+			    }
+			},
+			
+			// 使用 Web Share API（如果支持）
+			shareWithWebAPI() {
+			    if (navigator.share) {
+			        navigator.share({
+			            title: "test1",
+			            text: "test2",
+			            url: this.getCurrentUrl()
+			        }).catch(err => {
+			            console.log('分享取消或失败:', err);
+			        });
+			    }
+			},
+			
+			
+			
+			
+			
 			// 剧目详情
 			filmDramaById(jimudalis) {
 				this.$request('video.filmDramaById', {
