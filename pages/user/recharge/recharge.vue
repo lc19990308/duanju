@@ -17,10 +17,10 @@
 				<span>Số dư: 50 vàng</span>
 			</view>
 			<view class="rechargeView_list">
-				<view class="rechargeView_lists top3" v-for="(item,index) in goldList" @click="handleToActive(index,item)">
-					<span class="rechargeView_percentage">+30%</span>
-					<view class="rechargeView_top">{{item.rechargeCoins}} vàng</view>
-					<view class="rechargeView_cen">+{{item.giftCoins}} vàng</view>
+				<view class="rechargeView_lists top3" v-for="(item,index) in goldList" @click="handleToActive(index,item)" :key="index">
+					<!-- <span class="rechargeView_percentage">+30%</span> -->
+					<view class="rechargeView_top">{{item.giftCoins}} vàng</view>
+					<view class="rechargeView_cen">+{{item.rechargeCoins}} vàng</view>
 					<view class="rechargeView_bottom">${{item.actualReceipt}}</view>
 				</view>
 				<!-- <view class="rechargeView_lists">
