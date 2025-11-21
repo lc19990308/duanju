@@ -137,7 +137,7 @@
 		methods: {
 			...mapActions('user', ['getUserInfo']),
 			gotoPage(url) {
-				if(!this.token) return this.$u.toast('请先登录!')
+				if(!this.token) return this.$u.toast(this.$t('toast.please_log'))
 				// #ifdef MP-WEIXIN
 				if(!this.iosIsPay) return this.jumpView('/pages/user/info/contact')
 				// #endif
@@ -161,7 +161,7 @@
 			},
 			// 充值
 			recharge(type, id, price) {
-				if(!this.token) return this.$u.toast('请先登录!')
+				if(!this.token) return this.$u.toast(this.$t('toast.please_log'))
 				
 				// #ifdef MP-WEIXIN
 				if(!this.iosIsPay) return this.jumpView('/pages/user/info/contact')
@@ -238,7 +238,7 @@
 					paySign: pay.paySign,
 					success: success => {
 						uni.showToast({
-						    title: '支付成功',
+						    title: this.$t('toast.pay_success'),
 							icon: 'none',
 							duration: 2000
 						});
@@ -272,7 +272,7 @@
 					res => {
 						if (res.err_msg == "get_brand_wcpay_request:ok") {
 							uni.showToast({
-							    title: '支付成功',
+							    title: this.$t('toast.pay_success'),
 								icon: 'none',
 								duration: 2000
 							});

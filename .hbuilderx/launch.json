@@ -28,6 +28,17 @@
         {
             "openVueDevtools" : false,
             "type" : "uni-app:miniProgram"
+        },
+        {
+            "openVueDevtools" : true,
+            "type" : "uni-app:app-ios"
+        },
+        {
+            "customPlaygroundType" : "device",
+            "localRepoPath" : "/Users/liuchao/code/短剧/unpackage/debug",
+            "openVueDevtools" : true,
+            "playground" : "custom",
+            "type" : "uni-app:app-android"
         }
     ]
 }

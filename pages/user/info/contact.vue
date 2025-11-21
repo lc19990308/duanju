@@ -51,10 +51,7 @@
 				uni.setClipboardData({
 					data: info,
 					success: () => {
-						uni.showToast({
-							title: '复制成功',
-							icon: 'none'
-						})
+						uni.$u.toast(this.$t('toast.msg_copy_success'))
 					}
 				});
 				// #endif

@@ -144,6 +144,12 @@ const api = {
 		// 	method: 'POST',
 		// 	desc: '获取微信手机号'
 		// }
+		verifyGoogle: {
+			url: '/api/sys/user/oauth2/verify-google',
+			method: 'POST',
+			desc: '获取微信手机号'
+		}
+		
 	},
 	// 用户
 	user: {
@@ -231,37 +237,37 @@ const api = {
 	// 视频
 	video: {
 		filmDramaById: {
-			url: '/api/wxApi/filmDramaById',
+			url: '/api/appApi/filmDramaById',
 			method: 'GET',
 			desc: '剧目详情'
 		},
 		selectByIdAndMemberId: {
-			url: '/api/wxApi/selectByIdAndMemberId',
+			url: '/api/appApi/selectByIdAndMemberId',
 			method: 'GET',
 			desc: '根据剧集id查询剧集免费状态'
 		},
 		filmDramaSeriesList: {
-			url: '/api/wxApi/filmDramaSeriesList',
+			url: '/api/appApi/filmDramaSeriesList',
 			method: 'GET',
 			desc: '剧集列表'
 		},
 		handpickListApp: {
-			url: '/api/wxApi/handpickListApp',
+			url: '/api/appApi/handpickList',
 			method: 'GET',
 			desc: 'APP精选剧集'
 		},
 		handpickList: {
-			url: '/api/wxApi/handpickList',
+			url: '/api/appApi/handpickList',
 			method: 'GET',
 			desc: '精选剧集列表'
 		},
 		classify: {
-			url: '/api/wxApi/filmDlassifyList',
+			url: '/api/appApi/filmDlassifyList',
 			method: 'GET',
 			desc: '视频分类列表查询'
 		},
 		filmDramaList: {
-			url: '/api/wxApi/filmDramaList',
+			url: '/api/appApi/filmDramaList',
 			method: 'GET',
 			desc: '剧目列表查询'
 		},
@@ -281,12 +287,12 @@ const api = {
 			desc: '获取视频'
 		},
 		filmLikeCollectList: {
-			url: '/api/wxApi/filmLikeCollectList',
+			url: '/api/appApi/filmLikeCollectList',
 			method: 'GET',
 			desc: '获取收藏追剧列表'
 		},
 		filmViewHistoryList: {
-			url: '/api/wxApi/filmViewHistoryList',
+			url: '/api/appApi/filmViewHistoryList',
 			method: 'GET',
 			desc: '获取观看历史列表'
 		},
@@ -311,7 +317,7 @@ const api = {
 			desc: '获取播放记录'
 		},
 		likes: {
-			url: '/api/wxApi/filmDramaSeriesSecond',
+			url: '/api/appApi/filmDramaSeriesSecond',
 			method: 'POST',
 			desc: '点赞追剧'
 		},
@@ -326,7 +332,7 @@ const api = {
 			desc: '剧集分类列表'
 		},
 		videList: {
-			url: '/api/wxApi/filmDramaList',
+			url: '/api/appApi/filmDramaList',
 			method: 'GET',
 			desc: '分类剧集列表'
 		},
@@ -354,7 +360,7 @@ const api = {
 			desc: '金币充值'
 		},
 		vipPackageList: {
-			url: '/api/wxApi/vipPackageList',
+			url: '/api/appApi/vipPackageList',
 			method: 'GET',
 			desc: '会员充值套餐列表'
 		},
@@ -389,12 +395,12 @@ const api = {
 			desc: '功能管理列表'
 		},
 		filmViewHistoryList: {
-			url: '/api/wxApi/filmViewHistoryList',
+			url: '/api/appApi/filmViewHistoryList',
 			method: 'GET',
 			desc: '历史记录'
 		},
 		filmDramaMember: {
-			url: '/api/wxApi/filmDramaMember',
+			url: '/api/appApi/filmDramaMember',
 			method: 'GET',
 			desc: '会员信息'
 		},

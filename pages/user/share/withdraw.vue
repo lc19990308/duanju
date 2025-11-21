@@ -15,7 +15,7 @@
 				</view>
 				<view class="line2">
 					<text class="text">￥</text>
-					<input class="input" type="number" v-model="params.money" placeholder="请输入提现金额" placeholder-class="placeholder">
+					<input class="input" type="number" v-model="params.money" :placeholder="$t('toast.cash_withdrawal')" placeholder-class="placeholder">
 				</view>
 				<view class="line3">
 					<view class="left">提现至</view>
@@ -124,15 +124,15 @@
 			withdrawHandle() {
 				const num = Number(this.params.money)
 				if(!num) {
-					this.$u.toast('请输入提现金额')
+					uni.$u.toast(this.$t('toast.cash_withdrawal'))
 					return
 				}
 				if(num < this.sumMin) {
-					this.$u.toast('提现金额需大于' + this.sumMin)
+					this.$u.toast(`${t('toast.cash_withdrawal_greater')}` + this.sumMin)
 					return
 				}
 				if (num > this.sumMax) {
-					this.$u.toast('提现金额需小于' + this.sumMax)
+					this.$u.toast(`${t('toast.cash_withdrawal_less_than')}` + this.sumMax)
 					return
 				}
 				this.buttonLoading = true

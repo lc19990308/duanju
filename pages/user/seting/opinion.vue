@@ -1,14 +1,15 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="Liên hệ h hỗ trợ khách hàng" bgColor='transparent' leftIconColor='#fff' :autoBack="true"
+		<statusBar />
+		<u-navbar bgColor='transparent' leftIconColor='#fff' :fixed='false' :autoBack="true"
 			:placeholder='true'>
 			<template slot='center'>
 				<view class="tabs">
 					<view class="tabs-item" :class="current === 0 ? 'tabs-item_active':'' " @tap="tabChange(0)">
-						Phản hồi ý kiến
+						{{$t(`history.tabs_item1`)}}
 					</view>
 					<view class="tabs-item" :class="current === 1 ? 'tabs-item_active':'' " @tap="tabChange(1)">
-						Lịch sử
+						{{$t(`history.tabs_item2`)}}
 					</view>
 				</view>
 			</template>
@@ -16,11 +17,11 @@
 		<view class="form" v-if="current === 0">
 			<u--form :model="form" ref="uForm" :rules='rules' labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="email điện tử" prop="content" :borderBottom='false'>
+				<u-form-item :label="$t(`history.issue`)" prop="content" :borderBottom='false'>
 					<u--textarea v-model="form.content" :placeholderStyle='placeholderStyle'
-						placeholder="Vui lòng mô tả chi tiết câu hỏi và phản hồi của bạn"></u--textarea>
+						:placeholder="$t(`history.issue_text`)"></u--textarea>
 				</u-form-item>
-				<u-form-item label="mật khẩu" :borderBottom='false'>
+				<u-form-item :label="$t(`history.upload`)" :borderBottom='false'>
 					<view class="upload-box">
 						<view class="upload-item" @tap="uploadImage">
 							<image class="icon" src="/static/images/Frame-45.png" mode=""></image>
@@ -34,7 +35,7 @@
 					</view>
 				</u-form-item>
 			</u--form>
-			<u-button class="submt-btn" @click="submit">đăng ký</u-button>
+			<u-button class="submt-btn" @click="submit">{{$t(`history.submit_text`)}}</u-button>
 		</view>
 		<view class="list" v-if="current === 1">
 			<view class="list-item" v-for="(item,index) in  list" :key="index">
@@ -48,9 +49,6 @@
 </template>
 
 <script>
-	// import {
-	// 	mapState,
-	// } from "vuex"
 	import apis from '@/utils/config.js'
 	import apiMoen from '@/utils/config.js';
 	export default {
@@ -79,12 +77,12 @@
 				rules: {
 					picture: [{
 						required: true,
-						message: '请选择图片',
+						message: () => i18n.t('form.picRequired'),
 						trigger: ['blur', 'change']
 					}],
 					content: [{
 						required: true,
-						message: '请输入',
+						message: () => i18n.t('form.placeholder'),
 						trigger: ['blur', 'change']
 					}]
 				},
@@ -153,8 +151,9 @@
 						tenantId: this.form.tenantId,
 						picture: imageList.join(','),
 					}).then(res => {
-						uni.$u.toast('操作成功！');
+						uni.$u.toast(this.$t('toast.msg_success'))
 						this.resetForm();
+						this.tabChange(1);
 
 					})
 				})
@@ -222,7 +221,7 @@
 	.tabs {
 		display: flex;
 		justify-content: center;
-		width: 60%;
+		width: 70%;
 		margin: 0 auto;
 	}
 

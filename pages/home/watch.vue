@@ -1,11 +1,11 @@
 <template>
 	<view class="app-container">
 		<view class="reward_t">
-			Tiền vàng của tôi<br><span>{{totalPrice}}</span>
+			{{$t(`reward.my_gold`)}}<br><span>{{totalPrice}}</span>
 		</view>
 		<view class="reward_list">
 			<image src="/static/images/gold.png" class="goldImg" mode=""></image>
-			<view class="reward_list_t">Đăng ký đến ngày <span>2</span></view>
+			<view class="reward_list_t">{{$t(`reward.reg_to_date`)}}<span>2</span></view>
 			<scroll-view scroll-y="true" class="scroll-Y">
 				<view class="reward_lists">
 					<view class="reward_list_info"
@@ -18,45 +18,42 @@
 					</view>
 				</view>
 			</scroll-view>
-			<u-button class="reward-btn" @tap="rewardSign">Đăng ký ngay</u-button>
+			<u-button class="reward-btn" @tap="rewardSign">{{$t(`reward.reg_now`)}}</u-button>
 		</view>
 		<view class="invite">
-			<view class="invite_t">Mời bạn bè</view>
+			<view class="invite_t">{{$t(`reward.invite_friend`)}}</view>
 			<view class="invite_info">
 				<view class="invite_infos">
 					<image src="/static/images/Frame-31.png" class="invite_info_img" mode=""></image>
 					<view class="invite_info_left">
-						<view>Mời bạn bè</view>
+						<view>{{$t(`reward.invite_friend`)}}</view>
 						<br>
-						<image src="/static/images/gold.png" mode=""></image><span>+100</span><i>Vàng</i>
+						<image src="/static/images/gold.png" mode=""></image>
+						<span>+100</span><i>{{$t(`reward.gold`)}}</i>
 					</view>
 				</view>
-				<u-button class="invite-btn" @click="goBtn">GO</u-button>
+				<u-button class="invite-btn" @click="goBtn">{{$t(`reward.btn`)}}</u-button>
 			</view>
 		</view>
 		<view class="rewardCover" v-if="rewardCover" @tap="closeBtn">
-			<view class="rewardCover_t">Mời bạn bè</view>
+			<view class="rewardCover_t">{{$t(`reward.invite_friend`)}}</view>
 			<view class="rewardCover_info">
 				<image src="/static/images/gift.png" class="rewardCover_info_img" mode=""></image>
 				<view class="rewardCover_info_t">
 					<image src="/static/images/Frame-39.png" mode=""></image>
 					<view>
-						<span>SimoonLee</span><br>ID {{memberId}}
+						<span>{{nickname}}</span><br>ID {{memberId}}
 					</view>
 				</view>
-				<!-- <image src="/static/images/QR_code.png" class="QR_code" mode=""></image> -->
 				<view class="canvas">
 					<canvas canvas-id="qrcode" :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
 				</view>
 			</view>
 			<view class="rewardCover_bottom">
 				<image src="/static/images/Frame-44.png" mode=""></image>
-				<span>Tạo liên kết</span>
+				<span>{{$t(`reward.btn_text`)}}</span>
 			</view>
 		</view>
-		<!-- 		<view class="canvas">
-			<canvas canvas-id="qrcode" :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
-		</view> -->
 	</view>
 </template>
 
@@ -80,15 +77,43 @@
 
 				// 最终生成的二维码图片
 				qrcodeSrc: '',
+				nickname: '',
 			}
 		},
 		onShow() {
-			this.getMoeny();
-			this.getSigninManageList();
-			this.todayIndex = this.getTodayDate() - 1;
-			this.qrcodeText = `${window.location.origin}/pages/login/register?bindMemberId=${this.memberId}`
+			this.setTab();
+			this.getUserInfo();
 		},
 		methods: {
+			setTab(){
+				uni.setTabBarItem({
+					index: 0,
+					text: this.$t('tabBar.home')
+				})
+				uni.setTabBarItem({
+					index: 1,
+					text: this.$t('tabBar.recommend')
+				})
+				uni.setTabBarItem({
+					index: 2,
+					text: this.$t('tabBar.reward')
+				})
+				uni.setTabBarItem({
+					index: 3,
+					text: this.$t('tabBar.profile')
+				})
+			},
+			getUserInfo() {
+				this.$request('user.getUserInfo').then(res => {
+					const result = res.result.userInfo;
+					this.nickname = result.realname;
+					this.getMoeny();
+					this.getSigninManageList();
+					this.todayIndex = this.getTodayDate() - 1;
+					this.qrcodeText =
+						`${window.location.origin}/#/pages/login/register?bindMemberId=${this.memberId}`
+				})
+			},
 			//获取金币余额
 			getMoeny() {
 				this.$request('sign.memberGoldCoin', {
@@ -143,7 +168,7 @@
 					canvasId: 'qrcode',
 					text: this.qrcodeText,
 					size: this.qrcodeSize,
-					margin: 10,
+					margin: 3,
 					success(res) {
 						console.log(res, 'xx')
 					},

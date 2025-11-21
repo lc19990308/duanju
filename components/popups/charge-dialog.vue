@@ -3,95 +3,43 @@
 		<uv-popup ref="popup" @change="change" mode="bottom">
 
 			<view class="centert-lsty">
-				<view class="c-top" style="width: 100%;">
+			<!-- 	<view class="c-top" style="width: 100%;">
 					<view class="color-az">支持作者创作，当前内容需要解锁后观看</view>
-					<!-- <view class="color-az" v-if="platform === 'iOS'">IOS苹果用户暂不支持付费解锁功能</view> -->
-				</view>
-				<view class="c-yminsoer">
+					<view class="color-az" v-if="platform === 'iOS'">IOS苹果用户暂不支持付费解锁功能</view>
+				</view> -->
+		<!-- 		<view class="c-yminsoer">
 					<view class="solonun">余额：{{falishui.totalBalance || 0}}</view>
 					<view class="moinun">
 						解锁本集:<span>{{mainList.price || 0}}</span>{{falishui.currencyName}}，解锁整部剧
 						<span>{{mainList.totalPrice || 0}}</span>{{falishui.currencyName}}。
 					</view>
+				</view> -->
+				<view class="virtual-box">
+					<view class="virtual-box-tips">{{$t('video_popup.unlock_text')}} {{mainList.totalPrice || 0}} {{$t('video_popup.unit')}}</view>
+					<view class="virtual-box-value">{{$t('video_popup.balance')}}: {{falishui.totalBalance || 0}} {{$t('video_popup.unit')}}</view>
 				</view>
-				<!-- 充值虚拟币 -->
-				<view class="mon-list">
-					<view class="moinuns-view" v-for="(item,index) in mainList.list" @click="matbBtotton(index,item)">
-						<view class="mv-ones">
-							<view class="">
-								<span style="font-size: 34rpx;">{{item.packageMoney}}</span>元
+				<view class="viper">
+					<view class="viper-item" :class="[`viper-item${index}`]" @click="handleToActive(index,item)" v-for="(item,index) in memberList" :key="index">
+						<view class="viper-item-head">
+							{{item.packageDescribe}}
+						</view>
+						<view class="price">{{item.packageMoney}}{{$t('video_popup.unit')}}{{item.rechargeCoins}}</view>
+					</view>
+				</view>
+				<view class="virtual">
+					<view class="virtual-item" @click="matbBtotton(index,item)" :class="ativoeIndex === index ? 'virtual-item_active':'' "
+						v-for="(item,index) in mainList.list" :key="index">
+						<view class="virtual-item-head">
+							<view class="title">
+								<text class="title-text">{{item.rechargeCoins}}</text>
+								<text class="title-unit">{{falishui.currencyName}}</text>
 							</view>
-							<view class="coloir">{{item.rechargeCoins}}{{falishui.currencyName}}</view>
+							<view class="plus">{{$t('video_popup.bonus_gift')}}{{item.giftCoins}}{{falishui.currencyName}}</view>
 						</view>
-						<view class="mv-two">
-							额外赠送{{item.giftCoins}}{{falishui.currencyName}}
-						</view>
+						<view class="price">{{item.packageMoney}}{{$t('video_popup.unit')}}</view>
 					</view>
 				</view>
-				<!-- 开通VIP -->
-				<view class="mon-list">
-					<view class="moinuns-view" v-for="(items,index) in memberList" @click="handleToActive(index,items)">
-						<view class="mv-ones">
-							<view class="">
-								<span style="font-size: 34rpx;">{{items.packageMoney}}</span>元
-							</view>
-							<view class="coloir">{{items.rechargeCoins}}</view>
-						</view>
-						<view class="mv-two">
-							{{items.packageDescribe}}
-						</view>
-					</view>
-				</view>
-
-				<!-- <view class="moinunstile">
-			选择支付方式(虚拟商品不支持退款，未满18岁未成年人禁止充值)
-		</view> -->
-				<!-- <view class="moinunsdiv">
-			<view class="ouinmino">
-				<image src="../../static/weixin.png" mode=""></image>
-				<view>微信支付</view>
 			</view>
-		</view> -->
-				<view class="act_prompt">
-					<view class="pro_title">
-						温馨提示
-					</view>
-					<view class="text">
-						1.充值的开通的VIP会员及{{falishui.currencyName}}充值仅限于本剧场使用。
-					</view>
-					<view class="text">
-						2.在播剧目总数：<span class="tt">{{videoList.length || 0}}</span>，开通VIP免费观看！
-					</view>
-					<view class="text">
-						3.充值比例：1元兑换{{allocatRechargeList.proportSetUp || "100"}}{{allocatRechargeList.currencyName || ""}}，赠送的{{allocatRechargeList.currencyName || ""}}，有效期为{{allocatRechargeList.termSetUp || 0}}天，有效期到后赠送{{allocatRechargeList.currencyName || ""}}置0。
-					</view>
-					<view class="text">
-						4.开通VIP会员及{{falishui.currencyName}}充值前，请先阅读<navigator url="/pages/user/about/about"
-							hover-class="navigator-hover">
-							<span class="tt">《会员服务协议》</span>。
-						</navigator>
-					</view>
-					<view class="text">
-						5.未满18周岁的未成年人应在法定监护人同意后开通VIP或{{falishui.currencyName}}充值。
-					</view>
-					<view class="text">
-						6.充值的VIP及{{falishui.currencyName}}属于虚拟商品，不支持退换。
-					</view>
-					<view class="text">
-						7.开通VIP会员代表您已同意<navigator url="/pages/user/about/about" hover-class="navigator-hover">
-							<span class="tt">《用户协议》</span>和<span class="tt">《隐私政策》</span>.
-						</navigator>
-					</view>
-					<view class="text">
-						8.{{falishui.currencyName}}充值代表您已同意<navigator url="/pages/user/about/about"
-							hover-class="navigator-hover">
-							<span class="tt">《用户协议》</span>和<span class="tt">《隐私政策》</span>.
-						</navigator>
-					</view>
-				</view>
-				<!-- <view class="" style="height: 140rpx;"></view> -->
-			</view>
-
 		</uv-popup>
 	</view>
 </template>
@@ -440,13 +388,13 @@
 			// 查询会员信息
 			filmDramaMember() {
 				var data = {
-					memberId: uni.getStorageSync('id'),
+					id: uni.getStorageSync('id'),
 					// sysOrgCode:uni.getStorageSync('sysOrgCode'),
 					// tenantId: uni.getStorageSync('tenantId')
 				}
 				// console.log(memberId,"memberId")
 				// return 
-				this.$request('player.filmDramaMember', data).then(res => {
+				this.$request('wchatapi.filmDramaMember', data).then(res => {
 					console.log("res:查询会员信息------------------------------------------------------------", res, )
 					// console.log(tenantId,"tenantId")
 					this.falishui = res.result
@@ -493,13 +441,13 @@
 				that.ativoeIndex = index
 				var data = {
 					rechargeId: item.id, //充值套餐id
-					memberId: uni.getStorageSync('id'), //会员id
+					memberId: uni.getStorageSync('memberId'), //会员id
 					sysOrgCode: uni.getStorageSync('sysOrgCode'), //小程序id
 					tenantId: uni.getStorageSync('tenantId'), //运营主体公司id
 					platformType: 2,
-					payMethod:'wxpay',
-					openId:uni.getStorageSync('openid'),
-					runProgramType:2//支付平台类型(1.小程序,2.公众号)
+					payMethod: 'wxpay',
+					openId: uni.getStorageSync('openid'),
+					runProgramType: 2 //支付平台类型(1.小程序,2.公众号)
 				}
 				// const pm = that.getPlayerManager()
 				that.$request('player.rechargePackage', data).then(res => {
@@ -512,13 +460,13 @@
 			handleToActive(index, items) {
 				var data = {
 					rechargeId: items.id, //充值id 即是套餐id
-					memberId: uni.getStorageSync('id'), //会员id
-					sysOrgCode:  uni.getStorageSync('sysOrgCode'), //部门id
+					memberId: uni.getStorageSync('memberId'), //会员id
+					sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门id
 					tenantId: uni.getStorageSync('tenantId'), //运营主体公司id
-					platformType: 2,//1-APP支付,1-JSAPI支付,2-Native支付,3-H5支付
-					payMethod:'wxpay',
-					openId:uni.getStorageSync('openid'),
-					runProgramType:2 //支付平台类型(1.小程序,2.公众号)
+					platformType: 2, //1-APP支付,1-JSAPI支付,2-Native支付,3-H5支付
+					payMethod: 'wxpay',
+					openId: uni.getStorageSync('openid'),
+					runProgramType: 2 //支付平台类型(1.小程序,2.公众号)
 				}
 				this.$request('wchatapi.rechargeVip', data).then(res => {
 					console.log("res获得的数据", res);
@@ -526,73 +474,73 @@
 					return
 				})
 			},
-			monbtnonve(res){
+			monbtnonve(res) {
 				// 是微信浏览器
-				  // 使用微信支付
-				  let self = this;
-				  jweixin.config({
-				    //全局参数配置
-				    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-				    appId: apiMoen.gzhAppid, // 必填，公众号的唯一标识
-				    timestamp: res.result.timeStamp, // 必填，生成签名的时间戳
-				    nonceStr: res.result.nonceStr, // 必填，生成签名的随机串
-				    signature: res.result.paySign, // 必填，签名，见附录1
-				    jsApiList: ["chooseWXPay"], // 必填
-				  });
-				  jweixin.ready(function () {
-				    //预请求，看能否发起微信支付
-				    jweixin.checkJsApi({
-				      //判断当前版本是否支持指定js接口
-				      jsApiList: ["chooseWXPay"], // 需要检测的JS接口列表
-				      success: function (res) {
-				        console.log("成功信息1");
-				        console.log(res);
-				      },
-				      fail: function (res) {
-				        console.log("失败信息1");
-				        console.log(res);
-				      },
-				    });
-				
-				    jweixin.chooseWXPay({
-				      //发起一个微信的支付请求
-				      timestamp: res.result.timeStamp, // 支付签名时间戳
-				      nonceStr: res.result.nonceStr, // 支付签名随机串，不长于 32 位
-				      package: res.result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-				      signType: res.result.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-				      paySign: res.result.paySign, // 支付签名,与签名是一个东西
-				      success: async function (res) {
-				        console.log(res, "成功信息2");
-						uni.showToast({
-							icon: 'success',
-							title: '充值成功',
-							duration:2000
-						})
-						// pm.hideChargeDialog()
-						// 刷新列表
-						self.filmDramaMember()
-						// 购买剧集
-						setTimeout(function() {
-							self.$refs.popup.close()
-							self.$emit('monchang', 1);
-							// 数据加载完毕，关闭加载中的Toast
-							// self.onCheckIsCanPlay()
-							// uni.hideLoading();
-							// 执行其他逻辑...
-						}, 2000); // 假设这里是异步加载数据，3秒后完成
-				      },
-				      cancel: function (res) {
-				        console.log(res, "取消信息2");
-				      },
-				      fail: function (res) {
-				        console.log(res, "失败信息2");
-				      },
-				    });
-				  });
-				
-				  jweixin.error(function (res) {
-				    console.log(res, "失败信息3");
-				  });
+				// 使用微信支付
+				let self = this;
+				jweixin.config({
+					//全局参数配置
+					debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					appId: apiMoen.gzhAppid, // 必填，公众号的唯一标识
+					timestamp: res.result.timeStamp, // 必填，生成签名的时间戳
+					nonceStr: res.result.nonceStr, // 必填，生成签名的随机串
+					signature: res.result.paySign, // 必填，签名，见附录1
+					jsApiList: ["chooseWXPay"], // 必填
+				});
+				jweixin.ready(function() {
+					//预请求，看能否发起微信支付
+					jweixin.checkJsApi({
+						//判断当前版本是否支持指定js接口
+						jsApiList: ["chooseWXPay"], // 需要检测的JS接口列表
+						success: function(res) {
+							console.log("成功信息1");
+							console.log(res);
+						},
+						fail: function(res) {
+							console.log("失败信息1");
+							console.log(res);
+						},
+					});
+
+					jweixin.chooseWXPay({
+						//发起一个微信的支付请求
+						timestamp: res.result.timeStamp, // 支付签名时间戳
+						nonceStr: res.result.nonceStr, // 支付签名随机串，不长于 32 位
+						package: res.result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+						signType: res.result.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+						paySign: res.result.paySign, // 支付签名,与签名是一个东西
+						success: async function(res) {
+							console.log(res, "成功信息2");
+							uni.showToast({
+								icon: 'success',
+								title: '充值成功',
+								duration: 2000
+							})
+							// pm.hideChargeDialog()
+							// 刷新列表
+							self.filmDramaMember()
+							// 购买剧集
+							setTimeout(function() {
+								self.$refs.popup.close()
+								self.$emit('monchang', 1);
+								// 数据加载完毕，关闭加载中的Toast
+								// self.onCheckIsCanPlay()
+								// uni.hideLoading();
+								// 执行其他逻辑...
+							}, 2000); // 假设这里是异步加载数据，3秒后完成
+						},
+						cancel: function(res) {
+							console.log(res, "取消信息2");
+						},
+						fail: function(res) {
+							console.log(res, "失败信息2");
+						},
+					});
+				});
+
+				jweixin.error(function(res) {
+					console.log(res, "失败信息3");
+				});
 			},
 			// matbBtotton(index,item){
 			// 	let that = this;
@@ -717,7 +665,7 @@
 					if (seriesSeries < parseInt(serialNo)) {
 						console.log("serialNo222222222222222222222222222222222222222", serialNo);
 						uni.showToast({
-							title: '请按顺序解锁第' + seriesSeries + '集',
+							title: this.$t('toast.please_unlock') + seriesSeries + '集',
 							icon: 'success',
 							duration: 2000
 						});
@@ -837,5 +785,154 @@
 </script>
 
 <style lang="scss" scoped>
+	.virtual-box{
+		padding: 24rpx 36rpx;
+		height: 164rpx;
+		border-bottom: 2rpx solid #666;
+		box-sizing: border-box;
+		.virtual-box-tips{
+			font-family: Inter, Inter;
+			font-weight: 400;
+			font-size: 36rpx;
+			color: #D1D1D1;
+		}
+		.virtual-box-value{
+			margin-top: 12rpx;
+			font-family: Inter, Inter;
+			font-weight: 400;
+			font-size: 28rpx;
+			color: #FFCD03;
+		}
+	}
+	.viper {
+		padding: 0 24rpx;
+	}
+	.viper-item {
+		display: inline-block;
+		margin-top: 24rpx;
+		width: calc((100% - 20rpx) / 2);
+		border-radius: 20rpx;
+		border: 2rpx solid #EDC267;
+		background: linear-gradient( 186deg, rgba(255,224,157,0.4) 0%, rgba(237,194,103,0) 100%);
+
+
+		.viper-item-head {
+			font-family: Inter, Inter;
+			font-weight: normal;
+			font-size: 28rpx;
+			color: #EDC267;
+			padding: 26rpx 24rpx 12rpx 24rpx;
+			white-space: nowrap;
+			/* 不换行 */
+			overflow: hidden;
+			/* 溢出部分裁掉 */
+			text-overflow: ellipsis;
+			
+		}
+
+		.price {
+			padding: 8rpx 0 24rpx 24rpx;
+			font-weight: bold;
+			font-size: 36rpx;
+			color: #EDC267;
+			// background-color: #3F3E40;
+			border-radius: 0 0 20rpx 20rpx;
+		}
+	}
+	.viper-item0{
+		background-image: url('/static/images/001.png');
+		background-size: 96rpx 79rpx;
+		background-repeat: no-repeat;
+		background-position: 92% 90%;
+	}
+	.viper-item1{
+		background-image: url('/static/images/002.png');
+		background-size: 96rpx 79rpx;
+		background-repeat: no-repeat;
+		background-position: 92% 90%;
+	}
+	.viper-item2{
+		background-image: url('/static/images/003.png');
+		background-size: 96rpx 79rpx;
+		background-repeat: no-repeat;
+		background-position: 92% 90%;
+	}
+	.viper-item3{
+		background-image: url('/static/images/003.png');
+		background-size: 96rpx 79rpx;
+		background-repeat: no-repeat;
+		background-position: 92% 90%;
+	}
+
+	.viper-item:nth-child(2n) {
+		margin-left: 20rpx;
+	}
+
+	.virtual {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 0 24rpx;
+	}
+
+	.virtual-item {
+		margin-top: 24rpx;
+		width: calc((100% - 20rpx) / 2);
+		border-radius: 20rpx;
+		border: 2rpx solid #f7f7f7;
+		text-align: center;
+		background: #242328;
+
+		.virtual-item-head {
+			padding: 26rpx 0 12rpx 0;
+
+			.title {
+				.title-text {
+					font-size: 36rpx;
+					color: #D1D1D1;
+				}
+
+				.title-unit {
+					margin-left: 10rpx;
+					font-size: 22rpx;
+					color: #D1D1D1;
+				}
+			}
+
+			.plus {
+				font-weight: 400;
+				font-size: 26rpx;
+				color: #FFCD03;
+			}
+
+		}
+
+		.price {
+			padding: 8rpx 0;
+			font-size: 30rpx;
+			color: #D1D1D1;
+			font-weight: bold;
+			font-size: 36rpx;
+			background-color: #3F3E40;
+			border-radius: 0 0 20rpx 20rpx;
+		}
+	}
+
+	.virtual-item_active {
+		border: 2rpx solid #EDC267;
+
+		.price {
+			padding: 8rpx 0;
+			font-weight: bold;
+			font-size: 36rpx;
+			color: #000000;
+			background-color: #EDC267;
+			border-radius: 0 0 20rpx 20rpx;
+		}
+	}
+
+	.virtual-item:nth-child(2n) {
+		margin-left: 20rpx;
+	}
+
 	@import 'recharge.scss'
 </style>

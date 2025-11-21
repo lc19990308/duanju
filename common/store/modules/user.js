@@ -1,8 +1,4 @@
 import request from 'common/request/index.js'
-import {
-	BASE_URL,
-	SIGN
-} from '@/env.js';
 import store from '../index.js'
 
 export default {

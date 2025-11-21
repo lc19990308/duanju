@@ -1,6 +1,6 @@
 {
-    "name" : "盼盼短剧",
-    "appid" : "__UNI__A901C04",
+    "name" : "MonkeyDrama",
+    "appid" : "__UNI__8BBE7AF",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : 100,
@@ -21,6 +21,7 @@
         },
         "distribute" : {
             "android" : {
+                "package" : "com.monkeyshort.drama",
                 "permissions" : [
                     "<uses-feature android:name=\"android.hardware.camera\"/>",
                     "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",

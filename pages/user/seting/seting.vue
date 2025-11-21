@@ -1,8 +1,9 @@
 <template>
 	<view class="set">
-		<u-navbar title="Ví của tôi" :autoBack="true" bgColor='transparent' :titleStyle='titleStyle'
+		<statusBar />
+		<u-navbar :title="$t(`setting.page_title`)" :autoBack="true" :fixed='false' bgColor='transparent' :titleStyle='titleStyle'
 			leftIconColor='#fff' :placeholder='true' />
-		<view class="user-info">
+		<navigator class="user-info" url="/pages/user/account/changeUserName" hover-class="none">
 			<view class="left">
 				<image class="profile" :src="userInfo.avatar" mode=""></image>
 				<view class="nickName">{{userInfo.realname}}</view>
@@ -10,25 +11,27 @@
 			<view class="right">
 				<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 			</view>
-		</view>
+		</navigator>
 		<view class="cell-box">
 			<u-cell-group :border="false">
-				<u-cell title="Điều khoản dịch vụ" :border="false" url='/pages/user/about/detail/detail?id=1791523044515913730'>
+				<u-cell :title="$t(`setting.cell_item1`)" :border="false"
+					url='/pages/user/about/detail/detail?id=1791523044515913730'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
 				</u-cell>
-				<u-cell title="Thỏa thuận bảo mật" :border="false" url='/pages/user/about/detail/detail?id=1791523044515913731'>
+				<u-cell :title="$t(`setting.cell_item2`)" :border="false"
+					url='/pages/user/about/detail/detail?id=1791523044515913731'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
 				</u-cell>
-				<u-cell title="Phản hồi ý kiến" :border="false" url='/pages/user/seting/opinion'>
+				<u-cell :title="$t(`setting.cell_item3`)" :border="false" url='/pages/user/seting/opinion'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
 				</u-cell>
-				<u-cell title="Đăng xuất tài khoản" :border="false" url='/pages/login/unsubscribe'>
+				<u-cell :title="$t(`setting.cell_item4`)" :border="false" url='/pages/login/unsubscribe'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
@@ -52,9 +55,9 @@
 				customStyle: {
 					color: '#fff'
 				},
-				userInfo:{
-					realname:'',
-					avatar:'',
+				userInfo: {
+					realname: '',
+					avatar: '',
 				},
 			}
 		},
@@ -69,12 +72,12 @@
 				uni.removeStorageSync('id');
 			},
 			//获取用户信息
-			getUserInfo(){
+			getUserInfo() {
 				this.$request('user.getUserInfo').then(res => {
 					const userInfo = res.result.userInfo;
 					this.userInfo = {
-						realname:userInfo.realname,
-						avatar:userInfo.avatar,
+						realname: userInfo.realname,
+						avatar: userInfo.avatar,
 					}
 				})
 			},
@@ -98,7 +101,8 @@
 	::v-deep .u-cell__title-text {
 		color: #fff;
 	}
-	.user-info{
+
+	.user-info {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -106,15 +110,18 @@
 		height: 89rpx;
 		border-radius: 20rpx;
 		margin: 100rpx auto 36rpx auto;
-		.left{
+
+		.left {
 			display: flex;
 			align-items: center;
-			.profile{
+
+			.profile {
 				width: 88rpx;
 				height: 88rpx;
 				border-radius: 50%;
 			}
-			.nickName{
+
+			.nickName {
 				margin-left: 24rpx;
 				font-family: Inter, Inter;
 				font-weight: 400;
@@ -122,7 +129,8 @@
 				color: #FFFFFF;
 			}
 		}
-		.right{
+
+		.right {
 			margin-right: 30rpx;
 		}
 	}

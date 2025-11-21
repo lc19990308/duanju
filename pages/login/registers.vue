@@ -130,7 +130,7 @@
 			...mapActions('user', ['getUserInfo']),
 			submitHandle() {
 				if(!this.login.checked) {
-					this.$u.toast('请勾选并同意协议')
+					this.$u.toast(this.$t('toast.argeement_checke'))
 					return
 				}
 				this.$refs.uForm.validate().then(res => {
@@ -150,7 +150,7 @@
 			registerAccount(obj) {
 				this.$request('login.register', obj).then(res => {
 					if(res.code === 1) {
-						this.$u.toast("注册成功")
+						this.$u.toast(this.$t('toast.register_success'))
 						this.getUserInfo(res.data.token)
 						this.redirectPath(2)
 					}
@@ -177,7 +177,7 @@
 			},
 			getCode() {
 				if(!this.form.mobile) {
-					this.$u.toast("请输入手机号")
+					this.$u.toast(this.$t('toast.inpit_phone'))
 					return
 				}
 				let obj = {
@@ -186,12 +186,12 @@
 				}
 				if (this.$refs.uCode.canGetCode) {
 					uni.showLoading({
-						title: '正在获取验证码'
+						title: this.$t('toast.get_code_loing')
 					})
 					this.$request('login.sendCode', obj, false).then(res => {
 						if(res.code === 1) {
 							uni.hideLoading();
-							uni.$u.toast('验证码已发送');
+							uni.$u.toast(this.$t('toast.emailCodeSuccess'));
 							this.$refs.uCode.start();
 						} else {
 							uni.hideLoading();
@@ -199,7 +199,7 @@
 						}
 					}).catch(err => {
 						uni.hideLoading();
-						uni.$u.toast('验证码发送失败');
+						uni.$u.toast(this.$t('toast.code_fail'));
 					})
 				} else {
 					uni.$u.toast('倒计时结束后再发送');

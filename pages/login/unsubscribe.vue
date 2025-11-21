@@ -1,30 +1,31 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="Thay đổi tên" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff'
+		<statusBar />
+		<u-navbar :title="$t(`out.page_title`)" :fixed='false' :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff'
 			:autoBack="true" :placeholder='true'>
 		</u-navbar>
 		<view class="agreement">
 			<view class="agreement-item">
-				<view class="title1">ID tài khoản này sẽ không thể đăng nhập</view>
+				<view class="title1">{{$t(`out.cell_item_label1`)}}</view>
 			</view>
 			<view class="agreement-item">
-				<view class="title">Dữ liệu tài khoản</view>
+				<view class="title">{{$t(`out.cell_item_label2`)}}</view>
 				<view class="value">
-					Tất cả dữ liệu cá nhân của bạn sẽ bị xóa, bao gồm tên người dùng và email
+					{{$t(`out.cell_item_value2`)}}
 				</view>
 			</view>
 			<view class="agreement-item">
-				<view class="title">Quyền lợi dịch vụ</view>
+				<view class="title">{{$t(`out.cell_item_label3`)}}</view>
 				<view class="value">
-					Tiền vàng, điểm và lợi ích VIP của bạn sẽ bị xóa </view>
+					{{$t(`out.cell_item_value3`)}}</view>
 			</view>
 			<view class="agreement-item">
-				<view class="title">lịch sử</view>
+				<view class="title">{{$t(`out.cell_item_label4`)}}</view>
 				<view class="value">
-					Tất cả lịch sử sẽ bị xóa, bao gồm lịch sử nạp tiền và lịch sử xem</view>
+					{{$t(`out.cell_item_value4`)}}</view>
 			</view>
 			<view class="agreement-item">
-				<view class="title1">Thông tin tài khoản bên thứ ba</view>
+				<view class="title1">{{$t(`out.cell_item_label5`)}}</view>
 				<view class="value"></view>
 			</view>
 			<view class="agreement-checked">
@@ -33,10 +34,10 @@
 					</u-checkbox>
 				</u-checkbox-group>
 				<view class="agreement-tips">
-					Tôi chấp nhận rủi ro xóa và đồng ý xóa tài khoản của mình
+					{{$t(`out.btn_tips`)}}
 				</view>
 			</view>
-			<u-button class="submt-btn" @tap="submitForm" type="primary" text="Xác nhận rủi ro và xóa"></u-button>
+			<u-button class="submt-btn" @tap="submitForm" type="primary" :text="$t(`out.submit_btn`)"></u-button>
 		</view>
 	</view>
 </template>
@@ -61,7 +62,7 @@
 						confirmed: this.confirmed,
 					}).then(res => {
 						uni.clearStorageSync();
-						this.$u.toast('操作成功！')
+						uni.$u.toast(this.$t('toast.msg_success'))
 						setTimeout(() => {
 							uni.reLaunch({
 								url: '/pages/login/login'
@@ -70,7 +71,7 @@
 
 					})
 				} else {
-					this.$u.toast('请确认删除账户协议！')
+					this.$u.toast(this.$t('toast.confirm_remove_agreement'))
 				}
 			},
 		},

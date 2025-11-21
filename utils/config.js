@@ -3,7 +3,7 @@ const apis = {
 	tenantId: 1002,
 	// 192.168.200.43
 	// 'MPWEIXIN': 'http://192.168.201.74:9080', //正式服务器地址
-	'MPWEIXIN': 'http://114.242.58.96:4490', //正式服务器地址
+	'MPWEIXIN': 'https://dj.odi.ae', //正式服务器地址
 	sysOrgCode: "A03A01",
 	appId: '', //
 	srcAppid: '' ,//

@@ -3,7 +3,6 @@ import request from 'common/request/index.js'
 import utils from 'common/utils/index.js'
 
 import store from '..'
-import { BASE_URL, SIGN } from '@/env.js';
 // #ifdef H5
 const jweixin = require('jweixin-module')
 import wxoaShare from '@/common/utils/share.js'
@@ -121,7 +120,6 @@ export default {
 			const imgUrl = state.config?.share?.image ? state.config?.share?.image : ""
 			const desc = state.config?.share?.description ? state.config?.share?.description : ""
 			const uri = window.location.origin + window.location.pathname
-			const link = uri + `?${SIGN}#/pages/home/index?scene=${spm}`
 			
 			request('user.share', { uri }).then(res => {
 				if(res.code === 1) {
@@ -144,7 +142,6 @@ export default {
 						jweixin.updateAppMessageShareData({ 
 							title,
 							desc,
-							link,
 							imgUrl,
 							success: e => {
 								console.log("分享好友");
@@ -153,7 +150,6 @@ export default {
 						// 分享朋友圈
 						jweixin.updateTimelineShareData({
 							title,
-							link,
 							imgUrl,
 							success: e => {
 								console.log("分享朋友圈");

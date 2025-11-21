@@ -1,27 +1,28 @@
 <!--积分兑换金币-->
 <template>
 	<view class="app-container">
-		<u-navbar title="Chuyển đổi" :autoBack="true" bgColor='transparent' :titleStyle='titleStyle'
-			leftIconColor='#fff' :placeholder='true' @rightClick="rightClick" rightText='Chi tiết' />
+		<statusBar />
+		<u-navbar :title="$t(`withdrawal.page_title`) " :fixed='false' :autoBack="true" bgColor='transparent' :titleStyle='titleStyle'
+			leftIconColor='#fff' :placeholder='true' @rightClick="rightClick" :rightText='$t(`withdrawal.navbar_right`)' />
 		<view class="remaining">
-			<view class="remaining-text">Điểm của tôi</view>
+			<view class="remaining-text">{{$t(`withdrawal.card_title`)}}</view>
 			<view class="value">
 				<image class="remaining-icon" src="/static/images/diamond.png" mode=""></image>
 				<text class="value-text">{{info.currency }}</text>
 			</view>
 		</view>
 		<view class="tips">
-			100 điểm tích lũy =1 vàng
+			{{$t(`withdrawal.card_tips`)}}
 		</view>
 		<view class="form">
 			<u--form :model="form" ref="uForm" :rules='rules' labelPosition='top' labelWidth='190' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="Vui lòng nhập số điểm" prop="pointQuantity" :borderBottom='false'>
+				<u-form-item :label="$t(`withdrawal.cell_label`)" prop="pointQuantity" :borderBottom='false'>
 					<u-input type='number' v-model="form.pointQuantity" border='none' clearable
-						:placeholderStyle='placeholderStyle' placeholder='Chuyển đổi tối đa 12 vàng' />
+						:placeholderStyle='placeholderStyle' :placeholder='$t(`withdrawal.cell_value`)' />
 				</u-form-item>
 			</u--form>
-			<u-button class="submt-btn" @click="submit">nộp</u-button>
+			<u-button class="submt-btn" @click="submit">{{$t(`withdrawal.btn_text`)}}</u-button>
 		</view>
 	</view>
 </template>
@@ -54,7 +55,7 @@
 				rules: {
 					pointQuantity: [{
 						required: true,
-						message: '请输入积分数量',
+						message: () => i18n.t('form.pointsRequired'),
 						trigger: ['blur', 'change']
 					}]
 				},
@@ -85,7 +86,7 @@
 					this.$request('withdraw.goldCoinExchange', this.form, true, {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					}).then(res => {
-						uni.$u.toast('操作成功！');
+						uni.$u.toast(this.$t('toast.msg_success'))
 						this.getIntegral();
 					})
 				})

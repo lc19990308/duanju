@@ -458,7 +458,7 @@
 				uni.setClipboardData({
 					data: String(info),
 					success: () => {
-						this.$u.toast('复制成功')
+						uni.$u.toast(this.$t('toast.msg_copy_success'))
 					}
 				});
 			},

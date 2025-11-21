@@ -84,7 +84,7 @@
 		},
 		onLoad() {
 			uni.showLoading({
-				title: '加载中...',
+				title: `${this.$t('toast.loading')}...`,
 				mask: true
 			})
 			
@@ -190,7 +190,7 @@
 						},
 						error: error => {
 							uni.showToast({
-								title: '海报生成失败!',
+								title: this.$t('toast.poster_fail'),
 								icon: 'error'
 							})
 							uni.hideLoading()
@@ -250,7 +250,9 @@
 			// 报错alert
 			_errAlert(content) {
 				uni.showModal({
-					title: '提示',
+					title: this.$t('model.tip'),
+					confirmText:this.$t('model_box.confirm'),
+					cancelText:this.$t('model_box.cancel'),
 					content: content
 				});
 			},

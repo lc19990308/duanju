@@ -1,6 +1,7 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="" bgColor='transparent' leftIconColor='#fff' :autoBack="true" :placeholder='true'>
+		<statusBar />
+		<u-navbar title="" :fixed='false'  bgColor='transparent' leftIconColor='#fff' :autoBack="true" :placeholder='true'>
 		</u-navbar>
 		<u-toast ref="uToast"></u-toast>
 		<u-code :seconds="seconds" ref="uCode" @change="codeChange" />
@@ -30,7 +31,7 @@
 					<u-button class="code-btn" slot="right" @tap="getCode">{{tips}}</u-button>
 				</u-form-item>
 				<u-form-item label="mật khẩu" prop="password" :borderBottom='false'>
-					<u-input v-model="form.password" border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
+					<u-input v-model="form.password" type='password' border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
@@ -38,7 +39,7 @@
 					</u-input>
 				</u-form-item>
 				<u-form-item label="Xác nhận mật khẩu" prop="confirmpassword" :borderBottom='false'>
-					<u-input v-model="form.confirmpassword" border='none' placeholder='Nhập lại mật khẩu mới'
+					<u-input v-model="form.confirmpassword" type='password' border='none' placeholder='Nhập lại mật khẩu mới'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
@@ -52,6 +53,7 @@
 </template>
 
 <script>
+	import i18n from '@/utils/i18n/index.js'
 	export default {
 		data() {
 			return {
@@ -69,12 +71,12 @@
 				rules: {
 					email: [{
 							required: true,
-							message: '请输入邮箱',
+							message: () => i18n.t('form.emailRequired'),
 							trigger: ['blur', 'change']
 						},
 						{
 							type: 'email',
-							message: '邮箱格式不正确',
+							message: () => i18n.t('form.emailFormat'),
 							trigger: ['blur', 'change']
 						}
 					],
@@ -82,27 +84,27 @@
 					/* 验证码 */
 					emailcode: [{
 						required: true,
-						message: '请输入验证码',
+						message: () => i18n.t('form.captchaRequired'),
 						trigger: ['blur', 'change']
 					}],
 
 					/* 密码 */
 					password: [{
 						required: true,
-						message: '请输入密码',
+						message: () => i18n.t('form.pwdRequired'),
 						trigger: ['blur', 'change']
 					}],
 
 					/* 确认密码：必填 + 与 password 实时比对 */
 					confirmpassword: [{
 							required: true,
-							message: '请再次输入密码',
+							message: () => i18n.t('form.pwdAgain'),
 							trigger: ['blur', 'change']
 						},
 						{
 							validator: (rule, value, callback) =>
 								value === this.form.password ?
-								callback() : callback(new Error('两次输入密码不一致')),
+								callback() : callback(new Error(i18n.t('form.pwdMismatch'))),
 							trigger: ['blur', 'change']
 						}
 					]
@@ -121,16 +123,16 @@
 			},
 			getCode() {
 				if (uni.$u.test.isEmpty(this.form.email)) {
-					return uni.$u.toast('邮箱不能为空!')
+					return uni.$u.toast(this.$t('toast.emailEmpty'))
 				}
 				const emailState = uni.$u.test.email(this.form.email)
 				if (!emailState) {
-					return uni.$u.toast('请输入正确邮箱!')
+					return uni.$u.toast(this.$t('toast.emailTrue'))
 				}
 				if (this.$refs.uCode.canGetCode) {
 					// 模拟向后端请求验证码
 					uni.showLoading({
-						title: '正在获取验证码'
+						title: `${this.$t('toast.get_code_loing')}`
 					})
 					const form = {
 						email: this.form.email,
@@ -138,7 +140,7 @@
 					}
 					this.$request('login.sendEmailCode', form).then(res => {
 						uni.hideLoading();
-						uni.$u.toast('验证码已发送');
+						uni.$u.toast(this.$t('toast.emailCodeSuccess'));
 						this.$refs.uCode.start();
 					})
 				} else {
@@ -148,7 +150,7 @@
 			submit() {
 				this.$refs.uForm.validate().then(res => {
 					this.$request('login.resetPasswordByEmail', this.form).then(res => {
-						uni.$u.toast('重置成功！')
+						uni.$u.toast(this.$t('toast.resetMsg'))
 						setTimeout(()=>{
 							uni.clearStorageSync();
 							uni.redirectTo({

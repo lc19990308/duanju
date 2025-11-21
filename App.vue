@@ -23,12 +23,12 @@
 	import api from '@/common/request/api.js'
 	// #endif
 
-	import {
-		mapState,
-		mapGetters,
-		mapMutations,
-		mapActions
-	} from "vuex"
+	// import {
+	// 	mapState,
+	// 	mapGetters,
+	// 	mapMutations,
+	// 	mapActions
+	// } from "vuex"
 	export default {
 		usingComponents: {
 			"charge-dialog": "/components/charge-dialog/charge-dialog",
@@ -38,7 +38,7 @@
 			"playlet-plugin": "/pages/playlet/playlet"
 		},
 		onLaunch: function(options) {
-			this.submit();
+			// this.submit();
 			// #ifdef H5
 
 			// #endif
@@ -93,8 +93,10 @@
 				if (res.hasUpdate) {
 					updateManager.onUpdateReady(function(res) {
 						uni.showModal({
-							title: '更新提示',
-							content: '新版本已经准备好，是否重启应用？',
+							title: this.$('model_box.update_tip'),
+							content: this.$('model_box.new_version_ready'),
+							confirmText:this.$t('model_box.confirm'),
+							cancelText:this.$t('model_box.cancel'),
 							success: res => {
 								if (res.confirm) {
 									// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
@@ -106,9 +108,10 @@
 					updateManager.onUpdateFailed(function(res) {
 						// 新版本下载失败
 						uni.showModal({
-							title: '提示',
-							content: '新版小程序下载失败\n请自行退出程序，手动卸载本程序，再运行',
-							confirmText: "知道了"
+							title: this.$('model_box.tip'),
+							content: this.$('model_box.mini_download_fail'),
+							confirmText:  this.$('model_box.got_it'),
+							cancelText:this.$t('model_box.cancel'),
 						});
 					})
 				}
@@ -117,6 +120,11 @@
 
 
 			// #endif
+
+
+
+
+
 		},
 		onShow: function() {
 			// console.log('App Show')
@@ -126,16 +134,15 @@
 			// console.log('App Hide')
 		},
 		methods: {
-			...mapActions("app", ["getConfigInfo"]),
-			...mapMutations("app", ["setShare"]),
+			// ...mapActions("app", ["getConfigInfo"]),
+			// ...mapMutations("app", ["setShare"]),
 
 			longinopenid() {
 				const mythis = this
-				let newUrl = encodeURIComponent( apiMoen.MPWEIXIN + '/')
+				let newUrl = encodeURIComponent(apiMoen.MPWEIXIN + '/')
 				let appid = apiMoen.gzhAppid
 				let scope = 'snsapi_base'
 				let code = this.getUrlCode().code; //是否存在code
-				console.log(code, '1212222121212')
 				if (code == null || code === "") {
 					// return
 					// let url_code = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxef1f84e3ab87ba11&redirect_uri="+ newUrl +"&response_type=code&scope=snsapi_base&state=STATE&wechat_redirect";
@@ -175,7 +182,6 @@
 				console.log(theRequest);
 				return theRequest;
 			},
-
 			// H5登录
 			submit() {
 				const {
@@ -185,9 +191,9 @@
 					osName,
 					osVersion
 				} = uni.getSystemInfoSync();
-				console.log("登录参数", deviceId, apiMoen.sysOrgCode)
+
 				var datas = {
-					accountNumber: deviceId,
+					accountNumber: uni.getStorageSync('accountNumber'),
 					sysOrgCode: apiMoen.sysOrgCode,
 				};
 
@@ -195,7 +201,7 @@
 					// console.log("登录", res)
 					if (res.code != 200) {
 						uni.showToast({
-							title: '系统异常登录失败',
+							title: this.$t('toast.sys_error'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});

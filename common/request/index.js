@@ -1,9 +1,6 @@
 import apiList from './api.js';
 import apiMoen from '../../utils/config.js';
-// import {
-// 	BASE_URL,
-// 	SIGN
-// } from '@/env.js';
+
 import store from '@/common/store/index.js'
 console.log(store.state.user.token,'token')
 // 组装接口路径
@@ -55,7 +52,6 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				// 'Content-Type': method === 'GET' ? 'application/json' :
 				// 	'application/json; charset=UTF-8',
 				// 'Token': store.state.user.token || '',
-				// 'Sign': SIGN || '',
 				// 'X-Tenant-Id': uni.getStorageSync('tenantId')
 				'X-Tenant-Id': apiMoen.tenantId,
 				// 'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjI4OTQxNTAsInVzZXJuYW1lIjoiMTU4NzIzNzU0N0BxcS5jb20ifQ.VI-KZgFro8DJFpfgOuTWonli85ji-zFOGr64P438xYs',
@@ -69,8 +65,10 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				} else if (res.data.code === 401) {
 					store.dispatch('user/logout')
 					uni.showModal({
-						title: '系统提示',
-						content: '本操作需要您进行登录验证',
+						title: this.$t('model_box.sys_tip'),
+						content: this.$t('model_box.login_required'),
+						confirmText:this.$t('model_box.confirm'),
+						cancelText:this.$t('model_box.cancel'),
 						success: res => {
 							if (res.confirm) {
 								uni.navigateTo({
@@ -88,13 +86,8 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				}
 			},
 			fail: err => {
-				// uni.showToast({
-				// 	title: err.errMsg,
-				// 	icon: 'none',
-				// 	duration: 3000
-				// })
 				uni.showToast({
-					title: `服务器开小差 => ${BASE_URL || 'NULL'} => ${SIGN || 'NULL'}`,
+					title: `服务器开小差`,
 					icon: 'none'
 				})
 				reject(err)

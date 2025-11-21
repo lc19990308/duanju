@@ -377,7 +377,7 @@
 										if (res.success) {
 											uni.showToast({
 												icon: 'success',
-												title: '会员开通成功'
+												title: this.$t('toast.member_open_success')
 											})
 											pm.hideChargeDialog()
 											// 刷新列表
@@ -405,7 +405,7 @@
 								console.error(errMsg, errCode)
 								uni.showToast({
 									icon: 'error',
-									title: '支付取消'
+									title: this.$t('toast.pay_cancel')
 								})
 							},
 						})
@@ -562,7 +562,7 @@
 							console.error(errMsg, errCode)
 							uni.showToast({
 								icon: 'error',
-								title: '支付取消'
+								title: this.$t('toast.pay_cancel')
 							})
 						},
 					})
@@ -757,7 +757,7 @@
 					if (seriesSeries < parseInt(serialNo)) {
 						console.log("serialNo222222222222222222222222222222222222222", serialNo);
 						uni.showToast({
-							title: '请按顺序解锁第' + seriesSeries + '集',
+							title: this.$t('toast.please_unlock') + seriesSeries + '集',
 							icon: 'success',
 							duration: 2000
 						});

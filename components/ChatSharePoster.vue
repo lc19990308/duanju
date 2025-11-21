@@ -94,10 +94,9 @@
 						// })
 						
 						uni.showLoading({
-							title: '加载中',
+							title: this.$t('toast.loading'),
 							mask: true
 						})
-						console.log("加载中");
 						this.shareLink()
 					}
 				}
@@ -178,8 +177,10 @@
 				}).catch(err => {
 					this.isCreate = false
 					uni.showModal({
-						title: '提示',
-						content: `【生成图片失败，请重试】${err}`
+						title: this.$t('model_box.tip'),
+						content: `${this.$t('model_box.gen_img_fail')}${err}`,
+						confirmText:this.$t('model_box.confirm'),
+						cancelText:this.$t('model_box.cancel'),
 					});
 					// this.$refs.uToast.hide()
 					uni.hideLoading()

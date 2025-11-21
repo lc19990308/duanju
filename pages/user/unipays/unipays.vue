@@ -165,7 +165,9 @@
 				if (res) {
 					uni.showModal({
 						content: res.errMsg,
-						showCancel: false
+						showCancel: false,
+						confirmText:this.$t('model_box.confirm'),
+						cancelText:this.$t('model_box.cancel'),
 					});
 				}
 			},

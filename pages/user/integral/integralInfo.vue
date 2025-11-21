@@ -1,16 +1,17 @@
 <!--积分明细-->
 <template>
 	<view class="app-container">
-		<u-navbar title="Chi tiết" :autoBack="true" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+		<statusBar />
+		<u-navbar :title="$t(`walletLog.page_title`)" :fixed='false' :autoBack="true" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
 			:placeholder='true' />
 		<view class="list">
 			<view class="list-item" v-for="(item,index) in list" :key="index">
 				<view class="item-row">
-					<view class="label">Đổi {{item.currencyQuantity}} điểm</view>
+					<view class="label">{{$t(`walletLog.exchange`)}} {{item.currencyQuantity}} </view>
 				</view>
 				<view class="item-row">
 					<view class="time">{{item.createTime}}</view>
-					<view class="red value">+{{item.virtualQuantity}} vàng</view>
+					<view class="red value">+{{item.virtualQuantity}} {{$t(`walletLog.unit`)}}</view>
 				</view>
 			</view>
 		</view>

@@ -146,7 +146,7 @@
 						<view class="textarea">
 							<view class="text" :class="{ active: isUnfold }">
 								<text class="btn" v-if="$utils.countCharacters(item.dramaDescribe) > 74"
-									@click="isUnfold = !isUnfold">{{ isUnfold ? '收起' : '展开' }}</text>
+									@click="isUnfold = !isUnfold">{{ isUnfold ? $t('video_popup.pack_up') : $t('video_popup.unfold')  }}</text>
 								{{ item.dramaDescribe }}
 							</view>
 						</view>
@@ -162,7 +162,7 @@
 								<image class="moinuns"
 									src="https://baixoss.oss-cn-shenzhen.aliyuncs.com/bx_video/panpan/jxico/file-copy-fill.svg"
 									mode=""></image>
-								<text class="text1">合集 · 全{{item.totalEpisodes}}集 · 点击观看全集</text>
+								<text class="text1">{{$t('proposal.compilations')}}{{item.totalEpisodes}}{{$t('proposal.vidoe_unit')}} · {{$t('proposal.watch_all')}}</text>
 							</view>
 							<uni-icons class="arrow" type="right" size="24" color="#fff"></uni-icons>
 							<!-- <image  src="/static/icons/arrow.png" mode=""></image> -->
@@ -220,7 +220,7 @@
 				
 				isIos: uni.getSystemInfoSync().osName == 'ios' ? true : false,
 				barHeight: uni.getSystemInfoSync().statusBarHeight,
-				
+				memberId:uni.getStorageSync('memberId'),
 				current: 0,
 				currentTime: 0, // 当前视频播放进度
 
@@ -261,16 +261,18 @@
 		onLoad() {
 			console.log('video 页面')
 			const memberId = uni.getStorageSync('id')
-			if (!memberId) {
-				uni.redirectTo({
-					url: '/pages/user/login/login'
-				})
-			} else {
-				this.getHandpickList()
-			}
+			// if (!memberId) {
+			// 	uni.redirectTo({
+			// 		url: '/pages/user/login/login'
+			// 	})
+			// } else {
+			// 	this.getHandpickList()
+			// }
+			this.getHandpickList()
 			// this.getRecommendList()
 		},
 		onShow() {
+			this.setTab();
 			this.monis = true
 			const timer1 = setTimeout(() => {
 				console.log(4)
@@ -316,6 +318,24 @@
 			};
 		},
 		methods: {
+			setTab(){
+				uni.setTabBarItem({
+					index: 0,
+					text: this.$t('tabBar.home')
+				})
+				uni.setTabBarItem({
+					index: 1,
+					text: this.$t('tabBar.recommend')
+				})
+				uni.setTabBarItem({
+					index: 2,
+					text: this.$t('tabBar.reward')
+				})
+				uni.setTabBarItem({
+					index: 3,
+					text: this.$t('tabBar.profile')
+				})
+			},
 			skipplay(item) {
 				// console.log("item获取视频列表信息",item);
 				// this.$myGlobalMethod(item.dramaId); // 调用全局方法
@@ -365,7 +385,8 @@
 				var data = {
 					pageNo: this.pageNo,
 					pageSize: 10,
-					sysOrgCode: apiMoen.sysOrgCode
+					sysOrgCode: apiMoen.sysOrgCode,
+					memberId:this.memberId || '',
 				}
 				this.$request('video.handpickListApp', data).then(res => {
 					console.log("res精选视频列表:", res)

@@ -43,22 +43,22 @@
 			</view>
 			
 			<view class="button" style="margin-top: 40rpx;">
-				<u-button type="error" :plain="true" text="退出登录" @click="logoutClick"></u-button>
+				<u-button type="error" :plain="true" :text="$t('model_box.logout')" @click="logoutClick"></u-button>
 			</view>
 			
 			<view class="button" style="margin-top: 40rpx;">
-				<u-button type="error" text="注销账号" @click="deleteClick"></u-button>
+				<u-button type="error" :text="$t('model_box.account_cancel')" @click="deleteClick"></u-button>
 			</view>
 			
 			<u-popup :show="mobilePopup" :round="20" :closeable="true" :closeOnClickOverlay="false" @close="mobilePopup = false">
 				<view class="mobile_popup">
 					<view class="input_box">
 						<text class="label">手机号</text>
-						<u-input v-model="form.mobile" type="number" :maxlength="11" border="none" cursorSpacing="200rpx" clearable placeholder="请输入手机号码"></u-input>
+						<u-input v-model="form.mobile" type="number" :maxlength="11" border="none" cursorSpacing="200rpx" clearable :placeholder="$t('toast.inpit_phone')"></u-input>
 					</view>
 					<view class="input_box">
 						<text class="label">验证码</text>
-						<u-input v-model="form.code" type="number" :maxlength="6" border="none" cursorSpacing="200rpx" clearable placeholder="请输入验证码"></u-input>
+						<u-input v-model="form.code" type="number" :maxlength="6" border="none" cursorSpacing="200rpx" clearable :placeholder="$t('toast.verification_input')"></u-input>
 						<view class="send" @click="getCode">{{ codeTips }}</view>
 					</view>
 					<view class="button_box">
@@ -146,7 +146,7 @@
 			// 绑定手机号
 			bindMobile() {
 				if(!this.form.mobile) {
-					this.$u.toast("请输入手机号")
+					this.$u.toast(this.$t('toast.inpit_phone'))
 					return
 				}
 				if(!this.form.code) {
@@ -160,16 +160,16 @@
 
 				this.$request('login.wxBind', obj).then(res => {
 					if(res.code === 1) {
-						this.$u.toast("绑定成功")
+						this.$u.toast(this.$t('toast.bingSuccess'))
 						this.getUserInfo(res.data.token)
 						uni.switchTab({
 							url: '/pages/home/user'
 						});
 					} else if(res.code === 1314) {
 						uni.showModal({
-							title: '系统提示',
+							title: this.$t('model.tip'),
 							content: res.msg,
-							confirmText: '知道了',
+							confirmText: this.$t('model.got_it'),
 							showCancel: false,
 							success: res => {
 								if (res.confirm) {
@@ -186,17 +186,16 @@
 			// 退出登录
 			logoutClick() {
 				uni.showModal({
-					title: '退出登录',
-					content: '确认要退出登录吗？',
+					title: this.$t('model_box.tip'),
+					content: this.$t('model_box.logout_confirm'),
+					confirmText:this.$t('model_box.confirm'),
+					cancelText:this.$t('model_box.cancel'),
 					success: res => {
 						if (res.confirm) {
-							console.log('用户点击确定');
 							this.logout()
 							uni.switchTab({
 								url: '/pages/home/user'
 							});
-						} else if (res.cancel) {
-							console.log('用户点击取消');
 						}
 					}
 				})
@@ -204,8 +203,10 @@
 			// 注销账号
 			deleteClick() {
 				uni.showModal({
-					title: '注销账号',
-					content: '确认要注销账号吗？',
+					title: this.$t('model_box.tip'),
+					content: this.$t('model_box.account_cancel_confirm'),
+					confirmText:this.$t('model_box.confirm'),
+					cancelText:this.$t('model_box.cancel'),
 					success: res => {
 						if (res.confirm) {
 							console.log('用户点击确定');
@@ -249,7 +250,7 @@
 			// 获取验证码
 			getCode() {
 				if(!this.form.mobile) {
-					this.$u.toast("请输入手机号")
+					this.$u.toast(this.$t('toast.inpit_phone'))
 					return
 				}
 				
@@ -260,7 +261,7 @@
 				
 				if (this.$refs.uCode.canGetCode) {
 					uni.showLoading({
-						title: '正在获取验证码'
+						title: this.$t('toast.get_code_loing')
 					})
 					this.$request('login.sendCode', obj, false).then(res => {
 						if(res.code === 1) {
@@ -273,7 +274,7 @@
 						}
 					}).catch(err => {
 						uni.hideLoading();
-						uni.$u.toast('验证码发送失败');
+						uni.$u.toast(this.$t('toast.code_fail'));
 					})
 				} else {
 					uni.$u.toast('倒计时结束后再发送');

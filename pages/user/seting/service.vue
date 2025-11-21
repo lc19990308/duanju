@@ -1,7 +1,8 @@
 <!--联系客服-->
 <template>
 	<view class="app-container">
-		<u-navbar title="Liên hệ h hỗ trợ khách hàng" bgColor='transparent' :titleStyle='titleStyle'
+		<statusBar />
+		<u-navbar title="Liên hệ h hỗ trợ khách hàng" :fixed='false' bgColor='transparent' :titleStyle='titleStyle'
 			leftIconColor='#fff' :autoBack="true" :placeholder='true' />
 
 		<view class="chat-box">

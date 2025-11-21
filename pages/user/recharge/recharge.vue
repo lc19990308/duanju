@@ -1,5 +1,8 @@
 <template>
 	<view class="centert-lsty">
+		<u-navbar :title="$t(`store.page_title`)" :autoBack="true" :fixed='false' :placeholder='true' bgColor='transparent'
+			:titleStyle='titleStyle' leftIconColor='#fff'>
+		</u-navbar>
 		<view class="mon-list">
 			<!-- <view class="moinuns-view" v-for="(item,index) in goldList.list" :class="index==activeIndex?'m-ativoe':''"
 				@click="handleToActive(index,item)">
@@ -14,10 +17,11 @@
 				</view>
 			</view> -->
 			<view class="rechargeView_title">
-				<span>Số dư: 50 vàng</span>
+				<span>{{$t(`store.balance`)}}: 50 {{$t(`store.balance_unit`)}}</span>
 			</view>
 			<view class="rechargeView_list">
-				<view class="rechargeView_lists top3" v-for="(item,index) in goldList" @click="handleToActive(index,item)" :key="index">
+				<view class="rechargeView_lists top3" v-for="(item,index) in goldList"
+					@click="handleToActive(index,item)" :key="index">
 					<!-- <span class="rechargeView_percentage">+30%</span> -->
 					<view class="rechargeView_top">{{item.packageMoney}} vàng</view>
 					<view class="rechargeView_cen">+{{item.giftCoins}} vàng</view>
@@ -55,8 +59,7 @@
 			</view>
 		</view>
 		<view class="act_prompt">
-			Gợi ý:<br>
-			Monkey Short cung cấp nội dung miễn phí và trả phí cho tất cả mọi người. Bạn có thể quyết định nội dung cần giải mã. Thanh toán là không bắt buộc và giá trị lưu trữ không hỗ trợ hoàn lại tiền. Nếu tiền dự trữ chưa được ghi vào tài khoản của ông, xin vui lòng thoát khỏi bang của tôi.
+			{{$t(`store.page_tips`)}}
 			<!-- <view class="bot_title">
 				温馨提示
 			</view>
@@ -106,8 +109,14 @@
 				allocatRechargeList: {},
 				userCode: '',
 				falishui: {},
-				openid:'ogvdF6U0Z36PmXdEg7QQEO6Tfh1w',
-				memberId:uni.getStorageSync('memberId') || '',
+				openid: 'ogvdF6U0Z36PmXdEg7QQEO6Tfh1w',
+				memberId: uni.getStorageSync('memberId') || '',
+				titleStyle: {
+					color: '#fff',
+					fontFamily: 'PingFang SC, PingFang SC',
+					fontWeight: 800,
+					color: '#FFFFFF',
+				},
 			};
 		},
 		onLoad() {
@@ -196,9 +205,9 @@
 					sysOrgCode: uni.getStorageSync('sysOrgCode'), //租户id
 					tenantId: uni.getStorageSync('tenantId'), //运营主体公司id
 					platformType: 2,
-					payMethod:'wxpay',
-					openId:uni.getStorageSync('openid'),
-					runProgramType:2//支付平台类型(1.小程序,2.公众号)
+					payMethod: 'wxpay',
+					openId: uni.getStorageSync('openid'),
+					runProgramType: 2 //支付平台类型(1.小程序,2.公众号)
 				}
 				this.$request('player.rechargePackage', data).then(res => {
 					console.log(res, "res:9999999999")
@@ -214,7 +223,7 @@
 						success: function(payRes) {
 							uni.showToast({
 								icon: 'none',
-								title: '支付成功'
+								title: this.$t('toast.pay_success')
 							})
 							// 刷新列表
 							uni.navigateBack({
@@ -224,7 +233,7 @@
 						fail: function(err) {
 							uni.showToast({
 								icon: 'none',
-								title: '支付取消'
+								title: this.$t('toast.pay_cancel')
 							})
 							uni.navigateTo({
 								url: '/pages/user/vip/vip'
@@ -233,75 +242,75 @@
 					})
 				})
 			},
-			monbtnonve(res){
+			monbtnonve(res) {
 				// 是微信浏览器
-				  // 使用微信支付
-				  let self = this;
-				  jweixin.config({
-				    //全局参数配置
-				    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-				    appId: apiMoen.gzhAppid, // 必填，公众号的唯一标识
-				    timestamp: res.result.timeStamp, // 必填，生成签名的时间戳
-				    nonceStr: res.result.nonceStr, // 必填，生成签名的随机串
-				    signature: res.result.paySign, // 必填，签名，见附录1
-				    jsApiList: ["chooseWXPay"], // 必填
-				  });
-				  jweixin.ready(function () {
-				    //预请求，看能否发起微信支付
-				    jweixin.checkJsApi({
-				      //判断当前版本是否支持指定js接口
-				      jsApiList: ["chooseWXPay"], // 需要检测的JS接口列表
-				      success: function (res) {
-				        console.log("成功信息1");
-				        console.log(res);
-				      },
-				      fail: function (res) {
-				        console.log("失败信息1");
-				        console.log(res);
-				      },
-				    });
-				
-				    jweixin.chooseWXPay({
-				      //发起一个微信的支付请求
-				      timestamp: res.result.timeStamp, // 支付签名时间戳
-				      nonceStr: res.result.nonceStr, // 支付签名随机串，不长于 32 位
-				      package: res.result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-				      signType: res.result.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-				      paySign: res.result.paySign, // 支付签名,与签名是一个东西
-				      success: async function (res) {
-				        console.log(res, "成功信息2");
-						uni.showToast({
-							icon: 'none',
-							title: '支付成功',
-							duration:2000
-						})
-						// 刷新列表
-						setTimeout(function() {
-							uni.navigateBack({
-								delta: 1
+				// 使用微信支付
+				let self = this;
+				jweixin.config({
+					//全局参数配置
+					debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					appId: apiMoen.gzhAppid, // 必填，公众号的唯一标识
+					timestamp: res.result.timeStamp, // 必填，生成签名的时间戳
+					nonceStr: res.result.nonceStr, // 必填，生成签名的随机串
+					signature: res.result.paySign, // 必填，签名，见附录1
+					jsApiList: ["chooseWXPay"], // 必填
+				});
+				jweixin.ready(function() {
+					//预请求，看能否发起微信支付
+					jweixin.checkJsApi({
+						//判断当前版本是否支持指定js接口
+						jsApiList: ["chooseWXPay"], // 需要检测的JS接口列表
+						success: function(res) {
+							console.log("成功信息1");
+							console.log(res);
+						},
+						fail: function(res) {
+							console.log("失败信息1");
+							console.log(res);
+						},
+					});
+
+					jweixin.chooseWXPay({
+						//发起一个微信的支付请求
+						timestamp: res.result.timeStamp, // 支付签名时间戳
+						nonceStr: res.result.nonceStr, // 支付签名随机串，不长于 32 位
+						package: res.result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+						signType: res.result.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+						paySign: res.result.paySign, // 支付签名,与签名是一个东西
+						success: async function(res) {
+							console.log(res, "成功信息2");
+							uni.showToast({
+								icon: 'none',
+								title: this.$t('toast.pay_success'),
+								duration: 2000
 							})
-						}, 2000); // 假设这里是异步加载数据，3秒后完成
-						
-				      },
-				      cancel: function (res) {
-				        console.log(res, "取消信息2");
-						uni.showToast({
-							icon: 'none',
-							title: '支付取消'
-						})
-						uni.navigateTo({
-							url: '/pages/user/vip/vip'
-						})
-				      },
-				      fail: function (res) {
-				        console.log(res, "失败信息2");
-				      },
-				    });
-				  });
-				
-				  jweixin.error(function (res) {
-				    console.log(res, "失败信息3");
-				  });
+							// 刷新列表
+							setTimeout(function() {
+								uni.navigateBack({
+									delta: 1
+								})
+							}, 2000); // 假设这里是异步加载数据，3秒后完成
+
+						},
+						cancel: function(res) {
+							console.log(res, "取消信息2");
+							uni.showToast({
+								icon: 'none',
+								title: this.$t('toast.pay_cancel')
+							})
+							uni.navigateTo({
+								url: '/pages/user/vip/vip'
+							})
+						},
+						fail: function(res) {
+							console.log(res, "失败信息2");
+						},
+					});
+				});
+
+				jweixin.error(function(res) {
+					console.log(res, "失败信息3");
+				});
 			},
 			getWxCode(callback) {
 				// wx.login({
@@ -456,117 +465,334 @@
 	}
 </script>
 
-<style lang="scss">
-	@import '../../../components/charge-dialog/recharge.scss';
-	// .rech {
-	// 	width: 90%;
-	// 	margin: auto;
+<style lang="scss" scoped>
+	page {
+		background-image: url('/static/images/navbar-bg.png');
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+	}
+	
 
-	// 	.rech_bottom {
-	// 		margin-top: 25rpx;
-	// 		padding: 20rpx;
-	// 		.bot_title {
-	// 			color: #333;
-	// 			margin-bottom: 25rpx;
-	// 			font-size: 28rpx;
-	// 		}
+	.act_prompt {
+		margin-top: 25rpx;
+		padding: 20rpx 40rpx;
+		font-family: Inter, Inter;
+		font-weight: 400;
+		font-size: 24rpx;
+		line-height: 44rpx;
+		color: #D1D1D1;
 
-	// 		.text {
-	// 			font-size: 24rpx;
-	// 			color: #999;
-	// 			margin-bottom: 12rpx;
-	// 			display: flex;
-	// 		}
+		.pro_title {
+			color: #333;
+			margin-bottom: 25rpx;
+			font-size: 28rpx;
+		}
 
-	// 		.tt {
-	// 			// font-weight: bold;
-	// 			color: $uni-color-error;
-	// 		}
-	// 	}
+		.text {
+			font-size: 24rpx;
+			color: #999;
+			margin-bottom: 12rpx;
+			display: flex;
+		}
 
-	// 	.rech_but {
-	// 		margin-top: 60rpx;
-	// 		padding-bottom: 25rpx;
+		.tt {
+			// font-weight: bold;
+			color: $uni-color-error;
+		}
+	}
 
-	// 		.but {
-	// 			background-color: #FF0066;
-	// 			color: white;
-	// 			height: 60rpx;
-	// 			display: flex;
-	// 			justify-content: center;
-	// 			align-items: center;
-	// 		}
-	// 	}
-	// }
-	// .active {
-	// 	border: 1px solid #ff0066 !important;
-	// 	background-color: #fff2f7;
-	// }
+	.centert-lsty {
+		// background-color: #000;
+		width: 100%;
+		height: 100%;
+		padding: 24rpx 0;
+		padding-top: 0;
+		box-sizing: border-box;
+		position: relative;
 
-	// .activepay {
-	// 	border: 1px solid #ff0066 !important;
-	// }
+		.c-top {
+			padding: 0 20rpx;
+			box-sizing: border-box;
+			width: 100%;
+			height: 88rpx;
+			line-height: 88rpx;
+			// display: flex;
+			// justify-content: space-between;
+			text-align: center;
+			background-color: rgba(253, 234, 240, 1);
 
-	// .act_money {
-	// 	display: flex;
-	// 	flex-wrap: wrap;
-	// 	justify-content: space-between;
+			view {
+				font-size: 28rpx;
+				color: rgba(121, 121, 121, 1);
+			}
 
-	// 	.money {
-	// 		border: 1px solid #747474;
-	// 		margin-top: 15rpx;
-	// 		border-radius: 10rpx;
+			.color-az {
+				font-weight: bold;
+				color: $uni-color-error;
+			}
+		}
 
-	// 		.core {
-	// 			display: flex;
-	// 			flex-direction: column;
-	// 			align-items: flex-start;
-	// 		}
+		.c-yminsoer {
+			width: 100%;
+			padding: 0 24rpx;
+			box-sizing: border-box;
 
-	// 		.top {
-	// 			display: flex;
-	// 			align-items: flex-end;
+			.solonun {
+				margin-top: 24rpx;
+				font-size: 36rpx;
+				color: $uni-color-error;
+				font-weight: bold;
+			}
 
-	// 			.left {
-	// 				font-weight: bold;
-	// 				font-size: 34rpx;
-	// 			}
+			.moinun {
+				margin-top: 24rpx;
+				font-size: 28rpx;
 
-	// 			.right {
-	// 				margin-left: 10rpx;
-	// 			}
-	// 		}
+				span {
+					color: $uni-color-error;
+					font-weight: bold;
+					margin: 0 6rpx;
+				}
+			}
+		}
 
-	// 		.bottom {
-	// 			margin-top: 10rpx;
-	// 			font-size: 22rpx;
-	// 			color: #686868;
-	// 		}
-	// 	}
-	// }
+		.mon-list {
+			width: 100%;
+			padding: 0 24rpx;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			margin-top: 0rpx;
+			// display: grid;
+			grid-gap: 24rpx 24rpx;
+			grid-template-columns: 1fr 1fr;
+			justify-content: space-between;
 
-	// .act_pay {
-	// 	margin-top: 15rpx;
+			.rechargeView_title {
+				font-family: Inter, Inter;
+				font-weight: bold;
+				font-size: 40rpx;
+				padding: 40rpx;
+				border-bottom: 2rpx solid #2A2A2A;
 
-	// 	.pay_box {
-	// 		margin-top: 15rpx;
-	// 		width: 50%;
-	// 		height: 80rpx;
-	// 		border: 1px solid black;
-	// 		border-radius: 8rpx;
-	// 		display: flex;
-	// 		justify-content: center;
-	// 		align-items: center;
-	// 	}
+				span {
+					font-family: Inter, Inter;
+					font-weight: 400;
+					font-size: 28rpx;
+					color: #FFCD03;
+				}
+			}
 
-	// 	.pay_title {
-	// 		color: #888888;
-	// 	}
+			.rechargeView_list {
+				flex: 1;
+				width: 100%;
+				height: 100%;
+				padding-bottom: 25rpx;
+				overflow-y: auto;
 
-	// 	.pay_text {
-	// 		font-size: 26rpx;
-	// 		color: #686868;
-	// 		margin-left: 5rpx;
-	// 	}
-	// }
+				.rechargeView_lists {
+					position: relative;
+					float: left;
+					margin-left: 3%;
+					margin-right: 3%;
+					text-align: center;
+					margin-top: 25rpx;
+					width: 44%;
+					height: 160rpx;
+					line-height: 53rpx;
+					background: #242328;
+					border-radius: 16rpx !important;
+					border: 2rpx solid;
+					border-image: linear-gradient(180deg, rgba(63, 62, 64, 1), rgba(163, 161, 166, 1)) 2 2;
+
+					.rechargeView_percentage {
+						position: absolute;
+						z-index: 99;
+						right: 0;
+						top: 0;
+						text-align: center;
+						line-height: 40rpx;
+						width: 82rpx;
+						height: 40rpx;
+						background: linear-gradient(180deg, #EDC267 0%, #60D2FF 100%);
+						border-radius: 0rpx 16rpx 0rpx 16rpx;
+						font-family: Inter, Inter;
+						font-weight: 400;
+						font-size: 22rpx;
+						color: #000000;
+					}
+
+					image {
+						width: 96rpx;
+						height: 79rpx;
+						position: absolute;
+						z-index: 99;
+						right: 10rpx;
+						bottom: 10rpx;
+					}
+
+					.rechargeView_top {
+						font-family: Inter, Inter;
+						font-weight: normal;
+						font-size: 32rpx;
+						color: #D1D1D1;
+
+						span {
+							font-size: 26rpx;
+						}
+					}
+
+					.rechargeView_cen {
+						font-family: Inter, Inter;
+						font-weight: 400;
+						font-size: 26rpx;
+						color: #FFCD03;
+					}
+
+					.rechargeView_bottom {
+						background: #3F3E40;
+						font-family: Inter, Inter;
+						font-weight: normal;
+						font-size: 30rpx;
+						color: #D1D1D1;
+					}
+				}
+
+				.rechargeView_lists.top1 {
+					text-align: left;
+					padding-left: 20rpx;
+					padding-top: 20rpx;
+					background: linear-gradient(186deg, rgba(255, 224, 157, 0.4) 0%, rgba(237, 194, 103, 0) 100%);
+					border-radius: 16rpx;
+					border: 2rpx solid #EDC267;
+
+					.rechargeView_bottom {
+						background: transparent;
+						font-family: Inter, Inter;
+						font-weight: bold;
+						font-size: 36rpx;
+						color: #EDC267;
+					}
+				}
+
+				.rechargeView_lists.top2 {
+					text-align: left;
+					padding-left: 20rpx;
+					padding-top: 20rpx;
+					background: linear-gradient(186deg, rgba(255, 148, 122, 0.4) 0%, rgba(255, 148, 122, 0) 100%);
+					border-radius: 16rpx;
+					border: 2rpx solid #FF947A;
+
+					.rechargeView_top {
+						color: #FF947A;
+					}
+
+					.rechargeView_bottom {
+						background: transparent;
+						font-family: Inter, Inter;
+						font-weight: bold;
+						font-size: 36rpx;
+						color: #FF947A;
+					}
+				}
+
+				.rechargeView_lists.top3 {
+					.rechargeView_bottom {
+						background: #EDC267;
+						color: #000;
+					}
+				}
+			}
+
+			.moinuns-view {
+				// width: 320rpx;
+				// height: 140rpx;
+				padding: 20rpx;
+				border-radius: 18rpx;
+				border: 1rpx solid $uni-color-bgc;
+				// margin-bottom: 14rpx;
+
+				.mv-two {
+					width: 100%;
+					color: rgba(121, 121, 121, 1);
+					font-size: 26rpx;
+					margin-top: 4rpx;
+				}
+
+				.mv-ones {
+					width: 100%;
+					display: flex;
+
+					span {
+						font-size: 30rpx;
+						font-weight: bold;
+						margin-right: 6rpx;
+					}
+
+					.coloir {
+						margin-left: 6rpx;
+						line-height: 50rpx;
+						color: #999;
+						font-size: 24rpx;
+
+					}
+				}
+			}
+
+			.m-ativoe {
+				background-color: rgba(253, 234, 240, 1);
+				border: 1rpx solid $uni-color-error;
+			}
+		}
+
+		.moinunstile {
+			width: 100%;
+			padding: 0 24rpx;
+			font-size: 28rpx;
+			box-sizing: border-box;
+			color: #666;
+			margin-top: 14rpx;
+		}
+
+		.moinunsdiv {
+			width: 100%;
+			margin-top: 24rpx;
+			padding: 0 24rpx;
+			box-sizing: border-box;
+
+			.ouinmino {
+				width: 280rpx;
+				height: 100rpx;
+				display: flex;
+				// padding:  18rpx;
+				border-radius: 8rpx;
+				border: 1rpx solid $uni-color-error;
+				padding: 20rpx 50rpx;
+				box-sizing: border-box;
+
+				image {
+					width: 60rpx;
+					height: 60rpx;
+				}
+
+				view {
+					font-size: 28rpx;
+					line-height: 54rpx;
+				}
+			}
+		}
+
+		.moninsun-button {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			height: 100rpx;
+			line-height: 100rpx;
+			text-align: center;
+			color: $uni-color-error;
+			font-size: 30rpx;
+			background-color: rgba(253, 234, 240, 1);
+		}
+	}
 </style>

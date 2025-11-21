@@ -10,14 +10,14 @@
 				<image class="right-icon" src="/static/images/gift1.png" mode=""></image>
 			</view>
 			<navigator class="search-box" hover-class="none" url="/pages/home/search">
-				<input type="text" :disabled="true" v-model='query.searchValue' placeholder="Tìm kiếm" />
+				<input type="text" :disabled="true" v-model='query.searchValue'
+					:placeholder="$t(`home.serach.serach_placeholder`)" />
 				<u-icon name="search" color="#999" size="28"></u-icon>
 			</navigator>
 		</view>
 		<view class="swiperItem">
-			<HR_swiper s_type="swiper2" s_style="height:600rpx" :s_list="swiperList" @bindChange="change2"
-				@bindItem="bindItem2">
-			</HR_swiper>
+			<Swiper3D :list="swiperList" @touch="change2">
+			</Swiper3D>
 		</view>
 		<scroll-view class="scroll-view_H" scroll-x="true">
 			<view class="tabs">
@@ -37,23 +37,21 @@
 </template>
 
 <script>
-	import HR_swiper from "@/uni_modules/hongren-swiper/components/hongren-swiper/hongren-swiper.vue";
-
+	import Swiper3D from '@/components/swiper/swiper-3d.vue'
 	export default {
 		components: {
-			HR_swiper
+			Swiper3D
 		},
 		data() {
 			return {
-				swiperList: [
-				],
+				swiperList: [],
 				query: {
 					pageNo: 1,
 					pageSize: 9,
 					sysOrgCode: uni.getStorageSync('sysOrgCode') || '',
 					searchValue: '',
 					dramaClassify: '', //分类id
-					tenantld:uni.getStorageSync('tenantId') || '',
+					tenantld: uni.getStorageSync('tenantId') || '',
 				},
 				total: 0,
 				list: [],
@@ -62,33 +60,27 @@
 		},
 		methods: {
 			tabsChange(info) {
-				console.log(info.id, 'info.id')
 				this.query.dramaClassify = info.id;
 				this.getVideoList();
 			},
 			change2(e) {
-				let {
-					current
-				} = e.detail
-				console.log('change2: ', current);
-			},
-			bindItem2(evt) {
-				let {
-					item
-				} = evt.currentTarget.dataset
-				console.log('bindItem2: ', item);
+				const item = {
+					dramaId: e.id,
+				}
+				uni.navigateTo({
+					url: `/pages/video/videoDetails?item=${JSON.stringify(item)}`
+				})
 			},
 			//获取轮播图
 			getBanner() {
 				this.$request('video.carouselList').then(res => {
 					this.swiperList = res.result.map(item => {
 						return {
-							id: item.id,
-							path: '',
+							id: item.dramaId,
 							image: item.dramaPoster,
 						}
 					})
-					console.log(this.swiperList,'xx')
+					console.log(this.swiperList, 'xx')
 				})
 			},
 			//获取分类列表
@@ -100,25 +92,53 @@
 			//获取列表
 			getVideoList() {
 				this.$request('video.videList', this.query).then(res => {
-					this.list = res.result;
+					this.list = res.result.records;
 					// this.total = res.result.total;
 				})
 			},
-			vidoeInfo(item){
+			vidoeInfo(item) {
 				uni.navigateTo({
-					url:`/pages/video/videoDetails?item=${JSON.stringify(item)}`
+					url: `/pages/video/videoDetails?item=${JSON.stringify(item)}`
 				})
-			}
+			},
+			setTab(){
+				uni.setTabBarItem({
+					index: 0,
+					text: this.$t('tabBar.home')
+				})
+				uni.setTabBarItem({
+					index: 1,
+					text: this.$t('tabBar.recommend')
+				})
+				uni.setTabBarItem({
+					index: 2,
+					text: this.$t('tabBar.reward')
+				})
+				uni.setTabBarItem({
+					index: 3,
+					text: this.$t('tabBar.profile')
+				})
+			},
 		},
 		onLoad() {
 			this.getBanner();
 			this.getCateList();
 			this.getVideoList();
+		},
+		onShow() {
+			this.setTab();
 		}
+
+
 	}
 </script>
 
 <style lang="scss" scoped>
+	.app-container {
+		padding-top: 40rpx;
+		padding-bottom: 50rpx;
+	}
+
 	page {
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;

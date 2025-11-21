@@ -79,13 +79,13 @@
 					console.log("登录", res)
 					if (res.code != 200) {
 						uni.showToast({
-							title: '系统异常登录失败',
+							title: this.$t('toast.sys_error'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
 					} else {
 						uni.showToast({
-							title: '登录成功',
+							title: this.$t('toast.login_success'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
@@ -97,7 +97,6 @@
 						uni.setStorageSync('id', id)
 						uni.setStorageSync('tenantId', tenantId)
 						uni.setStorageSync('sysOrgCode', sysOrgCode)
-						console.log("登录111", res)
 						uni.switchTab({
 							url: '/pages/home/index'
 						})

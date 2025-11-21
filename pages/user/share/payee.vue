@@ -203,17 +203,17 @@
 				
 				if(this.contentCurrent == 1) {
 					if(!obj.real_name) {
-						this.$u.toast('请完善收款信息')
+						this.$u.toast(this.$t('toast.perfect_receipt'))
 						return
 					}
 					if(!obj.card_no && !obj.image) {
-						this.$u.toast('请完善收款信息')
+						this.$u.toast(this.$t('toast.perfect_receipt'))
 						return
 					}
 				} else {
 					const verify = Object.values(obj).every(val => val !== null && val !== undefined && val !== '');
 					if(!verify) {
-						this.$u.toast('请完善收款信息')
+						this.$u.toast(this.$t('toast.perfect_receipt'))
 						return
 					}
 				}
@@ -239,8 +239,10 @@
 			// 删除图片
 			deleteImage(id) {
 				uni.showModal({
-					title: '提示',
-					content: '确认要删除此项？',
+					title: this.$t('model_box.tip'),
+					content: this.$t('model_box.confirm_delete'),
+					confirmText:this.$t('model_box.confirm'),
+					cancelText:this.$t('model_box.cancel'),
 					success: (res) => {
 						if (res.confirm) {
 							if(id === 1) {

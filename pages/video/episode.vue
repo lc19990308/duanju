@@ -82,19 +82,7 @@
 				dramaId: this.dramaId,
 				filmDrama: {},
 				totalEpisodes: null, // Replace with your actual totalEpisodes value
-				list: [{
-						name: '1-30'
-					},
-					{
-						name: '31-60'
-					},
-					{
-						name: '61-90'
-					},
-					{
-						name: '91-120'
-					}
-				],
+				list: [],
 				pageNo: 1,
 				pageSize: 120,
 				jumuIndex: 0,
@@ -196,13 +184,13 @@
 				// }
 				console.log("this.剧集切换", item)
 				var mainIndex = 0
-				if(index>0){
-					mainIndex = index-1
+				if (index > 0) {
+					mainIndex = index - 1
 				}
-				if(this.SeriesList[mainIndex].unlockStatus != 1 ){
+				if (this.SeriesList[mainIndex].unlockStatus != 1) {
 					uni.showToast({
-						title: `请按顺序解锁`,
-						icon: 'success',
+						title: this.$t('toast.please_unlock'),
+						icon: 'none',
 						duration: 2000,
 					})
 					return
@@ -210,7 +198,6 @@
 				this.sid = item.dramaSeries
 				this.moindex = item.dramaSeries
 				this.jumuIndex = index
-				console.log(index); // 输出：2
 				this.$emit('changeValue', index);
 				this.$refs.popups.close();
 			},
@@ -226,7 +213,6 @@
 
 			// 剧集列表
 			filmDramaSeriesList() {
-				console.log("111111")
 				this.$request('video.filmDramaSeriesList', {
 					pageNo: this.pageNo,
 					pageSize: this.pageSize,
@@ -236,12 +222,12 @@
 					console.log("获取剧集列表11111111111111111111111111", res)
 					if (res.code != 200) {
 						uni.showToast({
-							title: '系统异常',
+							title: this.$t('toast.sys_error'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
 					} else {
-						this.SeriesList = res.result
+						this.SeriesList = res.result.records
 					}
 				}).catch(err => {
 					console.log(err)
@@ -250,12 +236,12 @@
 			// 剧目详情
 			filmDramaById() {
 				this.$request('video.filmDramaById', {
-					dramaId: this.dramaId
+					id: this.dramaId
 				}).then(res => {
 					console.log("获取剧目详情", res)
 					if (res.code != 200) {
 						uni.showToast({
-							title: '系统异常',
+							title: this.$t('toast.sys_error'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});

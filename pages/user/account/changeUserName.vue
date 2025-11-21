@@ -1,7 +1,8 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="Thay đổi tên" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
-			:autoBack="true" :placeholder='true' @rightClick='rightClick' rightText='lưu' />
+		<statusBar />
+		<u-navbar :title="$t(`changeUser.page_title`)" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+			:autoBack="true"  :fixed='false' :placeholder='true' @rightClick='rightClick' :rightText='$t(`changeUser.navbar_right`)' />
 		<view class="form">
 			<view class="upload-box" @tap="uploadImage">
 				<view class="avatar">
@@ -13,13 +14,13 @@
 					</view>
 				</view>
 				<view class="upload-tips">
-					Upload ảnh đại diện
+					{{$t(`changeUser.upload_text`)}}
 				</view>
 			</view>
 			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="Tên người dùng" prop="realname" :borderBottom='false'>
-					<u-input v-model="form.realname" border='none' placeholder='Tên người dùng'
+				<u-form-item :label="$t(`changeUser.form_item_label`)" prop="realname" :borderBottom='false'>
+					<u-input v-model="form.realname" border='none' :placeholder='$t(`changeUser.form_item_value`)'
 						:placeholderStyle='placeholderStyle' />
 				</u-form-item>
 			</u--form>
@@ -76,7 +77,7 @@
 				this.$request('user.appUpdateProfile', {
 					...this.form
 				}).then(res => {
-					this.$u.toast('操作成功！')
+					uni.$u.toast(this.$t('toast.msg_success'))
 					this.getUserInfo();
 				})
 			},

@@ -155,7 +155,7 @@
 		methods: {
 			...mapActions('user', ['getUserInfo']),
 			gotoPage(url) {
-				if(!this.token) return uni.showToast({ title: '请先登录', icon: 'none' })
+				if(!this.token) return uni.showToast({ title: this.$t('toast.please_log'), icon: 'none' })
 				uni.navigateTo({ url })
 			},
 			// 获取积分套餐列表
@@ -176,8 +176,8 @@
 			},
 			// 充值
 			recharge(type, id, price) {
-				if(!this.token) return uni.showToast({ title: '请先登录', icon: 'none' })
-				uni.showToast({ title: '您暂无开通APP支付功能', icon: 'none' })
+				if(!this.token) return uni.showToast({ title: this.$t('toast.please_log'), icon: 'none' })
+				uni.showToast({ title: this.$t('toast.no_app_pay'), icon: 'none' })
 			}
 		}
 	}

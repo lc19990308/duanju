@@ -99,7 +99,7 @@
 			},
 			cslink(){
 				 uni.showToast({
-				        title: '加载中',
+				        title: this.$t('toast.loading'),
 				        icon: 'loading',
 				        duration: 2000,
 				        position: 'bottom'
@@ -194,7 +194,7 @@
 				if (!srcAppid || !dramaId) {
 					wx.showToast({
 						icon: 'none',
-						title: '请输入参数'
+						title: this.$t('toast.input_msg')
 					})
 					return
 				}

@@ -1,14 +1,16 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="Liên hệ h hỗ trợ khách hàng" bgColor='transparent' :titleStyle='titleStyle'
-			leftIconColor='#fff' :autoBack="true" :placeholder='true' />
+		<statusBar />
+		<u-navbar :title="$t(`language.page_title`)" :fixed='false' bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+			:autoBack="true" :placeholder='true' />
 		<view class="issue-card">
 			<u-radio-group v-model="value" iconPlacement="right">
-				<u-radio activeColor="#FFCD03" name='Tiếng Anh' label='Tiếng Anh' labelColor='#d1d1d1'></u-radio>
-				<u-radio activeColor="#FFCD03" name='Việt Nam' label="Việt Nam" labelColor='#d1d1d1'></u-radio>
+				<u-radio activeColor="#FFCD03" name='zh_CN' :label='$t(`language.language_cn`)' labelColor='#d1d1d1' />
+				<u-radio activeColor="#FFCD03" name='vi_VN' :label='$t(`language.language_vi`)' labelColor='#d1d1d1' />
+				<u-radio activeColor="#FFCD03" name='zh_EN' :label='$t(`language.language_en`)' labelColor='#d1d1d1' />
 			</u-radio-group>
 		</view>
-		<u-button class="submt-btn" @click="submit">đăng ký</u-button>
+		<u-button class="submt-btn" @click="submit">{{$t(`language.submit_btn`)}}</u-button>
 	</view>
 </template>
 
@@ -26,17 +28,32 @@
 			}
 		},
 		methods: {
-			submit(){
-				if(this.value){
+			submit() {
+				if (this.value) {
+					this.$i18n.locale = this.value;
+					localStorage.setItem('lang', this.value); 
+					uni.$u.toast(this.$t('toast.msg_success'))
 					setTimeout(()=>{
-						uni.$u.toast('操作成功！');
-						uni.navigateBack()
+						uni.navigateBack();
 					},500)
-				}else{
-					uni.$u.toast('请选择语言设置！');
+				} else {
+					uni.$u.toast(this.$t('toast.picker_language_settings'));
 				}
-			}
+			},
+			changeLang() {
+				switch (this.value) {
+					case 'zh_CN':
+						break;
+					case 'vi_VN':
+						break;
+					case 'en_US':
+						break;
+				}
+			},
 		},
+		onLoad() {
+			this.value = uni.getStorageSync('lang');
+		}
 	}
 </script>
 

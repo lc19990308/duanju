@@ -1,5 +1,9 @@
 <template>
 	<view class="page_content">
+		<statusBar />
+		<u-navbar bgColor='transparent' :fixed='false' :title='$t(`my.history`)' :titleStyle='titleStyle' leftIconColor='#fff'
+			:autoBack="true" :placeholder='true'>
+		</u-navbar>
 		<view class="head_content">
 			<view class="tabs_box">
 				<u-tabs :scrollable="false" :lineWidth="0" :list="contentList" :current="contentCurrent"
@@ -12,17 +16,17 @@
 				@change="changeContent($event, 2)">
 				<swiper-item style="height: 100%;" v-for="(item, index) in contentList" :key="item.id">
 					<scroll-view style="height: 100%" :scroll-y="true" :refresher-enabled="true"
-						:refresher-threshold="100" :refresher-triggered="refreshStatus"
+						:refresher-threshold="100" :refresher-triggered="refreshStatus" refresher-background='transparent'
 						@refresherrefresh="refreshHandle" @scrolltolower="bottomHandle" @scroll="scrollHandle">
 						<view class="content_box">
 							<view class="boxTitle" v-if="contentCurrent == 0">
-								<view class="text">正在追{{item.total}}部短剧</view>
+								<view class="text">{{$t('history.currently_in_pursuit')}}{{item.total}}{{$t('history.total_views')}}</view>
 								<view class="icon">
 									<!-- <u-icon name="edit-pen" color="#000000" size="26"></u-icon>编辑 -->
 								</view>
 							</view>
 							<view class="boxTitle" v-if="contentCurrent == 1">
-								<view class="text">共浏览了{{item.total}}部短剧</view>
+								<view class="text">{{$t('history.total_views')}}{{item.total}}{{$t('history.total_views')}}</view>
 								<!-- <view class="icon">
 									<u-icon name="edit-pen" color="#000000" size="26"></u-icon>编辑
 								</view> -->
@@ -39,7 +43,7 @@
 									</view>
 									<view class="info">
 										<view class="title u-line-1">{{ lItem.dramaName}}</view>
-										<view class="text">观看至第{{ lItem.dramaSeries }}集</view>
+										<view class="text">{{$t('history.viewing_up')}}{{ lItem.dramaSeries }}{{$t('history.unit')}}</view>
 									</view>
 								</view>
 							</view>
@@ -52,7 +56,7 @@
 									<view class="info">
 										<view class="title u-line-1">{{ lItem.dramaName }}</view>
 										<!-- <view class="text1 u-line-2">{{ lItem.video.description }}</view> -->
-										<view class="text2">观看至第{{ lItem.dramaSeries }}集</view>
+										<view class="text2">{{$t('history.viewing_up')}}{{ lItem.dramaSeries }}{{$t('history.unit')}}</view>
 									</view>
 									<view class="btns">
 										<view class="button" v-if="indexId == 2"
@@ -61,7 +65,7 @@
 											<!-- @click.stop="handleCollect(lItem.vid, lItem.is_favorite, lIndex)" -->
 											<u-icon :name="lItem.is_favorite == 1 ? 'star-fill' : 'star'" color="#eee"
 												size="18"></u-icon>
-											<text class="text">{{ lItem.is_favorite == 1 ? '已追剧' : '前往追剧' }}</text>
+											<text class="text">{{ lItem.is_favorite == 1 ? t('history.binge_watching') : $t('history.go_binge_watching') }}</text>
 										</view>
 									</view>
 								</view>
@@ -81,18 +85,18 @@
 	const PlayerManager = require("../../utils/playerManager.js");
 	// const playletPlugin = requirePlugin("playlet-plugin");
 	let playletPlugin;
-	
+
 	// 检查当前是否在小程序环境中
 	if (typeof wx !== 'undefined' && wx.getSystemInfo) {
-	    try {
-	        // 在小程序中执行 requirePlugin
-	        // playletPlugin = requirePlugin("playlet-plugin");
-	    } catch (error) {
-	        // console.error('Failed to requirePlugin in WeChat Mini Program:', error);
-	    }
+		try {
+			// 在小程序中执行 requirePlugin
+			// playletPlugin = requirePlugin("playlet-plugin");
+		} catch (error) {
+			// console.error('Failed to requirePlugin in WeChat Mini Program:', error);
+		}
 	} else {
-	    // 在其他环境中的处理
-	    console.log('This code is executed only in WeChat Mini Program environment.');
+		// 在其他环境中的处理
+		console.log('This code is executed only in WeChat Mini Program environment.');
 	}
 	export default {
 		data() {
@@ -109,7 +113,7 @@
 				},
 				contentList: [{
 						id: 1,
-						name: '在追',
+						name: this.$t('my.tabs_item1'),
 						type: 'log',
 						list: [],
 						page: 1,
@@ -119,7 +123,7 @@
 					},
 					{
 						id: 2,
-						name: '历史',
+						name: this.$t('my.tabs_item2'),
 						type: 'favorite',
 						list: [],
 						page: 1,
@@ -159,19 +163,25 @@
 						nu: '70集'
 					},
 				],
-				indexId: 1
+				indexId: 1,
+				titleStyle: {
+					color: '#fff',
+					fontFamily: 'PingFang SC, PingFang SC',
+					fontWeight: 800,
+					color: '#FFFFFF',
+				},
 			}
 		},
 		onLoad() {
 			var memberId = uni.getStorageSync('id')
-			if(!memberId){
+			if (!memberId) {
 				uni.redirectTo({
-					url:'/pages/user/login/login'
+					url: '/pages/user/login/login'
 				})
 				return
 			}
 			// this.getPlayRecordList()
-			
+
 		},
 		onShow() {
 			this.getFilmLikeCollectList()
@@ -194,88 +204,32 @@
 			},
 			// 获取追剧列表
 			getFilmLikeCollectList() {
+				// contentCurrent
 				this.$request('video.filmLikeCollectList', {
-					memberId: uni.getStorageSync('id')
+					memberId: uni.getStorageSync('id'),
+					pageNo:this.contentList[this.contentCurrent].page,
+					pageSize:this.contentList[this.contentCurrent].pagesize,
+					
 				}).then(res => {
 					console.log(res,
 						"2追剧列表11111111111111111111111111111111111111111111111111111111111111111111111")
 					if (res.code == 200) {
-						this.contentList[0].list = res.result
-						this.contentList[0].total = res.result.length
+						this.contentList[0].list = res.result.records
+						this.contentList[0].total = res.result.total
 					}
 				})
 			},
 			// 获取观看历史列表
 			getFilmViewHistoryList() {
 				this.$request('video.filmViewHistoryList', {
-					memberId: uni.getStorageSync('id')
+					memberId: uni.getStorageSync('id'),
+					pageNo:this.contentList[this.contentCurrent].page,
+					pageSize:this.contentList[this.contentCurrent].pagesize,
 				}).then(res => {
-					console.log(res,
-						"观看历史列表11111111111111111111111111111111111111111111111111111111111111111111111")
-					if (res.code == 200) {
-						this.contentList[1].list = res.result
-						this.contentList[1].total = res.result.length
-					}
+					this.contentList[1].list = res.result.records
+					this.contentList[1].total = res.result.total
 				})
 			},
-			// 	收藏
-			// handleCollect(vid, collect, index) {
-			// 	if (collect == 0) {
-			// 		const obj = {
-			// 			vid,
-			// 			type: 'favorite'
-			// 		}
-			// 		this.$request('video.addRecord', obj, false).then(res => {
-			// 			if (res.code === 1) {
-			// 				this.contentList[this.contentCurrent].list[index].is_favorite = 1
-			// 			}
-			// 		})
-			// 	} else {
-			// 		const obj = {
-			// 			ids: vid,
-			// 			type: 'favorite'
-			// 		}
-			// 		this.$request('video.deleteRecord', obj, false).then(res => {
-			// 			if (res.code === 1) {
-			// 				this.contentList[this.contentCurrent].list[index].is_favorite = 0
-			// 			}
-			// 		})
-			// 	}
-			// },
-			// 获取播放记录
-			// getPlayRecordList() {
-			// 	const obj = {
-			// 		type: this.contentList[this.contentCurrent].type,
-			// 		page: this.contentList[this.contentCurrent].page,
-			// 		pagesize: this.contentList[this.contentCurrent].pagesize
-			// 	}
-			// 	this.contentList[this.contentCurrent].status = 'loading'
-			// 	this.$request('video.getRecord', obj).then(res => {
-			// 		if (res.code === 1) {
-			// 			if (res.data && res.data.length) {
-			// 				this.contentList[this.contentCurrent].list = this.contentList[this.contentCurrent].list
-			// 					.concat(res.data)
-			// 				if (res.data.length < this.contentList[this.contentCurrent].pagesize) {
-			// 					this.contentList[this.contentCurrent].status = 'nomore'
-			// 				} else {
-			// 					this.contentList[this.contentCurrent].status = 'loadmore'
-			// 				}
-			// 			} else {
-			// 				this.contentList[this.contentCurrent].page > 1 && this.contentList[this.contentCurrent]
-			// 					.page--
-			// 				const timer = setTimeout(() => {
-			// 					this.contentList[this.contentCurrent].status = 'nomore'
-			// 					clearTimeout(timer)
-			// 				}, 500)
-			// 			}
-			// 		}
-			// 		this.refreshStatus = false
-			// 		this.isRefresh = false
-			// 	}).catch(err => {
-			// 		this.refreshStatus = false
-			// 		this.isRefresh = false
-			// 	})
-			// },
 			// 下拉刷新
 			refreshHandle() {
 				this.refreshStatus = true
@@ -323,6 +277,8 @@
 			// 切换分类
 			changeContent(e, i) {
 				this.indexId = i
+				this.contentList[0].page = 1;
+				this.contentList[1].page = 1;
 				const current = i === 1 ? e.index : e.detail.current
 				if (this.contentCurrent === current) {
 					return;
@@ -340,10 +296,15 @@
 </script>
 
 <style lang="scss" scoped>
+	page {
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+	}
+
 	.page_content {
-		overflow: hidden;
-		background-color: #000;
 		color: #fff;
+
 		.head_content {
 			margin-top: 88rpx;
 

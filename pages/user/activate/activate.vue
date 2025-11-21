@@ -1,115 +1,39 @@
 <template>
 	<view class="act">
-		<!-- <view class="act_money">
-			<view class="money" :style="{width:width}" @click="selectMember(index,item)"
-				v-for="(item,index) in memberList" :key="index" :class="{ 'active': activeIndex === index }">
-				<u-cell :border="false">
-					<view slot="title">
-						<view class="core">
-							<view class="top">
-								<view class="left">
-									{{item.packageMoney}}元
-								</view>
-								<view class="right">
-									<u--text :text="'原价'+item.packagePrice+'元'" :size="13" :decoration="linethrough"
-										color="#c6c6c6"></u--text>
-								</view>
-							</view>
-							<view class="bottom">
-								{{item.packageDescribe}}
-							</view>
-						</view>
-					</view>
-				</u-cell>
-			</view>
-		</view> -->
-		<!-- #ifndef MP-WEIXIN -->
-		<!-- <view class="paytype">
-			<view class="box" :class="item.value == payDefValue ? 'active':''" v-for="item in payType"
-			<view class="box" :class="item.value == payDefValue ? 'active':''" v-for="item in payType"
-				@click="clickPayBtn(item.value)">
-				<u-icon :name="item.icon" :color="item.color" class="icon" size="26"></u-icon>
-				<text class="font">{{item.name}}</text>
-			</view>
-		</view> -->
-		<!-- #endif -->
-		<!-- <WenTag :memberlist="memberList" @active="handleToActive" @activepay="handleToactivePay" :width="width"
-			:linethrough="linethrough" :activeIndex="activeIndex" :activeIndexPay="activeIndexPay"></WenTag> -->
+		<statusBar />
+		<u-navbar :title="$t(`member.member_title`)" :fixed='false' bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+			:autoBack="true" :placeholder='true'>
+		</u-navbar>
 		<view class="activate_t">
-			<image src="/static/images/avatar.png" mode=""></image>
+			<image :src="avatar" mode=""></image>
 			<view>
-				<span>剧友-959472947</span><br>
-				Thành viên chưa mở
+				<text>{{nickname}}</text><br>
+				<!-- Thành viên chưa mở -->
 			</view>
 		</view>
 		<view class="act_equity">
 			<view class="equity_title">
-				Thành viên xem phim miễn phí
+				{{$t('member.member_title')}}
 			</view>
 			<view class="rechargeView_list">
-				<view :class="['rechargeView_lists', 'top' + (index + 1)]" @click="selectMember(index,item)" v-for="(item,index) in memberList" :key="index">
+				<view :class="['rechargeView_lists', 'top' + (index + 1)]" @click="selectMember(index,item)"
+					v-for="(item,index) in memberList" :key="index">
 					<!-- <image src="/static/images/002.png" mode=""></image> -->
 					<image :src="'/static/images/00' + (index + 1) + '.png'" mode=""></image>
 					<view class="rechargeView_cen">{{item.packageName}}</view>
-					<view class="rechargeView_bottom">${{item.packagePrice}}</view>
+					<view class="rechargeView_bottom">{{$t('currency')}} {{item.packagePrice}}</view>
 				</view>
-				
 			</view>
-			<!-- <view class="equity">
-				<view class="equity_box" v-for="(item,index) in equityList" :key="index">
-					<view class="equity_left">
-						<image class="img" :src="item.equityIcon" mode="aspectFit"></image>
-					</view>
-					<view class="equity_right">
-						<view class="right_title">
-							{{item.equityName}}
-						</view>
-						<view class="right_text">
-							{{item.equityDescribe}}
-						</view>
-					</view>
-				</view>
-			</view> -->
 		</view>
 		<view class="act_but">
-			<button class="but" @click="handleToActive">Mở thành viên</button>
+			<button class="but" @click="handleToActive">{{$t(`member.btn_text`)}}</button>
 		</view>
 		<view class="act_prompt">
-			<view>Vui lòng đọc kỹ các điều khoản sau trước khi mua</view>
-			1. Để trở thành thành viên, người dùng phải điền đầy đủ, chính xác và đầy đủ thông tin đăng ký theo quy trình đăng ký do Nền tảng cung cấp, bao gồm nhưng không giới hạn ở tên người dùng, mật khẩu, thông tin chứng minh thư hợp lệ, địa chỉ email, số điện thoại di động, v.v.
-			<br>
-			<br>2. Người dùng cam kết rằng thông tin đăng ký mà họ cung cấp là trung thực và hợp lệ và tự chịu trách nhiệm về mọi hậu quả phát sinh từ việc cung cấp thông tin sai lệch.
-			<br>
-			<br>3. Nền tảng có quyền xem xét đơn đăng ký của người dùng và có quyền từ chối hoặc đình chỉ việc phê duyệt đơn đăng ký, đặc biệt đối với các ứng dụng có thể vi phạm luật pháp và quy định, quy tắc của Nền tảng hoặc có nguy cơ bảo mật.
-			<br>
-			<br>4. Người dùng được coi là đồng ý với tất cả các điều khoản của Ghi chú này và trở thành thành viên của Nền tảng này sau khi hoàn tất đăng ký và kích hoạt Tài khoản.
-			<!-- <view class="pro_title">
-				温馨提示
-			</view>
-			<view class="text">
-				1.充值的开通的VIP会员仅限于本剧场使用。
-			</view>
-			<view class="text">
-				2.在播剧目总数：<span class="tt">{{videoList.length || 0}}</span>。
-			</view>
-			<view class="text">
-				3.开通VIP会员前，请先阅读<navigator url="/pages/user/about/about" hover-class="navigator-hover">
-					<span class="tt">《会员服务协议》</span>。
-				</navigator>
-			</view>
-			<view class="text">
-				4.未满18周岁的未成年人应在法定监护人同意后进行充值。
-			</view>
-			<view class="text">
-				5.充值的VIP属于虚拟商品，不支持退换。
-			</view>
-			<view class="text">
-				6.开通VIP会员代表您已同意<navigator url="/pages/user/about/about" hover-class="navigator-hover">
-					<span class="tt">《用户协议》</span>和<span class="tt">《隐私政策》</span>.
-				</navigator>
-			</view> -->
+			<view>{{$t(`member.tips_title`)}}</view>
+			<view v-html="$t(`member.tips_text`)"></view>
+
 		</view>
-		
+
 		<!-- 统一支付组件，注意：vue3下ref不可以等于组件名，因此这里ref="pay" 而不能是 ref="uniPay" -->
 		<uni-pay ref="pay" :adpid="adpid" return-url="/pages/order-detail/order-detail" logo="/static/logo.png"
 			@success="onSuccess" @create="onCreate"></uni-pay>
@@ -117,12 +41,13 @@
 </template>
 
 <script>
+	
 	import apiMoen from '../../../utils/config.js';
 	const jweixin = require('jweixin-module')
 	import WenTag from '../../../components/tag-select/tag-select.vue'
 	export default {
 		components: {
-			WenTag
+			WenTag,
 		},
 		data() {
 			return {
@@ -173,8 +98,18 @@
 					sysOrgCode: uni.getStorageSync('sysOrgCode'),
 					dramaClassify: "", //短剧分类
 					dramaChannel: "", //频道分类
+					pageNo:1,
+					pageSize:10,
 				},
-				videoList: []
+				videoList: [],
+				titleStyle: {
+					color: '#fff',
+					fontFamily: 'PingFang SC, PingFang SC',
+					fontWeight: 800,
+					color: '#FFFFFF',
+				},
+				nickname:'',
+				avatar:'',
 			};
 		},
 		onLoad() {
@@ -183,30 +118,13 @@
 			this.getVipPackageList(this.tenantId, this.sysOrgCode)
 			this.handleToEquityList(this.tenantId, this.sysOrgCode)
 			// this.getWxCode()
-			this.getVideoList()
 			this.selectMember()
+			this.getUserInfo();
 		},
 		methods: {
 			//选择支付类型
 			clickPayBtn(value) {
 				this.payDefValue = value
-			},
-			// 获取视频列表的长度
-			getVideoList() {
-				this.$request('video.filmDramaList', this.videoQuery).then(res => {
-					// console.log("视频列表:", res);
-					if (res.code != 200) {
-						uni.showToast({
-							title: '视频列表获取失败',
-							icon: 'none',
-							duration: 2000 // 提示框显示时长
-						});
-					}
-					this.videoList = res.result
-					console.log("this.videoList视频列表:", this.videoList);
-				}).catch(err => {
-					console.log(err)
-				})
 			},
 			// VIP充值套餐列表
 			getVipPackageList(tenantId, sysOrgCode) {
@@ -218,38 +136,33 @@
 					if (res.code == 200) {
 						this.memberList = res.result
 					}
-				}).catch(res => {
-					console.log(res);
 				})
 			},
 			// 获取用户选择数据
 			selectMember(index, item) {
 				this.activeIndex = index;
 				this.selectMemberVip = item
-				console.log(index, item.id);
-				console.log(item, "item列表");
 			},
 			// 微信支付/支付宝支付
 			handleToActive() {
-				// console.log("获得的数据",res);
 				if (this.selectMemberVip == undefined) {
 					uni.showToast({
 						icon: 'none',
-						title: '请先选择开通会员套餐'
+						title: this.$t('toast.open_member')
 					})
-				}else{
+				} else {
 					var data = {
 						rechargeId: this.selectMemberVip.id, //充值id 即是套餐id
 						memberId: uni.getStorageSync('id'), //会员id
-						sysOrgCode:  uni.getStorageSync('sysOrgCode'), //部门id
+						sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门id
 						tenantId: uni.getStorageSync('tenantId'), //运营主体公司id
-						platformType: 2,//1-APP支付,1-JSAPI支付,2-Native支付,3-H5支付
-						payMethod:'wxpay',
-						openId:uni.getStorageSync('openid'),
-						runProgramType:2 //支付平台类型(1.小程序,2.公众号)
+						platformType: 2, //1-APP支付,1-JSAPI支付,2-Native支付,3-H5支付
+						payMethod: 'wxpay',
+						openId: uni.getStorageSync('openid'),
+						runProgramType: 2 //支付平台类型(1.小程序,2.公众号)
 					}
 					this.$request('wchatapi.rechargeVip', data).then(res => {
-						console.log("res获得的数据", res);
+
 						this.monbtnonve(res)
 						return
 						this.order_no = `test` + Date.now();
@@ -257,7 +170,8 @@
 						// 发起支付
 						this.$refs.pay.createOrder({
 							provider: this.payDefValue, // 支付供应商
-							total_fee: this.selectMemberVip.packageMoney * 100, // 支付金额，单位分 100 = 1元（注意：因为是前端传的，此参数可能会被伪造，回调时需要再校验下是否和自己业务订单金额一致）
+							total_fee: this.selectMemberVip.packageMoney *
+								100, // 支付金额，单位分 100 = 1元（注意：因为是前端传的，此参数可能会被伪造，回调时需要再校验下是否和自己业务订单金额一致）
 							order_no: this.order_no, // 业务系统订单号（即你自己业务系统的订单表的订单号）
 							out_trade_no: this.out_trade_no, // 插件支付单号
 							description: this.selectMemberVip.packageName, // 支付描述
@@ -268,72 +182,72 @@
 					})
 				}
 			},
-			monbtnonve(res){
+			monbtnonve(res) {
 				// 是微信浏览器
-				  // 使用微信支付
-				  let self = this;
-				  jweixin.config({
-				    //全局参数配置
-				    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-				    appId: apiMoen.gzhAppid, // 必填，公众号的唯一标识
-				    timestamp: res.result.timeStamp, // 必填，生成签名的时间戳
-				    nonceStr: res.result.nonceStr, // 必填，生成签名的随机串
-				    signature: res.result.paySign, // 必填，签名，见附录1
-				    jsApiList: ["chooseWXPay"], // 必填
-				  });
-				  jweixin.ready(function () {
-				    //预请求，看能否发起微信支付
-				    jweixin.checkJsApi({
-				      //判断当前版本是否支持指定js接口
-				      jsApiList: ["chooseWXPay"], // 需要检测的JS接口列表
-				      success: function (res) {
-				        console.log("成功信息1");
-				        console.log(res);
-				      },
-				      fail: function (res) {
-				        console.log("失败信息1");
-				        console.log(res);
-				      },
-				    });
-				
-				    jweixin.chooseWXPay({
-				      //发起一个微信的支付请求
-				      timestamp: res.result.timeStamp, // 支付签名时间戳
-				      nonceStr: res.result.nonceStr, // 支付签名随机串，不长于 32 位
-				      package: res.result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-				      signType: res.result.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-				      paySign: res.result.paySign, // 支付签名,与签名是一个东西
-				      success: async function (res) {
-				        console.log(res, "成功信息2");
-						uni.showToast({
-							icon: 'none',
-							title: '会员开通成功',
-							duration:2000
-						})
-						// 刷新列表
-						setTimeout(function() {
-							uni.navigateBack({
-								delta: 1
+				// 使用微信支付
+				let self = this;
+				jweixin.config({
+					//全局参数配置
+					debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					appId: apiMoen.gzhAppid, // 必填，公众号的唯一标识
+					timestamp: res.result.timeStamp, // 必填，生成签名的时间戳
+					nonceStr: res.result.nonceStr, // 必填，生成签名的随机串
+					signature: res.result.paySign, // 必填，签名，见附录1
+					jsApiList: ["chooseWXPay"], // 必填
+				});
+				jweixin.ready(function() {
+					//预请求，看能否发起微信支付
+					jweixin.checkJsApi({
+						//判断当前版本是否支持指定js接口
+						jsApiList: ["chooseWXPay"], // 需要检测的JS接口列表
+						success: function(res) {
+							console.log("成功信息1");
+							console.log(res);
+						},
+						fail: function(res) {
+							console.log("失败信息1");
+							console.log(res);
+						},
+					});
+
+					jweixin.chooseWXPay({
+						//发起一个微信的支付请求
+						timestamp: res.result.timeStamp, // 支付签名时间戳
+						nonceStr: res.result.nonceStr, // 支付签名随机串，不长于 32 位
+						package: res.result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+						signType: res.result.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+						paySign: res.result.paySign, // 支付签名,与签名是一个东西
+						success: async function(res) {
+							console.log(res, "成功信息2");
+							uni.showToast({
+								icon: 'none',
+								title: this.$t('toast.member_open_success'),
+								duration: 2000
 							})
-						}, 2000);
-				      },
-				      cancel: function (res) {
-				        console.log(res, "取消信息2");
-						uni.showToast({
-							icon: 'none',
-							title: '支付取消'
-						})
-					
-				      },
-				      fail: function (res) {
-				        console.log(res, "失败信息2");
-				      },
-				    });
-				  });
-				
-				  jweixin.error(function (res) {
-				    console.log(res, "失败信息3");
-				  });
+							// 刷新列表
+							setTimeout(function() {
+								uni.navigateBack({
+									delta: 1
+								})
+							}, 2000);
+						},
+						cancel: function(res) {
+							console.log(res, "取消信息2");
+							uni.showToast({
+								icon: 'none',
+								title: '支付取消'
+							})
+
+						},
+						fail: function(res) {
+							console.log(res, "失败信息2");
+						},
+					});
+				});
+
+				jweixin.error(function(res) {
+					console.log(res, "失败信息3");
+				});
 			},
 			//支付成功的回调
 			paySuccess(e) {
@@ -528,56 +442,25 @@
 				}).catch(res => {
 					console.log(res);
 				})
-			}
+			},
+			getUserInfo() {
+				this.$request('user.getUserInfo').then(res => {
+					const result = res.result.userInfo;
+					this.nickname = result.realname;
+					this.avatar = result.avatar;
+	
+				})
+			},
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	// .paypage {
-	// 	padding: 30rpx;
-
-	// 	.goodsList {
-	// 		margin-top: 30rpx;
-	// 	}
-
-	// 	.paytype {
-	// 		// @include flex-box();
-
-	// 		.box {
-	// 			width: 49%;
-	// 			height: 75rpx;
-	// 			background: #fff;
-	// 			border-radius: 10rpx;
-	// 			// @include flex-box-set();
-	// 			border: 1px solid #fff;
-	// 			filter: grayscale(100%);
-
-	// 			.font {
-	// 				padding-left: 10rpx;
-	// 			}
-	// 		}
-
-	// 		.box:first-child.active {
-	// 			border-color: #1578FF;
-	// 			color: #1578FF;
-	// 			filter: grayscale(0%);
-	// 		}
-
-	// 		.box:last-child.active {
-	// 			border-color: #04C15F;
-	// 			color: #04C15F;
-	// 			filter: grayscale(0%);
-	// 		}
-	// 	}
-
-	// 	.payTabbar {
-	// 		position: fixed;
-	// 		width: 100%;
-	// 		bottom: 0;
-	// 		left: 0;
-	// 	}
-	// }
+	page{
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+	}
 	.paytype {
 		display: flex;
 		// background-color: #333;
@@ -621,7 +504,6 @@
 	}
 
 	.act {
-		width: 90%;
 		margin: auto;
 
 		&_equity {
@@ -785,6 +667,7 @@
 			margin-left: 5rpx;
 		}
 	}
+
 	.act {
 		width: 100%;
 		padding: 0 40rpx;
@@ -792,15 +675,16 @@
 		overflow-y: auto;
 		padding-top: 40rpx;
 		height: 100%;
-		background-color: #000;
 	}
+
 	.act_prompt {
-		
+
 		font-family: Inter, Inter;
 		font-weight: 400;
 		font-size: 24rpx;
 		line-height: 44rpx;
 		color: #D1D1D1;
+
 		view {
 			font-family: Inter, Inter;
 			font-weight: 400;
@@ -808,8 +692,9 @@
 			color: #FFFFFF;
 		}
 	}
+
 	.act_but {
-		
+
 		.but {
 			height: 88rpx;
 			background: #EDC267;
@@ -820,18 +705,21 @@
 			color: #000000;
 		}
 	}
+
 	.equity_title {
 		font-family: Inter, Inter;
 		font-weight: bold;
 		font-size: 36rpx;
 		color: #D1D1D1;
 	}
+
 	.rechargeView_list {
 		flex: 1;
 		width: 100%;
 		height: 100%;
 		padding-bottom: 25rpx;
 		overflow-y: auto;
+
 		.rechargeView_lists {
 			position: relative;
 			float: left;
@@ -846,6 +734,7 @@
 			border-radius: 16rpx !important;
 			border: 2rpx solid;
 			border-image: linear-gradient(180deg, rgba(63, 62, 64, 1), rgba(163, 161, 166, 1)) 2 2;
+
 			.rechargeView_percentage {
 				position: absolute;
 				z-index: 99;
@@ -855,13 +744,14 @@
 				line-height: 40rpx;
 				width: 82rpx;
 				height: 40rpx;
-				background: linear-gradient( 180deg, #EDC267 0%, #60D2FF 100%);
+				background: linear-gradient(180deg, #EDC267 0%, #60D2FF 100%);
 				border-radius: 0rpx 16rpx 0rpx 16rpx;
 				font-family: Inter, Inter;
 				font-weight: 400;
 				font-size: 22rpx;
 				color: #000000;
 			}
+
 			image {
 				width: 96rpx;
 				height: 79rpx;
@@ -870,21 +760,25 @@
 				right: 10rpx;
 				bottom: 10rpx;
 			}
+
 			.rechargeView_top {
 				font-family: Inter, Inter;
 				font-weight: normal;
 				font-size: 32rpx;
 				color: #D1D1D1;
+
 				span {
 					font-size: 26rpx;
 				}
 			}
+
 			.rechargeView_cen {
 				font-family: Inter, Inter;
 				font-weight: 400;
 				font-size: 26rpx;
 				color: #FFCD03;
 			}
+
 			.rechargeView_bottom {
 				background: #3F3E40;
 				font-family: Inter, Inter;
@@ -893,13 +787,15 @@
 				color: #D1D1D1;
 			}
 		}
+
 		.rechargeView_lists.top1 {
 			text-align: left;
 			padding-left: 20rpx;
 			padding-top: 20rpx;
-			background: linear-gradient( 186deg, rgba(255,224,157,0.4) 0%, rgba(237,194,103,0) 100%);
+			background: linear-gradient(186deg, rgba(255, 224, 157, 0.4) 0%, rgba(237, 194, 103, 0) 100%);
 			border-radius: 16rpx;
 			border: 2rpx solid #EDC267;
+
 			.rechargeView_bottom {
 				background: transparent;
 				font-family: Inter, Inter;
@@ -908,19 +804,23 @@
 				color: #EDC267;
 			}
 		}
+
 		.rechargeView_lists.top2 {
 			text-align: left;
 			padding-left: 20rpx;
 			padding-top: 20rpx;
-			background: linear-gradient( 186deg, rgba(255,148,122,0.4) 0%, rgba(255,148,122,0) 100%);
+			background: linear-gradient(186deg, rgba(255, 148, 122, 0.4) 0%, rgba(255, 148, 122, 0) 100%);
 			border-radius: 16rpx;
 			border: 2rpx solid #FF947A;
+
 			.rechargeView_cen {
 				color: #FF947A;
 			}
+
 			.rechargeView_top {
 				color: #FF947A;
 			}
+
 			.rechargeView_bottom {
 				background: transparent;
 				font-family: Inter, Inter;
@@ -929,19 +829,48 @@
 				color: #FF947A;
 			}
 		}
+
 		.rechargeView_lists.top3 {
 			text-align: left;
 			padding-left: 20rpx;
 			padding-top: 20rpx;
-			background: linear-gradient( 186deg, rgba(226,122,255,0.4) 0%, rgba(226,122,255,0) 100%);
+			background: linear-gradient(186deg, rgba(226, 122, 255, 0.4) 0%, rgba(226, 122, 255, 0) 100%);
 			border-radius: r;
 			border: 2px solid #E27AFF;
+
 			.rechargeView_cen {
 				color: #E27AFF;
 			}
+
 			.rechargeView_top {
 				color: #E27AFF;
 			}
+
+			.rechargeView_bottom {
+				background: transparent;
+				font-family: Inter, Inter;
+				font-weight: bold;
+				font-size: 36rpx;
+				color: #E27AFF;
+			}
+		}
+		
+		.rechargeView_lists.top4 {
+			text-align: left;
+			padding-left: 20rpx;
+			padding-top: 20rpx;
+			background: linear-gradient(186deg, rgba(226, 122, 255, 0.4) 0%, rgba(226, 122, 255, 0) 100%);
+			border-radius: r;
+			border: 2px solid #E27AFF;
+		
+			.rechargeView_cen {
+				color: #E27AFF;
+			}
+		
+			.rechargeView_top {
+				color: #E27AFF;
+			}
+		
 			.rechargeView_bottom {
 				background: transparent;
 				font-family: Inter, Inter;
@@ -951,16 +880,19 @@
 			}
 		}
 	}
+
 	.activate_t {
-		
+
 		width: 100%;
 		display: flex;
+
 		image {
 			width: 128rpx;
 			height: 128rpx;
 			border-radius: 50%;
 			margin-right: 32rpx;
 		}
+
 		view {
 			flex: 1;
 			font-family: Inter, Inter;
@@ -969,6 +901,7 @@
 			color: #999999;
 			line-height: 50rpx;
 			margin-top: 16rpx;
+
 			span {
 				font-family: Inter, Inter;
 				font-weight: bold;

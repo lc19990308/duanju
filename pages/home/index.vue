@@ -306,7 +306,7 @@
 					}).then(res => {
 						if (res.code !== 200) {
 							uni.showToast({
-								title: '获取视频分类失败',
+								title: that.$t('toast.video_fail'),
 								icon: 'none',
 								duration: 2000 // 提示框显示时长
 							});
@@ -353,16 +353,15 @@
 				this.$request('video.filmDramaSeriesList', {
 					id: lItems.dramaId
 				}).then(res => {
-					console.log("获取剧集列表", res)
 					if (res.code != 200) {
 						uni.showToast({
-							title: '系统异常',
+							title: this.$t('toast.sys_error'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
 					} else {
 						uni.showToast({
-							title: '获取剧集列表成功',
+							title: this.$t('toast.video_list_success'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});

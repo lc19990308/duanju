@@ -1,7 +1,8 @@
 <template>
 	<view class="page_content">
 		<view class="main_content" :style="[{ paddingTop: barHeight + 'px' }]">
-			<swiper class="swiper" :disable-touch="DisableTouch" circular :vertical="true" :duration="300" :current="current" @change="swiperChange">
+			<swiper class="swiper" :disable-touch="DisableTouch" circular :vertical="true" :duration="300"
+				:current="current" @change="swiperChange">
 				<swiper-item class="swiper_item" v-for="(item, index) in videoData" :key="index">
 					<view class="videos" v-if="videoIndex == index" @click="videoClick">
 						<!-- #ifdef H5 -->
@@ -52,7 +53,7 @@
 					<view class="mojinunus" @click="minbckon">
 						<uni-icons class="arrow" type="left" size="24" color="#fff"></uni-icons>
 						<view class="">
-							第{{item.dramaSeries}}集
+							{{$t(`proposal.vidoe_unit`)}}{{item.dramaSeries}}
 						</view>
 					</view>
 					<view class="sidebar" v-if="!isDrag && !isPlayError && videoIndex == index">
@@ -63,12 +64,13 @@
 								mode="widthFix"></image>
 							<text class="text" v-if="numLikes.likeTotal != 0"
 								:class="{ active: numLikes.likeStatus }">{{ numLikes.likeTotal }}</text>
-							<text class="text" v-else>喜欢</text>
+							<text class="text" v-else>{{$t('proposal.like')}}</text>
 						</view>
 						<!-- 追剧 -->
 						<view class="item" @click="bingeWatch(item,3)">
-							<image class="image"
-								:src="`https://baixoss.oss-cn-shenzhen.aliyuncs.com/bx_video/panpan/jxico/${numLikes.collectStatus == true ? 'heart-fill-d': 'heart-fill' }.svg`"
+							<image class="image" v-if="numLikes.collectStatus" src="/static/images/Frame-16.png"
+								mode="widthFix"></image>
+							<image class="image" v-else="numLikes.collectStatus" src="/static/images/Frame-15.png"
 								mode="widthFix"></image>
 							<text class="text" v-if="numLikes.collectTotal != 0"
 								:class="{ active: numLikes.collectStatus }">{{ numLikes.collectTotal }}</text>
@@ -84,7 +86,7 @@
 								<image class="image"
 									src="https://baixoss.oss-cn-shenzhen.aliyuncs.com/bx_video/panpan/jxico/share-forward-fill.svg"
 									mode="widthFix"></image>
-								<text class="text">{{ item.transMitCount || "转发" }}</text>
+								<text class="text">{{ item.transMitCount || $t(`proposal.share`) }} </text>
 							</button>
 							<view v-if="shareShow" class="shareView">
 								<view @click="shareToTwitter">Twitter</view>
@@ -92,7 +94,7 @@
 							</view>
 						</view>
 						<!-- #ifdef MP-WEIXIN -->
-						
+
 						<!-- #endif -->
 					</view>
 					<view class="infobox" v-if="!isDrag && videoIndex == index">
@@ -106,7 +108,7 @@
 						<view class="textarea">
 							<view class="text" :class="{ active: isUnfold }">
 								<text class="btn" v-if="$utils.countCharacters(minonunmain.dramaDescribe) > 74"
-									@click="isUnfold = !isUnfold">{{ isUnfold ? '收起' : '展开' }}</text>
+									@click="isUnfold = !isUnfold">{{ isUnfold ? $t('video_popup.pack_up') : $t('video_popup.unfold')  }}</text>
 								{{ minonunmain.dramaDescribe }}
 							</view>
 						</view>
@@ -122,7 +124,7 @@
 								<image class="moinuns"
 									src="https://baixoss.oss-cn-shenzhen.aliyuncs.com/bx_video/panpan/jxico/file-copy-fill.svg"
 									mode=""></image>
-								<text class="text1">合集 · 全{{originData.length}}集 · 已完结</text>
+								<text class="text1">{{$t(`proposal.compilations`)}}{{originData.length}}{{$t('proposal.vidoe_unit')}} · {{$t('proposal.completed')}}</text>
 							</view>
 							<uni-icons class="arrow" type="top" size="24" color="#fff"></uni-icons>
 							<!-- <image  src="/static/icons/arrow.png" mode=""></image> -->
@@ -179,8 +181,8 @@
 	export default {
 		data() {
 			return {
-				shareShow:false,
-				DisableTouch:false,
+				shareShow: false,
+				DisableTouch: false,
 				parentDramaId: '',
 				isIos: uni.getSystemInfoSync().osName == 'ios' ? true : false,
 				barHeight: uni.getSystemInfoSync().statusBarHeight,
@@ -221,7 +223,7 @@
 				collectStatus: false, //是否已追剧
 				likeStatus: false, //是否点赞
 				isPay: true, //是否显示播放
-				minonunmain:{},
+				minonunmain: {},
 			}
 		},
 		computed: {
@@ -246,7 +248,7 @@
 			this.filmDramaById(this.masitem)
 			this.getHandpickList(this.masitem.dramaSeries)
 
-			console.log(this.masitem,'item5555555555555555')
+			console.log(this.masitem, 'item5555555555555555')
 
 		},
 		onShow() {
@@ -295,114 +297,114 @@
 		//     };
 		// },
 		methods: {
-			shareBtn(){
+			shareBtn() {
 				this.shareShow = !this.shareShow
 			},
 			// 获取当前页面URL
 			getCurrentUrl() {
-			    return window.location.href;
+				return window.location.href;
 			},
 			// 分享到 X (Twitter)
 			shareToTwitter() {
-			    const url = encodeURIComponent(this.getCurrentUrl());
-			    const text = "test"
-			    
-			    // 检测是否为移动设备
-			    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-			    
-			    if (isMobile) {
-			        // 移动端：优先尝试打开Twitter app，如果未安装则打开网页版
-			        const twitterAppUrl = `twitter://post?message=${text} ${url}`;
-			        const twitterWebUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-			        
-			        // 尝试打开app，如果失败则打开网页
-			        const iframe = document.createElement('iframe');
-			        iframe.style.display = 'none';
-			        iframe.src = twitterAppUrl;
-			        document.body.appendChild(iframe);
-			        
-			        setTimeout(() => {
-			            document.body.removeChild(iframe);
-			            // 如果app未打开，则打开网页版
-			            window.open(twitterWebUrl, '_blank');
-			        }, 500);
-			    } else {
-			        // 桌面端：直接打开Twitter网页版
-			        const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-			        window.open(twitterUrl, '_blank', 'width=550,height=420');
-			    }
+				const url = encodeURIComponent(this.getCurrentUrl());
+				const text = "test"
+
+				// 检测是否为移动设备
+				const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+				if (isMobile) {
+					// 移动端：优先尝试打开Twitter app，如果未安装则打开网页版
+					const twitterAppUrl = `twitter://post?message=${text} ${url}`;
+					const twitterWebUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+
+					// 尝试打开app，如果失败则打开网页
+					const iframe = document.createElement('iframe');
+					iframe.style.display = 'none';
+					iframe.src = twitterAppUrl;
+					document.body.appendChild(iframe);
+
+					setTimeout(() => {
+						document.body.removeChild(iframe);
+						// 如果app未打开，则打开网页版
+						window.open(twitterWebUrl, '_blank');
+					}, 500);
+				} else {
+					// 桌面端：直接打开Twitter网页版
+					const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+					window.open(twitterUrl, '_blank', 'width=550,height=420');
+				}
 			},
-			
+
 			// 分享到 Facebook
 			shareToFacebook() {
-			    const url = encodeURIComponent(this.getCurrentUrl());
-			    
-			    // 检测是否为移动设备
-			    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-			    
-			    if (isMobile) {
-			        // 移动端：优先尝试打开Facebook app
-			        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-			        const isAndroid = /Android/i.test(navigator.userAgent);
-			        
-			        let facebookAppUrl;
-			        if (isIOS) {
-			            facebookAppUrl = `fb://share?href=${url}`;
-			        } else if (isAndroid) {
-			            facebookAppUrl = `fb://facewebmodal/f?href=${url}`;
-			        }
-			        
-			        const facebookWebUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-			        
-			        if (facebookAppUrl) {
-			            // 尝试打开app
-			            const iframe = document.createElement('iframe');
-			            iframe.style.display = 'none';
-			            iframe.src = facebookAppUrl;
-			            document.body.appendChild(iframe);
-			            
-			            setTimeout(() => {
-			                document.body.removeChild(iframe);
-			                // 如果app未打开，则打开网页版
-			                window.open(facebookWebUrl, '_blank');
-			            }, 500);
-			        } else {
-			            // 直接打开网页版
-			            window.open(facebookWebUrl, '_blank');
-			        }
-			    } else {
-			        // 桌面端：直接打开Facebook网页版
-			        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-			        window.open(facebookUrl, '_blank', 'width=550,height=420');
-			    }
+				const url = encodeURIComponent(this.getCurrentUrl());
+
+				// 检测是否为移动设备
+				const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+				if (isMobile) {
+					// 移动端：优先尝试打开Facebook app
+					const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+					const isAndroid = /Android/i.test(navigator.userAgent);
+
+					let facebookAppUrl;
+					if (isIOS) {
+						facebookAppUrl = `fb://share?href=${url}`;
+					} else if (isAndroid) {
+						facebookAppUrl = `fb://facewebmodal/f?href=${url}`;
+					}
+
+					const facebookWebUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+
+					if (facebookAppUrl) {
+						// 尝试打开app
+						const iframe = document.createElement('iframe');
+						iframe.style.display = 'none';
+						iframe.src = facebookAppUrl;
+						document.body.appendChild(iframe);
+
+						setTimeout(() => {
+							document.body.removeChild(iframe);
+							// 如果app未打开，则打开网页版
+							window.open(facebookWebUrl, '_blank');
+						}, 500);
+					} else {
+						// 直接打开网页版
+						window.open(facebookWebUrl, '_blank');
+					}
+				} else {
+					// 桌面端：直接打开Facebook网页版
+					const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+					window.open(facebookUrl, '_blank', 'width=550,height=420');
+				}
 			},
-			
+
 			// 使用 Web Share API（如果支持）
 			shareWithWebAPI() {
-			    if (navigator.share) {
-			        navigator.share({
-			            title: "test1",
-			            text: "test2",
-			            url: this.getCurrentUrl()
-			        }).catch(err => {
-			            console.log('分享取消或失败:', err);
-			        });
-			    }
+				if (navigator.share) {
+					navigator.share({
+						title: "test1",
+						text: "test2",
+						url: this.getCurrentUrl()
+					}).catch(err => {
+						console.log('分享取消或失败:', err);
+					});
+				}
 			},
-			
-			
-			
-			
-			
+
+
+
+
+
 			// 剧目详情
 			filmDramaById(jimudalis) {
 				this.$request('video.filmDramaById', {
-					dramaId: jimudalis.dramaId
+					id: jimudalis.dramaId
 				}).then(res => {
 					console.log("获取剧目详情", res)
 					if (res.code != 200) {
 						uni.showToast({
-							title: '系统异常',
+							title: this.$t('toast.sys_error'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
@@ -462,8 +464,8 @@
 				var index = item.dramaSeries
 				this.$refs.childComponent.showOpen(index, this.masitem.dramaId);
 			},
-			monchangValue(index){
-				console.log(index,'kaish')
+			monchangValue(index) {
+				console.log(index, 'kaish')
 				// this.initSwiperData(this.originIndex, 1)
 				this.buyDramaSeries()
 			},
@@ -473,7 +475,7 @@
 				if (this.originData[this.originIndex].unlockStatus == 3) {
 					this.initSwiperData(this.originIndex, 1)
 					this.buyDramaSeries()
-				}else{
+				} else {
 					this.initSwiperData(this.originIndex, 1)
 				}
 			},
@@ -515,7 +517,7 @@
 			// },
 			// 获取剧集列表
 			getHandpickList(dramaSeries) {
-				
+
 				this.isonuns = false
 				// var data = {
 				// 	id:'100909'
@@ -526,21 +528,21 @@
 				// 	this.initSwiperData(this.originIndex, 1)
 				// })
 				// return
-				if(dramaSeries){
+				if (dramaSeries) {
 					this.originIndex = dramaSeries - 1
 				}
 				this.parentDramaId = this.masitem.dramaId
 				var data = {
 					dramaId: this.masitem.dramaId,
-					memberId: uni.getStorageSync('id')
+					memberId: uni.getStorageSync('id'),
+					pageNo:1,
+					pageSize:10,
 				}
 				this.$request('video.filmDramaSeriesList', data).then(res => {
-					console.log("res精选视频列表:", res)
 					if (res.code === 200) {
 						this.isonuns = false
-						if (res.result && res.result.length) {
-							this.originData = this.originData.concat(res.result)
-							console.log(this.originData, 'this.originData')
+						if (res.result.records && res.result.records.length) {
+							this.originData = this.originData.concat(res.result.records)
 							this.initSwiperData(this.originIndex, 1)
 						}
 						// this.originData = this.originData.concat(res.result.records)
@@ -560,7 +562,7 @@
 					// 调用购买剧集接口
 					uni.request({
 						// url: MYurl + '/api/wxApi/buyDramaSeries',
-						url: apiMoen.MPWEIXIN + '/api/wxApi/buyDramaSeries',
+						url: apiMoen.MPWEIXIN + '/api/appApi/buyDramaSeries',
 						method: 'POST',
 						header: {
 							'content-type': 'application/json', // 添加 content-type
@@ -586,11 +588,12 @@
 								if (res.data.message != '') {
 									uni.showToast({
 										title: res.data.message,
-										icon: 'success',
+										icon: 'none',
 										duration: 1200,
 									})
 									this.initSwiperData(this.originIndex);
-									console.log('剧集状态和剧集ID购买后', this.videoData[this.videoIndex].unlockStatus,this.videoData[this.videoIndex].dramaSeries)
+									console.log('剧集状态和剧集ID购买后', this.videoData[this.videoIndex].unlockStatus,
+										this.videoData[this.videoIndex].dramaSeries)
 									// H5自动播放
 									const timer1 = setTimeout(() => {
 										// console.log(4)
@@ -625,12 +628,12 @@
 								// 重新获取剧集状态
 							} else {
 								console.log('++购买失败返回的数据1', res.data.code)
-								if(this.originData[this.originIndex-1].unlockStatus == 1 ){
+								if (this.originData[this.originIndex - 1].unlockStatus == 1) {
 									this.$refs.popups.open(this.originData[this.originIndex])
-								}else{
+								} else {
 									uni.showToast({
-										title: `请按顺序解锁`,
-										icon: 'success',
+										title: this.$t('toast.please_unlock'),
+										icon: 'none',
 										duration: 2000,
 									})
 								}
@@ -643,7 +646,6 @@
 								that.isPay = false
 								that.unlock = false
 								if (res.data.message != '') {
-									console.log(res.data.message);
 									this.videoPause(this.originIndex)
 									// uni.showToast({
 									// 	title: res.data.message,
@@ -660,8 +662,9 @@
 			//记录播放
 			loncalis() {
 				// return
+				console.log(this.masitem,'this.masitem.dramaId')
 				uni.request({
-					url: apiMoen.MPWEIXIN + '/api/wxApi/filmDramaSeriesSecond',
+					url: apiMoen.MPWEIXIN + '/api/appApi/filmDramaSeriesSecond',
 					method: 'POST',
 					header: {
 						'content-type': 'application/json', // 添加 content-type
@@ -669,15 +672,14 @@
 					},
 					data: {
 						secondType: 1, //操作分类 1播放、2点赞、3收藏、4转发
+						calculateType:1,
 						memberId: uni.getStorageSync('id'), //会员ID
-						dramaId: this.masitem.dramaId, //剧目ID
+						dramaId:this.masitem.dramaId, 
+						seriesId: this.masitem.seriesId, //剧目ID
 						dramaSeries: this.videoData[this.videoIndex].dramaSeries, //剧集集数
 						tenantId: uni.getStorageSync('tenantId'), //租户ID
 						sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门编码
 					},
-					success: (res) => {
-						// console.log(serialNo,'记录')
-					}
 				})
 			},
 			// 初始化swiper数据
@@ -709,7 +711,8 @@
 				this.isDrag = false
 				this.isPlayError = false
 				this.boxunchauxn(this.oldIndex)
-				console.log('剧集状态和剧集ID初始化后', this.videoData[this.videoIndex].unlockStatus,this.videoData[this.videoIndex].dramaSeries)
+				console.log('剧集状态和剧集ID初始化后', this.videoData[this.videoIndex].unlockStatus, this.videoData[this.videoIndex]
+					.dramaSeries)
 				// if (this.videoData[this.videoIndex].unlockStatus == 1) {
 				// 	const timer = setTimeout(() => {
 				// 		const video = this.getVideoCtx()
@@ -723,8 +726,8 @@
 				// 		clearTimeout(timer)
 				// 	}, 500)
 				// }
-				
-				
+
+
 				// H5自动播放
 				// #ifdef H5
 				this.unlock = true
@@ -818,11 +821,11 @@
 
 			},
 			handleClick(item) {
-				if(this.originData[this.originIndex-1].unlockStatus == 1 ){
+				if (this.originData[this.originIndex - 1].unlockStatus == 1) {
 					this.$refs.popups.open(item)
-				}else{
+				} else {
 					uni.showToast({
-						title: `请按顺序解锁`,
+						title: this.$t('toast.please_unlock'),
 						icon: 'success',
 						duration: 2000,
 					})
@@ -834,7 +837,8 @@
 				// console.log('this.videoIndex',this.videoIndex)
 				// console.log('this.videoData',this.videoData)
 				// console.log('this.videoData[this.videoIndex + 1].dramaSeries',this.videoData[this.videoIndex + 1].dramaSeries)
-				console.log('剧集状态和剧集ID购买前', this.videoData[this.videoIndex].unlockStatus,this.videoData[this.videoIndex].dramaSeries)
+				console.log('剧集状态和剧集ID购买前', this.videoData[this.videoIndex].unlockStatus, this.videoData[this.videoIndex]
+					.dramaSeries)
 				// this.current = event.detail.current
 				const {
 					current
@@ -862,7 +866,8 @@
 					this.initSwiperData(this.originIndex);
 				}
 				if (this.videoData[this.videoIndex].unlockStatus == 3) {
-					console.log('剧集状态和剧集ID切换前', this.videoData[this.videoIndex].unlockStatus,this.videoData[this.videoIndex].dramaSeries)
+					console.log('剧集状态和剧集ID切换前', this.videoData[this.videoIndex].unlockStatus, this.videoData[this
+						.videoIndex].dramaSeries)
 					this.initSwiperData(this.originIndex);
 					this.buyDramaSeries()
 				}
@@ -1267,6 +1272,7 @@
 						.item {
 							margin-bottom: 40rpx;
 							text-align: center;
+
 							.shareView {
 								position: absolute;
 								width: 200rpx;
@@ -1280,6 +1286,7 @@
 								background-color: #000;
 								border-radius: 20rpx;
 							}
+
 							&:last-child {
 								margin-bottom: 0;
 							}

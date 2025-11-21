@@ -136,8 +136,10 @@
 				
 				if(this.dredgeLevel < this.level) {
 					uni.showModal({
-						title: '提示',
-						content: '当前购买等级小于已购买等级，是否继续购买？',
+						title: this.$t('model.tip'),
+						content: this.$t('model.level_lower_continue'),
+						confirmText:this.$t('model_box.confirm'),
+						cancelText:this.$t('model_box.cancel'),
 						success: (res) => {
 							if (res.confirm) {
 								buy()
@@ -183,7 +185,7 @@
 					paySign: pay.paySign,
 					success: success => {
 						uni.showToast({
-						    title: '支付成功',
+						    title: this.$t('toast.pay_success'),
 							icon: 'none',
 							duration: 2000
 						});
@@ -216,7 +218,7 @@
 					res => {
 						if (res.err_msg == "get_brand_wcpay_request:ok") {
 							uni.showToast({
-							    title: '支付成功',
+							    title: this.$t('toast.pay_success'),
 								icon: 'none',
 								duration: 2000
 							});

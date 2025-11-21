@@ -122,7 +122,7 @@
 						}
 					],
 					password: [
-						{ required: true, message: '请输入密码', trigger: ['blur', 'change'] },
+						{ required: true, message: () => i18n.t('form.pwdRequired'), trigger: ['blur', 'change'] },
 						{ validator: this.$utils.checkPassword, trigger: ['change','blur'] }
 					],
 					code: [
@@ -207,7 +207,7 @@
 			// 登录提交
 			loginSubmit() {
 				if(!this.login.checked) {
-					this.$u.toast('请勾选并同意协议')
+					this.$u.toast(this.$t('toast.argeement_checke'))
 					return
 				}
 				let obj = {}
@@ -272,7 +272,7 @@
 			accountLogin(obj) {
 				this.$request('login.accountLogin', obj).then(res => {
 					if(res.code === 1) {
-						this.$u.toast("登录成功")
+						this.$u.toast(this.$t('toast.login_success'))
 						this.getUserInfo(res.data.token)
 						this.redirectPath()
 					}
@@ -282,7 +282,7 @@
 			codeLogin(obj) {
 				this.$request('login.codeLogin', obj).then(res => {
 					if(res.code === 1) {
-						this.$u.toast("登录成功")
+						this.$u.toast(this.$t('toast.login_success'))
 						this.getUserInfo(res.data.token)
 						this.redirectPath()
 					}
@@ -384,7 +384,7 @@
 				const api = () => {
 					this.$request('login.wxBind', obj).then(res => {
 						if(res.code === 1) {
-							this.$u.toast("绑定成功")
+							this.$u.toast(this.$t('toast.bingSuccess'))
 							this.getUserInfo(res.data.token)
 							this.redirectPath()
 						}
@@ -451,7 +451,7 @@
 			// 获取验证码
 			getCode() {
 				if(!this.form.mobile) {
-					this.$u.toast("请输入手机号")
+					this.$u.toast(this.$t('toast.inpit_phone'))
 					return
 				}
 				let event = ''
@@ -471,12 +471,12 @@
 
 				if (this.$refs.uCode.canGetCode) {
 					uni.showLoading({
-						title: '正在获取验证码'
+						title: this.$t('toast.get_code_loing')
 					})
 					this.$request('login.sendCode', obj, false).then(res => {
 						if(res.code === 1) {
 							uni.hideLoading();
-							uni.$u.toast('验证码已发送');
+							uni.$u.toast(this.$t('toast.emailCodeSuccess'));
 							this.$refs.uCode.start();
 						} else {
 							uni.hideLoading();
@@ -484,7 +484,7 @@
 						}
 					}).catch(err => {
 						uni.hideLoading();
-						uni.$u.toast('验证码发送失败');
+						uni.$u.toast(this.$t('toast.code_fail'));
 					})
 				} else {
 					uni.$u.toast('倒计时结束后再发送');

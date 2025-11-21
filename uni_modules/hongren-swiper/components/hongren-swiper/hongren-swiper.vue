@@ -25,7 +25,11 @@
     swiper2_left: current > index,
     swiper2_right: current < index
   }">
-							<image class="autoImage" :src="item.image" mode="widthFix"></image>
+							<image class="autoImage"
+								:src="'https://preview.qiantucdn.com/58pic/20220317/58PIC58PICU58PICdqwCdHPxfhf1Q_PIC2018_PIC2018.jpg!w1024_new_small_1'"
+								mode="widthFix"></image>
+
+							<!-- <image class="autoImage" :src="item.image" mode="widthFix"></image> -->
 							<div class="swiperSlot">
 								<slot></slot>
 							</div>

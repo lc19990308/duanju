@@ -96,7 +96,7 @@
 			},
 			// 创建订单
 			createOrder() {
-				if(!this.integralActiveId || !this.integralActivePrice) return this.$u.toast('请选择积分套餐')
+				if(!this.integralActiveId || !this.integralActivePrice) return this.$u.toast(this.$t('toast.pickerIntegral'))
 				this.recharge(this.integralActiveId, this.integralActivePrice)
 			},
 			// 充值
@@ -152,7 +152,7 @@
 					paySign: pay.paySign,
 					success: success => {
 						uni.showToast({
-						    title: '支付成功',
+						    title: this.$t('toast.pay_success'),
 							icon: 'none',
 							duration: 2000
 						});
@@ -186,7 +186,7 @@
 					res => {
 						if (res.err_msg == "get_brand_wcpay_request:ok") {
 							uni.showToast({
-							    title: '支付成功',
+							    title: this.$t('toast.pay_success'),
 								icon: 'none',
 								duration: 2000
 							});

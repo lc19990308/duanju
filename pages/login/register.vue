@@ -8,48 +8,36 @@
 		<view class="form">
 			<u--form :model="form" ref="uForm" labelPosition='top' labelWidth='120' :borderBottom='false'
 				:labelStyle='labelStyle'>
-				<u-form-item label="email điện tử" prop="email" :borderBottom='false'>
-					<u-input v-model="form.email" border='none' placeholder='Vui lòng nhập email'
+				<u-form-item :label="$t(`regist.email`)" prop="email" :borderBottom='false'>
+					<u-input v-model="form.email" border='none' :placeholder='$t(`regist.email_input`)'
 						:placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-23.png" mode=""></image>
 						</template>
 					</u-input>
 				</u-form-item>
-				<u-form-item label="Mã xác minh" prop="verificationCode" :borderBottom='false'>
-					<u-input v-model="form.verificationCode" border='none' placeholder='Nhập mã xác nhận'
-						:placeholderStyle='placeholderStyle'>
+				<u-form-item :label="$t(`regist.verification`)" prop="verificationCode" :borderBottom='false'>
+					<u-input v-model="form.verificationCode" border='none'
+						:placeholder='$t(`regist.verification_input`)' :placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-25.png" mode=""></image>
 						</template>
 					</u-input>
 					<u-button class="code-btn" slot="right" @tap="getCode">{{tips}}</u-button>
+
+
 				</u-form-item>
-				<u-form-item label="mật khẩu" prop="password" :borderBottom='false'>
-					<u-input v-model="form.password" border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
-						:placeholderStyle='placeholderStyle'>
+				<u-form-item :label="$t(`regist.password`)" prop="password" :borderBottom='false'>
+					<u-input v-model="form.password" border='none' prefixIcon="search"
+						:placeholder='$t(`regist.password_input`)' type='password' :placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
 						</template>
 					</u-input>
 				</u-form-item>
 			</u--form>
-			<u-button class="submt-btn" @click="submit">đăng ký</u-button>
-			<u-button class="reset-btn" @click="reset">Đăng nhập</u-button>
-		</view>
-		<view class="btn-groud">
-			<view class="btn-groud-item">
-				<image src="/static/images/Frame-26.png" mode="" @click="submitGA('google')"></image>
-			</view>
-			<view class="btn-groud-item">
-				<image src="/static/images/Frame-27.png" mode="" @click="submitGA('apple')"></image>
-			</view>
-			<view class="btn-groud-item">
-				<image src="/static/images/Frame-28.png" mode=""></image>
-			</view>
-			<view class="btn-groud-item">
-				<image src="/static/images/Frame-29.png" mode=""></image>
-			</view>
+			<u-button class="submt-btn" @click="submit">{{$t(`regist.register_btn`)}}</u-button>
+			<u-button class="reset-btn" @click="reset">{{$t(`regist.login_btn`)}}</u-button>
 		</view>
 
 		<view class="agreement-checked">
@@ -58,13 +46,15 @@
 				</u-checkbox>
 			</u-checkbox-group>
 			<view class="agreement-tips">
-				Tôi chấp nhận rủi ro xóa và đồng ý xóa tài khoản của mình
+				{{$t(`regist.register_tips`)}}
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	let that;
+	import apiMoen from '../../utils/config.js';
 	export default {
 		data() {
 			return {
@@ -79,27 +69,46 @@
 				},
 				form: {
 					email: '',
-					verificationCode:'',
-					password:'',
+					verificationCode: '',
+					password: '',
 				},
 				rules: {
-					name: [{
+					email: [{
+							required: true,
+							message: () => i18n.t('form.emailRequired'),
+							trigger: ['blur', 'change']
+						},
+						{
+							type: 'email',
+							message: () => i18n.t('form.emailFormat'),
+							trigger: ['blur', 'change']
+						}
+					],
+					verificationCode: [{
 						required: true,
-						message: '请输入姓名',
+						message: () => i18n.t('form.captchaRequired'),
+						trigger: ['blur', 'change']
+					}],
+					password: [{
+						required: true,
+						message: () => i18n.t('form.pwdRequired'),
 						trigger: ['blur', 'change']
 					}]
 				},
 				placeholderStyle: {
 					color: '#666'
 				},
-				tips: 'lấy',
+				tips: '获取验证码',
 				// refCode: null,
-				seconds: 10,
+				seconds: 30,
 				checkboxValue1: 1,
 				titleStyle: {
 					color: '#fff'
 				}
 			}
+		},
+		onShow() {
+			that = this;
 		},
 		methods: {
 			codeChange(text) {
@@ -121,19 +130,19 @@
 				// } else {
 				// 	uni.$u.toast('倒计时结束后再发送');
 				// }
-				
+
 				let obj = {
 					"email": this.form.email,
 					"emailmode": "1",
 				}
 				this.$request('login.sendEmailCode', obj).then(res => {
-					if(res.code === 0) {
+					if (res.code === 0) {
 						this.$u.toast(res.message)
-					}else if(res.code === 500) {
+					} else if (res.code === 500) {
 						this.$u.toast(res.message)
-					}else{
-						if(res.code === 200) {
-							this.$u.toast("发送成功")
+					} else {
+						if (res.code === 200) {
+							this.$u.toast(this.$t('toast.send_msg_success'))
 						}
 					}
 				})
@@ -155,7 +164,7 @@
 					}
 				}
 				this.$request('login.loginGA', obj).then(res => {
-			
+
 					if (res.code === 0) {
 						this.webUrl = res.result.authorizationUrl
 						this.showWebView = true;
@@ -174,25 +183,49 @@
 					"email": this.form.email,
 					"emailcode": this.form.verificationCode,
 					"username": this.form.email,
-				    "password": this.form.password,
-				    "realname": this.form.email
+					"password": this.form.password,
+					"realname": this.form.email
 				}
 				this.$request('login.registerEmail', obj).then(res => {
-					if(res.code === 0) {
-						this.$u.toast(res.message)
-					}else if(res.code === 500) {
-						this.$u.toast(res.message)
-					}else{
-						if(res.code === 200) {
-							this.$u.toast("注册成功")
-						}
-					}
+					this.$u.toast(res.message);
+					that.bindRelationship();
 				})
 			},
 			reset() {
 				uni.reLaunch({
 					url: '/pages/login/login'
 				})
+			},
+			bindRelationship() {
+				var datas = {
+					accountNumber: this.form.email,
+					sysOrgCode: apiMoen.sysOrgCode,
+					bindMemberId: this.getQueryParam('bindMemberId'),
+				};
+				this.$request('common.memberAccountNumberAdd', datas).then(res => {
+					setTimeout(() => {
+						uni.redirectTo({
+							url: '/pages/login/login'
+						})
+					}, 500)
+				})
+			},
+			getQueryParam(key) {
+				// #ifdef H5
+				// H5 带 hash 模式：http://localhost:8080/#/pages/login/register?bindMemberId=1989270268829470722
+				const hash = window.location.hash || ''; // #/pages/login/register?bindMemberId=1989270268829470722
+				const search = hash.split('?')[1] || ''; // bindMemberId=1989270268829470722
+				const urlSearch = new URLSearchParams(search);
+				return urlSearch.has(key) ? decodeURIComponent(urlSearch.get(key)) : null;
+				// #endif
+
+				// #ifndef H5
+				// 小程序 / App：从页面路由对象里取
+				const pages = getCurrentPages();
+				if (!pages.length) return null;
+				const options = pages[pages.length - 1].options || {}; // 或 $route.query（vue3）
+				return options[key] ? decodeURIComponent(options[key]) : null;
+				// #endif
 			},
 		},
 	}
@@ -207,6 +240,7 @@
 		top: 0;
 		z-index: 999999;
 	}
+
 	page {
 		// background-image: url('/static/images/login.png');
 		// background-repeat: no-repeat;
@@ -290,7 +324,7 @@
 		border-radius: 20rpx !important;
 		font-family: Inter, Inter;
 		font-weight: 400;
-		font-size: 28rpx;
+		font-size: 22rpx;
 		color: #FFCD03;
 		box-shadow: 2rpx 2rpx 2rpx #282828;
 		border-color: #282828;
@@ -345,7 +379,8 @@
 		border: 2rpx solid #EDC267 !important;
 		background-color: #000 !important;
 	}
-	::v-deep .u-checkbox{
+
+	::v-deep .u-checkbox {
 		margin-bottom: 0rpx !important;
 	}
 </style>

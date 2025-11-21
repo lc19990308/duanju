@@ -61,7 +61,7 @@
 			changeWatch(index, x) {
 				if(!this.data[index].url && index != this.data.findIndex(item => !item.url)) {
 					if(x != 1) {
-						this.$u.toast("请按剧集顺序点播！")
+						this.$u.toast(this.$t('toast.series_Demand'))
 					} else {
 						this.currentIndex = index
 					}

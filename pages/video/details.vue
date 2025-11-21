@@ -13,7 +13,7 @@
 						</view>
 						<view class="classify-name">
 							<!-- {{filmDrama.classifyName}} · 播放{{filmDrama.playSecond || 0 }} -->
-							已完结
+							{{$t('proposal.completed')}}
 						</view>
 					</view>
 					<view class="btn">
@@ -27,7 +27,7 @@
 							<!-- @click.stop="handleCollect(lfilmDrama.vid, lfilmDrama.is_favorite, lIndex)" -->
 							<u-icon :name="1 == 1 ? 'star-fill' : 'star'" color="#eee" size="18"></u-icon>
 							<!-- <text class="text">{{ lfilmDrama.is_favorite == 1 ? '已追剧' : '前往追剧' }}</text> -->
-							<text @click="monunbrn" class="text">播放</text>
+							<text @click="monunbrn" class="text">{{$t('video_popup.player')}}</text>
 						</view>
 					</view>
 				</view>
@@ -35,7 +35,7 @@
 			<!-- 剧情简介 -->
 			<view class="synopsis">
 				<view class="synopsis-name">
-					剧情简介
+					{{$t('video_popup.synopsis')}}
 				</view>
 				<view class="synopsis-dramaDescribe">
 					{{filmDrama.dramaDescribe}}
@@ -66,7 +66,7 @@
 			<!-- 相关推荐 -->
 			<view class="related">
 				<view class="related-text">
-					相关推荐
+					{{$t('video_popup.program')}}
 				</view>
 				<scroll-view style="height: 100%" :scroll-y="true" :refresher-enabled="true" :refresher-threshold="100"
 					:refresher-triggered="refreshStatus" @refresherrefresh="refreshHandle" @scrolltolower="bottomHandle"
@@ -83,7 +83,7 @@
 								</view>
 								<view class="info">
 									<view class="title u-line-1">{{ lItems.dramaName }}</view>
-									<view class="text u-line-1">{{lItems.classifyName}} · {{ lItems.totalEpisodes}}集
+									<view class="text u-line-1">{{lItems.classifyName}} · {{ lItems.totalEpisodes}}{{$t('watch.unit')}}
 									</view>
 								</view>
 							</view>
@@ -130,6 +130,8 @@
 				videoQuery: {
 					tenantId: apiMoen.tenantId,
 					sysOrgCode: apiMoen.sysOrgCode,
+					pageNo: 1,
+					pageSize: 10,
 				},
 				filmDrama: {},
 				totalEpisodes: null, // Replace with your actual totalEpisodes value
@@ -194,14 +196,14 @@
 					console.log("获取剧集列表", res)
 					if (res.code != 200) {
 						uni.showToast({
-							title: '系统异常',
+							title: this.$t('toast.sys_error'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
 					} else {
 						this.SeriesList = res.result
 						uni.showToast({
-							title: '获取剧集列表成功',
+							title: this.$t('toast.video_list_success'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
@@ -217,12 +219,11 @@
 			// 剧目详情
 			filmDramaById() {
 				this.$request('video.filmDramaById', {
-					dramaId: this.dramaIds
+					id: this.dramaIds
 				}).then(res => {
-					console.log("获取剧目详情", res)
 					if (res.code != 200) {
 						uni.showToast({
-							title: '系统异常',
+							title: this.$t('toast.sys_error'),
 							icon: 'none',
 							duration: 2000 // 提示框显示时长
 						});
@@ -326,7 +327,7 @@
 							duration: 2000 // 提示框显示时长
 						});
 					}
-					this.videoList = res.result
+					this.videoList = res.result.records
 					console.log("this.videoList视频列表:", this.videoList);
 				})
 			},
@@ -336,7 +337,13 @@
 
 <style scoped lang="scss">
 	@import 'episode-listing.scss';
-.Plot {background-color: #000;height: 100%;color: #fff;}
+
+	.Plot {
+		background-color: #000;
+		height: 100%;
+		color: #fff;
+	}
+
 	.Plot-details {
 		z-index: 9;
 		padding: 20rpx;
@@ -524,8 +531,8 @@
 						margin-top: 16rpx;
 
 						.title {
-							font-size: 32rpx;
-							color: #000;
+							font-size: 28rpx;
+							color: #858585;
 						}
 
 						.text {

@@ -1,8 +1,8 @@
 <template>
 	<view class="detail">
-		<u-navbar :title="protocolName" :titleStyle='titleStyle' bgColor='transparent' leftIconColor='#fff'
-			:autoBack="true" :placeholder='true' :fixed='true'>
-		</u-navbar>
+		<statusBar />
+		<u-navbar :title="protocolName" :fixed='false' :titleStyle='titleStyle' bgColor='transparent'
+			leftIconColor='#fff' :autoBack="true" :placeholder='true' />
 		<view class="de_content">
 			<u-parse :content="content"></u-parse>
 		</view>
@@ -14,7 +14,7 @@
 		data() {
 			return {
 				content: '',
-				protocolName:'',
+				protocolName: '',
 				id: null,
 				titleStyle: {
 					color: '#fff'
@@ -34,7 +34,7 @@
 					if (res.code == 200) {
 						this.content = res.result.protocolDescribe
 						this.protocolName = res.result.protocolName
-						
+
 					}
 				}).catch(res => {
 					console.log(res);
@@ -46,20 +46,17 @@
 
 <style lang="scss" scoped>
 	page {
-		background-color: #000;
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;
-	
+		background-attachment: fixed;
 	}
+
 	.detail {
 		padding-top: 60rpx;
-		width: 90%;
-		margin: auto;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+		margin: 0 30rpx;
+
 		color: #d1d1d1;
 
 		.de_title {

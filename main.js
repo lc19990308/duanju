@@ -1,16 +1,17 @@
 import Vue from 'vue'
 import App from './App.vue'
+import i18n from '@/utils/i18n/index.js'
 
-import {
-	BASE_URL,
-	SIGN
-} from './env.js'
-Vue.prototype.$BASE_URL = BASE_URL
-Vue.prototype.$SIGN = SIGN
+// import {
+// 	BASE_URL,
+// 	SIGN
+// } from './env.js'
+// Vue.prototype.$BASE_URL = BASE_URL
+// Vue.prototype.$SIGN = SIGN
 
-// #ifdef H5
-Vue.prototype.$WXOA_CALLBACK = `${window.location.origin + window.location.pathname}?${SIGN}#/pages/login/login`
-// #endif
+// // #ifdef H5
+// Vue.prototype.$WXOA_CALLBACK = `${window.location.origin + window.location.pathname}?${SIGN}#/pages/login/login`
+// // #endif
 
 import uView from '@/uview-ui'
 Vue.use(uView)
@@ -36,12 +37,14 @@ Vue.prototype.$store = store
 
 import chargedialog from './components/charge-dialog/charge-dialog.vue'
 Vue.component('charge-dialog', chargedialog)
+import statusBar from '@/components/statusBar/index.vue'
+Vue.component('statusBar', statusBar)
 
 // #ifdef H5
 // import Vconsole from 'vconsole'
 // const vConsole = new Vconsole();
 
-import wxoaShare from '@/common/utils/share.js'
+// import wxoaShare from '@/common/utils/share.js'
 // #endif
 
 
@@ -69,9 +72,9 @@ Vue.mixin({
 		// #endif
 	},
 	onShow() {
-		// #ifdef H5
-		wxoaShare()
-		// #endif
+		// // #ifdef H5
+		// wxoaShare()
+		// // #endif
 	},
 	onShareAppMessage(res) {
 		// #ifdef MP-WEIXIN
@@ -120,6 +123,7 @@ Vue.mixin({
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
+	i18n,
 	store,
 	...App
 })

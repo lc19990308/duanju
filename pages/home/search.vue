@@ -1,34 +1,33 @@
 <template>
 	<view class="app-container">
-		<u-navbar title="" :autoBack="true" :fixed='true' :placeholder='true' bgColor='transparent'
+		<statusBar />
+		<u-navbar title="" :fixed='false' :autoBack="true"  :placeholder='true' bgColor='transparent'
 			:titleStyle='titleStyle' leftIconColor='#fff'>
 			<template slot='center'>
-<!-- 				<view class="input-box" @tap="serachList">
-					<input type="text" v-model="dramaName" placeholder="Tìm kiếm" />
-					<u-icon name="search" color="#8a9d9f" size="28"></u-icon>
-				</view> -->
-				<view class="input-box" >
-					<input type="text" v-model="dramaName" placeholder="Tìm kiếm" />
+				<view class="input-box">
+					<input type="text" v-model="dramaName" :placeholder="$t(`search.serach_placeholder`)" />
 					<u-icon @tap="serachList" name="search" color="#8a9d9f" size="28"></u-icon>
 				</view>
 			</template>
 		</u-navbar>
 		<view class="remove-block">
 			<view class="action-row">
-				<view class="action-text">Lịch sử tìm kiếm</view>
+				<view class="action-text">{{$t(`search.history`)}}</view>
 				<view class="remove" @tap="claerHistory">
 					<u-icon name="trash" color="#FFFFFF" size="28"></u-icon>
 				</view>
 			</view>
 			<view class="remove-content">
-				<view class="remove-item" @tap="historySerach(item)" v-for="(item,index) in historyList" :key="index">{{item.searchKeyword}}</view>
+				<view class="remove-item" @tap="historySerach(item)" v-for="(item,index) in historyList" :key="index">
+					{{item.searchKeyword}}
+				</view>
 			</view>
 		</view>
 		<!--热搜词-->
 		<view class="hot-keyword">
 			<view class="hot-keyword-action">
 				<view class="action-text">
-					Tìm kiếm nóng
+					{{$t(`search.host_lable`)}}
 				</view>
 				<view class="action-icon" @tap="getHotKeyword(true)">
 					<u-icon name="reload" color="#FFFFFF" size="28"></u-icon>
@@ -47,7 +46,7 @@
 		<!--搜索排行榜单-->
 		<view class="book-list">
 			<view class="title">
-				<view class="text">Phổ biến gần đây</view>
+				<view class="text">{{$t(`search.video_label`)}}</view>
 				<view class="icon">
 					<image class="icon-hot" src="/static/images/hot.png" mode=""></image>
 				</view>
@@ -152,18 +151,18 @@
 			claerHistory() {
 				this.$request('serach.clearSearchHistory', {
 					sysOrgCode: this.sysOrgCode,
-					memberId:this.memberId,
+					memberId: this.memberId,
 				}).then(res => {
 					this.getHistoryList();
 				})
 			},
-			historySerach(info){
+			historySerach(info) {
 				this.dramaName = info.searchKeyword;
 				this.serachList();
 			},
-			videoInfo(item){
+			videoInfo(item) {
 				uni.redirectTo({
-					url:`/pages/video/videoDetails?item=${JSON.stringify(item)}`
+					url: `/pages/video/videoDetails?item=${JSON.stringify(item)}`
 				})
 			}
 		},
@@ -177,18 +176,15 @@
 
 <style lang="scss" scoped>
 	page {
-		background-color: #000;
-	}
-
-	.app-container {
-		min-height: 100vh;
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;
-		// background-size: cover;
 		background-attachment: fixed;
-		/* 背景固定 */
+	}
+
+	.app-container {
+		padding-top: 80rpx;
 	}
 
 	.input-box {
@@ -209,7 +205,7 @@
 
 	uni-input {
 		width: 100%;
-		color: #666;
+		color: #f7f7f7;
 	}
 
 	.remove-block {
@@ -395,6 +391,6 @@
 	}
 
 	::v-deep .uni-input-placeholder {
-		color: #666666;
+		color: #f6f6f6;
 	}
 </style>

@@ -2,7 +2,6 @@
 import request from '@/common/request/index.js'
 import utils from '@/common/utils/index.js'
 import store from '@/common/store/index.js'
-import { BASE_URL, SIGN } from '@/env.js'
 const jweixin = require('jweixin-module')
 
 // 微信公众号分享
@@ -27,7 +26,7 @@ const wxoaShare = () => {
 			desc = params?.desc || app.config?.share?.description || ""
 		}
 	} else {
-		link = `${uri}?${SIGN}#/pages/home/index?scene=${spm}`
+
 	}
 	
 	request('user.share', { uri }).then(res => {
