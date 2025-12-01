@@ -37,6 +37,7 @@
 </template>
 
 <script>
+	import apiMoen from '@/utils/config.js'
 	import Swiper3D from '@/components/swiper/swiper-3d.vue'
 	export default {
 		components: {
@@ -48,7 +49,7 @@
 				query: {
 					pageNo: 1,
 					pageSize: 9,
-					sysOrgCode: uni.getStorageSync('sysOrgCode') || '',
+					sysOrgCode: apiMoen.sysOrgCode, 
 					searchValue: '',
 					dramaClassify: '', //分类id
 					tenantld: uni.getStorageSync('tenantId') || '',
@@ -64,20 +65,17 @@
 				this.getVideoList();
 			},
 			change2(e) {
-				const item = {
-					dramaId: e.id,
-				}
 				uni.navigateTo({
-					url: `/pages/video/videoDetails?item=${JSON.stringify(item)}`
+					url: `/pages/video/testVideoInfo?dramaId=${e.id}`
 				})
 			},
 			//获取轮播图
 			getBanner() {
 				this.$request('video.carouselList').then(res => {
-					this.swiperList = res.result.map(item => {
+					this.swiperList = res.result.records.map(item => {
 						return {
 							id: item.dramaId,
-							image: item.dramaPoster,
+							image: item.url,
 						}
 					})
 					console.log(this.swiperList, 'xx')
@@ -93,15 +91,14 @@
 			getVideoList() {
 				this.$request('video.videList', this.query).then(res => {
 					this.list = res.result.records;
-					// this.total = res.result.total;
 				})
 			},
 			vidoeInfo(item) {
 				uni.navigateTo({
-					url: `/pages/video/videoDetails?item=${JSON.stringify(item)}`
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
 				})
 			},
-			setTab(){
+			setTab() {
 				uni.setTabBarItem({
 					index: 0,
 					text: this.$t('tabBar.home')
@@ -136,15 +133,13 @@
 <style lang="scss" scoped>
 	.app-container {
 		padding-top: 40rpx;
-		padding-bottom: 50rpx;
-	}
-
-	page {
+		min-height: 100vh;
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-color: #000;
 	}
+
 
 	.navbar {
 		padding: 22rpx 24rpx 16rpx 24rpx;

@@ -102,17 +102,6 @@
         // "lazyCodeLoading": "requiredComponents",
         "optimization" : {
             "subPackages" : true
-        },
-        "plugins" : {
-            "playlet-plugin" : {
-                "version" : "latest",
-                "provider" : "wx94a6522b1d640c3b",
-                "genericsImplementation" : {
-                    "playlet" : {
-                        "charge-dialog" : "/components/charge-dialog/charge-dialog"
-                    }
-                }
-            }
         }
     },
     "mp-alipay" : {

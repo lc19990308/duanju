@@ -121,8 +121,8 @@
 		},
 		onLoad() {
 			this.getAllocatRechargeList()
-			this.tenantId = uni.getStorageSync('tenantId')
-			this.sysOrgCode = uni.getStorageSync('sysOrgCode')
+			this.tenantId = apiMoen.tenantId
+			this.sysOrgCode = apiMoen.sysOrgCode
 			this.handleToGoldList(this.tenantId, this.sysOrgCode)
 			this.getRechargePackageList(this.tenantId, this.sysOrgCode)
 			this.getWxCode()
@@ -143,7 +143,7 @@
 			getAllocatRechargeList() {
 				this.$request('wchatapi.allocatRechargeList', {
 					memberId: this.memberId,
-					sysOrgCode: uni.getStorageSync('sysOrgCode'),
+					sysOrgCode: apiMoen.sysOrgCode,
 				}).then(res => {
 					if (res != 200 && res.message != "") {
 						uni.showToast({
@@ -202,8 +202,8 @@
 				var data = {
 					rechargeId: item.id, //充值套餐id
 					memberId: this.memberId,
-					sysOrgCode: uni.getStorageSync('sysOrgCode'), //租户id
-					tenantId: uni.getStorageSync('tenantId'), //运营主体公司id
+					sysOrgCode: apiMoen.sysOrgCode, //租户id
+					tenantId: apiMoen.tenantId, //运营主体公司id
 					platformType: 2,
 					payMethod: 'wxpay',
 					openId: uni.getStorageSync('openid'),

@@ -1,0 +1,124 @@
+{
+  "name": "",
+  "attributes": [
+    {
+      "name": "[event]onchange",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]transition",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]animationfinish",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]loadmore",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]longTap",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]onclick",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]ondblclick",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]onplay",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]onpause",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]onended",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]changing",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]changed",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]timeupdate",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]onwaiting",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]fullscreenchange",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]fullscreenclick",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]loadedmetadata",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]onerror",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "[event]noTrigger",
+      "description": "",
+      "type": "Event"
+    },
+    {
+      "name": "list",
+      "type": "{\r\n        type: Array,\r\n        default: [],\r\n        required: true\r\n      }"
+    },
+    {
+      "name": "startIndex",
+      "type": "{\r\n        type: Number,\r\n        default: 0,\r\n        required: false\r\n      }"
+    },
+    {
+      "name": "force",
+      "type": "{\r\n        type: Boolean,\r\n        default: false,\r\n        required: false\r\n      }"
+    },
+    {
+      "name": "useSwiper",
+      "type": "{\r\n        type: Boolean,\r\n        default: true,\r\n        required: false\r\n      }"
+    },
+    {
+      "name": "touch",
+      "type": "{\r\n        type: Object,\r\n        default() {\r\n          return {\r\n            /** 上滑距离 */\r\n            upDistance: 20,\r\n            /** 下滑距离 */\r\n            downDistance: -40,\r\n            /** 滑动时间 */\r\n            slidTime: 200,\r\n            /** swiper 滑动距离 */\r\n            touchDistance: 80\r\n          };\r\n        },\r\n        required: false\r\n      }"
+    },
+    {
+      "name": "options",
+      "type": "{\r\n        type: Object,\r\n        default() {\r\n          return {\r\n            /** 组件宽度 */\r\n            width: uni.getSystemInfoSync().windowWidth,\r\n            /** 组件高度 */\r\n            height: uni.getSystemInfoSync().windowHeight,\r\n            /** 初始化提示内容 */\r\n            loadingText: \"加载中...\",\r\n            /** 临界值 */\r\n            criticalVal: 2,\r\n            /** 是否显示进度条 */\r\n            showProgress: true,\r\n            /** 是否自动切换 */\r\n            autoChange: false,\r\n            /** 是否显示全屏按钮 */\r\n            showFullScreen: true,\r\n            /** 全屏按钮配置 */\r\n            fullScreenOption: {\r\n              /** 按钮距底部高度 */\r\n              bottom: 100,\r\n              /** 按钮显示的内容 */\r\n              text: \"全屏观看\"\r\n            },\r\n            /** -90=屏幕顺时针90度、0=正常竖向、90=屏幕逆时针90度、 */\r\n            direction: '',\r\n            /** 是否显示loading控件 */\r\n            loading: false,\r\n            /** 是否使用默认的video组件，为 false 时可以自定义 video，提供有 video 插槽 */\r\n            useVideo: true,\r\n            /** swiper 滑动动画时长 */\r\n            duration: 300,\r\n            /** contain：包含，fill：填充，cover：覆盖 */\r\n            objectFit: \"contain\",\r\n            /** hardware：硬解码，software：ffmpeg软解码 */\r\n            codec: \"software\",\r\n            /** 0：普通模式，1：平滑播放模式（降级），2： M3U8优化模式 */\r\n            playStrategy: 1\r\n          };\r\n        },\r\n        required: false\r\n      }"
+    }
+  ]
+}

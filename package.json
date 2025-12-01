@@ -1,13 +1,29 @@
 {
-  "dependencies": {
-    "html2canvas": "^1.4.1",
-    "image-tools": "^1.4.0",
-    "jweixin-module": "^1.6.0",
-    "secure-ls": "^1.2.6",
-    "swiper": "^12.0.3",
-    "vconsole": "^3.15.1",
-    "vue-i18n": "^11.1.12",
-    "vuex-persistedstate": "^4.1.0",
-    "wxml2canvas": "^1.0.1"
-  }
+    "id": "tsp-video",
+    "name": "tsp仿抖音高性能短视频模板",
+    "displayName": "tsp仿抖音高性能短视频模板",
+    "version": "1.1.7",
+    "description": "组件的方式引用，代码简洁，无需过多更改，小程序端可支持10万条数据，H5、小程序端采用的是3个item节点循环加载显示，到第一个视频和最后一个视频自动禁止循环滚动加载，不用担心数据过多卡顿的问题",
+    "keywords": [
+        "支持H5",
+        "小程序",
+        "APP(nvue)",
+        "视频定位预览播放",
+        "双击点赞,自定义进度条"
+    ],
+    "dcloudext": {
+        "type": "component-vue",
+        "sale": {
+            "regular": {
+                "price": "0.00"
+            },
+            "sourcecode": {
+                "price": "0.00"
+            }
+        }
+    },
+    "uni_modules": {
+        "dependencies": [],
+        "encrypt": []
+    }
 }

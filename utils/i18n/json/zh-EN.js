@@ -40,7 +40,7 @@ const en = {
 
 	reward: {
 		my_gold: 'My Gold',
-		reg_to_date: 'Expires on ',
+		reg_to_date: 'Checked-in days ',
 		reg_now: 'Sign in immediately',
 		invite_friend: 'Invite Friends',
 		gold: 'Gold',
@@ -326,9 +326,10 @@ const en = {
 		pwdMismatch: 'Passwords do not match',
 		picRequired: 'Please select an image',
 		placeholder: 'Please enter',
-		pointsRequired: 'Please enter the amount of points'
+		pointsRequired: 'Please enter the amount of points',
+		getCode:'Get code',
+		regain: 'Resend code',
 	}
-
 };
 
 export default en;

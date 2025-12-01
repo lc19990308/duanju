@@ -156,22 +156,6 @@
 	import apiMoen from '../../utils/config.js';
 	import MyComponent from '@/pages/video/episode.vue';
 	import Popups from '../../components/popups/charge-dialog.vue'
-	const PlayerManager = require("../../utils/playerManager.js");
-	// const playletPlugin = requirePlugin("playlet-plugin");
-	let playletPlugin;
-
-	// 检查当前是否在小程序环境中
-	// if (typeof wx !== 'undefined' && wx.getSystemInfo) {
-	//     try {
-	//         // 在小程序中执行 requirePlugin
-	//         playletPlugin = requirePlugin("playlet-plugin");
-	//     } catch (error) {
-	//         console.error('Failed to requirePlugin in WeChat Mini Program:', error);
-	//     }
-	// } else {
-	//     // 在其他环境中的处理
-	//     console.log('This code is executed only in WeChat Mini Program environment.');
-	// }
 	import {
 		mapState,
 		mapGetters,
@@ -443,8 +427,8 @@
 					memberId: uni.getStorageSync('id'), //会员ID
 					dramaId: this.masitem.dramaId, //剧目ID
 					dramaSeries: item.dramaSeries, //剧集集数
-					tenantId: uni.getStorageSync('tenantId'), //租户ID
-					sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门编码
+					tenantId: apiMoen.tenantId, //租户ID
+					sysOrgCode: apiMoen.sysOrgCode, //部门编码
 				}
 				// console.log("数据calculateType", datas)
 				// return
@@ -566,13 +550,13 @@
 						method: 'POST',
 						header: {
 							'content-type': 'application/json', // 添加 content-type
-							"X-Tenant-Id": uni.getStorageSync('tenantId')
+							"X-Tenant-Id": apiMoen.tenantId
 						},
 						data: {
 							memberId: uni.getStorageSync('id'), //用户ID
 							dramaId: this.videoData[this.videoIndex].filmDramaId, //剧集ID
-							sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门ID
-							tenantId: uni.getStorageSync('tenantId'), //租户ID
+							sysOrgCode: apiMoen.sysOrgCode, //部门ID
+							tenantId:apiMoen.tenantId, //租户ID
 							seriesSeries: this.videoData[this.videoIndex].dramaSeries, //解锁的剧集ID
 							unlockState: false //剧集是否解锁状态
 						},
@@ -668,7 +652,7 @@
 					method: 'POST',
 					header: {
 						'content-type': 'application/json', // 添加 content-type
-						"X-Tenant-Id": uni.getStorageSync('tenantId')
+						"X-Tenant-Id": apiMoen.tenantId
 					},
 					data: {
 						secondType: 1, //操作分类 1播放、2点赞、3收藏、4转发
@@ -677,8 +661,8 @@
 						dramaId:this.masitem.dramaId, 
 						seriesId: this.masitem.seriesId, //剧目ID
 						dramaSeries: this.videoData[this.videoIndex].dramaSeries, //剧集集数
-						tenantId: uni.getStorageSync('tenantId'), //租户ID
-						sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门编码
+						tenantId: apiMoen.tenantId, //租户ID
+						sysOrgCode: apiMoen.sysOrgCode, //部门编码
 					},
 				})
 			},

@@ -1,0 +1,859 @@
+<template>
+	<view>
+		<!-- 底部标题 -->
+		<view @click.stop.prevent="moveHandle" class="footTitle"
+			:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
+			<view style="margin-left: 30rpx;">
+				<!-- 			<view class="footTitle-commodity">
+					<view class="footTitle-commodity-icon">
+						<image src="/static/icon/cart.png" class="footTitle-commodity-icon-img"></image>
+					</view>
+					<text class="footTitle-commodity-name text_one">商品商品商品商品商品商品商品商品商品商品商品商品商品</text>
+				</view> -->
+				<view><text class="foot-name">{{item.dramaName}}</text></view>
+				<view style="width: 500rpx;position: relative;font-size: 28rpx;" v-if="item.desc">
+					<text style="width: 450rpx;" class="foot-cont"
+						:class="[(item.desc.length > 33 && !expandDesc) ?'text_two':'']">{{item.desc}}</text>
+					<text class="foot-expand" v-if="item.desc.length > 33" @click="expandDesc = !expandDesc">
+						{{expandDesc?'...收起':'...展开'}}
+					</text>
+				</view>
+
+			</view>
+			<view class="video-info" v-if="!showSelectShow" @tap="JumpBtn(1,item)">
+				<view class="video-info-left">
+					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
+					<text class="label">Tổng hợp · Tất cả5Tập · Xem trọn bộ</text>
+				</view>
+				<uni-icons type="right" color="#fff" size="18"></uni-icons>
+			</view>
+			<view class="video-info" v-else @tap="JumpBtn(5,item)">
+				<view class="video-info-left">
+					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
+					<text class="label">Tổng hợp · Tất cả5Tập · Xem trọn bộ</text>
+				</view>
+				<uni-icons type="right" color="#fff" size="18"></uni-icons>
+			</view>
+		</view>
+		<!-- 右侧操作栏 -->
+		<view class="menuBox" v-if="item.menuBox" :style="{height:vodHeight+'px'}" @click.stop.prevent="moveHandle">
+			<view class="vodMenu"
+				:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
+				<!-- 头像 -->
+				<!-- 			<view class="vodMenu-top">
+					<view class="menu-avatar" @click="JumpBtn(1)">
+						<image src="/static/icon/touxiang.jpg" mode="" class="avatar-image"></image>
+					</view>
+					<view class="follow" @click="followBtn(index)" v-if="!item.followReally" :class="{followHide:followShow==2}">
+						<image src="/static/icon/gou.png" mode="" class="follow-guanzhu guanzhu-gou" v-if="followShow == 1 || followShow == 2"></image>
+						<image src="/static/icon/guanzhu.png" mode="" class="follow-guanzhu" v-if="followShow==null || followShow==0"></image>
+					</view>
+				</view> -->
+				<!-- 点赞 -->
+				<view class="fabulous" @click="JumpBtn(2)" style="position: relative;padding-top: 5rpx;">
+					<view class="likeBox" :ref="'pelRef'+index">
+						<view class="like-pellet" :class="'like-pellet'+j" v-for="(lt,j) in 8" :key="j"></view>
+					</view>
+					<view class="fabulous-image" @click="fabulousBtn" :ref="'likeRef'+index">
+						<image src="/static/icon/selectTaoxin.png" mode="" class="fabulous-image" v-if="likeStatus">
+						</image>
+						<image src="/static/icon/taoxin.png" mode="" class="fabulous-image" v-else></image>
+					</view>
+					<text class="fabulous-num"> {{likeTotal}}</text>
+				</view>
+				<!-- 评论 -->
+				<view class="fabulous" style="margin-top: 30rpx;" @click="JumpBtn(3)">
+					<view class="fabulous-image" v-if="!collectStatus">
+						<image src="/static/images/Frame-15.png" mode="" class="fabulous-image"></image>
+					</view>
+					<view class="fabulous-image" v-if="collectStatus">
+						<image src="/static/images/Frame-16.png" mode="" class="fabulous-image"></image>
+					</view>
+					<text class="fabulous-num">{{collectTotal}}</text>
+				</view>
+				<!-- 转发 -->
+				<view class="fabulous" style="margin-top: 30rpx;" @click="JumpBtn(4)">
+					<view class="fabulous-image">
+						<image src="/static/icon/ward.png" mode="" class="fabulous-image"></image>
+					</view>
+					<text class="fabulous-num" style="font-size: 26rpx;">转发</text>
+				</view>
+			</view>
+		</view>
+		<!-- 旋转头像 -->
+		<!-- 		<view @click.stop.prevent="moveHandle" class="avatarMenu" v-if="item.rotateImgShow" :class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
+			<view style="position: relative;width: 95rpx;height: 95rpx;" @click="JumpBtn(5)">
+				<view :ref="'rotateImg'+ index">
+					<view class="rotate-avatar">
+						<image src="/static/icon/touxiang.jpg" mode="" class="rotate-image"></image>
+					</view>
+				</view>
+				<view :style="`position: absolute;top: 0;left: 0;opacity:${item.vodPaly? 0 : 1}`">
+					<view class="rotate-avatar">
+						<image src="/static/icon/touxiang.jpg" mode="" class="rotate-image"></image>
+					</view>
+				</view>
+			</view>
+		</view> -->
+
+		<u-popup :show="show" :closeOnClickOverlay='true' :closeable='true' bgColor='#000' @close.stop="show = false"
+			:round="15">
+			<view class="selected-video">
+				<view class="selected-video-head">
+					<image class="cover" v-if="videoInfo.dramaPoster" :src="videoInfo.dramaPoster" mode=""></image>
+					<view class="content">
+						<view class="content-info" @tap="JumpBtn(6)">
+							<text class="content-info-title">{{videoInfo.dramaName}}</text>
+							<uni-icons type="right" color="#fff" size="14"></uni-icons>
+						</view>
+						<text class="des-text">
+							{{videoInfo.dramaDescribe}}
+						</text>
+					</view>
+				</view>
+				<view class="video-box">
+					<view class="video-box-item" @tap="pickerVideoPlay(index,item)"
+						:class="vodIndex === index ? 'video-box-item_active':'' " v-for="(item,index) in videoList"
+						:key="index">
+						<text class="video-box-item-text">{{item.dramaSeries}}</text>
+						<view class="lock-box" v-if="item.unlockStatus === 3">
+							<u-icon name="lock-opened-fill" color="#fff" size="18"></u-icon>
+						</view>
+					</view>
+				</view>
+			</view>
+		</u-popup>
+	</view>
+</template>
+
+<script>
+	import api from '@/utils/config.js'
+	import selectedVideo from '../tsp-menu/selected-video'
+	import {
+		mapState,
+		mapGetters,
+		mapMutations,
+		mapActions
+	} from "vuex"
+	const animation = uni.requireNativePlugin('animation')
+	export default {
+		components: {
+			selectedVideo
+		},
+		props: {
+			//视频部分的高度
+			vodHeight: {
+				type: Number,
+				default: 0
+			},
+			//下标索引
+			index: {
+				type: Number,
+				default: 0
+			},
+			//当前播放的视频下标
+			vodIndex: {
+				type: Number,
+				default: 0
+			},
+			//当前视频的整个对象
+			item: {
+				type: Object,
+				default: () => {
+					return {}
+				}
+			},
+			//数据总数
+			discussNum: {
+				type: Number,
+				default: 0
+			},
+			//是否在拖动进度
+			sliderDrag: {
+				type: Boolean,
+				default: false
+			},
+			//是否透明
+			moveOpacity: {
+				type: Boolean,
+				default: false
+			},
+			showSelectShow: {
+				type: Boolean,
+				default: false
+			},
+		},
+		computed: {
+			...mapState('video', ['likeStatus', 'likeTotal', 'collectStatus', 'collectTotal'])
+		},
+		data() {
+			return {
+				followShow: null,
+				fabuTimeOut: null,
+				likeNum: 0,
+				pelletNum: 0,
+				expandDesc: false,
+				/* 点赞动画 */
+				likeDropList: {
+					list: [{
+							transform: 'scale(1)'
+						},
+						{
+							transform: 'scale(0)'
+						},
+						{
+							transform: 'scale(0.5)'
+						},
+						{
+							transform: 'scale(1)'
+						},
+						{
+							transform: 'scale(1.2)'
+						},
+						{
+							transform: 'scale(1)'
+						},
+						{
+							transform: 'scale(1.1)'
+						},
+						{
+							transform: 'scale(1)'
+						}
+					],
+					duration: 62
+				},
+				/* 取消点赞动画 */
+				likeCancelList: {
+					list: [{
+							transform: 'scale(1)'
+						},
+						{
+							transform: 'scale(0.7)'
+						},
+						{
+							transform: 'scale(1)'
+						}
+					],
+					duration: 66
+				},
+				/* 小圆点闪出的动画 */
+				pelletList: {
+					list: [{
+							transform: 'scale(0.5)',
+							opacity: '0.8'
+						},
+						{
+							transform: 'scale(1)',
+							opacity: '1'
+						},
+						{
+							transform: 'scale(1.1)',
+							opacity: '0'
+						}
+					],
+					duration: 166
+				},
+				memberId: uni.getStorageSync('id') || '',
+				videoList: [],
+				videoInfo: {
+					dramaDescribe: '',
+					dramaName: '',
+					dramaPoster: '',
+				},
+				show: false,
+			}
+		},
+		methods: {
+			...mapActions('video', ['setLike', 'getVideoInfo']),
+			/* 阻止事件冒泡 */
+			moveHandle(event) {
+				event.stopPropagation()
+			},
+			/* 旋转头像动画 */
+			rotateAvatar() {
+				let testEl = this.$refs['rotateImg' + this.vodIndex]
+				animation.transition(testEl, {
+					styles: {
+						transform: 'rotate(0deg)',
+					},
+					duration: 0, //ms
+					timingFunction: 'linear',
+					delay: 0 //ms
+				}, () => {
+					this.rotateAvatar1();
+				})
+			},
+			rotateAvatar1() {
+				let testEl = this.$refs['rotateImg' + this.vodIndex]
+				animation.transition(testEl, {
+					styles: {
+						transform: 'rotate(360deg)',
+					},
+					duration: 3000, //ms
+					timingFunction: 'linear',
+					delay: 0 //ms
+				}, () => {
+					this.rotateAvatar();
+				})
+			},
+			/* 视频点赞动效 */
+			fabulousBtn() {
+				let obj = Object.assign({}, this.item)
+				obj.fabulousShow = !obj.fabulousShow
+				this.likeNum = 0
+				this.pelletNum = 0
+				let result = obj.fabulousShow ? this.likeDropList : this.likeCancelList
+				this.addAnimation('likeRef', result, this.likeNum) //点赞动画
+				if (obj.fabulousShow) { //小圆点闪出动画
+					this.addAnimation('pelRef', this.pelletList, this.pelletNum)
+				}
+				this.$emit('fabulousBtn', {
+					obj: obj,
+					index: this.index
+				}) //点赞成功
+				/* clearTimeout(this.fabuTimeOut)
+				this.fabuTimeOut = setTimeout(()=>{
+					console.log('发送请求')
+				},300) */
+			},
+			/* 关注动效 */
+			followBtn(index) {
+				let obj = Object.assign({}, this.item)
+				obj.followReally = true
+				this.followShow = 0
+				setTimeout(() => {
+					this.followShow = 1
+					setTimeout(() => {
+						this.followShow = 2
+						setTimeout(() => {
+							this.$emit('fabulousBtn', {
+								obj: obj,
+								index: this.index
+							}) //关注成功
+						}, 500)
+					}, 50)
+				}, 300)
+			},
+			/* 点击右侧菜单选项 1头像 2点赞 3评论 4转发 5旋转头像 */
+			async JumpBtn(index, item) {
+				switch (index) {
+					case 1:
+						uni.navigateTo({
+							url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
+						})
+						break;
+					case 2:
+						const data = {
+							calculateType: this.likeStatus ? 2 : 1,
+							dramaId: this.item.filmDramaId,
+							dramaSeries: this.item.dramaSeries,
+							memberId: this.memberId,
+							secondType: 2,
+							seriesId: this.item.id,
+							sysOrgCode: this.item.sysOrgCode,
+							tenantId: this.item.tenantId,
+						}
+						await this.setLike(data);
+						await this.getVideoInfo({
+							seriesId: this.item.id,
+							memberId: this.memberId,
+						})
+						break;
+					case 3:
+						const params = {
+							calculateType: this.collectStatus ? 2 : 1,
+							dramaId: this.item.filmDramaId,
+							dramaSeries: this.item.dramaSeries,
+							memberId: this.memberId,
+							secondType: 3,
+							seriesId: this.item.id,
+							sysOrgCode: this.item.sysOrgCode,
+							tenantId: this.item.tenantId,
+						}
+						await this.setLike(params);
+						await this.getVideoInfo({
+							seriesId: this.item.id,
+							memberId: this.memberId,
+						})
+						break;
+					case 4:
+						console.log('点击4转发')
+						break;
+					case 5:
+						this.getVideData();
+						break;
+					case 6:
+						uni.navigateTo({
+							url: '/pages/video/details?dramaId=1994367728237072385'
+						})
+						break
+				}
+			},
+			//获取剧集列表
+			async getVideData() {
+				const [error, res] = await uni.request({
+					url: `${api.MPWEIXIN}/api/appApi/filmDramaSeriesList`,
+					method: 'GET',
+					data: {
+						dramaId: this.item.filmDramaId,
+						memberId: this.memberId,
+						pageNo: 1,
+						pageSize: 1000,
+					},
+					header: {
+						'content-type': 'application/json', // 添加 content-type
+						"X-Tenant-Id": api.tenantId,
+					},
+				})
+				if (res.data.code === 200) {
+					this.videoList = res.data.result.records;
+				}
+				const [errorVideoInfo, videoInfo] = await uni.request({
+					url: `${api.MPWEIXIN}/api/appApi/filmDramaById`,
+					method: 'GET',
+					data: {
+						id: this.item.filmDramaId,
+					},
+					header: {
+						'content-type': 'application/json', // 添加 content-type
+						"X-Tenant-Id": api.tenantId,
+					},
+				})
+				this.videoInfo = videoInfo.data.result;
+				this.show = true;
+			},
+			/* 动画方法 */
+			addAnimation(name, dataList, num) {
+				let testEl = this.$refs[name + this.vodIndex]
+				animation.transition(testEl, {
+					styles: dataList.list[num],
+					duration: dataList.duration, //ms
+					timingFunction: 'linear',
+					delay: 0 //ms
+				}, () => {
+					num = num + 1
+					if (num < dataList.list.length) {
+						this.addAnimation(name, dataList, num);
+					}
+				})
+			},
+			//选集
+			pickerVideoPlay(index, item) {
+				this.show = false;
+				let i = index - 1;
+				if (i === -1) {
+					this.$emit('pickerVideoPlay', {
+						index,
+						item
+					});
+				} else {
+					if (this.videoList[i].unlockStatus === 3) {
+						return uni.$u.toast('请先解锁上一集')
+					}
+					this.$emit('pickerVideoPlay', {
+						index,
+						item
+					});
+				}
+			},
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.menuBox {
+		position: absolute;
+		right: 10rpx;
+		width: 115rpx;
+		z-index: 8;
+		justify-content: center;
+	}
+
+	.avatarMenu {
+		position: absolute;
+		bottom: 20px;
+		right: 10rpx;
+		width: 115rpx;
+		z-index: 8;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.vodMenu {
+		margin-top: 100rpx;
+		width: 115rpx;
+		width: 115rpx;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.vodMenu-bright0 {
+		opacity: 1;
+		transition-property: opacity;
+		transition-timing-function: linear;
+		transition-duration: 0.3s;
+	}
+
+	.vodMenu-bright1 {
+		opacity: 0;
+		transition-property: opacity;
+		transition-timing-function: linear;
+		transition-duration: 0.3s;
+	}
+
+	.vodMenu-bright2 {
+		opacity: 0.2;
+		transition-property: opacity;
+		transition-timing-function: linear;
+		transition-duration: 0.3s;
+	}
+
+	.vodMenu-top {
+		height: 140rpx;
+		width: 115rpx;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.menu-avatar {
+		position: relative;
+		width: 115rpx;
+		height: 115rpx;
+		border-radius: 115rpx;
+		background-color: #FFFFFF;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.avatar-image {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 100rpx;
+	}
+
+	.follow {
+		position: absolute;
+		bottom: 0;
+		width: 40rpx;
+		height: 40rpx;
+		background-color: #FFFFFF;
+		border-radius: 40rpx;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.follow:active {
+		transition-property: transform;
+		transition-timing-function: linear;
+		transition-duration: 0.4s;
+		transform: scale(0.7);
+	}
+
+	.follow-guanzhu {
+		width: 40rpx;
+		height: 40rpx;
+	}
+
+	.guanzhu-gou {
+		width: 30rpx;
+		height: 30rpx;
+	}
+
+	.followActive {
+		transition-property: transform;
+		transition-timing-function: linear;
+		transition-duration: 0.5s;
+		transform: rotate(180deg);
+	}
+
+	.followHide {
+		transition-property: transform;
+		transition-timing-function: linear;
+		transition-duration: 0.5s;
+		transform: scale(0.1);
+	}
+
+	.fabulous {
+		width: 100rpx;
+		margin-top: 80rpx;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.fabulous-image {
+		width: 80rpx;
+		height: 80rpx;
+	}
+
+	.fabulous-num {
+		width: 100rpx;
+		font-size: 28rpx;
+		color: #FFFFFF;
+		text-align: center;
+		margin-top: 10rpx;
+	}
+
+	.likeBox {
+		position: absolute;
+		width: 100rpx;
+		height: 94rpx;
+		opacity: 0;
+		transform: scale(0.1);
+	}
+
+	.like-pellet {
+		width: 5rpx;
+		height: 5rpx;
+		background-color: #FF0000;
+		border-radius: 5rpx;
+		position: absolute;
+	}
+
+	.like-pellet0 {
+		top: 10rpx;
+		left: 5rpx;
+	}
+
+	.like-pellet1 {
+		top: 10rpx;
+		right: 5rpx;
+	}
+
+	.like-pellet2 {
+		bottom: 13rpx;
+		left: 13rpx;
+	}
+
+	.like-pellet3 {
+		bottom: 13rpx;
+		right: 13rpx;
+	}
+
+	.like-pellet4 {
+		top: 0;
+		left: 46rpx;
+	}
+
+	.like-pellet5 {
+		bottom: 2rpx;
+		left: 46rpx;
+	}
+
+	.like-pellet6 {
+		left: 0;
+		top: 44rpx;
+	}
+
+	.like-pellet7 {
+		right: 0;
+		top: 44rpx;
+	}
+
+	/* 底部标题部分 */
+	.footTitle {
+		position: absolute;
+		bottom: 20px;
+		left: 0;
+		width: 750rpx;
+		/* padding-left: 30rpx; */
+		/* margin-left: 30rpx; */
+	}
+
+	.footTitle-commodity {
+		margin-bottom: 50rpx;
+		width: 400rpx;
+		background-color: rgba(0, 0, 0, 0.4);
+		padding: 10rpx;
+		border-radius: 7rpx;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.footTitle-commodity-icon {
+		width: 40rpx;
+		height: 40rpx;
+		background-color: #f98607;
+		border-radius: 7rpx;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.footTitle-commodity-icon-img {
+		width: 30rpx;
+		height: 30rpx;
+	}
+
+	.footTitle-commodity-name {
+		width: 330rpx;
+		font-size: 24rpx;
+		color: #FFFFFF;
+		margin-left: 15rpx;
+	}
+
+	.foot-name {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		font-weight: bold;
+		margin-bottom: 15rpx;
+	}
+
+	.foot-cont {
+		font-size: 28rpx;
+		color: #FFFFFF;
+	}
+
+	.foot-primary {
+		margin-top: 15rpx;
+		font-size: 25rpx;
+		color: #FFFFFF;
+	}
+
+	.foot-expand {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		font-size: 25rpx;
+		color: #FFFFFF;
+	}
+
+	/*字体单行省略*/
+	.text_one {
+		lines: 1;
+	}
+
+	/*字体两行省略*/
+	.text_two {
+		lines: 2;
+	}
+
+	.rotate-avatar {
+		width: 95rpx;
+		height: 95rpx;
+		border-radius: 95rpx;
+		background-color: #333333;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.rotate-image {
+		width: 55rpx;
+		height: 55rpx;
+		border-radius: 55rpx;
+	}
+
+	.video-info {
+		flex-direction: row;
+		/* 最关键：横向排列 */
+		align-items: center;
+		justify-content: space-between;
+		/* 左中右结构必备 */
+		/* 垂直居中，可选 */
+		width: 750rpx;
+		margin-top: 20rpx;
+		padding: 10rpx 16rpx;
+		background-color: rgba(0, 0, 0, 0.1);
+	}
+
+	.video-info-left {
+		flex-direction: row;
+		/* 最关键：横向排列 */
+		align-items: center;
+	}
+
+	.icon {
+		width: 46rpx;
+		height: 46rpx;
+	}
+
+	.label {
+		margin-left: 10rpx;
+		/* 控制图标与文字间距 */
+		lines: 1;
+		color: #fff;
+		margin-left: 8px;
+		font-size: 32rpx;
+		/* 保持一行，可选 */
+	}
+
+	.selected-video {
+		padding: 90rpx 30rpx 30rpx 30rpx;
+		// background-color: #000;
+		height: 700rpx;
+	}
+
+	.selected-video-head {
+		flex-direction: row;
+	}
+
+	.cover {
+		width: 150rpx;
+		height: 200rpx;
+	}
+
+	.content {
+		margin-left: 30rpx;
+		flex: 1;
+	}
+
+	.content-info {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 30rpx;
+
+		.content-info-title {
+			font-size: 36rpx;
+			font-weight: 500;
+			color: #fff;
+		}
+	}
+
+	.des-text {
+		color: #fff;
+		font-size: 30rpx;
+		margin-top: 10rpx;
+		lines: 2;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	.video-box {
+		position: relative;
+		flex-direction: row;
+		flex-wrap: wrap;
+		margin-top: 20rpx;
+
+		.video-box-item {
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			width: 90rpx;
+			height: 90rpx;
+			background: #2a2a2a;
+			border-radius: 8rpx;
+			margin-right: 15rpx;
+			margin-bottom: 15rpx;
+
+			.video-box-item-text {
+				color: #fff;
+				font-size: 24rpx;
+			}
+		}
+
+		.video-box-item_active {
+			background-color: rgb(25, 23, 23) !important;
+		}
+
+	}
+
+	.lock-box {
+		position: absolute;
+		right: 0;
+		top: 0;
+		background-color: #90630F;
+		border-radius: 0px 8rpx 0px 8rpx;
+	}
+</style>

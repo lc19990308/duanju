@@ -79,10 +79,11 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
+	.app-container {
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
+		min-height: 100vh;
 	}
 
 	.agreement {

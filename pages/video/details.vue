@@ -1,6 +1,9 @@
 <template>
 	<view class="Plot">
 		<view class="Plot-details">
+			<statusBar />
+			<u-navbar :title="$t(`walletLog.page_title`)" :fixed='true' :autoBack="true" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+				:placeholder='true' />
 			<!-- 头部区域 -->
 			<view class="top">
 				<view class="top-cover">
@@ -118,7 +121,6 @@
 </template>
 
 <script>
-	const PlayerManager = require("../../utils/playerManager.js");
 	import apiMoen from '../../utils/config.js';
 	export default {
 		data() {
@@ -153,7 +155,13 @@
 				styles: {
 					backgroundColor: '#F2F5F7', // 默认背景颜色
 					color: '#333',
-				}
+				},
+				titleStyle: {
+					color: '#fff',
+					fontFamily: 'PingFang SC, PingFang SC',
+					fontWeight: 800,
+					color: '#FFFFFF',
+				},
 			}
 		},
 		onLoad(option) {
@@ -310,11 +318,6 @@
 				uni.navigateTo({
 					url: '/pages/video/videoDetails?item=' + encodeURIComponent(omim)
 				})
-				// PlayerManager.navigateToPlayer({
-				// 	srcAppid: uni.getStorageSync('srcAppid'),
-				// 	dramaId: lItems.dramaId,
-				// 	// extParam: encodeURIComponent('a=b&c=d'), // 分享会携带的参数，可自定义
-				// })
 			},
 			// 获取视频列表
 			getVideoList() {

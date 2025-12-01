@@ -3,12 +3,8 @@
 		<view class="infoBox">
 			<view class="userinfo_box" v-if="userInfoStore">
 				<view class="avatar">
-					<image class="imageloog" v-if="userInfoStore.backgLogo" :src="userInfoStore.backgLogo" mode="">
-					</image>
-					<!-- <image class="imageloog"  src="/static/images/avatar.png" mode=""></image> -->
-					<image class="image" v-if="userInfoStore.themeLogo" :src="userInfoStore.themeLogo"
-						mode="aspectFill"></image>
-					<image class="image" v-else :src="avatar" mode="aspectFill"></image>
+					<image class="image" v-if="avatar" :src="avatar" mode="aspectFill"></image>
+					<image class="image" v-else src="/static/images/avatar.png" mode="aspectFill"></image>
 				</view>
 				<navigator class="info" url="/pages/user/account/changeUserName" hover-class="none">
 					<view class="msg single-line">
@@ -16,17 +12,13 @@
 						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
 					<view class="msg">
-						<text class="text"
-							v-if="userInfoStore.activate != $t('my.have_opened')">ID：{{ userInfoStore.memberId || "000001" }}</text>
+						<text class="text" v-if="memberId">ID：{{ memberId || "" }}</text>
 						<!-- <text class="text" style="margin: 0 16rpx;" v-if="userInfoStore.activate=='已开通'"></text> -->
-						<text class="text" v-if="
-                userInfoStore.activate == $t('my.have_opened') && userInfoStore.rechargeVal
-              ">VIP{{$t('my.member')}}{{ userInfoStore.expireTime }}{{$t('my.expire')}}</text>
 						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
 				</navigator>
-				<u-button class="user-btn" @tap="tologin" v-if="token">{{$t(`my.login_text`)}}</u-button>
-				<u-button class="user-btn" @tap="loginOut" v-else="!token">{{$t(`my.get_out`)}}</u-button>
+				<u-button class="user-btn" @tap="loginOut" v-if='token != ""'>{{$t(`my.get_out`)}}</u-button>
+				<u-button class="user-btn" @tap="tologin" v-else>{{$t(`my.login_text`)}}</u-button>
 				<!-- <image class="arrow" src="/static/icons/arrow.png" mode="widthFix"></image> -->
 			</view>
 			<view class="userinfo_box" v-else>
@@ -53,13 +45,13 @@
 					<navigator class="right" url="/pages/user/integral/recharge-info" hover-class="none">
 						<text class="text">{{$t(`my.gold`)}}</text>
 						<text class="text usable">{{
-						  userInfoStore.totalBalance || 0
+						  balanceData.currency || 0
 						}}</text>
 					</navigator>
 					<navigator class="right" url="/pages/user/integral/recharge-info" hover-class="none">
 						<text class="text">{{$t(`my.points`)}}</text>
 						<text class="text usables">{{
-              userInfoStore.totalBalance || 0
+              balanceData.totalBalance || 0
             }}</text>
 					</navigator>
 
@@ -95,7 +87,7 @@
 					<span>></span>
 					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
 				</view>
-				<view class="list">
+				<view class="list" v-if="mounList.length">
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
 						<view v-for="(item, index) in mounList" :key="index" style="position: relative"
 							@click="abunbtn(item)">
@@ -146,6 +138,7 @@
 				</view>
 			</view>
 
+
 			<view class="copyright" v-if="copyrightData.length" @click="debugClick">
 				<view class="item" v-for="(item, index) in copyrightData" :key="index">
 					<image class="image" v-if="item.image" :src="item.image" mode="widthFix"></image>
@@ -167,35 +160,19 @@
 					<text class="btn" @click="alertBindButton('mobile')">去绑定</text>
 				</view>
 			</view> -->
-			<u-modal :show="cdkey.show" :title="cdkey.title" :showCancelButton="true" @confirm="cdkeyConfirm"
+			<!-- 			<u-modal :show="cdkey.show" :title="cdkey.title" :showCancelButton="true" @confirm="cdkeyConfirm"
 				@cancel="cdkey.show = false">
 				<view style="width: 100%">
 					<u-input v-model="cdkey.value" :customStyle="inputStyle" clearable :placeholder="$t('my.cdkey')"
 						@change="inputChange" @blur="inputChange"></u-input>
 				</view>
-			</u-modal>
+			</u-modal> -->
 		</view>
 	</view>
 </template>
 
 <script>
 	import apiMoen from "../../utils/config.js";
-	const PlayerManager = require("../../utils/playerManager.js");
-	// const playletPlugin = requirePlugin("playlet-plugin");
-	// let playletPlugin;
-
-	// 检查当前是否在小程序环境中
-	if (typeof wx !== "undefined" && wx.getSystemInfo) {
-		try {
-			// 在小程序中执行 requirePlugin
-			// playletPlugin = requirePlugin("playlet-plugin");
-		} catch (error) {
-			// console.error('Failed to requirePlugin in WeChat Mini Program:', error);
-		}
-	} else {
-		// 在其他环境中的处理
-		console.log("This code is executed only in WeChat Mini Program environment.");
-	}
 	import {
 		mapState,
 		mapGetters,
@@ -209,7 +186,7 @@
 				allocatProgram: {},
 				tenantId: null,
 				sysOrgCode: null,
-				memberId: null,
+				memberId: uni.getStorageSync("id"),
 				memberName: null,
 				buttonStyle: {
 					width: "100%",
@@ -272,6 +249,15 @@
 						rid: "",
 						path: "/pages/user/seting/seting",
 					},
+					{
+						id: 6,
+						img: "/static/images/Frame-38.png",
+						width: "32rpx",
+						text: "my.set", //联系我们
+						rid: "",
+						path: "/pages/video/testVideo",
+					},
+
 					// {
 					// 	id: 7,
 					// 	img: '/static/icons/list_1.png',
@@ -299,7 +285,11 @@
 				videoList: [],
 				mounList: [],
 				avatar: '',
-				token: uni.getStorageSync('token'),
+				balanceData:{
+					currency:'',
+					totalBalance:'',
+				},
+				id:uni.getStorageSync("id"),
 			};
 		},
 		computed: {
@@ -341,9 +331,6 @@
 
 			this.tenantId = apiMoen.tenantId;
 			this.sysOrgCode = apiMoen.sysOrgCode;
-
-			this.memberId = uni.getStorageSync("id");
-			this.id = uni.getStorageSync("id");
 			this.handleTovideoList();
 			this.richtext && this.initMenuList(this.richtext);
 			this.getAllocatProgram();
@@ -351,6 +338,7 @@
 		},
 		onShow() {
 			this.setTab();
+			this.getIntegral();
 			this.getUserInfo();
 		},
 		onUnload() {
@@ -358,6 +346,14 @@
 		},
 		methods: {
 			...mapActions("user", ["getUserInfo"]),
+			//获取货币信息
+			getIntegral() {
+				this.$request('withdraw.getBalance', {
+					memberId: this.memberId
+				}).then(res => {
+					this.balanceData = res.result;
+				})
+			},
 			setTab() {
 				uni.setTabBarItem({
 					index: 0,
@@ -385,8 +381,8 @@
 				const [res, model] = await uni.showModal({
 					title: this.$t('model_box.tip'),
 					content: this.$t('model_box.logout_confirm'),
-					confirmText:this.$t('model_box.confirm'),
-					cancelText:this.$t('model_box.cancel'),
+					confirmText: this.$t('model_box.confirm'),
+					cancelText: this.$t('model_box.cancel'),
 				})
 				if (model.confirm) {
 					setTimeout(() => {
@@ -447,29 +443,6 @@
 					url: `/pages/video/videoDetails?item=${JSON.stringify(item)}`
 				})
 			},
-			// 调试
-			debugClick() {
-				// #ifdef MP-WEIXIN
-				const env = wx.getAccountInfoSync().miniProgram.envVersion;
-				if (env != "release") {
-					clearTimeout(this.debug.timer);
-					this.debug.count++;
-					this.debug.timer = setTimeout(() => {
-						if (this.debug.count >= 5) {
-							uni.showModal({
-								title: "配置信息",
-								content: `
-									(env => ${env}) -
-									(domain => ${this.$BASE_URL}) -
-									(sign => ${this.$SIGN})
-								`,
-							});
-						}
-						this.debug.count = 0;
-					}, 500);
-				}
-				// #endif
-			},
 			alertBindButton(type) {
 				if (type == "wxmp") {
 					console.log("绑定微信小程序");
@@ -498,8 +471,8 @@
 			// 小程序信息查询
 			getAllocatProgram() {
 				this.$request("common.allocatProgram", {
-					tenantId: uni.getStorageSync("tenantId"),
-					sysOrgCode: uni.getStorageSync("sysOrgCode"),
+					tenantId: apiMoen.tenantId,
+					sysOrgCode:apiMoen.sysOrgCode,
 					appId: uni.getStorageSync("srcAppid"),
 				}).then((res) => {
 					if (res != 200 && res.message != "") {
@@ -696,6 +669,10 @@
 
 					.msg {
 						.membername {
+							width: 300rpx;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
 							font-size: 36rpx;
 							margin-top: 20rpx;
 							color: #fff;

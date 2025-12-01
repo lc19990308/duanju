@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "",
-  "enablePullDownRefresh": false,
-  "navigationStyle": "default",
-  "usingComponents": {
-    "uni-pay": "/uni_modules/uni-pay/components/uni-pay/uni-pay"
-  }
-}

@@ -65,7 +65,6 @@
 </template>
 
 <script>
-	const PlayerManager = require("../../utils/playerManager.js");
 	import apiMoen from '../../utils/config.js';
 	export default {
 		data() {
@@ -342,14 +341,6 @@
 			// 显示演员详情
 			open() {
 				this.$refs.popup.open();
-			},
-			// 跳转播放
-			openVideoDetail(lItems) {
-				PlayerManager.navigateToPlayer({
-					srcAppid: uni.getStorageSync('srcAppid'),
-					dramaId: lItems.dramaId,
-					// extParam: encodeURIComponent('a=b&c=d'), // 分享会携带的参数，可自定义
-				})
 			},
 			// 获取视频列表
 			getVideoList() {

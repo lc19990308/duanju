@@ -91,6 +91,7 @@
 </template>
 
 <script>
+	import api from '@/utils/config.js'
 	const jweixin = require('jweixin-module')
 	import PlayletManager from '../../utils/playerManager.js'
 	// var plugin = requirePlugin("playlet-plugin");
@@ -126,12 +127,12 @@
 				},
 				serialNos: null,
 				userCode: '',
-				tenantId: uni.getStorageSync('tenantId'),
-				sysOrgCode: uni.getStorageSync('sysOrgCode'),
+				tenantId: api.tenantId,
+				sysOrgCode: api.sysOrgCode,
 				allocatRechargeList: {},
 				videoQuery: {
-					tenantId: uni.getStorageSync('tenantId'),
-					sysOrgCode: uni.getStorageSync('sysOrgCode'),
+					tenantId: api.tenantId,
+					sysOrgCode: api.sysOrgCode,
 					dramaClassify: "", //短剧分类
 					dramaChannel: "", //频道分类
 				},
@@ -168,7 +169,6 @@
 			this.getVipPackageList()
 			this.filmDramaMember()
 			this.getAllocatRechargeList()
-			console.log("this.tenantId,this.sysOrgCode", this.tenantId, this.sysOrgCode);
 		},
 		watch: {
 			serialNo(serialNo) {
@@ -234,8 +234,8 @@
 			// 查询充值设置
 			getAllocatRechargeList() {
 				this.$request('wchatapi.allocatRechargeList', {
-					memberId: uni.getStorageSync('tenantId'),
-					sysOrgCode: uni.getStorageSync('sysOrgCode'),
+					memberId: api.tenantId,
+					sysOrgCode: api.sysOrgCode,
 				}).then(res => {
 					if (res != 200 && res.message != "") {
 						uni.showToast({
@@ -266,11 +266,9 @@
 			// VIP充值套餐列表
 			getVipPackageList() {
 				this.$request('wchatapi.vipPackageList', {
-					tenantId: this.tenantId,
+					tenantId: api.tenantId,
 					sysOrgCode: this.sysOrgCode
 				}).then(res => {
-					console.log("this.tenantId,this.sysOrgCode充值套餐列表", this.tenantId, this.sysOrgCode);
-					console.log(res, "res1111111VIP充值套餐列表");
 					if (res.code == 200) {
 						this.memberList = res.result
 					}
@@ -332,7 +330,7 @@
 					goodsPrice: items.packageMoney, //充值金额
 					productId: items.id, //充值会员id 即是套餐id
 					memberId: uni.getStorageSync('id'), //会员id
-					sysOrgCode: uni.getStorageSync('sysOrgCode'), //小程序id
+					sysOrgCode: api.sysOrgCode,
 					tenantId: this.tenantId, //运营主体公司id
 					code: userCode
 				}
@@ -427,14 +425,11 @@
 			filmDramaMember() {
 				var data = {
 					memberId: uni.getStorageSync('id'),
-					// sysOrgCode:uni.getStorageSync('sysOrgCode'),
-					// tenantId: uni.getStorageSync('tenantId')
 				}
 				// console.log(memberId,"memberId")
 				// return 
 				this.$request('player.filmDramaMember', data).then(res => {
 					console.log("res:查询会员信息------------------------------------------------------------", res, )
-					// console.log(tenantId,"tenantId")
 					this.falishui = res.result
 				})
 			},
@@ -448,13 +443,11 @@
 				var data = {
 					dramaId,
 					dramaSeries: this.serialNos,
-					sysOrgCode: uni.getStorageSync('sysOrgCode'),
-					tenantId: uni.getStorageSync('tenantId'),
-					// tenantId:'1002',
+					sysOrgCode: api.sysOrgCode,
+					tenantId: api.tenantId,
 					id: uni.getStorageSync('id')
 				}
 				this.$request('player.rechargePackageList', data).then(res => {
-					console.log(res, "res:1212121212")
 					this.mainList = res.result
 				})
 			},
@@ -486,8 +479,8 @@
 				var data = {
 					rechargeId: item.id, //充值套餐id
 					memberId: uni.getStorageSync('id'), //会员id
-					sysOrgCode: uni.getStorageSync('sysOrgCode'), //小程序id
-					tenantId: uni.getStorageSync('tenantId'), //运营主体公司id
+					sysOrgCode: api.sysOrgCode, //小程序id
+					tenantId: api.tenantId, //运营主体公司id
 					platformType: 2,
 					payMethod:'wxpay',
 					openId:this.openid
@@ -775,13 +768,13 @@
 						method: 'POST',
 						header: {
 							'content-type': 'application/json', // 添加 content-type
-							"X-Tenant-Id": uni.getStorageSync('tenantId')
+							"X-Tenant-Id": api.tenantId,
 						},
 						data: {
 							memberId: uni.getStorageSync('id'), //用户ID
 							dramaId: dramaId, //剧集ID
-							sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门ID
-							tenantId: uni.getStorageSync('tenantId'), //租户ID
+							sysOrgCode: api.sysOrgCode, //部门ID
+							tenantId: api.tenantId, //租户ID
 							seriesSeries: seriesSeries, //解锁的剧集ID
 							unlockState: false //剧集是否解锁状态
 						},
@@ -845,8 +838,8 @@
 								data: {
 									memberId: uni.getStorageSync('id'),
 									dramaId: dramaId,
-									sysOrgCode: uni.getStorageSync('sysOrgCode'),
-									tenantId: uni.getStorageSync('tenantId'),
+									sysOrgCode: api.sysOrgCode,
+									tenantId: api.tenantId,
 									code: res.code,
 								},
 

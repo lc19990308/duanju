@@ -37,7 +37,7 @@ const zh = {
 	},
 	reward: {
 		my_gold: '我的金币',
-		reg_to_date: '注册到期日 ',
+		reg_to_date: '已签到天数 ',
 		reg_now: '立即签到',
 		invite_friend: '邀请好友',
 		gold: '金币',
@@ -335,7 +335,9 @@ const zh = {
 		pwdMismatch: '两次输入密码不一致',
 		picRequired: '请选择图片',
 		placeholder: '请输入',
-		pointsRequired: '请输入积分数量'
+		pointsRequired: '请输入积分数量',
+		getCode: '获取验证码',
+		regain: '重新获取',
 	}
 }
 

@@ -3,32 +3,11 @@
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [ // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		// 登录
-		// #ifdef APP-PLUS
-		// APP 平台
-		// {
-		// 	"path": "pages/user/login/login",
-		// 	"style": {
-		// 		"navigationBarTitleText": "",
-		// 		"enablePullDownRefresh": false,
-		// 		"navigationStyle": "default"
-		// 	}
-		// },
-		// #endif
-		// {
-		// 	"path": "pages/user/login/login",
-		// 	"style": {
-		// 		"navigationBarTitleText": "",
-		// 		"enablePullDownRefresh": false,
-		// 		"navigationStyle": "default"
-		// 	}
-		// },
 		{
 			"path": "pages/home/new-home",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"disableScroll": true
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -37,14 +16,6 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/index/playes",
-			"style": {
-				"navigationBarTitleText": "播放",
-				"enablePullDownRefresh": false,
-				"navigationBarTextStyle": "white"
 			}
 		},
 		{
@@ -98,19 +69,6 @@
 			}
 		},
 		{
-			"path": "pages/home/update",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"app-plus": {
-					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
-					"background": "transparent", // 背景透明
-					"backgroundColor": "rgba(0, 0, 0, 0)", // 背景透明
-					"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
-				}
-			}
-		},
-		{
 			"path": "pages/home/search",
 			"style": {
 				"navigationBarTitleText": "",
@@ -125,29 +83,8 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		// {
-		// 	"path": "pages/login/new-login",
-		// 	"style": {
-		// 		"navigationBarTitleText": "",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/login/new-register",
-		// 	"style": {
-		// 		"navigationBarTitleText": "",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
 		{
 			"path": "pages/login/register",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "components/tag-select/tag-select",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
@@ -166,40 +103,37 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/video/testVideo",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/video/testVideoInfo",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"nvue": true // 必须写
+				}
+			}
 		}
 	],
 	"subPackages": [ // 小程序分包
 		{
 			"root": "pages/video",
-			"pages": [{
-					"path": "play",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
-						"navigationBarTextStyle": "white"
-					}
-				},
-				{
-					"path": "recharge",
-					"style": {
-						"navigationBarTitleText": "充值熊币",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "record",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "search",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
+			"pages": [
+				// {
+				// 	"path": "play",
+				// 	"style": {
+				// 		"navigationBarTitleText": "",
+				// 		"enablePullDownRefresh": false,
+				// 		"navigationBarTextStyle": "white"
+				// 	}
+				// },
 				// 剧目详情
 				{
 					"path": "details",
@@ -207,7 +141,7 @@
 						"navigationBarTitleText": "",
 						"navigationBarTextStyle": "white",
 						"navigationBarBackgroundColor": "#000",
-						"navigationStyle": "default"
+						"navigationStyle": "custom"
 					}
 				},
 				// 剧集弹窗
@@ -223,44 +157,12 @@
 		},
 		{
 			"root": "pages/user",
-			"pages": [
-				// 登录
-				{
-					"path": "login/login",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
-						"navigationStyle": "default"
-					}
-				}, {
+			"pages": [{
 					"path": "unipays/unipays",
 					"style": {
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false,
 						"navigationStyle": "default"
-					}
-				},
-				// 积分
-				{
-					"path": "integral/index",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "integral/recharge",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "integral/task",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
-						"navigationBarTextStyle": "white"
 					}
 				},
 				{
@@ -287,49 +189,9 @@
 						"navigationBarTextStyle": "white"
 					}
 				},
-				// 经销商
-				{
-					"path": "dealer/index",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				// 会员
-				{
-					"path": "member/index",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
-						"navigationBarTextStyle": "white"
-					}
-				},
-				// 信息展示
-				{
-					"path": "info/index",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
+
 				{
 					"path": "info/richtext",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "info/contact",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
-						"navigationBarTextStyle": "white"
-					}
-				},
-				// 分享赚钱
-				{
-					"path": "share/index",
 					"style": {
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false
@@ -342,35 +204,6 @@
 						"navigationBarTextStyle": "white",
 						"navigationBarBackgroundColor": "#000",
 						"navigationStyle": "custom"
-					}
-				},
-				{
-					"path": "share/brokerage",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "share/withdraw",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false,
-						"navigationBarTextStyle": "white"
-					}
-				},
-				{
-					"path": "share/payee",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "share/poster",
-					"style": {
-						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
 					}
 				},
 				{
@@ -406,20 +239,12 @@
 					}
 				},
 				{
-					"path": "account/account",
-					"style": {
-						"navigationBarTitleText": "账户详情",
-						"enablePullDownRefresh": false,
-						"navigationStyle": "default"
-					}
-				},
-				{
 					"path": "account/changeUserName",
 					"style": {
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false,
 						"navigationStyle": "custom"
-				
+
 					}
 				},
 				{
@@ -451,7 +276,7 @@
 					"path": "recharge/recharge",
 					"style": {
 						"navigationBarTitleText": "Cửa hàng",
-						"navigationBarTextStyle": "white",  
+						"navigationBarTextStyle": "white",
 						"navigationBarBackgroundColor": "#000",
 						"navigationStyle": "custom"
 					}
@@ -502,7 +327,7 @@
 				"enablePullDownRefresh": true
 			},
 			{
-				"pagePath": "pages/home/video",
+				"pagePath": "pages/video/testVideo",
 				"text": "đề xuất",
 				"iconPath": "/static/images/Frame-4.png",
 				"selectedIconPath": "/static/images/Frame-19.png",

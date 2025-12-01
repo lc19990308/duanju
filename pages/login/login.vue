@@ -1,6 +1,5 @@
 <template>
 	<view class="app-container">
-		<!-- <web-view class="webView" v-if="showWebView" :src="webUrl"></web-view> -->
 		<view class="logo-box">
 			<image class="logo-icon" src="/static/images/logo.png" mode=""></image>
 			<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
@@ -50,9 +49,9 @@
 				<u-checkbox :checked='checked' :customStyle="{marginBottom: '8px'}" name="1" inactiveColor='#000000'>
 				</u-checkbox>
 			</u-checkbox-group>
-			<view class="agreement-tips">
+			<navigator class="agreement-tips" hover-class="none" url="/pages/user/about/detail/detail?id=1791523044515913730">
 				{{$t(`login.login_tips`)}}
-			</view>
+			</navigator>
 		</view>
 	</view>
 </template>
@@ -60,7 +59,6 @@
 <script>
 	import i18n from '@/utils/i18n/index.js'
 	import apiMoen from '@/utils/config.js';
-	import webview from '@/common/uni.webview.1.5.4.js'
 	let that;
 	import {
 		mapState,
@@ -81,9 +79,8 @@
 					fontsize: '32rpx',
 				},
 				form: {
-					email: '',
-					password: '',
-
+					email: '1587237547@qq.com',
+					password: '123456',
 				},
 				rules: {
 					email: [{
@@ -197,9 +194,9 @@
 				console.log('postMessage run')
 				// console.log(webview.postMessage,'webview')
 				// console.log(uni.webView)
-				webview.postMessage({
-					data: obj
-				});
+				// webview.postMessage({
+				// 	data: obj
+				// });
 				// this.$request('login.loginGA', obj).then(res => {
 				// 	this.webUrl = res.result.authorizationUrl
 				// 	console.log(res.result.authorizationUrl,'res.result.authorizationUrl')
@@ -234,11 +231,9 @@
 						const userInfo = await that.getUserInfo(resp.result.token);
 						that.memberAccountNumberAdd();
 						if (userInfo.code === 200) {
-							setTimeout(() => {
-								uni.reLaunch({
-									url: '/'
-								})
-							}, 500)
+							uni.switchTab({
+								url:'/pages/home/new-home'
+							})
 						}
 					}
 
@@ -325,32 +320,32 @@
 		onLoad() {
 			that = this;
 			that.submitGAList();
-			window.msgFromApp = window.msgFromApp || function(data) {
-				// console.log('接收到 uni-app 参数（默认）:', data.idToken);
-				that.googleCallBack(data);
-				// let form = {
-				// 	access_token: '',
-				// 	idToken:data.idToken,
-				// }
-				// that.$request('login.verifyGoogle', form).then(res=>{
-				// 	console.log(res,'xx')
-				// })
+			// window.msgFromApp = window.msgFromApp || function(data) {
+			// 	// console.log('接收到 uni-app 参数（默认）:', data.idToken);
+			// 	that.googleCallBack(data);
+			// 	// let form = {
+			// 	// 	access_token: '',
+			// 	// 	idToken:data.idToken,
+			// 	// }
+			// 	// that.$request('login.verifyGoogle', form).then(res=>{
+			// 	// 	console.log(res,'xx')
+			// 	// })
 
 
-			};
+			// };
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.webView {
-		width: 100%;
-		height: 100%;
-		position: fixed;
-		left: 0;
-		top: 0;
-		z-index: 999999;
-	}
+	// .webView {
+	// 	width: 100%;
+	// 	height: 100%;
+	// 	position: fixed;
+	// 	left: 0;
+	// 	top: 0;
+	// 	z-index: 999999;
+	// }
 
 	page {
 		// background-image: url('/static/images/login.png');

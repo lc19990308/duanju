@@ -1,8 +1,8 @@
 import apiList from './api.js';
 import apiMoen from '../../utils/config.js';
-
+import i18n from '@/utils/i18n/index.js'
 import store from '@/common/store/index.js'
-console.log(store.state.user.token,'token')
+
 // 组装接口路径
 const getApiPath = path => {
 	let apiArray = path.split("."),
@@ -40,35 +40,28 @@ const request = (path, data, error = true, customHeaders = {}) => {
 		method = api.method
 	// 通过Promise封装请求, 返回异步请求结果
 	return new Promise(async (resolve, reject) => {
-		const sysOrgCode = uni.getStorageSync('sysOrgCode');
-		const tenantId = uni.getStorageSync('tenantId');
 		uni.request({
 			url,
 			data,
 			method,
 			header: {
-				// 'sysOrgCode': sysOrgCode,
-				// 'tenantId': tenantId,
-				// 'Content-Type': method === 'GET' ? 'application/json' :
-				// 	'application/json; charset=UTF-8',
-				// 'Token': store.state.user.token || '',
-				// 'X-Tenant-Id': uni.getStorageSync('tenantId')
 				'X-Tenant-Id': apiMoen.tenantId,
 				// 'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjI4OTQxNTAsInVzZXJuYW1lIjoiMTU4NzIzNzU0N0BxcS5jb20ifQ.VI-KZgFro8DJFpfgOuTWonli85ji-zFOGr64P438xYs',
 				'X-Access-Token':store.state.user.token,
 				...customHeaders,
-				// 'X-Access-Token': uni.getStorageSync('tenantId')
 			},
 			success: res => {
+				// console.log('xxx',this.$t('model_box.sys_tip'))
 				if (res.data.code === 200 || res.data.code === 0) {
 					resolve(res.data)
 				} else if (res.data.code === 401) {
 					store.dispatch('user/logout')
+					// console.log('xxx',this.$t('model_box.sys_tip'))
 					uni.showModal({
-						title: this.$t('model_box.sys_tip'),
-						content: this.$t('model_box.login_required'),
-						confirmText:this.$t('model_box.confirm'),
-						cancelText:this.$t('model_box.cancel'),
+						title: i18n.t('model_box.sys_tip'),
+						content: i18n.t('model_box.login_required'),
+						confirmText:i18n.t('model_box.confirm'),
+						cancelText:i18n.t('model_box.cancel'),
 						success: res => {
 							if (res.confirm) {
 								uni.navigateTo({

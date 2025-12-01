@@ -13,11 +13,11 @@
 		<view class="remove-block">
 			<view class="action-row">
 				<view class="action-text">{{$t(`search.history`)}}</view>
-				<view class="remove" @tap="claerHistory">
+				<view class="remove" v-if="historyList.length" @tap="claerHistory">
 					<u-icon name="trash" color="#FFFFFF" size="28"></u-icon>
 				</view>
 			</view>
-			<view class="remove-content">
+			<view   class="remove-content">
 				<view class="remove-item" @tap="historySerach(item)" v-for="(item,index) in historyList" :key="index">
 					{{item.searchKeyword}}
 				</view>
@@ -29,7 +29,7 @@
 				<view class="action-text">
 					{{$t(`search.host_lable`)}}
 				</view>
-				<view class="action-icon" @tap="getHotKeyword(true)">
+				<view  class="action-icon" @tap="getHotKeyword(true)">
 					<u-icon name="reload" color="#FFFFFF" size="28"></u-icon>
 				</view>
 			</view>
@@ -77,7 +77,7 @@
 	import {
 		mapState
 	} from 'vuex'
-
+	import apis from '@/utils/config.js'
 	export default {
 		data() {
 			return {
@@ -92,7 +92,8 @@
 				dramaName: '',
 				historyList: [],
 				memberId: uni.getStorageSync('memberId') || '',
-				sysOrgCode: uni.getStorageSync('sysOrgCode') || '',
+				sysOrgCode: apis.sysOrgCode,
+				token: uni.getStorageSync('token'),
 			}
 		},
 		computed: {
@@ -161,15 +162,20 @@
 				this.serachList();
 			},
 			videoInfo(item) {
-				uni.redirectTo({
-					url: `/pages/video/videoDetails?item=${JSON.stringify(item)}`
+				uni.navigateTo({
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
 				})
-			}
+			},
+			init(){
+				if(this.token){
+					this.getHistoryList();
+				}
+				this.getHotKeyword();
+				this.getVideoList();
+			},
 		},
 		onLoad() {
-			this.getHistoryList();
-			this.getHotKeyword();
-			this.getVideoList();
+			this.init();
 		}
 	}
 </script>

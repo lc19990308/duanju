@@ -8,11 +8,11 @@
 			<view class="wallet-row">
 				<view class="wallet-item">
 					<image class="wallet-item-icon" src="/static/images/gold.png" mode=""></image>
-					<text class="wallet-value">{{info.totalBalance}}</text>
+					<text class="wallet-value">{{info.currency}}</text>
 				</view>
 				<view class="wallet-item">
 					<image class="wallet-item-icon" src="/static/images/diamond.png" mode=""></image>
-					<text class="wallet-value">{{info.currency}}</text>
+					<text class="wallet-value">{{info.totalBalance}}</text>
 				</view>
 			</view>
 			<view class="action">
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+	import apiMoen from '@/utils/config.js'
 	import {
 		mapState,
 	} from "vuex"
@@ -73,13 +74,13 @@
 					fontWeight: 800,
 					color: '#FFFFFF',
 				},
-				memberId:uni.getStorageSync('memberId') || '',
+				memberId:uni.getStorageSync('id') || '',
 				info: {
 					currency: 0,
 					totalBalance: 0,
 				},
 				query: {
-					sysOrgCode: 'A03A01',
+					sysOrgCode: apiMoen.sysOrgCode,
 					pageNo: 1,
 					pageSize: 10,
 				},

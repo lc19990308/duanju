@@ -37,8 +37,8 @@ const vi = {
 	},
 	reward: {
 		my_gold: 'Tiền vàng của tôi',
-		reg_to_date: 'Đăng ký đến ngày ',
-		reg_now: 'Đăng ký ngay lập tức',
+		reg_to_date: 'Số ngày đã điểm danh ',
+		reg_now: 'Điểm danh ngay',
 		invite_friend: 'Mời bạn bè',
 		gold: 'Vàng',
 		btn: 'go',
@@ -300,7 +300,9 @@ const vi = {
 		pwdMismatch: 'Mật khẩu nhập lại không khớp',
 		picRequired: 'Vui lòng chọn hình ảnh',
 		placeholder: 'Vui lòng nhập',
-		pointsRequired: 'Vui lòng nhập số điểm'
+		pointsRequired: 'Vui lòng nhập số điểm',
+		getCode:'Nhận mã',
+		regain:'Lấy lại mã',
 	}
 }
 

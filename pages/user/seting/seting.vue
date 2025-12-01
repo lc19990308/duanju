@@ -1,7 +1,7 @@
 <template>
 	<view class="set">
 		<statusBar />
-		<u-navbar :title="$t(`setting.page_title`)" :autoBack="true" :fixed='false' bgColor='transparent' :titleStyle='titleStyle'
+		<u-navbar :title="$t(`setting.page_title`)" :autoBack="true" :fixed='true' bgColor='transparent' :titleStyle='titleStyle'
 			leftIconColor='#fff' :placeholder='true' />
 		<navigator class="user-info" url="/pages/user/account/changeUserName" hover-class="none">
 			<view class="left">
@@ -89,13 +89,13 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
+	.set {
 		background-color: #000;
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;
-
+		min-height: 100vh;
 	}
 
 	::v-deep .u-cell__title-text {

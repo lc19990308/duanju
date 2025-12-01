@@ -88,14 +88,14 @@
 				equityList: [],
 				width: '100%',
 				linethrough: 'line-through',
-				tenantId: null,
+				tenantId: apiMoen.tenantId,
 				sysOrgCode: null,
 				activeIndex: 0,
 				activeIndexPay: 0,
 				userCode: '',
 				videoQuery: {
-					tenantId: uni.getStorageSync('tenantId'),
-					sysOrgCode: uni.getStorageSync('sysOrgCode'),
+					tenantId: apiMoen.tenantId,
+					sysOrgCode:apiMoen.sysOrgCode,
 					dramaClassify: "", //短剧分类
 					dramaChannel: "", //频道分类
 					pageNo:1,
@@ -113,8 +113,8 @@
 			};
 		},
 		onLoad() {
-			this.tenantId = uni.getStorageSync('tenantId')
-			this.sysOrgCode = uni.getStorageSync('sysOrgCode')
+			this.tenantId = apiMoen.tenantId,
+			this.sysOrgCode = apiMoen.sysOrgCode,
 			this.getVipPackageList(this.tenantId, this.sysOrgCode)
 			this.handleToEquityList(this.tenantId, this.sysOrgCode)
 			// this.getWxCode()
@@ -154,8 +154,8 @@
 					var data = {
 						rechargeId: this.selectMemberVip.id, //充值id 即是套餐id
 						memberId: uni.getStorageSync('id'), //会员id
-						sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门id
-						tenantId: uni.getStorageSync('tenantId'), //运营主体公司id
+						sysOrgCode: apiMoen.sysOrgCode, //部门id
+						tenantId: apiMoen.tenantId, //运营主体公司id
 						platformType: 2, //1-APP支付,1-JSAPI支付,2-Native支付,3-H5支付
 						payMethod: 'wxpay',
 						openId: uni.getStorageSync('openid'),

@@ -1,11 +1,11 @@
 <template>
 	<view class="detail">
 		<statusBar />
-		<u-navbar :title="protocolName" :fixed='false' :titleStyle='titleStyle' bgColor='transparent'
+		<u-navbar :title="protocolName" :fixed='true' :titleStyle='titleStyle' bgColor='transparent'
 			leftIconColor='#fff' :autoBack="true" :placeholder='true' />
-		<view class="de_content">
+		<scroll-view scroll-y="true" class="de_content">
 			<u-parse :content="content"></u-parse>
-		</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -45,17 +45,14 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
+	.detail {
+		padding: 0rpx 30rpx 0 30rpxx;
+		min-height: 100vh;
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;
-		background-attachment: fixed;
-	}
 
-	.detail {
-		padding-top: 60rpx;
-		margin: 0 30rpx;
 
 		color: #d1d1d1;
 
@@ -65,8 +62,9 @@
 		}
 
 		.de_content {
-			padding-top: 40rpx;
+			padding: 0 30rpx 0 30rpx;
 			width: 100%;
+			height: 100vh;
 			word-wrap: break-word;
 		}
 

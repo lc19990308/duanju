@@ -30,22 +30,6 @@
 
 <script>
 	import apiMoen from '../../utils/config.js';
-	const PlayerManager = require("../../utils/playerManager.js");
-	// const playletPlugin = requirePlugin("playlet-plugin");
-	// let playletPlugin;
-
-	// 检查当前是否在小程序环境中
-	if (typeof wx !== 'undefined' && wx.getSystemInfo) {
-		try {
-			// 在小程序中执行 requirePlugin
-			// playletPlugin = requirePlugin("playlet-plugin");
-		} catch (error) {
-			// console.error('Failed to requirePlugin in WeChat Mini Program:', error);
-		}
-	} else {
-		// 在其他环境中的处理
-		console.log('This code is executed only in WeChat Mini Program environment.');
-	}
 	import {
 		mapState,
 		mapGetters,
@@ -62,7 +46,7 @@
 					color: '#FFFFFF',
 				},
 				allocatProgram: {},
-				tenantId: null,
+				tenantId: apiMoen.tenantId,
 				sysOrgCode: null,
 				memberId: null,
 				memberName: null,
@@ -273,8 +257,8 @@
 					memberId: uni.getStorageSync('id'), //会员ID
 					dramaId: item.dramaId, //剧目ID
 					dramaSeries: 1, //剧集集数
-					tenantId: uni.getStorageSync('tenantId'), //租户ID
-					sysOrgCode: uni.getStorageSync('sysOrgCode'), //部门编码
+					tenantId: apiMoen.tenantId, //租户ID
+					sysOrgCode: apiMoen.sysOrgCode, //部门编码
 				}
 				this.$request('video.likes', obj).then(res => {
 					this.getFilmLikeCollectList()
@@ -307,29 +291,6 @@
 				} = uni.getSystemInfoSync();
 				console.log("获取设备品牌、型号、设备 id 、系统名称、osVersion", deviceBrand, deviceModel, deviceId, osName, osVersion);
 			},
-			// 调试
-			debugClick() {
-				// #ifdef MP-WEIXIN
-				const env = wx.getAccountInfoSync().miniProgram.envVersion
-				if (env != "release") {
-					clearTimeout(this.debug.timer);
-					this.debug.count++;
-					this.debug.timer = setTimeout(() => {
-						if (this.debug.count >= 5) {
-							uni.showModal({
-								title: '配置信息',
-								content: `
-									(env => ${env}) -
-									(domain => ${this.$BASE_URL}) -
-									(sign => ${this.$SIGN})
-								`
-							})
-						}
-						this.debug.count = 0;
-					}, 500);
-				}
-				// #endif
-			},
 			alertBindButton(type) {
 				if (type == 'wxmp') {
 					console.log("绑定微信小程序");
@@ -359,8 +320,8 @@
 			// 小程序信息查询
 			getAllocatProgram() {
 				this.$request('common.allocatProgram', {
-					tenantId: uni.getStorageSync('tenantId'),
-					sysOrgCode: uni.getStorageSync('sysOrgCode'),
+					tenantId: apiMoen.tenantId,
+					sysOrgCode: apiMoen.sysOrgCode,
 					appId: uni.getStorageSync('srcAppid'),
 				}).then(res => {
 					if (res != 200 && res.message != "") {

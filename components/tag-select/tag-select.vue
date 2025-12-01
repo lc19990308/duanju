@@ -43,6 +43,7 @@
 </template>
 
 <script>
+	import api from '@/utils/config.js'
 	export default {
 		props: ['memberlist', 'goldlist', 'width', 'linethrough', 'activeIndex', 'activeIndexPay'],
 		data() {
@@ -97,9 +98,8 @@
 				// 	return this.memberList
 				// }
 				var data = {
-					sysOrgCode:uni.getStorageSync('sysOrgCode'),
-					// tenantId:uni.getStorageSync('tenantId'),
-					tenantId:'1002',
+					sysOrgCode: api.sysOrgCode,
+					tenantId:api.tenantId,
 					id:uni.getStorageSync('id')
 				}
 				this.$request('player.rechargePackageList',data).then(res => {

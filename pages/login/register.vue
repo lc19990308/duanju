@@ -45,16 +45,18 @@
 				<u-checkbox :customStyle="{marginBottom: '8px'}" name="1" inactiveColor='#000000'>
 				</u-checkbox>
 			</u-checkbox-group>
-			<view class="agreement-tips">
-				{{$t(`regist.register_tips`)}}
-			</view>
+			<navigator class="agreement-tips" hover-class="none" url="/pages/user/about/detail/detail?id=1791523044515913730">
+				{{$t(`login.login_tips`)}}
+			</navigator>
 		</view>
+		<u-code :seconds="seconds" ref="uCode" @change="codeChange"></u-code>
 	</view>
 </template>
 
 <script>
 	let that;
 	import apiMoen from '../../utils/config.js';
+	import i18n from '../../utils/i18n/index.js';
 	export default {
 		data() {
 			return {
@@ -98,7 +100,7 @@
 				placeholderStyle: {
 					color: '#666'
 				},
-				tips: '获取验证码',
+				tips: i18n.t('form.getCode'),
 				// refCode: null,
 				seconds: 30,
 				checkboxValue1: 1,
@@ -112,40 +114,26 @@
 		},
 		methods: {
 			codeChange(text) {
-				this.tips = text;
+				if(text === '获取验证码'){
+					this.tips = `${i18n.t('form.getCode')}`;
+				}else{
+					this.tips = `${this.extractNumber(text)} ${i18n.t('form.regain')}`;
+				}
+				
 			},
 			getCode() {
-				// if (this.$refs.uCode.canGetCode) {
-				// 	// 模拟向后端请求验证码
-				// 	uni.showLoading({
-				// 		title: '正在获取验证码'
-				// 	})
-				// 	setTimeout(() => {
-				// 		uni.hideLoading();
-				// 		// 这里此提示会被this.start()方法中的提示覆盖
-				// 		uni.$u.toast('验证码已发送');
-				// 		// 通知验证码组件内部开始倒计时
-				// 		this.$refs.uCode.start();
-				// 	}, 2000);
-				// } else {
-				// 	uni.$u.toast('倒计时结束后再发送');
-				// }
-
-				let obj = {
-					"email": this.form.email,
-					"emailmode": "1",
-				}
-				this.$request('login.sendEmailCode', obj).then(res => {
-					if (res.code === 0) {
-						this.$u.toast(res.message)
-					} else if (res.code === 500) {
-						this.$u.toast(res.message)
-					} else {
-						if (res.code === 200) {
-							this.$u.toast(this.$t('toast.send_msg_success'))
-						}
+				if (this.$refs.uCode.canGetCode) {
+					let obj = {
+						"email": this.form.email,
+						"emailmode": "1",
 					}
-				})
+					this.$request('login.sendEmailCode', obj).then(res => {
+						if (res.code === 0) {
+							this.$u.toast(this.$t('toast.send_msg_success'))
+							this.$refs.uCode.start();
+						}
+					})
+				}
 			},
 			submitGA(val) {
 				const timestamp = Date.now();
@@ -227,6 +215,11 @@
 				return options[key] ? decodeURIComponent(options[key]) : null;
 				// #endif
 			},
+			extractNumber(text) {
+				if (!text) return null;
+				const m = text.match(/\p{Nd}+/u); // 使用 u 标志支持 Unicode 数字
+				return m ? Number(m[0]) : null;
+			}
 		},
 	}
 </script>

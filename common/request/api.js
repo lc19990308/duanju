@@ -322,8 +322,8 @@ const api = {
 			desc: '点赞追剧'
 		},
 		carouselList: {
-			url: '/api/appApi/carouselList',
-			method: 'GET',
+			url: '/api/allocat/allocatCarousel/list',
+			method: 'POST',
 			desc: '首页轮播图列表'
 		},
 		filmDlassifyList: {

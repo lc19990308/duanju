@@ -3,7 +3,8 @@ const apis = {
 	tenantId: 1002,
 	// 192.168.200.43
 	// 'MPWEIXIN': 'http://192.168.201.74:9080', //正式服务器地址
-	'MPWEIXIN': 'https://dj.odi.ae', //正式服务器地址
+	// 'MPWEIXIN': 'https://dj.odi.ae', //正式服务器地址
+	'MPWEIXIN':'https://www.vndrama.com:9082',
 	sysOrgCode: "A03A01",
 	appId: '', //
 	srcAppid: '' ,//

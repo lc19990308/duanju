@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "充值",
-  "navigationStyle": "default",
-  "navigationBarBackgroundColor": "#FFFFFF",
-  "usingComponents": {
-    "wen-tag": "/components/tag-select/tag-select"
-  }
-}

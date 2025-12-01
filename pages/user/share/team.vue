@@ -1,9 +1,9 @@
+
 <template>
 	<view class="page_content">
-		<statusBar />
-		<u-navbar  :title="$t(`team.page_title`)" :autoBack="true" :fixed='false' :placeholder='true' bgColor='transparent'
-			:titleStyle='titleStyle' leftIconColor='#fff'>
-		</u-navbar>
+		<view class="head_content">
+			<CustomNavbar title="đội của tôi"></CustomNavbar>
+		</view>
 		<view class="main_content">
 			<scroll-view class="scroll_view" :scroll-y="true" @scrolltolower="scrollBottom">
 				<view class="scroll_content">
@@ -11,16 +11,16 @@
 						<!-- <view class="text1">{{ info.count }}人</view> -->
 						<view class="text2">
 							<view class="text2_lie">
-								<span>{{ info.count_direct }}</span><br>{{$t(`team.total`)}}
+							<span>{{ info.count_direct }}</span><br>Số lượng
 							</view>
 							<view class="text2_lie">
-								<span>{{ info.count_indirect }}</span><br>{{$t(`team.profit`)}}
+								<span>{{ info.count_indirect }}</span><br>lợi nhuận
 							</view>
-
+							
 						</view>
 					</view>
 					<view class="content_box">
-						<view class="title">{{$t(`team.invitation`)}}</view>
+						<view class="title">Giới thiệu trực tiếp</view>
 						<view class="list_box" v-if="list.length">
 							<view class="item" v-for="(item, index) in list" :key="index">
 								<view class="left">
@@ -32,10 +32,9 @@
 										<view class="text2">{{ item.bindTime }}</view>
 									</view>
 								</view>
-								<view class="right">+{{ item.todayDivideAmount }}</view>
+								<view class="right">{{ item.todayDivideAmount }}</view>
 							</view>
 						</view>
-
 					</view>
 				</view>
 			</scroll-view>
@@ -54,14 +53,8 @@
 				},
 				list: [],
 				page: 1,
-				memberId: uni.getStorageSync('id') || '',
-				pagesize: 10,
-				titleStyle: {
-					color: '#fff',
-					fontFamily: 'PingFang SC, PingFang SC',
-					fontWeight: 800,
-					color: '#FFFFFF',
-				},
+				memberId:uni.getStorageSync('memberId') || '',
+				pagesize: 10
 			}
 		},
 		onLoad() {
@@ -76,15 +69,23 @@
 				this.$request('share.teamNum', {
 					memberId: this.memberId,
 				}).then(res => {
-					this.info = {
-						count_direct: res.result.totalExtendNumber,
-						count_indirect: res.result.todayGiveaway
+					if(res.code === 1) {
+						this.info = {
+							count_direct: res.totalExtendNumber,
+							count_indirect: res.totalProfit
+						}
+						
 					}
 				})
 				this.$request('share.teamNew', {
 					memberId: this.memberId,
 				}).then(res => {
-					this.list = res.result;
+					if(res.code === 1) {
+						
+						if(res.DivideRecordByTeamVo && res.DivideRecordByTeamVo.length) {
+							this.list = this.list.concat(res.DivideRecordByTeamVo)
+						} 
+					}
 				})
 			}
 		}
@@ -94,16 +95,12 @@
 <style lang="scss" scoped>
 	.page_content {
 		background: #000000;
-		background-image: url('/static/images/navbar-bg.png');
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-
 		.main_content {
 			overflow: hidden;
-
+			
 			.scroll_view {
 				height: 100%;
-
+				
 				.scroll_content {
 					padding: 24rpx 40rpx 60rpx 40rpx;
 				}
@@ -119,7 +116,7 @@
 				align-items: center;
 				font-weight: bold;
 				color: #fff;
-
+				
 				&::before {
 					content: "";
 					width: 100%;
@@ -131,12 +128,12 @@
 					background-repeat: no-repeat;
 					background-size: 100% 100%;
 				}
-
+				
 				.text1 {
 					font-size: 40rpx;
 					margin-bottom: 20rpx;
 				}
-
+				
 				.text2 {
 					height: 220rpx;
 					width: 100%;
@@ -144,23 +141,21 @@
 					display: flex;
 					justify-content: space-between;
 					flex-direction: row;
-
 					.text2_lie {
 						width: 46%;
 						padding-top: 5%;
 						text-align: center;
-						background: linear-gradient(186deg, rgba(255, 224, 157, 0.4) 0%, rgba(237, 194, 103, 0) 100%);
+						background: linear-gradient( 186deg, rgba(255,224,157,0.4) 0%, rgba(237,194,103,0) 100%);
 						border-radius: 16rpx 16rpx 16rpx 16rpx;
 						border: 0rpx solid;
 						border-image: linear-gradient(199deg, rgba(237, 194, 103, 1), rgba(237, 194, 103, 0.2)) 1 1;
-
 						span {
 							color: #EDC267;
 						}
 					}
 				}
 			}
-
+			
 			.content_box {
 				margin-top: 40rpx;
 
@@ -169,7 +164,7 @@
 					font-weight: 700;
 					color: #fff;
 				}
-
+				
 				.list_box {
 					.item {
 						padding: 40rpx 20rpx;
@@ -180,11 +175,11 @@
 						display: flex;
 						align-items: center;
 						justify-content: space-between;
-
+					
 						.left {
 							display: flex;
 							align-items: center;
-
+							
 							.photo {
 								width: 100rpx;
 								height: 100rpx;
@@ -195,30 +190,30 @@
 								display: flex;
 								align-items: center;
 								justify-content: center;
-
+								
 								.image {
 									width: 100%;
 									height: 100%;
 								}
 							}
-
+							
 							.info {
 								margin-left: 40rpx;
-
+								
 								.text1 {
 									font-size: 32rpx;
 									font-weight: 700;
 									color: #D1D1D1;
 									margin-bottom: 12rpx;
 								}
-
+								
 								.text2 {
 									font-size: 24rpx;
 									color: #D1D1D1;
 								}
 							}
 						}
-
+						
 						.right {
 							font-size: 32rpx;
 							font-weight: 700;
@@ -226,7 +221,7 @@
 						}
 					}
 				}
-
+				
 				.be_empty {
 					font-size: 28rpx;
 					color: #999;

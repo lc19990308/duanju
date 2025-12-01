@@ -5,7 +5,7 @@
 		</view>
 		<view class="reward_list">
 			<image src="/static/images/gold.png" class="goldImg" mode=""></image>
-			<view class="reward_list_t">{{$t(`reward.reg_to_date`)}}<span>2</span></view>
+			<view class="reward_list_t">{{$t(`reward.reg_to_date`)}}<span>{{signDay}}</span></view>
 			<scroll-view scroll-y="true" class="scroll-Y">
 				<view class="reward_lists">
 					<view class="reward_list_info"
@@ -58,6 +58,13 @@
 </template>
 
 <script>
+	import apis from '@/utils/config.js'
+	import {
+		mapState,
+		mapGetters,
+		mapMutations,
+		mapActions
+	} from "vuex";
 	import {
 		uQRCode
 	} from '@/uni_modules/cc-defineNewQRCode/components/cc-defineNewQRCode/common/uqrcode.js'
@@ -65,7 +72,7 @@
 		data() {
 			return {
 				rewardCover: false,
-				sysOrgCode: uni.getStorageSync('sysOrgCode') || '',
+				sysOrgCode: apis.sysOrgCode,
 				memberId: uni.getStorageSync('id') || '',
 				totalPrice: 0,
 				signList: [],
@@ -78,13 +85,25 @@
 				// 最终生成的二维码图片
 				qrcodeSrc: '',
 				nickname: '',
+				signDay:0,
 			}
 		},
+		computed: {
+			...mapGetters("user", ["token"]),
+		},
 		onShow() {
-			this.setTab();
-			this.getUserInfo();
+			this.init();
 		},
 		methods: {
+			//判断哪些接口需要登录了，才能看
+			init(){
+				if(this.token){
+					this.getUserInfo();
+					this.getMoeny();
+				}
+				this.setTab();
+				this.getSigninManageList();
+			},
 			setTab(){
 				uni.setTabBarItem({
 					index: 0,
@@ -107,8 +126,6 @@
 				this.$request('user.getUserInfo').then(res => {
 					const result = res.result.userInfo;
 					this.nickname = result.realname;
-					this.getMoeny();
-					this.getSigninManageList();
 					this.todayIndex = this.getTodayDate() - 1;
 					this.qrcodeText =
 						`${window.location.origin}/#/pages/login/register?bindMemberId=${this.memberId}`
@@ -120,7 +137,6 @@
 					memberId: this.memberId,
 					sysOrgCode: this.sysOrgCode,
 				}).then(res => {
-					console.log(res.result, 'serachList')
 					this.totalPrice = res.result.totalPrice;
 
 				})
@@ -130,9 +146,8 @@
 					memberId: this.memberId,
 					sysOrgCode: this.sysOrgCode,
 				}).then(res => {
-					console.log(res.result.list, 'serachList')
 					this.signList = res.result.list;
-					// this.totalPrice = res.result.totalPrice;
+					this.signDay = res.result.list.filter(item => item.receiveStatus === true).length;
 
 				})
 			},
@@ -184,15 +199,13 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
+	.app-container {
+		padding: 80rpx 40rpx;
 		background: #000;
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
-	}
-
-	.app-container {
-		padding: 80rpx 40rpx;
+		min-height: 100vh;
 
 		.reward_t {
 			font-family: Inter, Inter;

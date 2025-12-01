@@ -87,22 +87,6 @@
 
 <script>
 	import apiMoen from '../../utils/config.js';
-	// const PlayerManager = require("../../utils/playerManager.js");
-	// const playletPlugin = requirePlugin("playlet-plugin");
-	// let playletPlugin;
-
-	// 检查当前是否在小程序环境中
-	// if (typeof wx !== 'undefined' && wx.getSystemInfo) {
-	// 	try {
-	// 		// 在小程序中执行 requirePlugin
-	// 		playletPlugin = requirePlugin("playlet-plugin");
-	// 	} catch (error) {
-	// 		console.error('Failed to requirePlugin in WeChat Mini Program:', error);
-	// 	}
-	// } else {
-	// 	// 在其他环境中的处理
-	// 	console.log('This code is executed only in WeChat Mini Program environment.');
-	// }
 	import {
 		mapState,
 		mapGetters,
@@ -269,7 +253,7 @@
 				} else {
 					mythis.$request('login.getOpenIdByCode', {
 						code: code,
-						sysOrgCode: uni.getStorageSync('sysOrgCode'), //盼盼短剧
+						sysOrgCode: apiMoen.sysOrgCode, //盼盼短剧
 					}).then(res => {
 						console.log('获取openid', res)
 						if (res.code == 200) {

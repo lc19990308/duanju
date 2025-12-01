@@ -35,8 +35,9 @@
         },
         {
             "customPlaygroundType" : "device",
-            "localRepoPath" : "/Users/liuchao/code/短剧/unpackage/debug",
+            "localRepoPath" : "/Users/liuchao/code/duanju/dj-app/h5/unpackage/debug",
             "openVueDevtools" : true,
+            "packageName" : "com.monkey.shortdramaapp.ios",
             "playground" : "custom",
             "type" : "uni-app:app-android"
         }

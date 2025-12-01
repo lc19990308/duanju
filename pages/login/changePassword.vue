@@ -7,8 +7,8 @@
 		<u-code :seconds="seconds" ref="uCode" @change="codeChange" />
 
 		<view class="title">
-			<view class="title-text">Đặt lại mật khẩu</view>
-			<view class="tips-text">Vui lòng nhập mật khẩu mới của bạn</view>
+			<view class="title-text">{{$t('changePassword.title')}}</view>
+			<view class="tips-text">{{$t('changePassword.title_tips')}}</view>
 		</view>
 		<view class="form">
 			<u--form :model="form" ref="uForm" :rules='rules' labelPosition='top' labelWidth='auto'
@@ -47,8 +47,9 @@
 					</u-input>
 				</u-form-item>
 			</u--form>
-			<u-button class="submt-btn" @click="submit">Đặt lại mật khẩu</u-button>
+			<u-button class="submt-btn" @click="submit">{{$t('changePassword.btn_text')}}</u-button>
 		</view>
+		<u-code :seconds="seconds" ref="uCode" @change="codeChange"></u-code>
 	</view>
 </template>
 
@@ -109,7 +110,7 @@
 						}
 					]
 				},
-				tips: 'lấy',
+				tips: i18n.t('form.getCode'),
 				seconds: 30,
 				placeholderStyle: 'color:#666;'
 
@@ -118,8 +119,12 @@
 		},
 		methods: {
 			codeChange(text) {
-				console.log(text,'xx')
-				this.tips = text;
+				if(text === '获取验证码'){
+					this.tips = `${i18n.t('form.getCode')}`;
+				}else{
+					this.tips = `${this.extractNumber(text)} ${i18n.t('form.regain')}`;
+				}
+				
 			},
 			getCode() {
 				if (uni.$u.test.isEmpty(this.form.email)) {
@@ -159,6 +164,11 @@
 						},500)
 					})
 				})
+			},
+			extractNumber(text) {
+				if (!text) return null;
+				const m = text.match(/\p{Nd}+/u); // 使用 u 标志支持 Unicode 数字
+				return m ? Number(m[0]) : null;
 			}
 		},
 		onShow() {
