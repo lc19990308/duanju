@@ -28487,13 +28487,6 @@ var _default = {
   },
   "nvue": {
     "pages": [{
-      "path": "pages/video/testVideo.html",
-      "style": {
-        "navigationBarTitleText": "",
-        "enablePullDownRefresh": false,
-        "navigationBarTextStyle": "white"
-      }
-    }, {
       "path": "pages/video/testVideoInfo.html",
       "style": {
         "navigationBarTitleText": "",
@@ -28503,6 +28496,13 @@ var _default = {
           "nvue": true
         },
         "nvue": true
+      }
+    }, {
+      "path": "pages/video/testVideo.html",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false,
+        "navigationBarTextStyle": "white"
       }
     }]
   }
