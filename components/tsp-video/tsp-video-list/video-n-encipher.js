@@ -4,6 +4,7 @@ const dom = uni.requireNativePlugin('dom')
 import unirefresh from '../tsp-load/tsp-refresh-n.vue'
 import videoMenu from '../tsp-menu/tsp-menu-n.vue'
 import uniVideoPlayer from '../DomVideoPlayer/uniVideoPlayer'
+
 import {
 	mapState,
 	mapGetters,
@@ -201,6 +202,7 @@ export default {
 			viperInfo: {},
 			rechargeList:[],
 			viperList:[],
+			unlocking_price:0,
 		}
 	},
 	created() {
@@ -493,8 +495,6 @@ export default {
 			index,
 			item
 		}) {
-			console.log(index, 'index')
-			// console.log(item.unlockStatus, 'item')
 			if (item.unlockStatus != 3) {
 				await this.getVideoInfo({
 					seriesId: item.id,
@@ -502,7 +502,7 @@ export default {
 				})
 				this.scrollToVod(index);
 			} else {
-				console.log('需要解锁')
+				this.unlocking_price = item.price;
 				this.buyVideoItem(item, index);
 			}
 			// await this.getVideoInfo({
@@ -534,6 +534,7 @@ export default {
 				uni.$u.toast(`${res.data.message},解锁成功！`)
 				this.$emit('unlock', index)
 			} else if (res.data.code == 600) {
+				
 				this.openPayPopup();
 			}
 		},

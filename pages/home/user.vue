@@ -91,11 +91,6 @@
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
 						<view v-for="(item, index) in mounList" :key="index" style="position: relative"
 							@click="abunbtn(item)">
-							<!-- <view class="mouns">
-								<view class="count">
-									<u-icon name="play-right-fill" color="#fff" size="14"></u-icon>{{item.totalPlay || '0'}}
-								</view>
-							</view> -->
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
 								<u--text :lines="1" size="24rpx" color="#fff" align="left"
@@ -104,9 +99,6 @@
 									:text="item.dramaName"></u--text>
 							</view>
 						</view>
-						<!-- <view class="" style="width: 20px;">
-							查看更多
-						</view> -->
 					</u-scroll-list>
 				</view>
 				<!-- <view class="dalisewier">
@@ -249,22 +241,6 @@
 						rid: "",
 						path: "/pages/user/seting/seting",
 					},
-					{
-						id: 6,
-						img: "/static/images/Frame-38.png",
-						width: "32rpx",
-						text: "my.set", //联系我们
-						rid: "",
-						path: "/pages/video/testVideo",
-					},
-
-					// {
-					// 	id: 7,
-					// 	img: '/static/icons/list_1.png',
-					// 	width: '28rpx',
-					// 	text: 'thiết lập',//设置
-					// 	rid: ''
-					// },
 				],
 				copyrightData: this.$store.state.app.copyright || [], // 版权说明
 				platform: this.$utils.platforms(),
@@ -345,7 +321,7 @@
 			uni.$off("updateUserInfo");
 		},
 		methods: {
-			...mapActions("user", ["getUserInfo"]),
+			...mapActions("user", ["getUserInfo",'logout']),
 			//获取货币信息
 			getIntegral() {
 				this.$request('withdraw.getBalance', {
@@ -385,6 +361,7 @@
 					cancelText: this.$t('model_box.cancel'),
 				})
 				if (model.confirm) {
+					this.logout();
 					setTimeout(() => {
 						uni.clearStorageSync();
 						uni.redirectTo({
@@ -439,8 +416,8 @@
 				);
 			},
 			abunbtn(item) {
-				uni.redirectTo({
-					url: `/pages/video/videoDetails?item=${JSON.stringify(item)}`
+				uni.navigateTo({
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
 				})
 			},
 			alertBindButton(type) {

@@ -34,22 +34,14 @@
 			<view class="btn-groud-item" v-show="item.show" v-for="(item,index) in providersList" :key="index">
 				<image :src="item.icon" mode="" @click="submitGA(item.key)"></image>
 			</view>
-<!-- 			<view class="btn-groud-item">
-				<image src="/static/images/Frame-27.png" mode="" @click="submitGA('apple')"></image>
-			</view>
-			<view class="btn-groud-item">
-				<image src="/static/images/Frame-28.png" mode=""></image>
-			</view>
-			<view class="btn-groud-item">
-				<image src="/static/images/Frame-29.png" mode=""></image>
-			</view> -->
 		</view>
 		<view class="agreement-checked">
 			<u-checkbox-group shape='circle' activeColor='#EDC267' @change="checkboxChange">
 				<u-checkbox :checked='checked' :customStyle="{marginBottom: '8px'}" name="1" inactiveColor='#000000'>
 				</u-checkbox>
 			</u-checkbox-group>
-			<navigator class="agreement-tips" hover-class="none" url="/pages/user/about/detail/detail?id=1791523044515913730">
+			<navigator class="agreement-tips" hover-class="none"
+				url="/pages/user/about/detail/detail?id=1791523044515913730">
 				{{$t(`login.login_tips`)}}
 			</navigator>
 		</view>
@@ -57,6 +49,7 @@
 </template>
 
 <script>
+	const JYGoogleSignin = uni.requireNativePlugin('JY-GoogleSignin');
 	import i18n from '@/utils/i18n/index.js'
 	import apiMoen from '@/utils/config.js';
 	let that;
@@ -79,8 +72,8 @@
 					fontsize: '32rpx',
 				},
 				form: {
-					email: '1587237547@qq.com',
-					password: '123456',
+					email: '',
+					password: '',
 				},
 				rules: {
 					email: [{
@@ -100,26 +93,25 @@
 						trigger: ['blur', 'change']
 					}]
 				},
-				providersList:[
-					{
-						icon:'/static/images/Frame-26.png',
-						key:'google',
-						show:false,
+				providersList: [{
+						icon: '/static/images/Frame-26.png',
+						key: 'google',
+						show: false,
 					},
 					{
-						icon:'/static/images/Frame-27.png',
-						key:'apple',
-						show:false,
+						icon: '/static/images/Frame-27.png',
+						key: 'apple',
+						show: false,
 					},
 					{
-						icon:'/static/images/Frame-28.png',
-						key:'facebook',
-						show:false,
+						icon: '/static/images/Frame-28.png',
+						key: 'facebook',
+						show: false,
 					},
 					{
-						icon:'/static/images/Frame-29.png',
-						key:'instagram',
-						show:false,
+						icon: '/static/images/Frame-29.png',
+						key: 'instagram',
+						show: false,
 					}
 				],
 				placeholderStyle: {
@@ -158,11 +150,11 @@
 			},
 			submitGAList() {
 				this.$request('login.loginGAList').then(res => {
-					console.log(res.result.whitelistProviders,'xxx')
-					
-					this.providersList.forEach((item,index)=>{
-						res.result.whitelistProviders.map((childItem)=>{
-							if(item.key === childItem){
+					console.log(res.result.whitelistProviders, 'xxx')
+
+					this.providersList.forEach((item, index) => {
+						res.result.whitelistProviders.map((childItem) => {
+							if (item.key === childItem) {
 								item.show = true;
 							}
 						})
@@ -170,45 +162,32 @@
 				})
 			},
 			submitGA(val) {
+				const that = this;
 				if (!this.checked) {
 					return uni.showToast({
 						title: this.$t('toast.agreement'),
 						icon: 'none'
 					})
 				}
-				const timestamp = Date.now();
-				const timestampString = new Date(timestamp).toString();
-				let obj = {}
-				if (val == "apple") {
-					obj = {
-						"provider": "apple",
-						"state": timestampString
-					}
-				}
 				if (val == "google") {
-					obj = {
-						"provider": "google",
-						"state": timestampString
-					}
+					JYGoogleSignin.jy_startLogin(res => {
+						//  这里会返回登录的结果，如果errorCode = 1，代表错误，可检查msg返回的数据判断；如果errorCode = 0，代表成功，也会在data里面返回登录数据
+						if (res.errorCode == 0) {
+							const form = {
+								access_token: '',
+								id_token: res.data.idToken,
+							}
+							that.$request('common.google',form).then(res=>{
+								const loginInfo = {
+									email: res.data.email,
+									token: resp.data.result.token
+								};
+								that.googleCallBack();
+							})
+						}
+					})
 				}
-				console.log('postMessage run')
-				// console.log(webview.postMessage,'webview')
-				// console.log(uni.webView)
-				// webview.postMessage({
-				// 	data: obj
-				// });
-				// this.$request('login.loginGA', obj).then(res => {
-				// 	this.webUrl = res.result.authorizationUrl
-				// 	console.log(res.result.authorizationUrl,'res.result.authorizationUrl')
-				// 	this.showWebView = true;
-				// 	// let intervalId = setInterval(function() {
-				// 	// 	if (this.webUrl.includes("token")) {
-				// 	// 		let queryString = this.webUrl.split('?')[1];
-				// 	// 		this.urlToken = queryString.split('=')[1];
-				// 	// 		clearInterval(intervalId);
-				// 	// 	}
-				// 	// }, 1000);
-				// })
+
 			},
 			submit() {
 				if (!this.checked) {
@@ -232,7 +211,7 @@
 						that.memberAccountNumberAdd();
 						if (userInfo.code === 200) {
 							uni.switchTab({
-								url:'/pages/home/new-home'
+								url: '/pages/home/new-home'
 							})
 						}
 					}
@@ -301,9 +280,11 @@
 				this.checked = !this.checked;
 			},
 			//谷歌登录获取token的回调
-			async googleCallBack({token,email}) {
-				console.log(token,email,'email')
-				uni.setStorageSync('accountNumber',email);
+			async googleCallBack({
+				token,
+				email
+			}) {
+				uni.setStorageSync('accountNumber', email);
 				const userInfo = await that.getUserInfo(token);
 				console.log(token, 'token')
 				uni.$u.toast(this.$t('toast.login_success'));
@@ -320,19 +301,10 @@
 		onLoad() {
 			that = this;
 			that.submitGAList();
-			// window.msgFromApp = window.msgFromApp || function(data) {
-			// 	// console.log('接收到 uni-app 参数（默认）:', data.idToken);
-			// 	that.googleCallBack(data);
-			// 	// let form = {
-			// 	// 	access_token: '',
-			// 	// 	idToken:data.idToken,
-			// 	// }
-			// 	// that.$request('login.verifyGoogle', form).then(res=>{
-			// 	// 	console.log(res,'xx')
-			// 	// })
-
-
-			// };
+			JYGoogleSignin.jy_init({
+				//  安卓的client_id应该是谷歌开发者后台默认Web应用的；iOS的client_id应该是谷歌开发者后台iOS对应的
+				client_id: "446804274711-fjevh6bdtigb92hr78df0a206kqlqes9.apps.googleusercontent.com"
+			}, res => {})
 		}
 	}
 </script>

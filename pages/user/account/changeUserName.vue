@@ -2,7 +2,7 @@
 	<view class="app-container">
 		<statusBar />
 		<u-navbar :title="$t(`changeUser.page_title`)" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
-			:autoBack="true"  :fixed='false' :placeholder='true' @rightClick='rightClick' :rightText='$t(`changeUser.navbar_right`)' />
+			:autoBack="true"  :fixed='true' :placeholder='true' @rightClick='rightClick' :rightText='$t(`changeUser.navbar_right`)' />
 		<view class="form">
 			<view class="upload-box" @tap="uploadImage">
 				<view class="avatar">

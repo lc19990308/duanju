@@ -1,10 +1,15 @@
 <template>
 	<view>
 		<!-- 底部标题 -->
+		<view class="back" v-if="showSelectShow" @tap.stop="JumpBtn(7)">
+			<u-icon name="arrow-left" color="#fff" size="20"></u-icon>
+			<text class="back-text">Tập {{vodIndex+1}}</text>
+		</view>
 		<view @click.stop.prevent="moveHandle" class="footTitle"
 			:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
 			<view style="margin-left: 30rpx;">
-				<!-- 			<view class="footTitle-commodity">
+
+				<!-- 							<view class="footTitle-commodity">
 					<view class="footTitle-commodity-icon">
 						<image src="/static/icon/cart.png" class="footTitle-commodity-icon-img"></image>
 					</view>
@@ -20,17 +25,17 @@
 				</view>
 
 			</view>
-			<view class="video-info" v-if="!showSelectShow" @tap="JumpBtn(1,item)">
+			<view class="video-info" v-if="!showSelectShow" @tap.stop="JumpBtn(1,item)">
 				<view class="video-info-left">
 					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
-					<text class="label">Tổng hợp · Tất cả5Tập · Xem trọn bộ</text>
+					<text class="label">Tổng hợp · Tất cả{{discussNum}}Tập · Xem trọn bộ</text>
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
-			<view class="video-info" v-else @tap="JumpBtn(5,item)">
+			<view class="video-info" v-else @tap.stop="JumpBtn(5,item)">
 				<view class="video-info-left">
 					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
-					<text class="label">Tổng hợp · Tất cả5Tập · Xem trọn bộ</text>
+					<text class="label">Tổng hợp · Tất cả{{discussNum}}Tập · Xem trọn bộ</text>
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
@@ -59,7 +64,7 @@
 						</image>
 						<image src="/static/icon/taoxin.png" mode="" class="fabulous-image" v-else></image>
 					</view>
-					<text class="fabulous-num"> {{likeTotal}}</text>
+					<text class="fabulous-num" v-if="likeTotal"> {{likeTotal}}</text>
 				</view>
 				<!-- 评论 -->
 				<view class="fabulous" style="margin-top: 30rpx;" @click="JumpBtn(3)">
@@ -69,14 +74,14 @@
 					<view class="fabulous-image" v-if="collectStatus">
 						<image src="/static/images/Frame-16.png" mode="" class="fabulous-image"></image>
 					</view>
-					<text class="fabulous-num">{{collectTotal}}</text>
+					<text class="fabulous-num" v-if="collectTotal">{{collectTotal}}</text>
 				</view>
 				<!-- 转发 -->
 				<view class="fabulous" style="margin-top: 30rpx;" @click="JumpBtn(4)">
 					<view class="fabulous-image">
 						<image src="/static/icon/ward.png" mode="" class="fabulous-image"></image>
 					</view>
-					<text class="fabulous-num" style="font-size: 26rpx;">转发</text>
+					<text class="fabulous-num" style="font-size: 26rpx;">Chia sẻ</text>
 				</view>
 			</view>
 		</view>
@@ -102,7 +107,7 @@
 				<view class="selected-video-head">
 					<image class="cover" v-if="videoInfo.dramaPoster" :src="videoInfo.dramaPoster" mode=""></image>
 					<view class="content">
-						<view class="content-info" @tap="JumpBtn(6)">
+						<view class="content-info" @tap.stop="JumpBtn(6)">
 							<text class="content-info-title">{{videoInfo.dramaName}}</text>
 							<uni-icons type="right" color="#fff" size="14"></uni-icons>
 						</view>
@@ -112,7 +117,7 @@
 					</view>
 				</view>
 				<view class="video-box">
-					<view class="video-box-item" @tap="pickerVideoPlay(index,item)"
+					<view class="video-box-item" @tap.stop="pickerVideoPlay(index,item)"
 						:class="vodIndex === index ? 'video-box-item_active':'' " v-for="(item,index) in videoList"
 						:key="index">
 						<text class="video-box-item-text">{{item.dramaSeries}}</text>
@@ -127,6 +132,9 @@
 </template>
 
 <script>
+	import vi_VN from '@/utils/i18n/json/vi-VN.js'
+	import zh_CN from '@/utils/i18n/json/zh-CN.js'
+	import zh_EN from '@/utils/i18n/json/zh-EN.js'
 	import api from '@/utils/config.js'
 	import selectedVideo from '../tsp-menu/selected-video'
 	import {
@@ -386,6 +394,9 @@
 						uni.navigateTo({
 							url: '/pages/video/details?dramaId=1994367728237072385'
 						})
+						break;
+					case 7:
+						uni.navigateBack()
 						break
 				}
 			},
@@ -855,5 +866,19 @@
 		top: 0;
 		background-color: #90630F;
 		border-radius: 0px 8rpx 0px 8rpx;
+	}
+
+	.back {
+		position: absolute;
+		top: 80rpx;
+		left: 20rpx;
+		z-index: 999999;
+		flex-direction: row;
+		align-items: center;
+
+		.back-text {
+			color: #fff;
+			font-size: 28rpx;
+		}
 	}
 </style>

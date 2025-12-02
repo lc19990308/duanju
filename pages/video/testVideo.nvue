@@ -3,7 +3,7 @@
 		<!-- #ifdef APP-NVUE -->
 		<tw-videon ref="videoGroup" @lodData="loadingData" @refreshData="refreshData" :autoplay="autoplay"
 			:nextPlay="nextPlay" :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick" @longpress="longpress"
-			@swiperChange="swiperChange" @removeAllData="removeAllData"></tw-videon>
+			@swiperChange="swiperChange" :totalvod="totalvod" @removeAllData="removeAllData"></tw-videon>
 		<!-- #endif -->
 
 		<!-- #ifndef APP-NVUE -->
@@ -73,7 +73,7 @@
 				autoplay: true, //初始加载完成是否自动播放
 				nextPlay: false, //是否开启自动播放
 				loopPlay: false, //是否循环播放
-				totalvod: 3, //视频总数量，有值才能滑动加载到最后一个视频并禁止循环滑动（仅H5、小程序支持）
+				totalvod: 0, //视频总数量，有值才能滑动加载到最后一个视频并禁止循环滑动（仅H5、小程序支持）
 				query: {
 					pageNo: 1,
 					pageSize: 3,
@@ -156,6 +156,7 @@
 								item.dramaId;
 							})
 							this.tNum += 1
+							this.totalvod = data.result.total;
 							resolve(data.result.records);
 						}
 

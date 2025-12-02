@@ -60,7 +60,12 @@ const api = {
 			url: '/addons/drama/index/version',
 			method: 'GET',
 			desc: 'app版本检测'
-		}
+		},
+		google: {
+			url: '/api/sys/user/oauth2/verify-google',
+			method: 'POST',
+			desc: 'app版本检测'
+		},
 	},
 	// 登录
 	login: {
@@ -581,7 +586,7 @@ const api = {
 			desc: '积分兑换金币明细'
 		},
 		goldCoinExchange: {
-			url: '/api/wxApi/goldCoinExchange',
+			url: '/api/appApi/goldCoinExchange',
 			method: 'POST',
 			desc: '积分兑换金币'
 		},

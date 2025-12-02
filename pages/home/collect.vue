@@ -1,15 +1,15 @@
 <template>
 	<view class="page_content">
 		<statusBar />
-		<u-navbar :title="$t(`collect.page_title`)" :fixed='false' bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
-			:autoBack="true" :placeholder='true' />
+		<u-navbar :title="$t(`collect.page_title`)" :fixed='true' bgColor='transparent' :titleStyle='titleStyle'
+			leftIconColor='#fff' :autoBack="true" :placeholder='true' />
 
 		<view class="main_content">
 			<!-- VIP充值 -->
 			<view class="moinublock">
 				<view class="list">
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
-						<view @tap="jumpLink(item)" class="list-item"  v-for="(item, index) in contentList" :key="index"
+						<view @tap="jumpLink(item)" class="list-item" v-for="(item, index) in contentList" :key="index"
 							style="position: relative;">
 							<image class="star" @tap.stop="handleCollect(item,index)" src="/static/images/Frame-16.png">
 							</image>
@@ -155,11 +155,11 @@
 				platform: '',
 				videoList: [],
 				mounList: [],
-				query:{
-					pageNo:1,
-					pageSize:20,
+				query: {
+					pageNo: 1,
+					pageSize: 20,
 				},
-				total:0,
+				total: 0,
 			}
 		},
 		computed: {
@@ -192,8 +192,8 @@
 			this.getFilmLikeCollectList();
 		},
 		onReachBottom() {
-			if(this.total > this.contentList.length){
-				this.query.pageNo +=1;
+			if (this.total > this.contentList.length) {
+				this.query.pageNo += 1;
 				this.getFilmLikeCollectList();
 			}
 		},
@@ -242,8 +242,8 @@
 			getFilmLikeCollectList() {
 				this.$request('video.filmLikeCollectList', {
 					memberId: uni.getStorageSync('id'),
-					pageNo:this.query.pageNo,
-					pageSize:this.query.pageSize,
+					pageNo: this.query.pageNo,
+					pageSize: this.query.pageSize,
 				}).then(res => {
 					uni.stopPullDownRefresh();
 					this.contentList = res.result.records;
@@ -375,8 +375,8 @@
 			handleToFilmViewHistoryList() {
 				this.$request('wchatapi.filmViewHistoryList', {
 					memberId: this.memberId,
-					pageNo:this.query.pageNo,
-					pageSize:this.query.pageSize,
+					pageNo: this.query.pageNo,
+					pageSize: this.query.pageSize,
 				}).then(res => {
 					if (res.code == 200) {
 						console.log(res);
@@ -390,9 +390,9 @@
 			handleToRight() {
 				console.log('11111111111111111111111')
 			},
-			jumpLink(item){
-				uni.redirectTo({
-					url:`/pages/video/videoDetails?item=${JSON.stringify(item)}`
+			jumpLink(item) {
+				uni.navigateTo({
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
 				})
 			}
 		}
@@ -400,12 +400,6 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
-		background-image: url('/static/images/navbar-bg.png');
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-	}
-
 	.mouns {
 		width: 100%;
 		// height: 282rpx;
@@ -433,7 +427,10 @@
 
 	.page_content {
 		position: relative;
-		overflow-y: auto;
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		min-height: 100vh;
 
 		.infoBox {
 			position: relative;
@@ -813,8 +810,6 @@
 			.moinublock {
 				border-radius: 8rpx;
 				padding: 36rpx;
-				background: transparent;
-				margin-top: 24rpx;
 
 				.list {
 					margin-top: 15rpx;
@@ -1006,7 +1001,8 @@
 			}
 		}
 	}
-	.list-item{
+
+	.list-item {
 		width: calc((100% - 80rpx) / 3);
 		margin: 0 10rpx;
 	}

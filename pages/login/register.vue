@@ -17,7 +17,7 @@
 					</u-input>
 				</u-form-item>
 				<u-form-item :label="$t(`regist.verification`)" prop="verificationCode" :borderBottom='false'>
-					<u-input v-model="form.verificationCode" border='none'
+					<u-input v-model="form.verificationCode" border='none' :maxlength='6'
 						:placeholder='$t(`regist.verification_input`)' :placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-25.png" mode=""></image>
@@ -102,7 +102,7 @@
 				},
 				tips: i18n.t('form.getCode'),
 				// refCode: null,
-				seconds: 30,
+				seconds: 5,
 				checkboxValue1: 1,
 				titleStyle: {
 					color: '#fff'
@@ -114,7 +114,8 @@
 		},
 		methods: {
 			codeChange(text) {
-				if(text === '获取验证码'){
+				console.log('xxx',text)
+				if(text === '获取验证码' || text === '重新获取'){
 					this.tips = `${i18n.t('form.getCode')}`;
 				}else{
 					this.tips = `${this.extractNumber(text)} ${i18n.t('form.regain')}`;

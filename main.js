@@ -15,6 +15,7 @@ Vue.prototype.$utils = utils
 
 import store from '@/common/store/index.js'
 Vue.prototype.$store = store
+Vue.prototype._i18n = i18n
 
 
 import statusBar from '@/components/statusBar/index.vue'

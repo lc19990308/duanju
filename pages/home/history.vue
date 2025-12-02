@@ -1,7 +1,7 @@
 <template>
 	<view class="page_content">
 		<statusBar />
-		<u-navbar bgColor='transparent' :fixed='false' :title='$t(`my.history`)' :titleStyle='titleStyle' leftIconColor='#fff'
+		<u-navbar bgColor='transparent' :fixed='true' :title='$t(`my.history`)' :titleStyle='titleStyle' leftIconColor='#fff'
 			:autoBack="true" :placeholder='true'>
 		</u-navbar>
 		<view class="head_content">
@@ -164,7 +164,6 @@
 				})
 				return
 			}
-			// this.getPlayRecordList()
 
 		},
 		onShow() {
@@ -173,17 +172,15 @@
 		},
 		methods: {
 			// 追剧跳转
-			openVideoDetail(lItem) {
-				var omim = JSON.stringify(lItem)
+			openVideoDetail(item) {
 				uni.navigateTo({
-					url: '/pages/video/videoDetails?item=' + encodeURIComponent(omim)
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
 				})
 			},
 			// 历史跳转
-			HistoriCalcatchUp(lItem) {
-				var omim = JSON.stringify(lItem)
+			HistoriCalcatchUp(item) {
 				uni.navigateTo({
-					url: '/pages/video/videoDetails?item=' + encodeURIComponent(omim)
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
 				})
 			},
 			// 获取追剧列表
@@ -195,8 +192,6 @@
 					pageSize:this.contentList[this.contentCurrent].pagesize,
 					
 				}).then(res => {
-					console.log(res,
-						"2追剧列表11111111111111111111111111111111111111111111111111111111111111111111111")
 					if (res.code == 200) {
 						this.contentList[0].list = res.result.records
 						this.contentList[0].total = res.result.total
@@ -280,18 +275,13 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
+	.page_content {
+		color: #fff;
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
-	}
-
-	.page_content {
-		color: #fff;
-
+		min-height: 100vh;
 		.head_content {
-			margin-top: 88rpx;
-
 			.tabs_box {
 				// padding: 0 100rpx;
 			}

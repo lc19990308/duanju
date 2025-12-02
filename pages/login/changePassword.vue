@@ -1,7 +1,8 @@
 <template>
 	<view class="app-container">
 		<statusBar />
-		<u-navbar title="" :fixed='false'  bgColor='transparent' leftIconColor='#fff' :autoBack="true" :placeholder='true'>
+		<u-navbar title="" :fixed='false' bgColor='transparent' leftIconColor='#fff' :autoBack="true"
+			:placeholder='true'>
 		</u-navbar>
 		<u-toast ref="uToast"></u-toast>
 		<u-code :seconds="seconds" ref="uCode" @change="codeChange" />
@@ -31,16 +32,16 @@
 					<u-button class="code-btn" slot="right" @tap="getCode">{{tips}}</u-button>
 				</u-form-item>
 				<u-form-item label="mật khẩu" prop="password" :borderBottom='false'>
-					<u-input v-model="form.password" type='password' border='none' prefixIcon="search" placeholder='Nhập mật khẩu mới'
-						:placeholderStyle='placeholderStyle'>
+					<u-input v-model="form.password" type='password' border='none' prefixIcon="search"
+						placeholder='Nhập mật khẩu mới' :placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
 						</template>
 					</u-input>
 				</u-form-item>
 				<u-form-item label="Xác nhận mật khẩu" prop="confirmpassword" :borderBottom='false'>
-					<u-input v-model="form.confirmpassword" type='password' border='none' placeholder='Nhập lại mật khẩu mới'
-						:placeholderStyle='placeholderStyle'>
+					<u-input v-model="form.confirmpassword" type='password' border='none'
+						placeholder='Nhập lại mật khẩu mới' :placeholderStyle='placeholderStyle'>
 						<template slot='prefix'>
 							<image class="input-icon" src="/static/images/Frame-24.png" mode=""></image>
 						</template>
@@ -119,12 +120,11 @@
 		},
 		methods: {
 			codeChange(text) {
-				if(text === '获取验证码'){
+				if (text === '获取验证码' || text === '重新获取') {
 					this.tips = `${i18n.t('form.getCode')}`;
-				}else{
+				} else {
 					this.tips = `${this.extractNumber(text)} ${i18n.t('form.regain')}`;
 				}
-				
 			},
 			getCode() {
 				if (uni.$u.test.isEmpty(this.form.email)) {
@@ -156,12 +156,12 @@
 				this.$refs.uForm.validate().then(res => {
 					this.$request('login.resetPasswordByEmail', this.form).then(res => {
 						uni.$u.toast(this.$t('toast.resetMsg'))
-						setTimeout(()=>{
+						setTimeout(() => {
 							uni.clearStorageSync();
 							uni.redirectTo({
-								url:'/pages/login/login'
+								url: '/pages/login/login'
 							})
-						},500)
+						}, 500)
 					})
 				})
 			},

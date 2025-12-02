@@ -108,7 +108,8 @@
 			"path": "pages/video/testVideo",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
 			}
 		},
 		{
@@ -116,6 +117,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white",
 				"app-plus": {
 					"nvue": true // 必须写
 				}
