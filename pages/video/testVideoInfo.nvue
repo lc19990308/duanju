@@ -87,6 +87,18 @@
 					dramaId: '',
 				},
 				likeData: null,
+				language: {
+					zh_CN: {
+						toLogin: '请前往登录',
+					},
+					vi_VN: {
+						toLogin: 'Vui lòng đi đến đăng nhập.',
+					},
+					zh_EN: { 
+						toLogin: 'Please go to log in.',
+					},
+				},
+				lang:uni.getStorageSync('lang'),
 			}
 		},
 		created() {
@@ -96,6 +108,17 @@
 			this.initVod()
 		},
 		onShow() {
+			if (uni.getStorageSync('id') == '') {
+				uni.showToast({
+					title: this.language[this.lang].toLogin,
+					icon: 'none'
+				})
+				setTimeout(() => {
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+				}, 500)
+			}
 			/* 播放视频 */
 			if (this.$refs.videoGroup) {
 				this.$refs.videoGroup.showPlay()
@@ -128,8 +151,8 @@
 		methods: {
 			...mapActions('video', ['getVideoInfo']),
 			startData() {
-				console.log(this.query,'xx')
 				const that = this;
+				console.log('打印查询参数',this.query)
 				return new Promise((resolve, reject) => {
 					uni.request({
 						url: `${api.MPWEIXIN}/api/appApi/filmDramaSeriesList`,
@@ -176,12 +199,12 @@
 					})
 				})
 			},
-			unlock(index){		
+			unlock(index) {
 				console.log('unlock 执行')
 				this.startData().then((res) => {
 					if (res.length > 0) {
 						/* 调用视频的初始方法 */
-						console.log(res,'解锁完毕数据')
+						console.log(res, '解锁完毕数据')
 						this.$refs.videoGroup.initVod(res, index); //0是播放的下标（默认播放下标是0）下标是从0开始
 						this.currIndex = index;
 						this.getLikeData(res)
@@ -193,6 +216,7 @@
 				this.startData().then((res) => {
 					if (res.length > 0) {
 						/* 调用视频的初始方法 */
+						console.log('拿到播放列表的数据',res,'rees')
 						this.$refs.videoGroup.initVod(res, 0); //0是播放的下标（默认播放下标是0）下标是从0开始
 						this.getLikeData(res)
 					}

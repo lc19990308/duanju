@@ -40,16 +40,6 @@
 					uni.$u.toast(this.$t('toast.picker_language_settings'));
 				}
 			},
-			changeLang() {
-				switch (this.value) {
-					case 'zh_CN':
-						break;
-					case 'vi_VN':
-						break;
-					case 'en_US':
-						break;
-				}
-			},
 		},
 		onLoad() {
 			this.value = uni.getStorageSync('lang');

@@ -37,7 +37,7 @@
 			<view class="video-info" v-else @tap.stop="JumpBtn(5,item)">
 				<view class="video-info-left">
 					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
-					<text class="label">{{language[lang].collect}} · {{language[lang].all}}{{discussNum}}{{language[lang].episode}} · {{language[lang].watchFull}}</text>
+					<text class="label">{{language[lang].collect}} · {{language[lang].all}} {{discussNum}} {{language[lang].episode}} · {{language[lang].watchFull}}</text>
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
@@ -228,7 +228,7 @@
 						all: 'Tất cả',
 						collect:'Tổng hợp',
 					},
-					zh_EN: { // 建议你改为 en_US，但我按你给的结构来
+					zh_EN: { 
 						unfold: 'Expand',
 						pack: 'Collapse',
 						share: 'Share',

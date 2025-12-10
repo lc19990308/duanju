@@ -316,7 +316,12 @@
 				if (model.confirm) {
 					this.logout();
 					setTimeout(() => {
-						uni.clearStorageSync();
+						uni.removeStorageSync('accountNumber')
+						uni.removeStorageSync('vuex')
+						uni.removeStorageSync('id')
+						uni.removeStorageSync('tenantId')
+						uni.removeStorageSync('sysOrgCode')
+						uni.removeStorageSync('memberId')
 						uni.redirectTo({
 							url: '/pages/login/login'
 						})

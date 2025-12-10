@@ -282,9 +282,9 @@
 						this.agreementId = '2791523044515913731'
 						break;
 					case 'vi_VN':
-						this.agreementId = '1791523044515913730'
+						this.agreementId = '1791523044515913731'
 						break;
-					case 'en_US':
+					case 'zh_EN':
 						this.agreementId = '1995867265509580802'
 						break;
 				}
