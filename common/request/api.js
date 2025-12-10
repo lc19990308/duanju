@@ -241,6 +241,16 @@ const api = {
 	},
 	// 视频
 	video: {
+		memberVideoList: {
+			url: '/api/appApi/memberVideo/list',
+			method: 'GET',
+			desc: '剧目详情'
+		},
+		memberVideoUpload: {
+			url: '/api/appApi/memberVideo/upload',
+			method: 'POST',
+			desc: '提交视频'
+		},
 		filmDramaById: {
 			url: '/api/appApi/filmDramaById',
 			method: 'GET',
@@ -596,7 +606,7 @@ const api = {
 			desc: '获取余额'
 		},
 		rechargeDetailList: {
-			url: '/api/wxApi/rechargeDetailList',
+			url: '/api/appApi/rechargeDetailList',
 			method: 'GET',
 			desc: '点数储值明细列表'
 		},

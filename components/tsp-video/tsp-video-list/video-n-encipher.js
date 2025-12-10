@@ -200,9 +200,78 @@ export default {
 			memberId: uni.getStorageSync('id') || '',
 			pay_show: false,
 			viperInfo: {},
-			rechargeList:[],
-			viperList:[],
-			unlocking_price:0,
+			rechargeList: [],
+			viperList: [],
+			language: {
+				zh_CN: {
+					unlockRequired: '需要解锁',
+					gold: '金币',
+					balance: '钻石',
+					fullScreen: '全屏显示',
+					unit: '¥',
+					vipFree: '设专属会员免费看',
+					nextFree: '免费观看下一部分',
+					recharge: '充值',
+					goldUnlock: '金币解锁',
+					episode: '第',
+					gold: '金币',
+					diamondUnlock: '钻石解锁',
+					diamond: '钻石',
+					unlockSeries: '解锁剧集',
+					buyToWatch: '购买后可观看',
+					unlockSuccess: '解锁成功',
+					choosePayMethod: '请选择支付方式'
+				},
+				vi_VN: {
+					unlockRequired: 'Mở khóa cần',
+					gold: 'vàng',
+					balance: 'kim cương',
+					fullScreen: 'Hiển thị toàn màn hình',
+					unit: '₫',
+					vipFree: 'Đặc quyền đặt miễn phí',
+					nextFree: 'Xem tiếp free',
+					recharge: 'Nạptiền',
+					goldUnlock: 'Mở khóa bằng vàng',
+					episode: 'Tập',
+					gold: 'vàng',
+					diamondUnlock: 'Mở khóa bằng kim cương',
+					diamond: 'kim cương',
+					unlockSeries: 'Mở khóa series',
+					buyToWatch: 'Mua để xem',
+					unlockSuccess: 'Mở khóa thành công',
+					choosePayMethod: 'Vui lòng chọn phương thức thanh toán'
+				},
+				zh_EN: {
+					unlockRequired: 'Unlock required',
+					gold: 'Gold',
+					balance: 'diamond',
+					fullScreen: 'Full Screen',
+					unit: '$',
+					vipFree: 'Members watch free',
+					nextFree: 'Watch free next',
+					recharge: 'Recharge',
+					goldUnlock: 'Unlock with Gold',
+					episode: 'Episode',
+					gold: 'Gold',
+					diamondUnlock: 'Unlock with Diamond',
+					diamond: 'Diamond',
+					unlockSeries: 'Unlock Series',
+					buyToWatch: 'Purchase to watch',
+					unlockSuccess: 'Unlock successful',
+					choosePayMethod: 'Please select payment method'
+				},
+			},
+			lang: uni.getStorageSync('lang'),
+			unlock_show: false,
+			unlockingData: {
+				dramaName: '',
+				totalEpisodes: '',
+				jinbiPrice: '',
+			},
+			unlockIndex: -1,
+			payTypeIndex: -1,
+			viperIndex: -1,
+
 		}
 	},
 	created() {
@@ -495,6 +564,7 @@ export default {
 			index,
 			item
 		}) {
+			this.unlockIndex = index;
 			if (item.unlockStatus != 3) {
 				await this.getVideoInfo({
 					seriesId: item.id,
@@ -502,23 +572,22 @@ export default {
 				})
 				this.scrollToVod(index);
 			} else {
-				this.unlocking_price = item.price;
-				this.buyVideoItem(item, index);
+				this.unlockingData = item;
+				this.unlock_show = true;
 			}
-			// await this.getVideoInfo({
-			// 	seriesId: item.id,
-			// 	memberId: this.memberId,
-			// })
-			// this.scrollToVod(index);
 		},
-		//购买剧集
+		//购买剧集	
 		async buyVideoItem(item, index) {
+			if (index === -1) {
+				return uni.$u.toast(this.language[this.lang].choosePayMethod)
+			}
 			const [error, res] = await uni.request({
 				url: api.MPWEIXIN + '/api/appApi/buyDramaSeries',
 				method: 'POST',
 				header: {
 					'content-type': 'application/json', // 添加 content-type
-					"X-Tenant-Id": api.tenantId
+					"X-Tenant-Id": api.tenantId,
+					'x-lang': this.setLang(),
 				},
 				data: {
 					memberId: uni.getStorageSync('id'), //用户ID
@@ -526,15 +595,17 @@ export default {
 					sysOrgCode: api.sysOrgCode,
 					tenantId: api.tenantId, //租户ID
 					seriesSeries: item.dramaSeries, //解锁的剧集ID
-					unlockState: false //剧集是否解锁状态
+					unlockState: false, //剧集是否解锁状态
+					payType: this.payTypeIndex,
 				},
 
 			})
 			if (res.data.code == 200) {
-				uni.$u.toast(`${res.data.message},解锁成功！`)
+				uni.$u.toast(`${res.data.message},${this.language[this.lang].unlockSuccess}！`)
+				this.unlock_show = false;
 				this.$emit('unlock', index)
 			} else if (res.data.code == 600) {
-				
+
 				this.openPayPopup();
 			}
 		},
@@ -931,7 +1002,8 @@ export default {
 				method: 'POST',
 				header: {
 					'content-type': 'application/json', // 添加 content-type
-					"X-Tenant-Id": api.tenantId
+					"X-Tenant-Id": api.tenantId,
+					'x-lang': this.setLang(),
 				},
 				data: {
 					secondType: 1, //操作分类 1播放、2点赞、3收藏、4转发
@@ -1706,34 +1778,54 @@ export default {
 		fabulousBtn(data) {
 			this.$set(this.vodList, data.index, data.obj)
 		},
+		setLang() {
+			const lang = uni.getStorageSync('lang')
+			let originLang = '';
+			switch (lang) {
+				case 'zh_CN':
+					originLang = 'zh'
+					break;
+				case 'zh_EN':
+					originLang = 'en'
+					break;
+				case 'vi_VN':
+					originLang = 've'
+					break;
+			}
+			return originLang;
+		},
 		//开启充值弹窗
 		async openPayPopup() {
+			this.unlock_show = false;
 			//获取会员信息
 			const [vipFaill, vipRes] = await uni.request({
-				url: api.MPWEIXIN + '/api/appApi/filmDramaMember',
+				url: api.MPWEIXIN + `/api/appDivideApi/getBalance?memberId=${uni.getStorageSync('id')}`,
 				method: 'GET',
 				header: {
 					'content-type': 'application/json', // 添加 content-type
-					"X-Tenant-Id": api.tenantId
-				},
-				data: {
-					id: uni.getStorageSync('id'),
+					"X-Tenant-Id": api.tenantId,
+					'x-lang': this.setLang(),
 				},
 			})
 			if (vipRes.data.code == 200) {
 				this.viperInfo = vipRes.data.result;
+				console.log(this.viperInfo, 'viperInfo')
 			}
 			//获取充值套餐详情
+			console.log({
+				sysOrgCode: api.sysOrgCode,
+				tenantId: api.tenantId,
+				id: uni.getStorageSync('id')
+			},'video xx')
 			const [rechargeFaill, rechargeRes] = await uni.request({
 				url: api.MPWEIXIN + '/api/wxApi/rechargePackageList',
 				method: 'GET',
 				header: {
 					'content-type': 'application/json', // 添加 content-type
-					"X-Tenant-Id": api.tenantId
+					"X-Tenant-Id": api.tenantId,
+					'x-lang': this.setLang(),
 				},
 				data: {
-					dramaId: '1990431394967576578',
-					dramaSeries: '1989235057668362242',
 					sysOrgCode: api.sysOrgCode,
 					tenantId: api.tenantId,
 					id: uni.getStorageSync('id')
@@ -1747,14 +1839,19 @@ export default {
 				header: {
 					'content-type': 'application/json', // 添加 content-type
 					"X-Tenant-Id": api.tenantId,
+					'x-lang': this.setLang(),
 				},
 				data: {
 					sysOrgCode: api.sysOrgCode,
 					tenantId: api.tenantId,
 				},
 			})
-			this.viperList=  viperRes.data.result
+			this.viperList = viperRes.data.result
 			this.pay_show = true;
 		},
+		viperPicker(index) {
+			// this.pay_show = false;
+			this.viperIndex = index;
+		}
 	}
 }

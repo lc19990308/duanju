@@ -15,17 +15,17 @@
 		<view class="cell-box">
 			<u-cell-group :border="false">
 				<u-cell :title="$t(`setting.cell_item1`)" :border="false"
-					url='/pages/user/about/detail/detail?id=1791523044515913730'>
+					:url='`/pages/user/about/detail/detail?id=${agreementId}`'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
 				</u-cell>
-				<u-cell :title="$t(`setting.cell_item2`)" :border="false"
+		<!-- 		<u-cell :title="$t(`setting.cell_item2`)" :border="false"
 					url='/pages/user/about/detail/detail?id=1791523044515913731'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
-				</u-cell>
+				</u-cell> -->
 				<u-cell :title="$t(`setting.cell_item3`)" :border="false" url='/pages/user/seting/opinion'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
@@ -59,6 +59,7 @@
 					realname: '',
 					avatar: '',
 				},
+				agreementId:"",
 			}
 		},
 		methods: {
@@ -81,8 +82,23 @@
 					}
 				})
 			},
+			getLang() {
+				const lang = uni.getStorageSync('lang');
+				switch (lang) {
+					case 'zh_CN':
+						this.agreementId = '2791523044515913731'
+						break;
+					case 'vi_VN':
+						this.agreementId = '1791523044515913730'
+						break;
+					case 'en_US':
+						this.agreementId = '1995867265509580802'
+						break;
+				}
+			},
 		},
 		onLoad() {
+			this.getLang();
 			this.getUserInfo();
 		}
 	}

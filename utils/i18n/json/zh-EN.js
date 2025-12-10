@@ -35,7 +35,8 @@ const en = {
 		have_opened: 'Subscribed',
 		expire: 'Expires',
 		member: 'Member',
-		cdkey: 'Enter redeem code'
+		cdkey: 'Enter redeem code',
+		creation: 'Creator Center'
 	},
 
 	reward: {
@@ -45,7 +46,8 @@ const en = {
 		invite_friend: 'Invite Friends',
 		gold: 'Gold',
 		btn: 'Go',
-		btn_text: 'build relationship',
+		btn_text: 'Share & Invite',
+		tips: 'The invited user must complete registration through your invitation link to establish the referral and receive rewards.',
 	},
 
 	proposal: {
@@ -118,7 +120,7 @@ const en = {
 	store: {
 		page_title: 'Store',
 		balance: 'Balance: ',
-		balance_unit: 'gold',
+		balance_unit: 'diamond',
 		page_tips: 'Tip: Monkey Short provides both free and paid content for everyone. You decide what to unlock. Payment is optional and stored value is non-refundable. If your top-up does not arrive, please log out and log in again.',
 	},
 
@@ -131,16 +133,17 @@ const en = {
 		page_title: 'My Wallet',
 		wallet_icon: 'Top Up',
 		exchange: 'Exchange',
-		gold_title: 'Gold Details',
-		info_title: 'Additional Info',
-		unit: 'gold',
+		gold_title: 'diamond details',
+		info_title: 'gold details',
+		unit: 'diamond',
+		points: 'gold',
 	},
 
 	withdrawal: {
 		page_title: 'Exchange',
 		card_title: 'My Points',
 		navbar_right: 'Details',
-		card_tips: '100 points = 1 gold',
+		card_tips: '1 gold = 100 points',
 		cell_label: 'Enter points amount',
 		cell_value: 'Max 12 gold per exchange',
 		btn_text: 'Submit',
@@ -327,9 +330,37 @@ const en = {
 		picRequired: 'Please select an image',
 		placeholder: 'Please enter',
 		pointsRequired: 'Please enter the amount of points',
-		getCode:'Get code',
+		getCode: 'Get code',
 		regain: 'Resend code',
-	}
+	},
+	more: {
+		loadmoreText: 'Load more',
+		loadingText: 'Loading...',
+		nomoreText: 'No more',
+	},
+	sgin: {
+		sginEnd: 'You have already checked in',
+		sginSuccess: 'Check-in successful!'
+	},
+	creation: {
+		pageTitle: 'Creator Center',
+		uploadText: 'Upload Work',
+		uploadLoading: 'uploading...',
+		coverSuccess: 'Cover uploaded successfully',
+		coverFail: 'Cover upload failed',
+		videoTooLarge: 'Video must not exceed {size} MB',
+		videoSuccess: 'Video uploaded successfully',
+		videoFail: 'Video upload failed',
+		needBoth: 'Please complete both cover and video upload',
+		submitSuccess: 'Submitted successfully',
+		chooseVideo: 'Choose Video',
+		submit: 'Submit',
+		uploadVideo: 'Upload Video',
+		uploadCover: 'Upload Video Cover',
+		chooseCover: 'Choose Cover',
+		inputText: 'Please enter the video name',
+		videoName: "Video title"
+	},
 };
 
 export default en;

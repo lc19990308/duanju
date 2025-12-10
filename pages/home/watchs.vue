@@ -83,16 +83,23 @@
 				<view class="canvas">
 					<canvas canvas-id="qrcode" :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
 				</view>
+				<view class="reward_tips">
+					{{$t('reward.tips')}}
+				</view>
 			</view>
-			<view class="rewardCover_bottom">
+			<view class="rewardCover_bottom" @tap="uniShare">
 				<image src="/static/images/Frame-44.png" mode=""></image>
-				<span>{{$t(`reward.btn_text`)}}</span>
+				<text>{{$t(`reward.btn_text`)}}</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	// #ifndef APP-HARMONY
+	import UniShare from '@/uni_modules/uni-share/js_sdk/uni-share.js';
+	const uniShare = new UniShare();
+	// #endif
 	import {
 		uQRCode
 	} from '@/uni_modules/cc-defineNewQRCode/components/cc-defineNewQRCode/common/uqrcode.js'
@@ -104,10 +111,20 @@
 				qrcodeText: '',
 				// 二维码尺寸
 				qrcodeSize: 84,
-				
+
 				// 最终生成的二维码图片
 				qrcodeSrc: '',
 				memberId: uni.getStorageSync('id') || '',
+			}
+		},
+		onBackPress({
+			from
+		}) {
+			if (from == 'backbutton') {
+				this.$nextTick(function() {
+					uniShare.hide()
+				})
+				return uniShare.isShow;
 			}
 		},
 		methods: {
@@ -145,13 +162,34 @@
 					const result = res.result.userInfo;
 					this.nickname = result.realname;
 					this.qrcodeText =
-						`${window.location.origin}/#/pages/login/register?bindMemberId=${this.memberId}`
+						`https://www.vndrama.com:9082/#/pages/login/register?bindMemberId=${this.memberId}`
+					this.goBtn();
 				})
 			},
+			uniShare() {
+				// #ifndef APP-HARMONY
+				uniShare.show({
+					content: { //公共的分享参数配置  类型（type）、链接（herf）、标题（title）、summary（描述）、imageUrl（缩略图）
+						type: 0,
+						href: this.qrcodeText,
+						title: '邀请好友',
+						summary: '好友分享',
+					},
+					menus: [{
+						"img": "/static/app-plus/sharemenu/more.png",
+						"text": "系统分享",
+						"share": "shareSystem"
+					}],
+					cancelText: "取消分享",
+				}, e => { //callback
+					console.log(uniShare.isShow);
+					console.log(e);
+				})
+				// #endif
+			}
 		},
 		onShow() {
 			this.getUserInfo();
-			this.goBtn();
 		}
 	}
 </script>
@@ -418,7 +456,7 @@
 				position: relative;
 				width: 100%;
 				float: left;
-				height: 842rpx;
+				height: 942rpx;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
@@ -490,5 +528,16 @@
 				}
 			}
 		}
+	}
+	.reward_tips{
+		margin-top: 70rpx;
+		padding: 15rpx 10rpx 0 10rpx;
+		width: 450rpx;
+		height: 100rpx;
+		font-size: 22rpx;
+		color: #666;
+		background-image: url('/static/images/msg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 	}
 </style>

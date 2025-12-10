@@ -34,7 +34,7 @@
             "type" : "uni-app:app-ios"
         },
         {
-            "customPlaygroundType" : "device",
+            "customPlaygroundType" : "local",
             "localRepoPath" : "/Users/liuchao/code/duanju/dj-app/h5/unpackage/debug",
             "openVueDevtools" : true,
             "packageName" : "com.monkey.shortdramaapp.ios",

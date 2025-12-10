@@ -1,18 +1,18 @@
 <template>
 	<view class="centert-lsty">
-		<u-navbar :title="$t(`store.page_title`)" :autoBack="true" :fixed='false' :placeholder='true' bgColor='transparent'
+		<u-navbar :title="$t(`store.page_title`)" :autoBack="true" :fixed='true' :placeholder='true' bgColor='transparent'
 			:titleStyle='titleStyle' leftIconColor='#fff'>
 		</u-navbar>
 		<view class="mon-list">
 			<view class="rechargeView_title">
-				<span>{{$t(`store.balance`)}}: {{totalPrice}} {{$t(`store.balance_unit`)}}</span>
+				<span>{{$t(`store.balance`)}}: {{balanceData.totalBalance}} {{$t(`store.balance_unit`)}}</span>
 			</view>
 			<view class="rechargeView_list">
 				<view class="rechargeView_lists top3" v-for="(item,index) in goldList"
 					@click="handleToActive(index,item)" :key="index">
-					<view class="rechargeView_top">{{item.packageMoney}} {{$t(`store.balance_unit`)}}</view>
-					<view class="rechargeView_cen">+{{item.giftCoins}} {{$t(`store.balance_unit`)}}</view>
-					<view class="rechargeView_bottom">{{$t('currency')}}{{item.actualReceipt}}</view>
+					<view class="rechargeView_top">{{item.actualReceipt}} {{$t(`store.balance_unit`)}}</view>
+					<view class="rechargeView_cen">+{{item.rechargeCoins}} {{$t(`store.balance_unit`)}}</view>
+					<view class="rechargeView_bottom">{{$t('currency')}}{{item.packageMoney}}</view>
 				</view>
 			</view>
 		</view>
@@ -44,6 +44,7 @@
 				falishui: {},
 				openid: 'ogvdF6U0Z36PmXdEg7QQEO6Tfh1w',
 				memberId: uni.getStorageSync('memberId') || '',
+				id:uni.getStorageSync('id') || '',
 				titleStyle: {
 					color: '#fff',
 					fontFamily: 'PingFang SC, PingFang SC',
@@ -51,13 +52,18 @@
 					color: '#FFFFFF',
 				},
 				totalPrice:0,
+				balanceData:{
+					currency: '',
+					totalBalance: '',
+				},
 			};
 		},
 		onLoad() {
 			this.tenantId = apiMoen.tenantId
 			this.sysOrgCode = apiMoen.sysOrgCode
 			this.getRechargePackageList(this.tenantId, this.sysOrgCode)
-			this.filmDramaMember()
+			this.filmDramaMember();
+			this.getIntegral();
 		},
 		methods: {
 			// 查询会员信息
@@ -72,9 +78,15 @@
 			},
 			// 账户充值套餐列表
 			getRechargePackageList(tenantId, sysOrgCode) {
+				console.log('套餐查询参数',{
+					tenantId,
+					sysOrgCode,
+					memberId: this.id,
+				})
 				this.$request('wchatapi.rechargePackageList', {
 					tenantId,
-					sysOrgCode
+					sysOrgCode,
+					memberId: this.id,
 				}).then(res => {
 					if (res.code == 200) {
 						this.goldList = res.result.list;
@@ -87,13 +99,19 @@
 			// 充值支付
 			handleToActive(index, item) {
 				this.activeIndex = index;
-				// console.log(index, item);
 				this.money = item.money
 			},
 
 			handleToactivePay(index, item) {
 				// console.log(index);
 				// console.log(this.width);
+			},
+			getIntegral() {
+				this.$request('withdraw.getBalance', {
+					memberId: this.id
+				}).then(res => {
+					this.balanceData = res.result;
+				})
 			},
 		}
 	}
@@ -132,8 +150,6 @@
 	.centert-lsty {
 		width: 100%;
 		height: 100vh;
-		padding: 24rpx 0;
-		padding-top: 0;
 		box-sizing: border-box;
 		position: relative;
 		background-image: url('/static/images/navbar-bg.png');

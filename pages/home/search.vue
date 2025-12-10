@@ -1,7 +1,7 @@
 <template>
 	<view class="app-container">
 		<statusBar />
-		<u-navbar title="" :fixed='false' :autoBack="true"  :placeholder='true' bgColor='transparent'
+		<u-navbar title="" :fixed='true' :autoBack="true" :placeholder='true' bgColor='transparent'
 			:titleStyle='titleStyle' leftIconColor='#fff'>
 			<template slot='center'>
 				<view class="input-box">
@@ -17,7 +17,7 @@
 					<u-icon name="trash" color="#FFFFFF" size="28"></u-icon>
 				</view>
 			</view>
-			<view   class="remove-content">
+			<view class="remove-content">
 				<view class="remove-item" @tap="historySerach(item)" v-for="(item,index) in historyList" :key="index">
 					{{item.searchKeyword}}
 				</view>
@@ -29,7 +29,7 @@
 				<view class="action-text">
 					{{$t(`search.host_lable`)}}
 				</view>
-				<view  class="action-icon" @tap="getHotKeyword(true)">
+				<view class="action-icon" @tap="getHotKeyword(true)">
 					<u-icon name="reload" color="#FFFFFF" size="28"></u-icon>
 				</view>
 			</view>
@@ -44,6 +44,7 @@
 			</view>
 		</view>
 		<!--搜索排行榜单-->
+
 		<view class="book-list">
 			<view class="title">
 				<view class="text">{{$t(`search.video_label`)}}</view>
@@ -51,24 +52,26 @@
 					<image class="icon-hot" src="/static/images/hot.png" mode=""></image>
 				</view>
 			</view>
-			<view class="book-list-item" @tap="videoInfo(item)" v-for="(item,index) in videoList" :key="index">
-				<view class="cover">
-					<image class="cover-image" :lazy-load="true" :src="item.dramaPoster" mode=""></image>
-					<image class="tag" v-if="index === 0" src="/static/images/Frame-8.png" mode=""></image>
-					<image class="tag" v-else-if="index === 1" src="/static/images/Frame-7.png" mode=""></image>
-					<image class="tag" v-else-if="index === 2" src="/static/images/Frame-9.png" mode=""></image>
-				</view>
-				<view class="content">
-					<view class="book-title">{{item.dramaName}}</view>
-					<view class="tag">
-						<view class="tag-item">{{item.classifyName}}</view>
-						<view class="tag-item">{{item.producerName}}</view>
+			<scroll-view scroll-y="true" class="scroll-Y">
+				<view class="book-list-item" @tap="videoInfo(item)" v-for="(item,index) in videoList" :key="index">
+					<view class="cover">
+						<image class="cover-image" :lazy-load="true" :src="item.dramaPoster" mode=""></image>
+						<image class="tag" v-if="index === 0" src="/static/images/Frame-8.png" mode=""></image>
+						<image class="tag" v-else-if="index === 1" src="/static/images/Frame-7.png" mode=""></image>
+						<image class="tag" v-else-if="index === 2" src="/static/images/Frame-9.png" mode=""></image>
 					</view>
-					<view class="desc">
-						{{item.dramaDescribe}}
+					<view class="content">
+						<view class="book-title">{{item.dramaName}}</view>
+						<view class="tag">
+							<view class="tag-item">{{item.classifyName}}</view>
+							<view class="tag-item">{{item.producerName}}</view>
+						</view>
+						<view class="desc">
+							{{item.dramaDescribe}}
+						</view>
 					</view>
 				</view>
-			</view>
+			</scroll-view>
 		</view>
 	</view>
 </template>
@@ -166,8 +169,8 @@
 					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
 				})
 			},
-			init(){
-				if(this.token){
+			init() {
+				if (this.token) {
 					this.getHistoryList();
 				}
 				this.getHotKeyword();
@@ -181,16 +184,12 @@
 </script>
 
 <style lang="scss" scoped>
-	page {
+	.app-container {
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		background-position: 100% 100%;
-		background-attachment: fixed;
-	}
-
-	.app-container {
-		padding-top: 80rpx;
+		min-height: 100vh;
 	}
 
 	.input-box {
@@ -398,5 +397,9 @@
 
 	::v-deep .uni-input-placeholder {
 		color: #f6f6f6;
+	}
+
+	.scroll-Y {
+		height: 1100rpx;
 	}
 </style>

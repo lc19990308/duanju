@@ -148,9 +148,7 @@
 						uni.$u.toast(this.$t('toast.emailCodeSuccess'));
 						this.$refs.uCode.start();
 					})
-				} else {
-					uni.$u.toast('倒计时结束后再发送');
-				}
+				} 
 			},
 			submit() {
 				this.$refs.uForm.validate().then(res => {
@@ -171,9 +169,6 @@
 				return m ? Number(m[0]) : null;
 			}
 		},
-		onShow() {
-			console.log(uni.$u.test.email('19139771157@qq.com'))
-		}
 	}
 </script>
 

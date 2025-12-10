@@ -9,19 +9,22 @@
 			"playlet-plugin": "/pages/playlet/playlet"
 		},
 		onLaunch: function(options) {
-			console.log("App Launch");
-			// 获取配置信息
-			// this.getConfigInfo()
-
-
-
-
-
+			console.log(uni.getStorageSync('lang'),'获取存入的语言')
+			if (!uni.getStorageSync('lang')) {
+				const langSys = uni.getSystemInfoSync().language;
+				switch (langSys) {
+					case 'zh-CN':
+						uni.setStorageSync('lang', 'zh_CN');
+						break
+					case 'vi-VN':
+						uni.setStorageSync('lang', 'vi_VN');
+						break
+					case 'zh-EN':
+						uni.setStorageSync('lang', 'zh_EN');
+						break
+				}
+			}
 		},
-		methods: {
-			// ...mapActions("app", ["getConfigInfo"]),
-			// ...mapMutations("app", ["setShare"]),
-		}
 	}
 </script>
 

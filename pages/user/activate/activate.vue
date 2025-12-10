@@ -1,14 +1,12 @@
 <template>
 	<view class="act">
-		<statusBar />
-		<u-navbar :title="$t(`member.member_title`)" :fixed='false' bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
-			:autoBack="true" :placeholder='true'>
+		<u-navbar :title="$t(`member.member_title`)" :fixed='true' bgColor='transparent' :titleStyle='titleStyle'
+			leftIconColor='#fff' :autoBack="true" :placeholder='true'>
 		</u-navbar>
 		<view class="activate_t">
 			<image :src="avatar" mode=""></image>
 			<view>
 				<text>{{nickname}}</text><br>
-				<!-- Thành viên chưa mở -->
 			</view>
 		</view>
 		<view class="act_equity">
@@ -16,10 +14,9 @@
 				{{$t('member.member_title')}}
 			</view>
 			<view class="rechargeView_list">
-				<view :class="['rechargeView_lists', 'top' + (index + 1)]" @click="selectMember(index,item)"
+				<view :class="['rechargeView_lists', 'top' + (index + 1),activeIndex == index ? 'active':'' ]" @click="selectMember(index,item)"
 					v-for="(item,index) in memberList" :key="index">
-					<!-- <image src="/static/images/002.png" mode=""></image> -->
-					<image :src="'/static/images/00' + (index + 1) + '.png'" mode=""></image>
+					<image :src="item.itemUrl" mode=""></image>
 					<view class="rechargeView_cen">{{item.packageName}}</view>
 					<view class="rechargeView_bottom">{{$t('currency')}} {{item.packagePrice}}</view>
 				</view>
@@ -28,10 +25,15 @@
 		<view class="act_but">
 			<button class="but" @click="handleToActive">{{$t(`member.btn_text`)}}</button>
 		</view>
+		<!-- 		<view class="equity-glass">
+			<view class="eq-glass-card" v-for="(item,index) in equityList" :key="index">
+				<view class="eq-title">{{item.equityName}}</view>
+				<view class="eq-desc">{{item.equityDescribe}}</view>
+			</view>
+		</view> -->
 		<view class="act_prompt">
 			<view>{{$t(`member.tips_title`)}}</view>
 			<view v-html="$t(`member.tips_text`)"></view>
-
 		</view>
 
 		<!-- 统一支付组件，注意：vue3下ref不可以等于组件名，因此这里ref="pay" 而不能是 ref="uniPay" -->
@@ -41,9 +43,7 @@
 </template>
 
 <script>
-	
 	import apiMoen from '../../../utils/config.js';
-	const jweixin = require('jweixin-module')
 	import WenTag from '../../../components/tag-select/tag-select.vue'
 	export default {
 		components: {
@@ -95,11 +95,11 @@
 				userCode: '',
 				videoQuery: {
 					tenantId: apiMoen.tenantId,
-					sysOrgCode:apiMoen.sysOrgCode,
+					sysOrgCode: apiMoen.sysOrgCode,
 					dramaClassify: "", //短剧分类
 					dramaChannel: "", //频道分类
-					pageNo:1,
-					pageSize:10,
+					pageNo: 1,
+					pageSize: 10,
 				},
 				videoList: [],
 				titleStyle: {
@@ -108,14 +108,18 @@
 					fontWeight: 800,
 					color: '#FFFFFF',
 				},
-				nickname:'',
-				avatar:'',
+				nickname: '',
+				avatar: '',
+				colorPool: [
+					'#FF9E9E', '#A0C4FF', '#CAFFBF', '#FFD6A5', '#BDB2FF', '#C0FDFF'
+				],
+				equityList: []
 			};
 		},
 		onLoad() {
 			this.tenantId = apiMoen.tenantId,
-			this.sysOrgCode = apiMoen.sysOrgCode,
-			this.getVipPackageList(this.tenantId, this.sysOrgCode)
+				this.sysOrgCode = apiMoen.sysOrgCode,
+				this.getVipPackageList(this.tenantId, this.sysOrgCode)
 			this.handleToEquityList(this.tenantId, this.sysOrgCode)
 			// this.getWxCode()
 			this.selectMember()
@@ -132,7 +136,6 @@
 					tenantId,
 					sysOrgCode
 				}).then(res => {
-					console.log(res, "res1111111充值套餐列表");
 					if (res.code == 200) {
 						this.memberList = res.result
 					}
@@ -261,172 +264,6 @@
 			payCreate(e) {
 				console.log(e);
 			},
-			// 微信支付
-			// handleToActive(index, item) {
-			// 	this.activeIndex = index;
-			// 	console.log(index, item.id);
-			// 	console.log(item, "item列表");
-
-			// 	var data = {
-			// 		rechargeId:item.id,//充值id 即是套餐id
-			// 		memberId: uni.getStorageSync('id'),//会员id
-			// 		sysOrgCode:uni.getStorageSync('sysOrgCode'),
-			// 		tenantId: this.tenantId,
-			// 	}
-			// 	this.$request('wchatapi.rechargeVip',data).then(res => {
-			// 		console.log(res,"res:9999999999")
-			// 		uni.requestPayment({
-			// 			provider: 'wxpay',
-			// 			timeStamp: res.result.timeStamp,
-			// 			nonceStr: res.result.nonceStr,
-			// 			package: res.result.package,
-			// 			signType: res.result.signType,
-			// 			paySign: res.result.paySign,
-			// 			success: function(payRes) {
-			// 				uni.showToast({
-			// 					icon: 'none',
-			// 					title: '支付成功'
-			// 				})
-			// 				// 刷新列表
-			// 			},
-			// 			fail: function(err) {
-			// 				uni.showToast({
-			// 					icon: 'none',
-			// 					title: '支付取消'
-			// 				})
-			// 				uni.navigateTo({
-			// 					url: '/pages/user/vip/vip'
-			// 				})
-			// 			}
-			// 		})
-			// 	})
-			// },
-			// getWxCode(callback) {
-			// 	wx.login({
-			// 		success: (res) => {
-			// 			if (res.code) {
-			// 				this.userCode = res.code;
-			// 				if (callback) {
-			// 					callback(this.userCode);
-			// 				}
-			// 			} else {
-			// 				console.log('获取失败！' + res.errMsg);
-			// 			}
-			// 		}
-			// 	});
-			// },
-			// 虚拟支付
-			// async handleToActive(index, item) {
-			// 	const userCode = await new Promise((resolve, reject) => {
-			// 		// this.getWxCode((userCode) => {
-			// 		// 	resolve(userCode); // 将 userCode 传递给 Promise 的 resolve 函数
-			// 		// });
-			// 	});
-			// 	this.activeIndex = index;
-			// 	// 目前只有 >= v2.19.2 的基础库支持该接口，后续将对更多低版本基础库支持该接口。因此建议开发者这样判断：当前用户的基础库版本 >= v2.19.2 时可以直接用 wx.requestVirtualPayment，小于 v2.19.2 时，用 wx.canIUse('requestVirtualPayment') 来判断接口是否可用。
-			// 	function compareVersion(_v1, _v2) {
-			// 		if (typeof _v1 !== 'string' || typeof _v2 !== 'string') return 0
-			// 		const v1 = _v1.split('.')
-			// 		const v2 = _v2.split('.')
-			// 		const len = Math.max(v1.length, v2.length)
-			// 		while (v1.length < len) {
-			// 			v1.push('0')
-			// 		}
-			// 		while (v2.length < len) {
-			// 			v2.push('0')
-			// 		}
-			// 		for (let i = 0; i < len; i++) {
-			// 			const num1 = parseInt(v1[i], 10)
-			// 			const num2 = parseInt(v2[i], 10)
-
-			// 			if (num1 > num2) {
-			// 				return 1
-			// 			} else if (num1 < num2) {
-			// 				return -1
-			// 			}
-			// 		}
-			// 		return 0
-			// 	}
-
-			// 	const SDKVersion = wx.getSystemInfoSync().SDKVersion
-			// 	const self = this; // 在外部保存正确的上下文
-			// 	var data = {
-			// 		buyQuantity: 1, //购买数量
-			// 		goodsPrice: item.packageMoney, //充值金额
-			// 		productId: item.id, //充值会员id 即是套餐id
-			// 		memberId: uni.getStorageSync('id'), //会员id
-			// 		sysOrgCode: uni.getStorageSync('sysOrgCode'), //小程序id
-			// 		tenantId: this.tenantId, //运营主体公司id
-			// 		code: userCode
-			// 	}
-			// 	this.$request('virtualPayment.virtualPaymentVip', data).then(res => {
-			// 		console.log('充值会员', res)
-			// 		if (compareVersion(SDKVersion, '2.19.2') >= 0 || wx.canIUse('requestVirtualPayment')) {
-			// 			wx.requestVirtualPayment({
-			// 				signData: JSON.stringify(res.result.signData),
-			// 				// signData: JSON.stringify({
-			// 				// 	offerId: '123', //在米大师侧申请的应用 id, mp-支付基础配置中的offerid
-			// 				// 	buyQuantity: 1, //购买数量
-			// 				// 	env: 1, //环境配置, 0 米大师正式环境, 1 米大师沙箱环境, 默认为 0
-			// 				// 	currencyType: 'CNY', //人民币
-			// 				// 	productId: 'testproductId', //道具ID
-			// 				// 	goodsPrice: 10, //道具单价(分)
-			// 				// 	outTradeNo: 'xxxxxx', //业务订单号
-			// 				// 	attach: 'testdata', //透传数据, 发货通知时会透传给开发者
-			// 				// }),
-			// 				paySig: res.result.paySig, //支付签名
-			// 				signature: res.result.signature, // 用户态签名
-			// 				mode: res.result
-			// 					.mode, //支付类型 道具直购：short_series_goods	代币充值：short_series_coin	
-			// 				success() {
-			// 					console.log('会员开通成功，准备支付回调', res)
-			// 					console.log('会员开通成功，准备支付回调', res.result.signData.outTradeNo)
-			// 					// return
-			// 					// const outTradeNo = res.result.signData.outTradeNo
-			// 					var dataToSend = {
-			// 						attach: res.result.signData.attach,
-			// 						buyQuantity: res.result.signData.buyQuantity,
-			// 						currencyType: res.result.signData.currencyType,
-			// 						env: res.result.signData.env,
-			// 						goodsPrice: res.result.signData.goodsPrice,
-			// 						offerId: res.result.signData.offerId,
-			// 						outTradeNo: res.result.signData.outTradeNo,
-			// 						productId: res.result.signData.productId
-			// 					};
-			// 					// 支付成功回调
-			// 					self.$request('virtualPayment.virtualPaymentNotifyUrl', dataToSend)
-			// 						.then(res => {
-			// 							console.log('支付回调数据', res.code)
-			// 							if (res.success) {
-			// 								uni.showToast({
-			// 									icon: 'success',
-			// 									title: '会员开通成功'
-			// 								})
-			// 							} else {
-			// 								uni.showToast({
-			// 									icon: 'error',
-			// 									title: '支付失败，请联系管理员'
-			// 								})
-			// 							}
-			// 						})
-			// 					// 刷新列表
-			// 				},
-			// 				fail({
-			// 					errMsg,
-			// 					errCode
-			// 				}) {
-			// 					console.error(errMsg, errCode)
-			// 					uni.showToast({
-			// 						icon: 'error',
-			// 						title: '支付取消'
-			// 					})
-			// 				},
-			// 			})
-			// 		} else {
-			// 			console.log('当前用户的客户端版本不支持 wx.requestVirtualPayment')
-			// 		}
-			// 	})
-			// },
 			handleToactivePay(index, item) {
 				console.log(index);
 			},
@@ -438,6 +275,7 @@
 				}).then(res => {
 					if (res.code == 200) {
 						this.equityList = res.result
+						console.log(this.equityList, 'equityList')
 					}
 				}).catch(res => {
 					console.log(res);
@@ -448,7 +286,7 @@
 					const result = res.result.userInfo;
 					this.nickname = result.realname;
 					this.avatar = result.avatar;
-	
+
 				})
 			},
 		}
@@ -456,14 +294,8 @@
 </script>
 
 <style lang="scss" scoped>
-	page{
-		background-image: url('/static/images/navbar-bg.png');
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-	}
 	.paytype {
 		display: flex;
-		// background-color: #333;
 		justify-content: space-between;
 		margin-top: 20rpx;
 		margin-bottom: 20rpx;
@@ -505,6 +337,10 @@
 
 	.act {
 		margin: auto;
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		min-height: 100vh;
 
 		&_equity {
 			.equity {
@@ -767,7 +603,7 @@
 				font-size: 32rpx;
 				color: #D1D1D1;
 
-				span {
+				text {
 					font-size: 26rpx;
 				}
 			}
@@ -835,7 +671,7 @@
 			padding-left: 20rpx;
 			padding-top: 20rpx;
 			background: linear-gradient(186deg, rgba(226, 122, 255, 0.4) 0%, rgba(226, 122, 255, 0) 100%);
-			border-radius: r;
+			border-radius: 16rpx;
 			border: 2px solid #E27AFF;
 
 			.rechargeView_cen {
@@ -846,31 +682,6 @@
 				color: #E27AFF;
 			}
 
-			.rechargeView_bottom {
-				background: transparent;
-				font-family: Inter, Inter;
-				font-weight: bold;
-				font-size: 36rpx;
-				color: #E27AFF;
-			}
-		}
-		
-		.rechargeView_lists.top4 {
-			text-align: left;
-			padding-left: 20rpx;
-			padding-top: 20rpx;
-			background: linear-gradient(186deg, rgba(226, 122, 255, 0.4) 0%, rgba(226, 122, 255, 0) 100%);
-			border-radius: r;
-			border: 2px solid #E27AFF;
-		
-			.rechargeView_cen {
-				color: #E27AFF;
-			}
-		
-			.rechargeView_top {
-				color: #E27AFF;
-			}
-		
 			.rechargeView_bottom {
 				background: transparent;
 				font-family: Inter, Inter;
@@ -881,10 +692,98 @@
 		}
 	}
 
-	.activate_t {
+	/* -------------- top4 深海青柠 -------------- */
+	.rechargeView_lists.top4 {
+		text-align: left;
+		padding-left: 20rpx;
+		padding-top: 20rpx;
+		background: linear-gradient(186deg, rgba(0, 255, 235, .35) 0%, rgba(0, 255, 235, 0) 100%);
+		border-radius: 16rpx;
+		border: 2rpx solid #00FFEB;
 
+		.rechargeView_top {
+			color: #00FFEB;
+		}
+
+		.rechargeView_cen {
+			color: #00FFEB;
+		}
+
+		.rechargeView_bottom {
+			background: transparent;
+			font-weight: bold;
+			font-size: 36rpx;
+			color: #00FFEB;
+		}
+	}
+
+
+	/* -------------- top6 星云紫蓝 -------------- */
+	.rechargeView_lists.top5 {
+		text-align: left;
+		padding-left: 20rpx;
+		padding-top: 20rpx;
+		background: linear-gradient(186deg, rgba(122, 162, 255, .4) 0%, rgba(122, 162, 255, 0) 100%);
+		border-radius: 16rpx;
+		border: 2rpx solid #7AA2FF;
+
+		.rechargeView_top {
+			color: #7AA2FF;
+		}
+
+		.rechargeView_cen {
+			color: #7AA2FF;
+		}
+
+		.rechargeView_bottom {
+			background: transparent;
+			font-weight: bold;
+			font-size: 36rpx;
+			color: #7AA2FF;
+		}
+	}
+	.rechargeView_lists.top6 {
+		text-align: left;
+		padding-left: 20rpx;
+		padding-top: 20rpx;
+		background: linear-gradient(186deg, rgba(122, 162, 255, .4) 0%, rgba(122, 162, 255, 0) 100%);
+		border-radius: 16rpx;
+		border: 2rpx solid #7AA2FF;
+	
+		.rechargeView_top {
+			color: #7AA2FF;
+		}
+	
+		.rechargeView_cen {
+			color: #7AA2FF;
+		}
+	
+		.rechargeView_bottom {
+			background: transparent;
+			font-weight: bold;
+			font-size: 36rpx;
+			color: #7AA2FF;
+		}
+	}
+
+	.rechargeView_lists.active {
+		background: linear-gradient(186deg, rgba(255, 255, 255, .25) 0%, rgba(255, 255, 255, 0) 100%);
+		transform: scale(0.98);
+		transition: all 0.15s ease;
+	}
+
+	.rechargeView_lists.active .rechargeView_top,
+	.rechargeView_lists.active .rechargeView_cen,
+	.rechargeView_lists.active .rechargeView_bottom {
+		color: #ffffff !important;
+	}
+
+
+
+	.activate_t {
 		width: 100%;
 		display: flex;
+		align-items: center;
 
 		image {
 			width: 128rpx;
@@ -900,9 +799,8 @@
 			font-size: 26rpx;
 			color: #999999;
 			line-height: 50rpx;
-			margin-top: 16rpx;
 
-			span {
+			text {
 				font-family: Inter, Inter;
 				font-weight: bold;
 				font-size: 36rpx;
@@ -910,4 +808,77 @@
 			}
 		}
 	}
+
+	.equity-wrap {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16rpx; // 统一间距
+	}
+
+	.equity-chip {
+		width: 330rpx; // 固定小卡片宽度
+		padding: 20rpx 24rpx;
+		border-radius: 16rpx;
+		box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, .08);
+		color: #fff;
+
+		.eq-title {
+			font-size: 28rpx;
+			font-weight: 600;
+		}
+
+		.eq-desc {
+			font-size: 24rpx;
+			opacity: .9;
+			margin-top: 6rpx;
+		}
+	}
+
+	.equity-glass {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16rpx;
+		margin-top: 32rpx;
+		// padding: 24rpx 32rpx;
+	}
+
+	.eq-glass-card {
+		position: relative;
+		width: calc((100% - 32rpx) / 2);
+		padding: 24rpx;
+		border-radius: 16rpx;
+		background: rgba(255, 255, 255, .06);
+		backdrop-filter: blur(12rpx);
+		border: 1rpx solid rgba(255, 255, 255, .08);
+		box-shadow: 0 4rpx 20rpx 0 rgba(0, 0, 0, .25);
+		color: #D1D1D1;
+
+		/* 金紫微光渐变边框 */
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			border-radius: 16rpx;
+			padding: 1rpx;
+			background: linear-gradient(135deg, #EDC267 0%, #B08AFF 100%);
+			-webkit-mask:
+				linear-gradient(#fff 0 0) content-box,
+				linear-gradient(#fff 0 0);
+			-webkit-mask-composite: xor;
+			mask-composite: exclude;
+		}
+
+		.eq-title {
+			font-size: 28rpx;
+			font-weight: 600;
+			color: #F2F2F2;
+		}
+
+		.eq-desc {
+			font-size: 24rpx;
+			color: #999;
+			margin-top: 8rpx;
+		}
+	}
+	
 </style>

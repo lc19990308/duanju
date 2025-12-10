@@ -22,17 +22,16 @@
 							<view class="boxTitle" v-if="contentCurrent == 0">
 								<view class="text">{{$t('history.currently_in_pursuit')}}{{item.total}}{{$t('history.total_views')}}</view>
 								<view class="icon">
-									<!-- <u-icon name="edit-pen" color="#000000" size="26"></u-icon>编辑 -->
+									<!-- 编辑图标预留 -->
 								</view>
 							</view>
 							<view class="boxTitle" v-if="contentCurrent == 1">
 								<view class="text">{{$t('history.total_views')}}{{item.total}}{{$t('history.total_views')}}</view>
-								<!-- <view class="icon">
-									<u-icon name="edit-pen" color="#000000" size="26"></u-icon>编辑
-								</view> -->
 							</view>
-							<view class="list" v-if="videoList.length > 0 && contentCurrent == 0">
-								<view class="item" v-for="(lItem, lIndex) in item.list" :key="lIndex"
+
+							<!-- 网格缩略图：当当前 tab 为 追剧（0）并且有数据时显示 -->
+							<view class="list" v-if="contentCurrent == 0 && contentList[0].list && contentList[0].list.length > 0">
+								<view class="item" v-for="(lItem, lIndex) in contentList[0].list" :key="lIndex"
 									@click="openVideoDetail(lItem)">
 									<view class="img">
 										<image class="image" :src="lItem.dramaPoster" mode="aspectFill"></image>
@@ -47,29 +46,23 @@
 									</view>
 								</view>
 							</view>
-							<view class="lists" v-else-if="videoList.length > 0 && contentCurrent == 1">
-								<view class="item" v-for="(lItem, lIndex) in item.list" :key="lIndex"
+
+							<!-- 列表视图：当当前 tab 为 历史（1）并且有数据时显示 -->
+							<view class="lists" v-else-if="contentCurrent == 1 && contentList[1].list && contentList[1].list.length > 0">
+								<view class="item" v-for="(lItem, lIndex) in contentList[1].list" :key="lIndex"
 									@click="HistoriCalcatchUp(lItem)">
 									<view class="img">
 										<image class="image" :src="lItem.dramaPoster" mode="aspectFill"></image>
 									</view>
 									<view class="info">
 										<view class="title u-line-1">{{ lItem.dramaName }}</view>
-										<!-- <view class="text1 u-line-2">{{ lItem.video.description }}</view> -->
+										<!-- 描述位可选 -->
 										<view class="text2">{{$t('history.viewing_up')}}{{ lItem.dramaSeries }}{{$t('history.unit')}}</view>
-									</view>
-									<view class="btns">
-										<view class="button" v-if="indexId == 2"
-											:class="{ collect: lItem.is_favorite == 1 }" hover-class="active"
-											:hover-start-time="0" :hover-stay-time="200">
-											<!-- @click.stop="handleCollect(lItem.vid, lItem.is_favorite, lIndex)" -->
-											<u-icon :name="lItem.is_favorite == 1 ? 'star-fill' : 'star'" color="#eee"
-												size="18"></u-icon>
-											<text class="text">{{ lItem.is_favorite == 1 ? t('history.binge_watching') : $t('history.go_binge_watching') }}</text>
-										</view>
 									</view>
 								</view>
 							</view>
+
+							<!-- 无数据状态 -->
 							<view class="nodata" v-else>
 								<u-empty mode="data" icon="http://cdn.uviewui.com/uview/empty/data.png" />
 							</view>
@@ -88,14 +81,13 @@
 				navbarTitle: '',
 				tabsActiveStyle: {
 					color: '#fff',
-					// fontSize: '40rpx',
 					fontWeight: 'bold',
 				},
 				tabsInactiveStyle: {
 					color: '#999',
-					// fontSize: '32rpx',
 				},
-				contentList: [{
+				contentList: [
+					{
 						id: 1,
 						name: this.$t('my.tabs_item1'),
 						type: 'log',
@@ -117,39 +109,11 @@
 					},
 				],
 				contentCurrent: 0,
-				refreshStatus: true,
+				refreshStatus: false,
 				isRefresh: false,
-				videoList: [{
-						id: 1,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
-					},
-					{
-						id: 2,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
-					},
-					{
-						id: 3,
-						image: '../../static/01.jpg',
-						name: '测试测试测试',
-						es: '100集',
-						description: '穿越',
-						number: '1000',
-						nu: '70集'
-					},
-				],
-				indexId: 1,
+				// indexId 之前逻辑不可靠，改为仅在需要时使用 contentCurrent
 				titleStyle: {
-					color: '#fff',
+					// 去掉重复 color
 					fontFamily: 'PingFang SC, PingFang SC',
 					fontWeight: 800,
 					color: '#FFFFFF',
@@ -157,95 +121,140 @@
 			}
 		},
 		onLoad() {
-			var memberId = uni.getStorageSync('id')
+			const memberId = uni.getStorageSync('id')
 			if (!memberId) {
 				uni.redirectTo({
 					url: '/pages/user/login/login'
 				})
 				return
 			}
-
 		},
 		onShow() {
-			this.getFilmLikeCollectList()
-			this.getFilmViewHistoryList()
+			// 切换到当前 tab 的数据加载（保证页面展示时数据为最新）
+			if (this.contentCurrent === 0) {
+				this.getFilmLikeCollectList()
+			} else {
+				this.getFilmViewHistoryList()
+			}
 		},
 		methods: {
 			// 追剧跳转
 			openVideoDetail(item) {
 				uni.navigateTo({
-					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId || item.id}`
 				})
 			},
-			// 历史跳转
+			// 历史跳转（同上）
 			HistoriCalcatchUp(item) {
 				uni.navigateTo({
-					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId || item.id}`
 				})
 			},
-			// 获取追剧列表
-			getFilmLikeCollectList() {
-				// contentCurrent
-				this.$request('video.filmLikeCollectList', {
-					memberId: uni.getStorageSync('id'),
-					pageNo:this.contentList[this.contentCurrent].page,
-					pageSize:this.contentList[this.contentCurrent].pagesize,
-					
-				}).then(res => {
-					if (res.code == 200) {
-						this.contentList[0].list = res.result.records
-						this.contentList[0].total = res.result.total
-					}
-				})
-			},
-			// 获取观看历史列表
-			getFilmViewHistoryList() {
-				this.$request('video.filmViewHistoryList', {
-					memberId: uni.getStorageSync('id'),
-					pageNo:this.contentList[this.contentCurrent].page,
-					pageSize:this.contentList[this.contentCurrent].pagesize,
-				}).then(res => {
-					this.contentList[1].list = res.result.records
-					this.contentList[1].total = res.result.total
-				})
-			},
-			// 下拉刷新
-			refreshHandle() {
-				this.refreshStatus = true
-				if (this.contentCurrent == 0) {
-					if (!this.isRefresh) {
-						this.isRefresh = true
-						this.contentList[this.contentCurrent].page = 1
-						this.contentList[this.contentCurrent].list = []
-						this.getFilmLikeCollectList();
-						setTimeout(() => {
-							if (this.isRefresh) { // 仅在确保当前正在刷新状态下执行退出刷新状态的操作
-								this.refreshStatus = false; // 退出刷新状态
-								this.isRefresh = false
-							}
-						}, 1000); // 2秒后退出刷新状态
-					}
-				} else {
-					if (!this.isRefresh) {
-						this.isRefresh = true
-						this.contentList[this.contentCurrent].page = 1
-						this.contentList[this.contentCurrent].list = []
-						this.getFilmViewHistoryList()
-						setTimeout(() => {
-							if (this.isRefresh) { // 仅在确保当前正在刷新状态下执行退出刷新状态的操作
-								this.refreshStatus = false; // 退出刷新状态
-								this.isRefresh = false
-							}
-						}, 1000); // 2秒后退出刷新状态
-					}
+
+			// 处理收藏按钮（示例：调用接口切换收藏状态并更新本地列表）
+			handleCollect(item, index) {
+				// 这里示例用 toggle，实际请替换为真实接口调用
+				const newStatus = item.is_favorite == 1 ? 0 : 1
+				// 伪接口：this.$request('video.toggleFavorite', { vid: item.vid, favorite: newStatus })
+				// .then(res => { if (res.code === 200) { ... } })
+				// 为了立即响应 UI，我们先更新本地：
+				// 判断 item 属于哪个列表（目前只在历史列表展示此按钮）
+				if (this.contentCurrent === 1) {
+					this.$set(this.contentList[1].list[index], 'is_favorite', newStatus)
 				}
 			},
-			// 滚动监听
-			scrollHandle(e) {
 
+			// 获取追剧列表（分页：page=1 时替换，page>1 时追加）
+			getFilmLikeCollectList() {
+				const idx = 0
+				const cur = this.contentList[idx]
+				this.$request('video.filmLikeCollectList', {
+					memberId: uni.getStorageSync('id'),
+					pageNo: cur.page,
+					pageSize: cur.pagesize,
+				}).then(res => {
+					if (res && res.code == 200 && res.result) {
+						const records = res.result.records || []
+						if (cur.page === 1) {
+							this.contentList[idx].list = records
+						} else {
+							this.contentList[idx].list = this.contentList[idx].list.concat(records)
+						}
+						this.contentList[idx].total = res.result.total || 0
+						// 更新 status（可选）
+						if (records.length < cur.pagesize) {
+							this.contentList[idx].status = 'noMore'
+						} else {
+							this.contentList[idx].status = 'loadmore'
+						}
+					}
+				}).catch(()=> {
+					// 错误处理（可扩展）
+				})
 			},
-			// 触底滚动
+
+			// 获取观看历史列表（分页同上）
+			getFilmViewHistoryList() {
+				const idx = 1
+				const cur = this.contentList[idx]
+				this.$request('video.filmViewHistoryList', {
+					memberId: uni.getStorageSync('id'),
+					pageNo: cur.page,
+					pageSize: cur.pagesize,
+				}).then(res => {
+					if (res && res.code == 200 && res.result) {
+						const records = res.result.records || []
+						if (cur.page === 1) {
+							this.contentList[idx].list = records
+						} else {
+							this.contentList[idx].list = this.contentList[idx].list.concat(records)
+						}
+						this.contentList[idx].total = res.result.total || 0
+						if (records.length < cur.pagesize) {
+							this.contentList[idx].status = 'noMore'
+						} else {
+							this.contentList[idx].status = 'loadmore'
+						}
+					}
+				}).catch(()=> {
+					// 错误处理（可扩展）
+				})
+			},
+
+			// 下拉刷新
+			refreshHandle() {
+				// 开始刷新
+				this.refreshStatus = true
+				if (!this.isRefresh) {
+					this.isRefresh = true
+					// 重置当前 tab 的分页与数据
+					this.contentList[this.contentCurrent].page = 1
+					this.contentList[this.contentCurrent].list = []
+					if (this.contentCurrent == 0) {
+						this.getFilmLikeCollectList();
+					} else {
+						this.getFilmViewHistoryList()
+					}
+					// 退出刷新状态（确保不会永远显示）
+					setTimeout(() => {
+						if (this.isRefresh) {
+							this.refreshStatus = false;
+							this.isRefresh = false
+						}
+					}, 1000);
+				}
+			},
+
+			// 滚动监听（预留）
+			scrollHandle(e) {
+				// 可用于记录滚动位置或展示回到顶部按钮
+			},
+
+			// 触底滚动（分页加载）
 			bottomHandle() {
+				const cur = this.contentList[this.contentCurrent]
+				// 如果已经没有更多就直接返回
+				if (cur.status === 'noMore') return
 				this.contentList[this.contentCurrent].page++
 				if (this.contentCurrent == 0) {
 					this.getFilmLikeCollectList();
@@ -253,21 +262,32 @@
 					this.getFilmViewHistoryList()
 				}
 			},
-			// 切换分类
-			changeContent(e, i) {
-				this.indexId = i
-				this.contentList[0].page = 1;
-				this.contentList[1].page = 1;
-				const current = i === 1 ? e.index : e.detail.current
+
+			// 切换分类（同时兼容 u-tabs 和 swiper 的事件）
+			changeContent(e, source) {
+				// source === 1 来自 u-tabs（事件对象：{ index }）
+				// source === 2 来自 swiper（事件对象：{ detail: { current } }）
+				let current = 0
+				if (source === 1) {
+					current = e.index
+				} else {
+					current = e.detail && typeof e.detail.current !== 'undefined' ? e.detail.current : 0
+				}
+
+				// 如果没有真正切换，就不重复请求（但保留 page 重置的逻辑在需要时）
 				if (this.contentCurrent === current) {
 					return;
 				}
+
 				this.contentCurrent = current
-				// if (current == this.contentCurrent) return
-				if (this.contentCurrent == 0) {
-					this.getFilmLikeCollectList();
-				} else {
-					this.getFilmViewHistoryList()
+				// 切换后如果当前页列表为空则加载
+				if (this.contentList[current].list.length === 0) {
+					this.contentList[current].page = 1
+					if (current == 0) {
+						this.getFilmLikeCollectList();
+					} else {
+						this.getFilmViewHistoryList()
+					}
 				}
 			}
 		}

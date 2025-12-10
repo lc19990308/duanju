@@ -35,12 +35,10 @@ export default {
 			const result = await new Promise((resolve, reject) => {
 				request("video.selectByIdAndMemberId", params)
 					.then(res => {
-						console.log(res.result.collectTotal,'res.result.collectTotal',res.result.collectStatus)
 						commit("setLikeStatus", res.result.likeStatus)
 						commit("setLikeTotal", res.result.likeTotal)
 						commit("setCollectStatus", res.result.collectStatus)
 						commit("setCollectTotal", res.result.collectTotal)
-						console.log('点赞追剧')
 						resolve(res)
 					})
 					.catch(err => {
@@ -57,7 +55,6 @@ export default {
 			state
 		}, params) {
 			const result = await new Promise((resolve, reject) => {
-				console.log('setLike')
 				request("video.likes", params)
 					.then(res => {
 						resolve(res)

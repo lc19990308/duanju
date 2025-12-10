@@ -1,3 +1,34 @@
-{
-    "prompt" : "template"
-}
+// {
+//     "version" : "1",
+//     "prompt" : "template",
+//     "title" : "Terms & Privacy",
+//     "message" : "Please make sure to carefully read and fully understand all the terms of the 'Service Agreement' and the 'Privacy Policy', including but not limited to: In order to provide you with better services, we need to collect information such as your device identification and operation logs for analysis and to optimize the performance of the application.<br/>You can read<a href=\"./static/androidService.html\">《service agreement》</a>和<a href=\"./static/privacy.html\">《privacy policy》</a>Get detailed information. If you agree, please click the button below to start receiving our services.",
+//     "buttonAccept" : "Agree and accept",
+//     "buttonRefuse" : "Agree temporarily not.",
+//     "hrefLoader" : "system|default",
+//     "second" : {
+//         "title" : "Confirmation Notice",
+//         "message" : "Before entering the application, you need to agree first.<a href=\"./static/androidService.html\">《service agreement》</a>和<a href=\"./static/privacy.html\">《privacy policy》</a>，Otherwise, the application will be exited.",
+//         "buttonAccept" : "Agree and continue",
+//         "buttonRefuse" : "Exit the application"
+//     },
+//     "disagreeMode" : {
+//         "support" : false,
+//         "loadNativePlugins" : false,
+//         "visitorEntry" : false,
+//         "showAlways" : false
+//     },
+//     "styles" : {
+//         "backgroundColor" : "#FFFFFF",
+//         "borderRadius" : "15px",
+//         "title" : {
+//             "color" : "#333333"
+//         },
+//         "buttonAccept" : {
+//             "color" : "#00a381"
+//         },
+//         "buttonRefuse" : {
+//             "color" : "#c8161d"
+//         }
+//     }
+// }

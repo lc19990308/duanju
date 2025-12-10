@@ -12,10 +12,24 @@ const getApiPath = path => {
 	});
 	return api
 }
-
+const setLang = () => {
+	const lang = uni.getStorageSync('lang')
+	let originLang = '';
+	switch (lang) {
+		case 'zh_CN':
+			originLang = 'zh'
+			break;
+		case 'zh_EN':
+			originLang = 'en'
+			break;
+		case 'vi_VN':
+			originLang = 've'
+			break;
+	}
+	return originLang;
+}
 // 发起请求的函数
 const request = (path, data, error = true, customHeaders = {}) => {
-	console.log(customHeaders, 'customHeaders')
 	const config = {
 		'default': '',
 		'MP-WEIXIN': apiMoen.MPWEIXIN, //线上测试
@@ -25,9 +39,6 @@ const request = (path, data, error = true, customHeaders = {}) => {
 	// 根据当前平台获取对应的 BASE_URL
 	let platform = 'MP-WEIXIN'; // 当前平台，这里以 MP-WEIXIN 为例
 	let BASE_URL = config[platform] || config['default'];
-
-	console.log('BASE_URL:', BASE_URL);
-
 	if (!BASE_URL) {
 		uni.showModal({
 			title: '未检测到域名地址，请联系管理员'
@@ -46,22 +57,20 @@ const request = (path, data, error = true, customHeaders = {}) => {
 			method,
 			header: {
 				'X-Tenant-Id': apiMoen.tenantId,
-				// 'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjI4OTQxNTAsInVzZXJuYW1lIjoiMTU4NzIzNzU0N0BxcS5jb20ifQ.VI-KZgFro8DJFpfgOuTWonli85ji-zFOGr64P438xYs',
-				'X-Access-Token':store.state.user.token,
+				'X-Access-Token': store.state.user.token,
+				'x-lang': setLang(),
 				...customHeaders,
 			},
 			success: res => {
-				// console.log('xxx',this.$t('model_box.sys_tip'))
 				if (res.data.code === 200 || res.data.code === 0) {
 					resolve(res.data)
 				} else if (res.data.code === 401) {
 					store.dispatch('user/logout')
-					// console.log('xxx',this.$t('model_box.sys_tip'))
 					uni.showModal({
 						title: i18n.t('model_box.sys_tip'),
 						content: i18n.t('model_box.login_required'),
-						confirmText:i18n.t('model_box.confirm'),
-						cancelText:i18n.t('model_box.cancel'),
+						confirmText: i18n.t('model_box.confirm'),
+						cancelText: i18n.t('model_box.cancel'),
 						success: res => {
 							if (res.confirm) {
 								uni.navigateTo({
@@ -79,10 +88,10 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				}
 			},
 			fail: err => {
-				uni.showToast({
-					title: `服务器开小差`,
-					icon: 'none'
-				})
+				// uni.showToast({
+				// 	title: `服务器开小差`,
+				// 	icon: 'none'
+				// })
 				reject(err)
 			}
 		})

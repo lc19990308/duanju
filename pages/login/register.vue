@@ -1,6 +1,6 @@
 <template>
 	<view class="app-container">
-		<web-view class="webView" v-if="showWebView" :src="webUrl"></web-view>
+
 		<view class="logo-box">
 			<image class="logo-icon" src="/static/images/logo.png" mode=""></image>
 			<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
@@ -102,7 +102,7 @@
 				},
 				tips: i18n.t('form.getCode'),
 				// refCode: null,
-				seconds: 5,
+				seconds: 30,
 				checkboxValue1: 1,
 				titleStyle: {
 					color: '#fff'
@@ -114,7 +114,6 @@
 		},
 		methods: {
 			codeChange(text) {
-				console.log('xxx',text)
 				if(text === '获取验证码' || text === '重新获取'){
 					this.tips = `${i18n.t('form.getCode')}`;
 				}else{
@@ -343,6 +342,7 @@
 		margin-top: 41rpx;
 
 		.agreement-tips {
+			margin-left: 20rpx;
 			width: 624px;
 			font-family: Inter, Inter;
 			font-weight: 400;

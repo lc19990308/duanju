@@ -1,7 +1,7 @@
 <template>
 	<view class="app-container">
 		<statusBar />
-		<u-navbar :title="$t(`language.page_title`)" :fixed='false' bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+		<u-navbar :title="$t(`language.page_title`)" :fixed='true' bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
 			:autoBack="true" :placeholder='true' />
 		<view class="issue-card">
 			<u-radio-group v-model="value" iconPlacement="right">
@@ -31,7 +31,7 @@
 			submit() {
 				if (this.value) {
 					this.$i18n.locale = this.value;
-					localStorage.setItem('lang', this.value); 
+					uni.setStorageSync('lang',this.value)
 					uni.$u.toast(this.$t('toast.msg_success'))
 					setTimeout(()=>{
 						uni.navigateBack();
@@ -53,15 +53,17 @@
 		},
 		onLoad() {
 			this.value = uni.getStorageSync('lang');
+			console.log(this.value,'value')
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	page {
+	.app-container {
 		background-image: url('/static/images/navbar-bg.png');
 		background-size: 100% 100%;
-
+		min-height: 100vh;
+		background-repeat: no-repeat;
 	}
 
 	.issue-card {

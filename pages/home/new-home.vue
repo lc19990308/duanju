@@ -7,7 +7,10 @@
 					<image class="icon" src="/static/images/Frame.png" mode=""></image>
 					<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
 				</view>
-				<image class="right-icon" src="/static/images/gift1.png" mode=""></image>
+				
+				<navigator url="/pages/home/watch" open-type='switchTab' hover-class="none">
+					<image class="right-icon" src="/static/images/gift1.png" mode=""></image>
+				</navigator>
 			</view>
 			<navigator class="search-box" hover-class="none" url="/pages/home/search">
 				<input type="text" :disabled="true" v-model='query.searchValue'
@@ -48,7 +51,7 @@
 				swiperList: [],
 				query: {
 					pageNo: 1,
-					pageSize: 9,
+					pageSize: 12,
 					sysOrgCode: apiMoen.sysOrgCode, 
 					searchValue: '',
 					dramaClassify: '', //分类id
@@ -90,6 +93,7 @@
 			//获取列表
 			getVideoList() {
 				this.$request('video.videList', this.query).then(res => {
+					uni.stopPullDownRefresh();
 					this.list = res.result.records;
 				})
 			},
@@ -116,17 +120,23 @@
 					text: this.$t('tabBar.profile')
 				})
 			},
+			resetQuery(){
+				this.query.dramaClassify = '';
+				this.query.pageNo = 1;
+			},
 		},
-		onLoad() {
+		onShow() {
+			this.setTab();
 			this.getBanner();
 			this.getCateList();
 			this.getVideoList();
 		},
-		onShow() {
-			this.setTab();
+		onPullDownRefresh(){
+			this.resetQuery();
+			this.getBanner();
+			this.getCateList();
+			this.getVideoList();
 		}
-
-
 	}
 </script>
 

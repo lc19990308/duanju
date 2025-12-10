@@ -33,7 +33,8 @@ const zh = {
 		have_opened: '已开通',
 		expire: '到期',
 		member: '会员',
-		cdkey: '请输入兑换码'
+		cdkey: '请输入兑换码',
+		creation: '创作者中心'
 	},
 	reward: {
 		my_gold: '我的金币',
@@ -42,7 +43,8 @@ const zh = {
 		invite_friend: '邀请好友',
 		gold: '金币',
 		btn: '前往',
-		btn_text: '建立联系',
+		btn_text: '分享-邀请好友',
+		tips: '受邀人必须通过你的邀请链接完成注册，才会建立邀请关系并获得奖励。',
 	},
 	// proposal
 	proposal: {
@@ -120,7 +122,7 @@ const zh = {
 	store: {
 		page_title: '商城',
 		balance: '余额：',
-		balance_unit: '金币',
+		balance_unit: '钻石',
 		page_tips: '提示：Monkey Short 为所有用户提供免费与付费内容，您可自主选择是否解锁。支付自愿，充值余额不支持退款。若金币未及时到账，请重新登录。',
 	},
 
@@ -135,9 +137,10 @@ const zh = {
 		page_title: '我的钱包',
 		wallet_icon: '充值',
 		exchange: '兑换',
-		gold_title: '金币明细',
-		info_title: '补充详情',
-		unit: '金币',
+		gold_title: '钻石消费明细',
+		info_title: '金币消费明细',
+		unit: '钻石',
+		points: '金币',
 		unlocked: '锁定',
 	},
 
@@ -146,7 +149,7 @@ const zh = {
 		page_title: '兑换',
 		card_title: '我的积分',
 		navbar_right: '明细',
-		card_tips: '100 积分 = 1 金币',
+		card_tips: '1 金币 = 100 积分',
 		cell_label: '请输入积分数量',
 		cell_value: '最多可兑换 12 金币',
 		btn_text: '提交',
@@ -338,7 +341,35 @@ const zh = {
 		pointsRequired: '请输入积分数量',
 		getCode: '获取验证码',
 		regain: '重新获取',
-	}
+	},
+	more: {
+		loadmoreText: '加载更多',
+		loadingText: '正在加载...',
+		nomoreText: '没有更多了',
+	},
+	sgin: {
+		sginEnd: '已经签过到了',
+		sginSuccess: '签到成功！'
+	},
+	creation: {
+		pageTitle: '创作者中心',
+		uploadText: '上传作品',
+		uploadLoading: '上传中...',
+		coverSuccess: '封面上传成功',
+		coverFail: '封面上传失败',
+		videoTooLarge: '视频不能超过 {size} MB',
+		videoSuccess: '视频上传成功',
+		videoFail: '视频上传失败',
+		needBoth: '请完成封面和视频上传',
+		submitSuccess: '提交成功',
+		chooseVideo: '选择视频',
+		submit: '提交',
+		uploadVideo: '上传视频',
+		uploadCover: '上传视频封面',
+		chooseCover: '选择封面',
+		inputText:'请输入视频名称',
+		videoName:"视频名称"
+	},
 }
 
 export default zh;

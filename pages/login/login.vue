@@ -41,7 +41,7 @@
 				</u-checkbox>
 			</u-checkbox-group>
 			<navigator class="agreement-tips" hover-class="none"
-				url="/pages/user/about/detail/detail?id=1791523044515913730">
+				:url="`/pages/user/about/detail/detail?id=${agreementId}`">
 				{{$t(`login.login_tips`)}}
 			</navigator>
 		</view>
@@ -119,11 +119,12 @@
 				},
 				tips: 'lấy',
 				// refCode: null,
-				seconds: 10,
+				seconds: 30,
 				checked: false,
 				titleStyle: {
 					color: '#fff'
-				}
+				},
+				agreementId: '',
 			}
 		},
 		methods: {
@@ -150,8 +151,6 @@
 			},
 			submitGAList() {
 				this.$request('login.loginGAList').then(res => {
-					console.log(res.result.whitelistProviders, 'xxx')
-
 					this.providersList.forEach((item, index) => {
 						res.result.whitelistProviders.map((childItem) => {
 							if (item.key === childItem) {
@@ -177,12 +176,12 @@
 								access_token: '',
 								id_token: res.data.idToken,
 							}
-							that.$request('common.google',form).then(res=>{
+							that.$request('common.google', form).then(resp => {
 								const loginInfo = {
 									email: res.data.email,
-									token: resp.data.result.token
+									token: resp.result.token
 								};
-								that.googleCallBack();
+								that.googleCallBack(loginInfo);
 							})
 						}
 					})
@@ -201,7 +200,6 @@
 					"loginType": "password",
 					"password": this.form.password
 				}
-
 				that.$refs.uForm.validate().then(async res => {
 					const resp = await that.$request('login.loginEmail', obj);
 					if (resp.code === 200) {
@@ -215,14 +213,6 @@
 							})
 						}
 					}
-
-					// that.getUserInfo(resp.result.token).then(resp => {
-					// 	setTimeout(() => {
-					// 		uni.reLaunch({
-					// 			url: '/'
-					// 		})
-					// 	}, 500)
-					// })
 				})
 			},
 			memberAccountNumberAdd() {
@@ -240,7 +230,6 @@
 				};
 
 				this.$request('common.memberAccountNumberAdd', datas).then(res => {
-					console.log("登录", res)
 					if (res.code != 200) {
 						uni.showToast({
 							title: this.$t('toast.sys_error'),
@@ -248,11 +237,6 @@
 							duration: 2000 // 提示框显示时长
 						});
 					} else {
-						// uni.showToast({
-						// 	title: '登录成功',
-						// 	icon: 'none',
-						// 	duration: 2000 // 提示框显示时长
-						// });
 						const id = res.result.id
 						const tenantId = res.result.tenantId
 						const memberName = res.result.memberName
@@ -262,10 +246,9 @@
 						uni.setStorageSync('tenantId', tenantId)
 						uni.setStorageSync('sysOrgCode', sysOrgCode)
 						uni.setStorageSync('memberId', memberId)
-						// this.longinopenid()
-						// uni.switchTab({
-						// 	url: '/pages/home/index'
-						// })
+						uni.switchTab({
+							url: '/pages/home/new-home'
+						})
 					}
 				}).catch(err => {
 					console.log(err)
@@ -290,42 +273,39 @@
 				uni.$u.toast(this.$t('toast.login_success'));
 				if (userInfo.code === 200) {
 					that.memberAccountNumberAdd();
-					setTimeout(() => {
-						uni.reLaunch({
-							url: '/'
-						})
-					}, 500)
+				}
+			},
+			getLang() {
+				const lang = uni.getStorageSync('lang');
+				switch (lang) {
+					case 'zh_CN':
+						this.agreementId = '2791523044515913731'
+						break;
+					case 'vi_VN':
+						this.agreementId = '1791523044515913730'
+						break;
+					case 'en_US':
+						this.agreementId = '1995867265509580802'
+						break;
 				}
 			},
 		},
 		onLoad() {
 			that = this;
 			that.submitGAList();
+		},
+		onShow() {
+			this.getLang();
 			JYGoogleSignin.jy_init({
 				//  安卓的client_id应该是谷歌开发者后台默认Web应用的；iOS的client_id应该是谷歌开发者后台iOS对应的
 				client_id: "446804274711-fjevh6bdtigb92hr78df0a206kqlqes9.apps.googleusercontent.com"
 			}, res => {})
-		}
+			// uni.getStorageSync('')
+		},
 	}
 </script>
 
 <style lang="scss" scoped>
-	// .webView {
-	// 	width: 100%;
-	// 	height: 100%;
-	// 	position: fixed;
-	// 	left: 0;
-	// 	top: 0;
-	// 	z-index: 999999;
-	// }
-
-	page {
-		// background-image: url('/static/images/login.png');
-		// background-repeat: no-repeat;
-		// background-size: 100% 100%;
-		// background-position: 100% 100%;
-	}
-
 	.app-container {
 		background-image: url('/static/images/login.png');
 		background-repeat: no-repeat;
@@ -427,6 +407,7 @@
 		margin-top: 41rpx;
 
 		.agreement-tips {
+			margin-left: 20rpx;
 			width: 624px;
 			font-family: Inter, Inter;
 			font-weight: 400;

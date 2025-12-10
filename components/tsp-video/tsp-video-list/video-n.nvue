@@ -72,7 +72,7 @@
 							:style="{left: (screenWidth/2) - 46.5 + 'px', bottom: vodHeight / 3.4 + 'px'}"
 							:class="[vodIndex == index ? (moveOpacity?'vodMenu-bright2':'vodMenu-bright0') : '']">
 							<image src="/static/icon/tsp-qp.png" class="fullScreen-icon"></image>
-							<text class="fullScreen-text">Xem toàn màn hình</text>
+							<text class="fullScreen-text">{{language[lang].fullScreen}}</text>
 						</view>
 					</view>
 				</cell>
@@ -131,28 +131,98 @@
 			@close.stop="pay_show = false" :round="15">
 			<view class="pay-popup">
 				<view class="pay-popup-head">
-					<text class="title">Mở khóa cần {{unlocking_price}} vàng</text>
-					<text class="tips">Số dư: {{viperInfo.totalBalance}} vàng</text>
+					<view class="gold-row">
+						<text class="tips">{{language[lang].gold}}:</text>
+			<!-- 			<image style="width: 28rpx;height: 28rpx;margin-right: 10rpx;" src="/static/images/image73.png"
+							mode=""></image> -->
+						<text class="tips">{{viperInfo.currency}}</text>
+					</view>
+					<view class="gold-row">
+						<text class="tips">{{language[lang].balance}}:</text>
+					<!-- 	<image style="width: 28rpx;height: 28rpx;margin-right: 10rpx;" src="/static/images/diamond.png"
+							mode=""></image> -->
+						<text class="tips">{{viperInfo.totalBalance}}</text>
+					</view>
 				</view>
 				<view class="pay-popup-main">
 					<view class="viper-box">
-						<view :class="`viper-box-item_${index}`" v-for="(item,index) in viperList" :key="item">
+						<view :class="[`viper-box-item_${index}`,viperIndex === index ? 'viper-box-item_active':'']"
+							@tap="viperPicker(index)" v-for="(item,index) in viperList" :key="item">
 							<text class="name">{{item.packageName}}</text>
-							<text class="value">{{item.packagePrice}}</text>
-							<image class="viper-icon" src="/static/images/001.png" mode=""></image>
+							<text class="value">{{language[lang].unit}} {{item.packagePrice}}</text>
+
+							<image class="viper-icon" :src="item.itemUrl" mode=""></image>
 						</view>
 					</view>
 					<view class="member-box">
 						<view class="member-box-item member-box-item_active" v-for="(item,index) in rechargeList"
 							:key="index">
 							<view class="title">
-								<text class="title-value">{{item.rechargeCoins}}</text>
-								<text class="title-unit">vàng</text>
+								<text class="title-value">{{item.actualReceipt}}</text>
+								<text class="title-unit">{{language[lang].balance}}</text>
 							</view>
-							<text class="plus">+{{item.giftCoins}}vàng</text>
-							<text class="price">${{item.packageMoney}}</text>
+							<text class="plus">+{{item.rechargeCoins}} {{language[lang].balance}}</text>
+							<text class="price">{{language[lang].unit}} {{item.packageMoney}}</text>
 						</view>
 					</view>
+				</view>
+			</view>
+		</u-popup>
+		<u-popup :show="unlock_show" :closeOnClickOverlay="true" :closeable="true" bgColor="#202020"
+			@close.stop="unlock_show = false" :round="15">
+			<view class="unlock-popup">
+				<view class="unlock-popup__head">
+					<text class="unlock-popup__title">{{language[lang].buyToWatch}}</text>
+				</view>
+				<view class="unlock-popup__main">
+					<view class="member">
+						<view class="member-left">
+							<image class="member-icon" src="/static/images/Frame-39.png" mode=""></image>
+							<view class="member-tips">
+								<text class="member-tips1">{{language[lang].vipFree}}</text>
+								<text class="member-tips2">{{language[lang].nextFree}}</text>
+							</view>
+						</view>
+						<view class="member-right">
+							<text class="member-btn" @tap="openPayPopup">{{language[lang].recharge}}</text>
+						</view>
+					</view>
+					<!-- 单独解锁 -->
+					<view class="unlock-type">
+						<view class="unlock-type-item">
+							<text class="unlock-type-item__label">{{language[lang].goldUnlock}} </text>
+							<view class="unlock-card" :class="payTypeIndex === 2 ?'unlock-card_active':'' "
+								@tap="payTypeIndex = 2">
+								<text class="unlock-card__title">{{unlockingData.dramaName}}</text>
+								<view class="unlock-card__info">
+									<text
+										class="unlock-card__episode">{{language[lang].episode}}{{unlockingData.totalEpisodes}}</text>
+									<text
+										class="unlock-card__price">{{unlockingData.jinbiPrice}}{{language[lang].gold}}</text>
+								</view>
+							</view>
+						</view>
+
+						<!-- 打包解锁 -->
+						<view class="unlock-type-item">
+							<text class="unlock-type-item__label">{{language[lang].diamondUnlock}}</text>
+							<view class="unlock-card" @tap="payTypeIndex = 1"
+								:class="payTypeIndex === 1 ?'unlock-card_active':'' ">
+								<text class="unlock-card__title">{{unlockingData.dramaName}}</text>
+								<view class="unlock-card__info">
+									<text
+										class="unlock-card__episode">{{language[lang].episode}}{{unlockingData.totalEpisodes}}</text>
+									<text
+										class="unlock-card__price">{{unlockingData.price}}{{language[lang].diamond}}</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="unlock-popup__footer">
+					<text class="unlock-popup__submit"
+						@tap="buyVideoItem(unlockingData,payTypeIndex)">{{language[lang].unlockSeries}}</text>
 				</view>
 			</view>
 		</u-popup>
@@ -415,17 +485,17 @@
 		margin-top: 40rpx;
 		position: relative;
 
-		.title {
-			font-weight: 400;
-			font-size: 36rpx;
-			color: #D1D1D1;
-		}
+		.gold-row {
+			flex-direction: row;
+			align-items: center;
+			margin-bottom: 10rpx;
 
-		.tips {
-			margin-top: 12rpx;
-			font-weight: 400;
-			font-size: 28rpx;
-			color: #FFCD03;
+			.tips {
+				margin: 0 10rpx;
+				font-weight: 400;
+				font-size: 28rpx;
+				color: #FFCD03;
+			}
 		}
 	}
 
@@ -475,7 +545,7 @@
 		padding: 33rpx 24rpx;
 		background: linear-gradient(186deg, rgba(255, 148, 122, 0.4) 0%, rgba(255, 148, 122, 0) 100%);
 		border-radius: 16rpx;
-		border: 4rpx solid #FF947A;
+		border: 2rpx solid #FF947A;
 		margin-bottom: 24rpx;
 
 		.name {
@@ -507,7 +577,7 @@
 		padding: 33rpx 24rpx;
 		background: linear-gradient(186deg, rgba(226, 122, 255, 0.4) 0%, rgba(226, 122, 255, 0) 100%);
 		border-radius: 16rpx;
-		border: 4rpx solid #E27AFF;
+		border: 2px solid #E27AFF;
 		margin-bottom: 24rpx;
 
 		.name {
@@ -537,21 +607,21 @@
 		width: 327rpx;
 		box-sizing: border-box;
 		padding: 33rpx 24rpx;
-		background: linear-gradient(186deg, rgba(226, 122, 255, 0.4) 0%, rgba(226, 122, 255, 0) 100%);
+		background: linear-gradient(186deg, rgba(0, 255, 235, .35) 0%, rgba(0, 255, 235, 0) 100%);
 		border-radius: 16rpx;
-		border: 4rpx solid #E27AFF;
+		border: 2rpx solid #00FFEB;
 		margin-bottom: 24rpx;
 
 		.name {
 			font-size: 28rpx;
-			color: #E27AFF;
+			color: #00FFEB;
 		}
 
 		.value {
 			margin-top: 13rpx;
 			font-weight: bold;
 			font-size: 36rpx;
-			color: #E27AFF;
+			color: #00FFEB;
 		}
 
 		.viper-icon {
@@ -569,21 +639,80 @@
 		width: 327rpx;
 		box-sizing: border-box;
 		padding: 33rpx 24rpx;
-		background: linear-gradient(186deg, rgba(226, 122, 255, 0.4) 0%, rgba(226, 122, 255, 0) 100%);
+		background: linear-gradient(186deg, rgba(122, 162, 255, .4) 0%, rgba(122, 162, 255, 0) 100%);
 		border-radius: 16rpx;
-		border: 4rpx solid #E27AFF;
+		border: 2rpx solid #7AA2FF;
 		margin-bottom: 24rpx;
 
 		.name {
 			font-size: 28rpx;
-			color: #E27AFF;
+			color: #7AA2FF;
 		}
 
 		.value {
 			margin-top: 13rpx;
 			font-weight: bold;
 			font-size: 36rpx;
-			color: #E27AFF;
+			color: #7AA2FF;
+		}
+
+		.viper-icon {
+			position: absolute;
+			width: 49px;
+			height: 41px;
+			z-index: 99;
+			right: 5px;
+			bottom: 5px;
+		}
+	}
+
+	.viper-box-item_6 {
+		position: relative;
+		width: 327rpx;
+		box-sizing: border-box;
+		padding: 33rpx 24rpx;
+		background: linear-gradient(186deg, rgba(122, 162, 255, .4) 0%, rgba(122, 162, 255, 0) 100%);
+		border-radius: 16rpx;
+		border: 2rpx solid #7AA2FF;
+		margin-bottom: 24rpx;
+
+		.name {
+			font-size: 28rpx;
+			color: #7AA2FF;
+		}
+
+		.value {
+			margin-top: 13rpx;
+			font-weight: bold;
+			font-size: 36rpx;
+			color: #7AA2FF;
+		}
+
+		.viper-icon {
+			position: absolute;
+			width: 49px;
+			height: 41px;
+			z-index: 99;
+			right: 5px;
+			bottom: 5px;
+		}
+	}
+
+	.viper-box-item_active {
+		background: linear-gradient(186deg, rgba(255, 255, 255, .25) 0%, rgba(255, 255, 255, 0) 100%);
+		transform: scale(0.98);
+		transition: all 0.15s ease;
+
+		.name {
+			font-size: 28rpx;
+			color: #fff;
+		}
+
+		.value {
+			margin-top: 13rpx;
+			font-weight: bold;
+			font-size: 36rpx;
+			color: #fff;
 		}
 
 		.viper-icon {
@@ -692,6 +821,151 @@
 			color: #000000;
 			background-color: #EDC267;
 			border-radius: 0 0 16rpx 16rpx;
+		}
+	}
+
+	.unlock-popup__head {
+		padding: 30rpx 20rpx;
+		margin: 0 30rpx;
+
+		.unlock-popup__title {
+			color: #fff;
+			font-size: 28rpx;
+		}
+	}
+
+	.unlock-popup__main {}
+
+	.member {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		margin: 0 30rpx;
+		background-color: #252525;
+		padding: 20rpx;
+		border-radius: 20rpx;
+		border: 2rpx solid #999;
+
+		.member-left {
+			flex-direction: row;
+
+			.member-icon {
+				width: 100rpx;
+				height: 100rpx;
+			}
+
+			.member-tips {
+				margin-left: 30rpx;
+
+				.member-tips1 {
+					color: #FFCD03;
+					font-size: 26rpx;
+				}
+
+				.member-tips2 {
+					margin-top: 10rpx;
+					color: #999;
+					font-size: 26rpx;
+				}
+			}
+
+		}
+
+		.member-right {
+			.member-btn {
+				width: 150rpx;
+				height: 50rpx;
+				line-height: 50rpx;
+				text-align: center;
+				background-color: #EDC267;
+				border-radius: 20rpx;
+				font-family: Inter, Inter;
+				font-weight: bold;
+				font-size: 25rpx;
+				color: #000000;
+			}
+		}
+	}
+
+	.unlock-card {
+		margin: 0 10rpx;
+		background-color: #252525;
+		padding: 20rpx;
+		border-radius: 20rpx;
+		border: 2rpx solid #999;
+
+		.unlock-card__title {
+			color: #ddd;
+			font-size: 34rpx;
+			font-weight: 500;
+		}
+
+		.unlock-card__info {
+			margin-top: 20rpx;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+
+			.unlock-card__episode {
+				color: #ddd;
+				font-size: 24rpx;
+			}
+
+			.unlock-card__price {
+				color: #ddd;
+				font-size: 26rpx;
+			}
+		}
+	}
+
+	.unlock-type {
+		margin: 20rpx 30rpx 0 30rpx;
+		padding: 20rpx;
+		border-radius: 20rpx;
+		border: 2rpx solid #999;
+	}
+
+	.unlock-type-item {
+		margin-top: 20rpx;
+	}
+
+	.unlock-type-item__label {
+		margin: 0 10rpx 20rpx 10rpx;
+		color: #ddd;
+		font-size: 28rpx;
+	}
+
+	.unlock-popup__footer {
+		padding: 40rpx 30rpx;
+	}
+
+	.unlock-popup__submit {
+		height: 80rpx;
+		line-height: 80rpx;
+		text-align: center;
+		font-size: 26rpx;
+		background-color: #EDC267;
+		border-radius: 16rpx;
+	}
+
+	.unlock-card_active {
+		border: 2rpx solid #EDC267;
+
+		.unlock-card__info {
+			margin-top: 20rpx;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+
+			.unlock-card__episode {
+				color: #ddd;
+				font-size: 24rpx;
+			}
+
+			.unlock-card__price {
+				color: #ffcd03;
+				font-size: 26rpx;
+			}
 		}
 	}
 </style>

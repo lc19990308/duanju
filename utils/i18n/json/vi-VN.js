@@ -33,7 +33,8 @@ const vi = {
 		have_opened: 'Đã đăng ký',
 		expire: 'Hết hạn',
 		member: 'Thành viên',
-		cdkey: 'Nhập mã đổi thưởng'
+		cdkey: 'Nhập mã đổi thưởng',
+		creation: 'Trung tâm Nhà sáng tạo'
 	},
 	reward: {
 		my_gold: 'Tiền vàng của tôi',
@@ -42,7 +43,8 @@ const vi = {
 		invite_friend: 'Mời bạn bè',
 		gold: 'Vàng',
 		btn: 'go',
-		btn_text: 'Tạo liên kết',
+		btn_text: 'Chia sẻ & Mời bạn bè',
+		tips: 'Người được mời phải đăng ký thông qua liên kết mời của bạn thì mới được thiết lập quan hệ mời và nhận thưởng.'
 	},
 	proposal: {
 		collection: 'Bộ sưu tập',
@@ -105,7 +107,7 @@ const vi = {
 	store: {
 		page_title: 'Cửa hàng',
 		balance: 'Số dư: ',
-		balance_unit: 'vàng',
+		balance_unit: 'kim cương',
 		page_tips: 'Gợi ý: Monkey Short cung cấp nội dung miễn phí và trả phí cho tất cả mọi người. Bạn có thể quyết định nội dung cần giải mã. Thanh toán là không bắt buộc và giá trị lưu trữ không hỗ trợ hoàn lại tiền. Nếu tiền dự trữ chưa được ghi vào tài khoản của ông, xin vui lòng thoát khỏi bang của tôi.',
 	},
 	watch: {
@@ -116,9 +118,10 @@ const vi = {
 		page_title: 'Ví của tôi',
 		wallet_icon: 'nạp tiền',
 		exchange: 'Chuyển đổi',
-		gold_title: 'Chi tiết vàng',
-		info_title: 'Chi tiết bổ sung',
-		unit: 'vàng',
+		gold_title: 'Chi tiết kim cương',
+		info_title: 'Chi tiết vàng',
+		unit: 'kim cương',
+		points: 'vàng',
 		unlocked: 'Mở Khóa',
 		exchange: 'Đổi',
 	},
@@ -126,7 +129,7 @@ const vi = {
 		page_title: 'Chuyển đổi',
 		card_title: 'Điểm của tôi',
 		navbar_right: 'Chi tiết',
-		card_tips: '100 điểm tích lũy =1 vàng',
+		card_tips: '1 đồng vàng = 100 điểm tích lũy',
 		cell_label: 'Vui lòng nhập số điểm',
 		cell_value: 'Chuyển đổi tối đa 12 vàng',
 		btn_text: 'nộp',
@@ -301,9 +304,37 @@ const vi = {
 		picRequired: 'Vui lòng chọn hình ảnh',
 		placeholder: 'Vui lòng nhập',
 		pointsRequired: 'Vui lòng nhập số điểm',
-		getCode:'Nhận mã',
-		regain:'Lấy lại mã',
-	}
+		getCode: 'Nhận mã',
+		regain: 'Lấy lại mã',
+	},
+	more: {
+		loadmoreText: 'Tải thêm',
+		loadingText: 'Đang tải...',
+		nomoreText: 'Không còn nữa',
+	},
+	sgin: {
+		sginEnd: 'Bạn đã điểm danh rồi',
+		sginSuccess: 'Điểm danh thành công!'
+	},
+	creation: {
+		pageTitle: 'Trung tâm Nhà sáng tạo',
+		uploadText: 'Tải lên tác phẩm',
+		uploadLoading: 'Đang tải lên...',
+		coverSuccess: 'Đã tải lên ảnh bìa thành công',
+		coverFail: 'Tải lên ảnh bìa thất bại',
+		videoTooLarge: 'Video không được vượt quá {size} MB',
+		videoSuccess: 'Tải lên video thành công',
+		videoFail: 'Tải lên video thất bại',
+		needBoth: 'Vui lòng hoàn thành ảnh bìa và video tải lên',
+		submitSuccess: 'Gửi thành công',
+		chooseVideo: 'Chọn video',
+		submit: 'Gửi',
+		uploadVideo: 'Tải lên video',
+		uploadCover: 'Tải lên ảnh bìa video',
+		chooseCover: 'Chọn ảnh bìa',
+		inputText:'Vui lòng nhập tên video',
+		videoName:"Tên video"
+	},
 }
 
 export default vi;

@@ -2,8 +2,8 @@
 <template>
 	<view class="app-container">
 		<statusBar />
-		<u-navbar :title="$t(`wallet.page_title`)" :fixed='false' :autoBack="true" bgColor='transparent' :titleStyle='titleStyle'
-			leftIconColor='#fff' :placeholder='true' />
+		<u-navbar :title="$t(`wallet.page_title`)" :fixed='false' :autoBack="true" bgColor='transparent'
+			:titleStyle='titleStyle' leftIconColor='#fff' :placeholder='true' />
 		<view class="wallet">
 			<view class="wallet-row">
 				<view class="wallet-item">
@@ -20,10 +20,10 @@
 					<image class="action-item-icon" src="/static/images/Frame-40.png" mode=""></image>
 					<text class="action-item-value">{{$t(`wallet.wallet_icon`)}}</text>
 				</navigator>
-				<navigator class="action-item" hover-class="none" url="/pages/user/integral/integal-conversion">
+				<!-- 				<navigator class="action-item" hover-class="none" url="/pages/user/integral/integal-conversion">
 					<image class="action-item-icon" src="/static/images/Frame-41.png" mode=""></image>
 					<text class="action-item-value">{{$t(`wallet.exchange`)}}</text>
-				</navigator>
+				</navigator> -->
 			</view>
 		</view>
 		<view class="tabs">
@@ -34,33 +34,32 @@
 				{{$t(`wallet.info_title`)}}
 			</view>
 		</view>
-		<view class="list" v-if="current === 1">
+		<view class="list">
 			<view class="list-item" v-for="(item,index) in list" :key="index">
 				<view class="item-row">
-					<view class="label"> {{item.payMethod}} </view>
-					<view class="value">¥{{item.unrealMoney}}</view>
+					<view class="label">{{$t(`wallet.unlocked`)}}{{item.dramaName}}</view>
+					<view class="value">
+						<text>-{{item.payMoney}}</text>
+						<text v-if="current === 0">{{$t(`wallet.unit`)}}</text>
+						<text v-if="current === 1">{{$t(`wallet.points`)}}</text>
+					</view>
+				</view>
+				<view class="item-row">
+					<view class="label">
+						{{item.dramaSeriesName}}
+					</view>
 				</view>
 				<view class="item-row">
 					<view class="time">{{item.createTime}}</view>
 				</view>
 			</view>
 		</view>
-		<view class="list" v-else>
-			<view class="list-item" v-for="(item,index) in list" :key="index">
-				<view class="item-row">
-					<view class="label">{{$t(`wallet.unlocked`)}} {{item.dramaName}} {{item.dramaSeriesName}}</view>
-					<view class="value">-{{item.payMoney}} {{$t(`wallet.unit`)}}</view>
-				</view>
-				<view class="item-row">
-					<view class="time">{{item.createTime}}</view>
-				</view>
-			</view>
-		</view>
-		<u-loadmore :status="status" />
+		<u-loadmore :status="status" :loadmoreText='loadmoreText' :loadingText='loadingText' :nomoreText='nomoreText' />
 	</view>
 </template>
 
 <script>
+	import i18n from '@/utils/i18n/index.js'
 	import apiMoen from '@/utils/config.js'
 	import {
 		mapState,
@@ -68,13 +67,16 @@
 	export default {
 		data() {
 			return {
+				loadmoreText: i18n.t('more.loadmoreText'),
+				loadingText: i18n.t('more.loadingText'),
+				nomoreText: i18n.t('more.nomoreText'),
 				titleStyle: {
 					color: '#fff',
 					fontFamily: 'PingFang SC, PingFang SC',
 					fontWeight: 800,
 					color: '#FFFFFF',
 				},
-				memberId:uni.getStorageSync('id') || '',
+				memberId: uni.getStorageSync('id') || '',
 				info: {
 					currency: 0,
 					totalBalance: 0,
@@ -101,31 +103,22 @@
 					this.info = res.result;
 				})
 			},
-			//明细列表
-			getIntegralList() {
-				this.status = 'loading';
-				this.$request('withdraw.rechargeDetailList', {
-					...this.query,
-					memberId: this.memberId
-				}).then(res => {
-					this.total = res.result.total;
-					this.list = this.list.concat(res.result.records);
-					uni.stopPullDownRefresh();
-					if (this.total === this.list.length) {
-						this.status = 'nomore'
-					} else {
-						this.status = 'loadmore'
-					}
-				})
-			},
 			//钱包明细列表
 			getWalletInfoList() {
+				console.log({
+					pageNo: this.query.pageNo,
+					pageSize: this.query.pageSize,
+					memberId: this.memberId,
+					payMethod: this.current === 0 ? 'yue' : 'jinbi'
+				})
 				this.$request('withdraw.consumptionDetailList', {
 					pageNo: this.query.pageNo,
 					pageSize: this.query.pageSize,
-					memberId: this.memberId
+					memberId: this.memberId,
+					payMethodCode: this.current === 0 ? 'yue' : 'jinbi'
 				}).then(res => {
 					this.total = res.result.total;
+					console.log(this.list, 'list', res.result.records)
 					this.list = this.list.concat(res.result.records);
 					uni.stopPullDownRefresh();
 					if (this.total === this.list.length) {
@@ -147,17 +140,17 @@
 						this.getWalletInfoList();
 						break;
 					case 1:
-						this.getIntegralList();
+						this.getWalletInfoList();
 						break;
 				}
 			},
-			getList(){
+			getList() {
 				switch (this.current) {
 					case 0:
 						this.getWalletInfoList();
 						break;
 					case 1:
-						this.getIntegralList();
+						this.getWalletInfoList();
 						break
 				}
 			},
@@ -166,13 +159,13 @@
 			this.getIntegral();
 			this.getList();
 		},
-		
+
 		onPullDownRefresh() {
+			this.getIntegral();
 			this.resetQuery();
 			this.getList();
 		},
 		onReachBottom() {
-			console.log(this.list.length < this.total,'this.list.length < this.total')
 			if (this.list.length < this.total) {
 				this.query.pageNo += 1;
 				this.getList();

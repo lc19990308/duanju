@@ -7,7 +7,7 @@
 		<view class="remaining">
 			<view class="remaining-text">{{$t(`withdrawal.card_title`)}}</view>
 			<view class="value">
-				<image class="remaining-icon" src="/static/images/gold.png" mode=""></image>
+				<image class="remaining-icon" src="/static/images/diamond.png" mode=""></image>
 				<text class="value-text">{{info.totalBalance }}</text>
 			</view>
 		</view>

@@ -3,7 +3,9 @@
 		<!-- 底部标题 -->
 		<view class="back" v-if="showSelectShow" @tap.stop="JumpBtn(7)">
 			<u-icon name="arrow-left" color="#fff" size="20"></u-icon>
-			<text class="back-text">Tập {{vodIndex+1}}</text>
+			<text class="back-text" v-if="lang =='zh_CN'">第{{vodIndex+1}}集</text>
+			<text class="back-text" v-if="lang =='vi_VN'">Tập{{vodIndex+1}}</text>
+			<text class="back-text" v-if="lang =='zh_EN'">Episode{{vodIndex+1}}集</text>
 		</view>
 		<view @click.stop.prevent="moveHandle" class="footTitle"
 			:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
@@ -20,7 +22,7 @@
 					<text style="width: 450rpx;" class="foot-cont"
 						:class="[(item.desc.length > 33 && !expandDesc) ?'text_two':'']">{{item.desc}}</text>
 					<text class="foot-expand" v-if="item.desc.length > 33" @click="expandDesc = !expandDesc">
-						{{expandDesc?'...收起':'...展开'}}
+						{{expandDesc? `...${language[lang].pack}`:`...${language[lang].unfold}`}}
 					</text>
 				</view>
 
@@ -28,14 +30,14 @@
 			<view class="video-info" v-if="!showSelectShow" @tap.stop="JumpBtn(1,item)">
 				<view class="video-info-left">
 					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
-					<text class="label">Tổng hợp · Tất cả{{discussNum}}Tập · Xem trọn bộ</text>
+					<text class="label">{{language[lang].collect}} · {{language[lang].all}}{{discussNum}} {{language[lang].episode}} · {{language[lang].watchFull}}</text>
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
 			<view class="video-info" v-else @tap.stop="JumpBtn(5,item)">
 				<view class="video-info-left">
 					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
-					<text class="label">Tổng hợp · Tất cả{{discussNum}}Tập · Xem trọn bộ</text>
+					<text class="label">{{language[lang].collect}} · {{language[lang].all}}{{discussNum}}{{language[lang].episode}} · {{language[lang].watchFull}}</text>
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
@@ -81,7 +83,7 @@
 					<view class="fabulous-image">
 						<image src="/static/icon/ward.png" mode="" class="fabulous-image"></image>
 					</view>
-					<text class="fabulous-num" style="font-size: 26rpx;">Chia sẻ</text>
+					<text class="fabulous-num" style="font-size: 26rpx;">{{language[lang].share}}</text>
 				</view>
 			</view>
 		</view>
@@ -132,9 +134,10 @@
 </template>
 
 <script>
-	import vi_VN from '@/utils/i18n/json/vi-VN.js'
-	import zh_CN from '@/utils/i18n/json/zh-CN.js'
-	import zh_EN from '@/utils/i18n/json/zh-EN.js'
+	// #ifndef APP-HARMONY
+	import UniShare from '@/uni_modules/uni-share/js_sdk/uni-share.js';
+	const uniShare = new UniShare();
+	// #endif
 	import api from '@/utils/config.js'
 	import selectedVideo from '../tsp-menu/selected-video'
 	import {
@@ -191,11 +194,51 @@
 				default: false
 			},
 		},
+		onBackPress({
+			from
+		}) {
+			if (from == 'backbutton') {
+				this.$nextTick(function() {
+					uniShare.hide()
+				})
+				return uniShare.isShow;
+			}
+		},
 		computed: {
 			...mapState('video', ['likeStatus', 'likeTotal', 'collectStatus', 'collectTotal'])
 		},
 		data() {
 			return {
+				language: {
+					zh_CN: {
+						unfold: '展开',
+						pack: '收起',
+						share: '分享',
+						watchFull: '看全集',
+						episode: '第集',
+						all: '全部',
+						collect:'汇总',
+					},
+					vi_VN: {
+						unfold: 'Mở rộng',
+						pack: 'Thu gọn',
+						share: 'Chia sẻ',
+						watchFull: 'Xem trọn bộ',
+						episode: 'Tập',
+						all: 'Tất cả',
+						collect:'Tổng hợp',
+					},
+					zh_EN: { // 建议你改为 en_US，但我按你给的结构来
+						unfold: 'Expand',
+						pack: 'Collapse',
+						share: 'Share',
+						watchFull: 'Watch Full',
+						episode: 'Episode',
+						all: 'All',
+						collect:'Summary',
+					},
+				},
+				lang:uni.getStorageSync('lang'),
 				followShow: null,
 				fabuTimeOut: null,
 				likeNum: 0,
@@ -344,6 +387,7 @@
 			},
 			/* 点击右侧菜单选项 1头像 2点赞 3评论 4转发 5旋转头像 */
 			async JumpBtn(index, item) {
+				let that = this;
 				switch (index) {
 					case 1:
 						uni.navigateTo({
@@ -351,48 +395,52 @@
 						})
 						break;
 					case 2:
-						const data = {
-							calculateType: this.likeStatus ? 2 : 1,
-							dramaId: this.item.filmDramaId,
-							dramaSeries: this.item.dramaSeries,
-							memberId: this.memberId,
-							secondType: 2,
-							seriesId: this.item.id,
-							sysOrgCode: this.item.sysOrgCode,
-							tenantId: this.item.tenantId,
-						}
-						await this.setLike(data);
-						await this.getVideoInfo({
-							seriesId: this.item.id,
-							memberId: this.memberId,
-						})
+						uni.$u.throttle(async () => {
+							const data = {
+								calculateType: that.likeStatus ? 2 : 1,
+								dramaId: that.item.filmDramaId,
+								dramaSeries: that.item.dramaSeries,
+								memberId: that.memberId,
+								secondType: 2,
+								seriesId: that.item.id,
+								sysOrgCode: that.item.sysOrgCode,
+								tenantId: that.item.tenantId,
+							}
+							await that.setLike(data);
+							await that.getVideoInfo({
+								seriesId: that.item.id,
+								memberId: that.memberId,
+							})
+						}, 2000)
 						break;
 					case 3:
-						const params = {
-							calculateType: this.collectStatus ? 2 : 1,
-							dramaId: this.item.filmDramaId,
-							dramaSeries: this.item.dramaSeries,
-							memberId: this.memberId,
-							secondType: 3,
-							seriesId: this.item.id,
-							sysOrgCode: this.item.sysOrgCode,
-							tenantId: this.item.tenantId,
-						}
-						await this.setLike(params);
-						await this.getVideoInfo({
-							seriesId: this.item.id,
-							memberId: this.memberId,
-						})
+						uni.$u.throttle(async () => {
+							const params = {
+								calculateType: this.collectStatus ? 2 : 1,
+								dramaId: this.item.filmDramaId,
+								dramaSeries: this.item.dramaSeries,
+								memberId: this.memberId,
+								secondType: 3,
+								seriesId: this.item.id,
+								sysOrgCode: this.item.sysOrgCode,
+								tenantId: this.item.tenantId,
+							}
+							await this.setLike(params);
+							await this.getVideoInfo({
+								seriesId: this.item.id,
+								memberId: this.memberId,
+							})
+						}, 2000)
 						break;
 					case 4:
-						console.log('点击4转发')
+						this.uniShare();
 						break;
 					case 5:
 						this.getVideData();
 						break;
 					case 6:
 						uni.navigateTo({
-							url: '/pages/video/details?dramaId=1994367728237072385'
+							url: `/pages/video/details?dramaId=${this.item.filmDramaId}`
 						})
 						break;
 					case 7:
@@ -467,6 +515,28 @@
 					});
 				}
 			},
+			uniShare() {
+				// #ifndef APP-HARMONY
+				uniShare.show({
+					content: { //公共的分享参数配置  类型（type）、链接（herf）、标题（title）、summary（描述）、imageUrl（缩略图）
+						type: 0,
+						href: `https://www.vndrama.com:9082/#/pages/login/register?bindMemberId=${this.memberId}`,
+						title: this.videoInfo.dramaName,
+						summary: '视频分享',
+						imageUrl: this.videoInfo.dramaPoster,
+					},
+					menus: [{
+						"img": "/static/app-plus/sharemenu/more.png",
+						"text": "系统分享",
+						"share": "shareSystem"
+					}],
+					cancelText: "取消分享",
+				}, e => { //callback
+					console.log(uniShare.isShow);
+					console.log(e);
+				})
+				// #endif
+			}
 		}
 	}
 </script>

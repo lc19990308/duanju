@@ -2,8 +2,8 @@
 <template>
 	<view class="app-container">
 		<statusBar />
-		<u-navbar :title="$t(`walletLog.page_title`)" :fixed='false' :autoBack="true" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
-			:placeholder='true' />
+		<u-navbar :title="$t(`walletLog.page_title`)" :fixed='false' :autoBack="true" bgColor='transparent'
+			:titleStyle='titleStyle' leftIconColor='#fff' :placeholder='true' />
 		<view class="list">
 			<view class="list-item" v-for="(item,index) in list" :key="index">
 				<view class="item-row">
@@ -15,17 +15,22 @@
 				</view>
 			</view>
 		</view>
-		<u-loadmore :status="status" />
+		<u-loadmore :status="status" :loadmoreText='loadmoreText' :loadingText='loadingText' :nomoreText='nomoreText' />
+
 	</view>
 </template>
 
 <script>
+	import i18n from '@/utils/i18n/index.js'
 	import {
 		mapState,
 	} from "vuex"
 	export default {
 		data() {
 			return {
+				loadmoreText: i18n.t('more.loadmoreText'),
+				loadingText: i18n.t('more.loadingText'),
+				nomoreText: i18n.t('more.nomoreText'),
 				titleStyle: {
 					color: '#fff',
 					fontFamily: 'PingFang SC, PingFang SC',
@@ -33,7 +38,7 @@
 					color: '#FFFFFF',
 				},
 				query: {
-					memberId:uni.getStorageSync('memberId') || '',
+					memberId: uni.getStorageSync('memberId') || '',
 					sysOrgCode: 'A03A01',
 					pageNo: 1,
 					pageSize: 10,
@@ -56,7 +61,7 @@
 					uni.stopPullDownRefresh();
 					if (this.total === this.list.length) {
 						this.status = 'nomore'
-					}else{
+					} else {
 						this.status = 'loadmore'
 					}
 				})

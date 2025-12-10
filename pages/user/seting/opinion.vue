@@ -1,8 +1,7 @@
 <template>
 	<view class="app-container">
 		<statusBar />
-		<u-navbar bgColor='transparent' leftIconColor='#fff' :fixed='false' :autoBack="true"
-			:placeholder='true'>
+		<u-navbar bgColor='transparent' leftIconColor='#fff' :fixed='false' :autoBack="true" :placeholder='true'>
 			<template slot='center'>
 				<view class="tabs">
 					<view class="tabs-item" :class="current === 0 ? 'tabs-item_active':'' " @tap="tabChange(0)">
@@ -41,6 +40,9 @@
 			<view class="list-item" v-for="(item,index) in  list" :key="index">
 				<view class="item-row">
 					<view class="label">{{item.content}}</view>
+				</view>
+				<view class="qa-image">
+					<image class="qa-image" :src="item.picture" mode=""></image>
 				</view>
 				<view class="time">{{item.createTime}}</view>
 			</view>
@@ -180,7 +182,7 @@
 					imageList.push(item.picture)
 				})
 				uni.previewImage({
-					urls:imageList,
+					urls: imageList,
 					current: index,
 				});
 			}
@@ -342,6 +344,21 @@
 			font-weight: 400;
 			font-size: 30rpx;
 			color: #D1D1D1;
+		}
+
+		.qa-image {
+			margin-top: 20rpx;
+			width: 200rpx;
+			height: 200rpx;
+			border-radius: 12rpx;
+			box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, .15);
+			object-fit: cover;
+			transition: transform .25s;
+		}
+
+		.qa-image:active {
+			transform: scale(1.05);
+			/* 轻按压放大 */
 		}
 
 		.time {

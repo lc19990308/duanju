@@ -48,16 +48,23 @@
 				<view class="canvas">
 					<canvas canvas-id="qrcode" :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
 				</view>
+				<view class="reward_tips">
+					{{$t('reward.tips')}}
+				</view>
 			</view>
-			<view class="rewardCover_bottom">
+			<view class="rewardCover_bottom" @tap="uniShare">
 				<image src="/static/images/Frame-44.png" mode=""></image>
-				<span>{{$t(`reward.btn_text`)}}</span>
+				<text>{{$t(`reward.btn_text`)}}</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	// #ifndef APP-HARMONY
+	import UniShare from '@/uni_modules/uni-share/js_sdk/uni-share.js';
+	const uniShare = new UniShare();
+	// #endif
 	import apis from '@/utils/config.js'
 	import {
 		mapState,
@@ -73,7 +80,7 @@
 			return {
 				rewardCover: false,
 				sysOrgCode: apis.sysOrgCode,
-				memberId: uni.getStorageSync('id') || '',
+				memberId: '',
 				totalPrice: 0,
 				signList: [],
 				signInId: '',
@@ -85,7 +92,8 @@
 				// 最终生成的二维码图片
 				qrcodeSrc: '',
 				nickname: '',
-				signDay:0,
+				signDay: 0,
+				today: '',
 			}
 		},
 		computed: {
@@ -94,17 +102,28 @@
 		onShow() {
 			this.init();
 		},
+		onBackPress({
+			from
+		}) {
+			if (from == 'backbutton') {
+				this.$nextTick(function() {
+					uniShare.hide()
+				})
+				return uniShare.isShow;
+			}
+		},
 		methods: {
 			//判断哪些接口需要登录了，才能看
-			init(){
-				if(this.token){
+			init() {
+				if (this.token) {
+					this.memberId = uni.getStorageSync('id') || '';
 					this.getUserInfo();
 					this.getMoeny();
 				}
 				this.setTab();
 				this.getSigninManageList();
 			},
-			setTab(){
+			setTab() {
 				uni.setTabBarItem({
 					index: 0,
 					text: this.$t('tabBar.home')
@@ -126,9 +145,9 @@
 				this.$request('user.getUserInfo').then(res => {
 					const result = res.result.userInfo;
 					this.nickname = result.realname;
-					this.todayIndex = this.getTodayDate() - 1;
+					this.today = this.getTodayDate();
 					this.qrcodeText =
-						`${window.location.origin}/#/pages/login/register?bindMemberId=${this.memberId}`
+						`https://www.vndrama.com:9082/#/pages/login/register?bindMemberId=${this.memberId}`
 				})
 			},
 			//获取金币余额
@@ -148,18 +167,50 @@
 				}).then(res => {
 					this.signList = res.result.list;
 					this.signDay = res.result.list.filter(item => item.receiveStatus === true).length;
+					let list = res.result.list;
+					let lastIndex = -1;
+					for (let i = list.length - 1; i >= 0; i--) {
+						if (list[i].receiveStatus === true) {
+							lastIndex = i;
+							break;
+						}
+					}
+					this.todayIndex = lastIndex;
 
 				})
 			},
 			rewardSign() {
-				this.$request('sign.addSigninWelfare', {
-					memberId: this.memberId,
-					sysOrgCode: this.sysOrgCode,
-					signInId: this.signList[this.todayIndex].id,
-				}).then(res => {
-					this.getSigninManageList();
+				//从未签到过
+				if (this.todayIndex === -1) {
+					this.$request('sign.addSigninWelfare', {
+						memberId: this.memberId,
+						sysOrgCode: this.sysOrgCode,
+						signInId: this.signList[0].id,
+					}).then(res => {
+						uni.$u.toast(this.$t('sgin.sginSuccess'))
+						this.getSigninManageList();
+						this.getMoeny();
+					})
+				} else if (this.today == this.getSeDate(this.signList[this.todayIndex].updateTime)) {
+					uni.$u.toast(this.$t('sgin.sginEnd'))
 
-				})
+				} else {
+					this.$request('sign.addSigninWelfare', {
+						memberId: this.memberId,
+						sysOrgCode: this.sysOrgCode,
+						signInId: this.signList[this.todayIndex + 1].id,
+					}).then(res => {
+						uni.$u.toast(this.$t('sgin.sginSuccess'))
+						this.getSigninManageList();
+						this.getMoeny();
+					})
+				}
+			},
+			//获取接口今天几号
+			getSeDate(time) {
+				let date = new Date(time.replace(" ", "T")); // 兼容格式
+				let day = date.getDate();
+				return day
 			},
 			getTodayDate() {
 				return new Date().getDate()
@@ -193,6 +244,27 @@
 
 				})
 			},
+			uniShare() {
+				// #ifndef APP-HARMONY
+				uniShare.show({
+					content: { //公共的分享参数配置  类型（type）、链接（herf）、标题（title）、summary（描述）、imageUrl（缩略图）
+						type: 0,
+						href: this.qrcodeText,
+						title: '邀请好友',
+						summary: '好友分享',
+					},
+					menus: [{
+						"img": "/static/app-plus/sharemenu/more.png",
+						"text": "系统分享",
+						"share": "shareSystem"
+					}],
+					cancelText: "取消分享",
+				}, e => { //callback
+					console.log(uniShare.isShow);
+					console.log(e);
+				})
+				// #endif
+			}
 
 		}
 	}
@@ -237,9 +309,9 @@
 				position: absolute;
 				z-index: 9;
 				right: 0;
-				top: -170rpx;
-				width: 265rpx;
-				height: 254rpx;
+				top: -100rpx;
+				width: 195rpx;
+				height: 184rpx;
 			}
 
 			.reward_list_t {
@@ -466,11 +538,11 @@
 				position: relative;
 				width: 100%;
 				float: left;
-				height: 842rpx;
+				height: 942rpx;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-				background-image: url(/static/images/Frame1000001593.png);
+				background-image: url('/static/images/Frame1000001593.png');
 				background-repeat: no-repeat;
 				background-size: auto 100%;
 				background-position: center bottom;
@@ -481,7 +553,7 @@
 					position: absolute;
 					z-index: 9;
 					right: 1%;
-					top: -100rpx;
+					top: -180rpx;
 				}
 
 				.rewardCover_info_t {
@@ -538,5 +610,16 @@
 				}
 			}
 		}
+	}
+	.reward_tips{
+		margin-top: 70rpx;
+		padding: 15rpx 10rpx 0 10rpx;
+		width: 450rpx;
+		height: 100rpx;
+		font-size: 22rpx;
+		color: #666;
+		background-image: url('/static/images/msg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 	}
 </style>

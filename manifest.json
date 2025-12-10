@@ -1,9 +1,9 @@
 {
-    "name" : "MonkeyDrama",
+    "name" : "猴子短剧",
     "appid" : "__UNI__8BBE7AF",
     "description" : "",
-    "versionName" : "1.0.0",
-    "versionCode" : 100,
+    "versionName" : "1.1.1",
+    "versionCode" : 111,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -17,7 +17,8 @@
         },
         "modules" : {
             "VideoPlayer" : {},
-            "Camera" : {}
+            "Camera" : {},
+            "Share" : {}
         },
         "distribute" : {
             "android" : {
@@ -47,7 +48,8 @@
                     "alipay" : {
                         "__platform__" : [ "ios", "android" ]
                     }
-                }
+                },
+                "share" : {}
             },
             "icons" : {
                 "android" : {
@@ -89,7 +91,30 @@
         "optimization" : {
             "subPackages" : true
         },
-        "runmode" : "liberate"
+        "runmode" : "liberate",
+        "nativePlugins" : {
+            "JY-GoogleSignin" : {
+                "ios_clientId" : "",
+                "__plugin_info__" : {
+                    "name" : "JY-GoogleSignin 谷歌登录 支持安卓iOS",
+                    "description" : "谷歌登录，一键支持",
+                    "platforms" : "Android,iOS",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=2244",
+                    "android_package_name" : "com.monkey.shortdramaapp.ios",
+                    "ios_bundle_id" : "com.monkey.shortdramaapp.ios",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "2244",
+                    "parameters" : {
+                        "ios_clientId" : {
+                            "des" : "谷歌后台ios_clientId",
+                            "key" : "GIDClientID",
+                            "value" : ""
+                        }
+                    }
+                }
+            }
+        }
     },
     "quickapp" : {},
     "mp-weixin" : {

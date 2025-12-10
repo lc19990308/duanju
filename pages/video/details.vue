@@ -2,8 +2,8 @@
 	<view class="Plot">
 		<view class="Plot-details">
 			<statusBar />
-			<u-navbar :title="$t(`walletLog.page_title`)" :fixed='true' :autoBack="true" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
-				:placeholder='true' />
+			<u-navbar :title="$t(`walletLog.page_title`)" :fixed='true' :autoBack="true" bgColor='transparent'
+				:titleStyle='titleStyle' leftIconColor='#fff' :placeholder='true' />
 			<!-- 头部区域 -->
 			<view class="top">
 				<view class="top-cover">
@@ -44,36 +44,12 @@
 					{{filmDrama.dramaDescribe}}
 				</view>
 			</view>
-			<!-- 演员列表 -->
-			<!-- <view class="actor">
-				<view class="actor-text">
-					演员
-				</view>
-				<view class="actor-box" @click="open">
-					<view class="actor-head">
-						<image src="../../static/icons/wx.png" mode="aspectFill"></image>
-					</view>
-					<view class="actor-name">
-						{{filmDrama.createBy}}
-					</view>
-				</view>
-				<view class="actor-box" @click="showOpen">
-					<view class="actor-head">
-						<image src="../../static/icons/wx.png" mode="aspectFill"></image>
-					</view>
-					<view class="actor-name">
-						剧集详情
-					</view>
-				</view>
-			</view> -->
 			<!-- 相关推荐 -->
 			<view class="related">
 				<view class="related-text">
 					{{$t('video_popup.program')}}
 				</view>
-				<scroll-view style="height: 100%" :scroll-y="true" :refresher-enabled="true" :refresher-threshold="100"
-					:refresher-triggered="refreshStatus" @refresherrefresh="refreshHandle" @scrolltolower="bottomHandle"
-					@scroll="scrollHandle">
+				<scroll-view style="height: 100%" :scroll-y="true" >
 					<view class="list" v-if="videoList.length > 0">
 						<block v-for="(lItems, lIndex) in videoList" :key="lItems.id">
 							<view class="item item1" @click="openVideoDetail(lItems)">
@@ -86,7 +62,8 @@
 								</view>
 								<view class="info">
 									<view class="title u-line-1">{{ lItems.dramaName }}</view>
-									<view class="text u-line-1">{{lItems.classifyName}} · {{ lItems.totalEpisodes}}{{$t('watch.unit')}}
+									<view class="text u-line-1">{{lItems.classifyName}} ·
+										{{ lItems.totalEpisodes}}{{$t('watch.unit')}}
 									</view>
 								</view>
 							</view>
@@ -165,6 +142,7 @@
 			}
 		},
 		onLoad(option) {
+			console.log('option', option, )
 			this.dramaIds = option.dramaId
 			this.getVideoList()
 			this.filmDramaById()
@@ -183,7 +161,6 @@
 			},
 			// 剧集切换 
 			episodeSwitching(item) {
-				console.log("this.剧集切换", item)
 				this.sid = item.dramaSeries
 			},
 			// 显示剧目详情
@@ -192,7 +169,6 @@
 				this.filmDramaSeriesList()
 				this.filmDramaById()
 				this.setSelectedList();
-				console.log("this.totalEpisodes111", this.totalEpisodes)
 			},
 
 
@@ -226,9 +202,11 @@
 
 			// 剧目详情
 			filmDramaById() {
+				console.log('dramaIds', this.dramaIds)
 				this.$request('video.filmDramaById', {
 					id: this.dramaIds
 				}).then(res => {
+					console.log(res, 'resfilmDramaById')
 					if (res.code != 200) {
 						uni.showToast({
 							title: this.$t('toast.sys_error'),
@@ -238,7 +216,6 @@
 					} else {
 						this.filmDrama = res.result
 						this.totalEpisodes = parseFloat(res.result.totalEpisodes)
-						console.log("this.totalEpisodes", this.totalEpisodes)
 					}
 				}).catch(err => {
 					console.log(err)
@@ -248,8 +225,6 @@
 			// tab切换
 			setSelectedList() {
 				this.selectedList = []
-				// this.filmDramaById()
-				// console.log("this.totalEpisodes111333", this.totalEpisodes)
 				if (this.totalEpisodes > 0 && this.totalEpisodes <= 30) {
 					this.selectedList.push(this.list[0]);
 				}
@@ -268,12 +243,9 @@
 					this.selectedList.push(this.list[2]);
 					this.selectedList.push(this.list[3]);
 				}
-				// You can add more conditions if needed for different ranges
 			},
 			click(name) {
 				this.onShowTab = name.index
-				// Handle click event if needed
-				console.log('Clicked:', name);
 			},
 
 			getStyle(item, sid) {
@@ -314,15 +286,13 @@
 			},
 			// 跳转播放
 			openVideoDetail(lItems) {
-				var omim = JSON.stringify(lItems)
 				uni.navigateTo({
-					url: '/pages/video/videoDetails?item=' + encodeURIComponent(omim)
+					url: `/pages/video/testVideoInfo?dramaId=${lItems.dramaId}`
 				})
 			},
 			// 获取视频列表
 			getVideoList() {
 				this.$request('video.filmDramaList', this.videoQuery).then(res => {
-					// console.log("视频列表:", res);
 					if (res.code != 200) {
 						uni.showToast({
 							title: '视频列表获取失败',
@@ -343,7 +313,7 @@
 
 	.Plot {
 		background-color: #000;
-		height: 100%;
+		min-height: 100vh;
 		color: #fff;
 	}
 

@@ -7,7 +7,7 @@
 			"path": "pages/home/new-home",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -280,6 +280,24 @@
 						"navigationBarTitleText": "Cửa hàng",
 						"navigationBarTextStyle": "white",
 						"navigationBarBackgroundColor": "#000",
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "framer/index",
+					"style": {
+						"navigationBarTitleText": "Cửa hàng",
+						"navigationBarTextStyle": "white",
+						"navigationBarBackgroundColor": "#000",
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "framer/add-framer",
+					"style": {
+						"navigationBarTextStyle": "white",
+						"navigationBarBackgroundColor": "#000",
+						"enablePullDownRefresh": true,
 						"navigationStyle": "custom"
 					}
 				}

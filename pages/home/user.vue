@@ -9,17 +9,13 @@
 				<navigator class="info" url="/pages/user/account/changeUserName" hover-class="none">
 					<view class="msg single-line">
 						<text class="membername">{{nickname}}</text>
-						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
 					<view class="msg">
 						<text class="text" v-if="memberId">ID：{{ memberId || "" }}</text>
-						<!-- <text class="text" style="margin: 0 16rpx;" v-if="userInfoStore.activate=='已开通'"></text> -->
-						<!-- <text class="copy" @click.stop="copyText(userInfoStore.user_id)">复制</text> -->
 					</view>
 				</navigator>
 				<u-button class="user-btn" @tap="loginOut" v-if='token != ""'>{{$t(`my.get_out`)}}</u-button>
 				<u-button class="user-btn" @tap="tologin" v-else>{{$t(`my.login_text`)}}</u-button>
-				<!-- <image class="arrow" src="/static/icons/arrow.png" mode="widthFix"></image> -->
 			</view>
 			<view class="userinfo_box" v-else>
 				<view class="avatar">
@@ -35,7 +31,6 @@
 		</view>
 		<view class="main_content">
 			<!-- VIP充值 -->
-			<!-- <view class="integral_box" v-if="userInfoStore.rechargeVal" > -->
 			<view class="integral_box">
 				<view class="integral_box_t" @click="recharbtn">
 					<view>{{$t(`my.wallet`)}}</view>
@@ -58,9 +53,7 @@
 					<view class="left" @click="recharbtn">{{$t(`my.top_up`)}}</view>
 				</view>
 			</view>
-			<!-- <view class="vip_card" v-if="userInfoStore.rechargeVal"> -->
 			<view class="vip_card">
-				<!-- <image class="imagssl" :src="userInfoStore.backgRound" mode="scaleToFill"></image> -->
 				<view class="vip_box">
 					<view class="left" @click="openVip">
 						<view class="line1">
@@ -70,11 +63,8 @@
 									<span>{{$t(`my.open_member`)}}</span><br />{{$t(`my.mebmer_tips`)}}
 								</view>
 							</view>
-							<!-- <image class="backgLogo" :src="userInfoStore.backgLogo" mode="aspectFill"></image> -->
-							<!-- <view class="kaitong">{{userInfoStore.activate}}</view> -->
 						</view>
 						<view class="line2">
-							<!-- {{userInfoStore.remarks || ''}}<u-icon name="arrow-right" color="$uni-text-color-vip" size="14"></u-icon> -->
 							<image src="/static/images/Frame1000001522-1.png" class="arrowRight" mode="aspectFill">
 							</image>
 						</view>
@@ -84,8 +74,6 @@
 			<view class="moinublock">
 				<view class="oinuntlist" @click="menuItemClicks">
 					<view> {{$t(`my.history`)}} </view>
-					<span>></span>
-					<!-- <image src="../../static/hunjiaotoa.png" mode=""></image> -->
 				</view>
 				<view class="list" v-if="mounList.length">
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
@@ -101,18 +89,6 @@
 						</view>
 					</u-scroll-list>
 				</view>
-				<!-- <view class="dalisewier">
-					<view class="item" @click="jumpView(`/${item.url}`)" v-for="(item,index) in videoList" v-if="item.functionStatus == 1">
-						<view class="icon">
-							<image class="image" :src="item.img" mode="aspectFill"></image>
-						</view>
-						<view class="text">{{ item.text }}</view>
-						<view class="vlist" :key="item.id" >
-							<image class="video-pic" :src="item.img" mode="widthFix"></image>
-							<view style="color: #000;" class="text">{{ item.text }}</view>
-						</view>
-					</view>
-				</view> -->
 				<view class="menu_box">
 					<view class="item" v-for="(item, index) in menuList" :key="item.id" @click="menuItemClick(item)">
 						<view class="left">
@@ -124,7 +100,6 @@
 						</view>
 						<view class="right">
 							<u-icon name="arrow-right" color="#fff" size="12" :bold="true"></u-icon>
-							<!-- <image class="image" src="/static/icons/arrow.png" mode="widthFix"></image> -->
 						</view>
 					</view>
 				</view>
@@ -145,20 +120,6 @@
 					<!-- #endif -->
 				</view>
 			</view>
-			<!-- <view class="alert_box"
-				v-if="platform != 'H5' && token && userInfoStore">
-				<view class="item" v-if="!userInfoStore.verification.mobile">
-					<text class="text">您还没有绑定手机号</text>
-					<text class="btn" @click="alertBindButton('mobile')">去绑定</text>
-				</view>
-			</view> -->
-			<!-- 			<u-modal :show="cdkey.show" :title="cdkey.title" :showCancelButton="true" @confirm="cdkeyConfirm"
-				@cancel="cdkey.show = false">
-				<view style="width: 100%">
-					<u-input v-model="cdkey.value" :customStyle="inputStyle" clearable :placeholder="$t('my.cdkey')"
-						@change="inputChange" @blur="inputChange"></u-input>
-				</view>
-			</u-modal> -->
 		</view>
 	</view>
 </template>
@@ -175,7 +136,6 @@
 		data() {
 			return {
 				nickname: "",
-				allocatProgram: {},
 				tenantId: null,
 				sysOrgCode: null,
 				memberId: uni.getStorageSync("id"),
@@ -190,9 +150,7 @@
 					borderRadius: "8rpx",
 					fontWeight: "bold",
 				},
-				menuList: [
-					// #ifndef APP-PLUS
-					{
+				menuList: [{
 						id: 1,
 						img: "/static/images/Frame-34.png",
 						width: "32rpx",
@@ -200,7 +158,6 @@
 						rid: "",
 						path: "/pages/home/watchs",
 					},
-					// #endif
 					{
 						id: 2,
 						img: "/static/images/Frame-32.png",
@@ -241,6 +198,14 @@
 						rid: "",
 						path: "/pages/user/seting/seting",
 					},
+					{
+						id: 7,
+						img: "/static/images/Frame-30.png",
+						width: "32rpx",
+						text: "my.creation", //联系我们
+						rid: "",
+						path: "/pages/user/framer/index",
+					},
 				],
 				copyrightData: this.$store.state.app.copyright || [], // 版权说明
 				platform: this.$utils.platforms(),
@@ -261,11 +226,11 @@
 				videoList: [],
 				mounList: [],
 				avatar: '',
-				balanceData:{
-					currency:'',
-					totalBalance:'',
+				balanceData: {
+					currency: '',
+					totalBalance: '',
 				},
-				id:uni.getStorageSync("id"),
+				id: uni.getStorageSync("id"),
 			};
 		},
 		computed: {
@@ -293,26 +258,14 @@
 			},
 		},
 		onLoad() {
-			const systemInfo = uni.getSystemInfoSync();
-			let platform;
-
-			if (systemInfo.platform === "android") {
-				this.platform = "Android";
-			} else if (systemInfo.platform === "ios") {
-				this.platform = "iOS";
-			}
-			uni.$on("updateUserInfo", () => {
-				// this.getUserInfo()
-			});
-
 			this.tenantId = apiMoen.tenantId;
 			this.sysOrgCode = apiMoen.sysOrgCode;
 			this.handleTovideoList();
 			this.richtext && this.initMenuList(this.richtext);
-			this.getAllocatProgram();
-			this.getDeviceid();
 		},
 		onShow() {
+			this.memberId = uni.getStorageSync("id");
+			console.log(this.memberId,'memberId')
 			this.setTab();
 			this.getIntegral();
 			this.getUserInfo();
@@ -321,7 +274,7 @@
 			uni.$off("updateUserInfo");
 		},
 		methods: {
-			...mapActions("user", ["getUserInfo",'logout']),
+			...mapActions("user", ["getUserInfo", 'logout']),
 			//获取货币信息
 			getIntegral() {
 				this.$request('withdraw.getBalance', {
@@ -395,40 +348,10 @@
 					url: "/pages/home/history",
 				});
 			},
-			// 获取设备
-			getDeviceid() {
-				// 获取设备品牌、型号、设备 id 、系统名称、osVersion
-				const {
-					deviceBrand,
-					deviceModel,
-					deviceId,
-					osName,
-					osVersion
-				} =
-				uni.getSystemInfoSync();
-				console.log(
-					"获取设备品牌、型号、设备 id 、系统名称、osVersion",
-					deviceBrand,
-					deviceModel,
-					deviceId,
-					osName,
-					osVersion
-				);
-			},
 			abunbtn(item) {
 				uni.navigateTo({
 					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
 				})
-			},
-			alertBindButton(type) {
-				if (type == "wxmp") {
-					console.log("绑定微信小程序");
-				} else if (type == "wxoa") {
-					console.log("绑定微信公众号");
-				} else if (type == "mobile") {
-					console.log("绑定手机号");
-					this.jumpView("/pages/user/info/index");
-				}
 			},
 			// 复制
 			copyText(info) {
@@ -445,25 +368,6 @@
 					url: "/pages/user/activate/activate",
 				});
 			},
-			// 小程序信息查询
-			getAllocatProgram() {
-				this.$request("common.allocatProgram", {
-					tenantId: apiMoen.tenantId,
-					sysOrgCode:apiMoen.sysOrgCode,
-					appId: uni.getStorageSync("srcAppid"),
-				}).then((res) => {
-					if (res != 200 && res.message != "") {
-						uni.showToast({
-							title: res.message,
-							icon: "error",
-							duration: 2000,
-							position: "top",
-						});
-					}
-					this.allocatProgram = res.result;
-					console.log("小程序信息查询:", res);
-				});
-			},
 			//功能列表
 			handleTovideoList() {
 				this.$request("wchatapi.allocatFunctionList", {
@@ -471,7 +375,6 @@
 						sysOrgCode: this.sysOrgCode,
 					})
 					.then((res) => {
-						console.log("功能列表", res);
 						if (res.code == 200) {
 							this.videoList = res.result.map((it) => ({
 								id: it.id,
@@ -481,12 +384,8 @@
 								url: it.functionUrl,
 								functionStatus: it.functionStatus,
 							}));
-							console.log(this.videoList);
 						}
 					})
-					.catch((res) => {
-						console.log(res);
-					});
 			},
 			//会员信息
 			handleToFilmDramaMember() {
@@ -499,11 +398,7 @@
 							this.VipListmu = res.result;
 							this.userInfoStore = res.result;
 						}
-						console.log("会员信息", res);
 					})
-					.catch((res) => {
-						console.log(res);
-					});
 			},
 			//历史记录
 			handleToFilmViewHistoryList() {
