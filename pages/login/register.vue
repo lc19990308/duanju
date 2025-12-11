@@ -45,7 +45,8 @@
 				<u-checkbox :customStyle="{marginBottom: '8px'}" name="1" inactiveColor='#000000'>
 				</u-checkbox>
 			</u-checkbox-group>
-			<navigator class="agreement-tips" hover-class="none" url="/pages/user/about/detail/detail?id=1791523044515913730">
+			<navigator class="agreement-tips" hover-class="none"
+				:url="`/pages/user/about/detail/detail?id=${agreementId}`">
 				{{$t(`login.login_tips`)}}
 			</navigator>
 		</view>
@@ -102,24 +103,46 @@
 				},
 				tips: i18n.t('form.getCode'),
 				// refCode: null,
-				seconds: 30,
+				seconds: 90,
 				checkboxValue1: 1,
 				titleStyle: {
 					color: '#fff'
-				}
+				},
+				agreementId: '',
+				bindMemberld:'',
 			}
 		},
 		onShow() {
 			that = this;
+			that.getLang();
+		},
+		onLoad(e) {
+			if(e.bindMemberld){
+				this.bindMemberld = e.bindMemberld;
+			}
 		},
 		methods: {
+			getLang() {
+				const lang = uni.getStorageSync('lang');
+				switch (lang) {
+					case 'zh_CN':
+						this.agreementId = '2791523044515913731'
+						break;
+					case 'vi_VN':
+						this.agreementId = '1791523044515913731'
+						break;
+					case 'zh_EN':
+						this.agreementId = '1995867265509580802'
+						break;
+				}
+			},
 			codeChange(text) {
-				if(text === '获取验证码' || text === '重新获取'){
+				if (text === '获取验证码' || text === '重新获取') {
 					this.tips = `${i18n.t('form.getCode')}`;
-				}else{
+				} else {
 					this.tips = `${this.extractNumber(text)} ${i18n.t('form.regain')}`;
 				}
-				
+
 			},
 			getCode() {
 				if (this.$refs.uCode.canGetCode) {
@@ -167,12 +190,14 @@
 				})
 			},
 			submit() {
+
 				let obj = {
 					"email": this.form.email,
 					"emailcode": this.form.verificationCode,
 					"username": this.form.email,
 					"password": this.form.password,
-					"realname": this.form.email
+					"realname": this.form.email,
+					'bindMemberId':this.bindMemberld,
 				}
 				this.$request('login.registerEmail', obj).then(res => {
 					this.$u.toast(res.message);
@@ -188,8 +213,8 @@
 				var datas = {
 					accountNumber: this.form.email,
 					sysOrgCode: apiMoen.sysOrgCode,
-					bindMemberId: this.getQueryParam('bindMemberId'),
 				};
+
 				this.$request('common.memberAccountNumberAdd', datas).then(res => {
 					setTimeout(() => {
 						uni.redirectTo({
@@ -198,23 +223,7 @@
 					}, 500)
 				})
 			},
-			getQueryParam(key) {
-				// #ifdef H5
-				// H5 带 hash 模式：http://localhost:8080/#/pages/login/register?bindMemberId=1989270268829470722
-				const hash = window.location.hash || ''; // #/pages/login/register?bindMemberId=1989270268829470722
-				const search = hash.split('?')[1] || ''; // bindMemberId=1989270268829470722
-				const urlSearch = new URLSearchParams(search);
-				return urlSearch.has(key) ? decodeURIComponent(urlSearch.get(key)) : null;
-				// #endif
-
-				// #ifndef H5
-				// 小程序 / App：从页面路由对象里取
-				const pages = getCurrentPages();
-				if (!pages.length) return null;
-				const options = pages[pages.length - 1].options || {}; // 或 $route.query（vue3）
-				return options[key] ? decodeURIComponent(options[key]) : null;
-				// #endif
-			},
+		
 			extractNumber(text) {
 				if (!text) return null;
 				const m = text.match(/\p{Nd}+/u); // 使用 u 标志支持 Unicode 数字
@@ -232,13 +241,6 @@
 		left: 0;
 		top: 0;
 		z-index: 999999;
-	}
-
-	page {
-		// background-image: url('/static/images/login.png');
-		// background-repeat: no-repeat;
-		// background-size: 100% 100%;
-		// background-position: 100% 100%;
 	}
 
 	.app-container {

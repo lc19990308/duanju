@@ -16,9 +16,9 @@ const zh = {
 		get_out: '退出',
 		wallet: '我的钱包',
 		gold: '金币', // 或“金豆”，根据实际货币单位
-		points: '积分',
+		points: '钻石',
 		top_up: '充值',
-		open_member: '开通会员', // 比“会员开”更自然
+		open_member: '开通订阅', // 比“会员开”更自然
 		mebmer_tips: '免费看下一集',
 		invite: '邀请好友',
 		collection: '我的收藏',
@@ -123,7 +123,7 @@ const zh = {
 		page_title: '商城',
 		balance: '余额：',
 		balance_unit: '钻石',
-		page_tips: '提示：Monkey Short 为所有用户提供免费与付费内容，您可自主选择是否解锁。支付自愿，充值余额不支持退款。若金币未及时到账，请重新登录。',
+		page_tips: '提示： Monkey Short 为所有人提供免费和付费内容。您可以自主决定解锁内容。如充值未到账，请退出后重新登录。',
 	},
 
 	// watch
@@ -207,7 +207,7 @@ const zh = {
 		cell_item_label2: '账号数据',
 		cell_item_value2: '您的全部个人数据将被清除，包括用户名与邮箱',
 		cell_item_label3: '服务权益',
-		cell_item_value3: '金币、积分及 VIP 权益将被清空',
+		cell_item_value3: '金币、钻石及 VIP 权益将被清空',
 		cell_item_label4: '历史记录',
 		cell_item_value4: '所有历史记录将被删除，包括充值与观看记录',
 		cell_item_label5: '第三方账号信息',
@@ -218,7 +218,7 @@ const zh = {
 	// language
 	language: {
 		page_title: '语言',
-		language_vi: 'Việt nam',
+		language_vi: 'Tiếng Việt',
 		language_cn: '简体中文',
 		language_en: 'English',
 		submit_btn: '确定',

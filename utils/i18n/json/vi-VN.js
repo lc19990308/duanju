@@ -15,10 +15,10 @@ const vi = {
 		login_text: 'Đăng nhập',
 		get_out: 'Đăng xuất',
 		wallet: 'Ví của tôi',
-		gold: 'Xu',
-		points: 'Điểm',
+		gold: 'vàng',
+		points: 'kim cương',
 		top_up: 'Nạp tiền',
-		open_member: 'Đăng ký gói',
+		open_member: 'Mở đăng ký',
 		mebmer_tips: 'Xem tập tiếp theo miễn phí',
 		invite: 'Mời bạn bè',
 		collection: 'Yêu thích',
@@ -108,7 +108,7 @@ const vi = {
 		page_title: 'Cửa hàng',
 		balance: 'Số dư: ',
 		balance_unit: 'kim cương',
-		page_tips: 'Gợi ý: Monkey Short cung cấp nội dung miễn phí và trả phí cho tất cả mọi người. Bạn có thể quyết định nội dung cần giải mã. Thanh toán là không bắt buộc và giá trị lưu trữ không hỗ trợ hoàn lại tiền. Nếu tiền dự trữ chưa được ghi vào tài khoản của ông, xin vui lòng thoát khỏi bang của tôi.',
+		page_tips: 'Mẹo: Monkey Short cung cấp cả nội dung miễn phí và trả phí cho mọi người. Bạn quyết định nội dung nào muốn mở khóa. Nếu nạp không thành công, vui lòng đăng xuất và đăng nhập lại.',
 	},
 	watch: {
 		page_title: 'Xem lịch sử',
@@ -183,7 +183,7 @@ const vi = {
 		cell_item_label2: 'Dữ liệu tài khoản',
 		cell_item_value2: 'Tất cả dữ liệu cá nhân của bạn sẽ bị xóa, bao gồm tên người dùng và email',
 		cell_item_label3: 'Quyền lợi dịch vụ',
-		cell_item_value3: 'Tiền vàng, điểm và lợi ích VIP của bạn sẽ bị xóa',
+		cell_item_value3: 'Tiền vàng, kim cương và quyền lợi VIP của bạn sẽ bị xóa.',
 		cell_item_label4: 'lịch sử',
 		cell_item_value4: 'Tất cả lịch sử sẽ bị xóa, bao gồm lịch sử nạp tiền và lịch sử xem',
 		cell_item_label5: 'Thông tin tài khoản bên thứ ba',
@@ -192,7 +192,7 @@ const vi = {
 	},
 	language: {
 		page_title: 'ngôn ngữ',
-		language_vi: 'Việt nam',
+		language_vi: 'Tiếng Việt',
 		language_cn: '简体中文',
 		language_en: 'English',
 		submit_btn: 'xác định',
@@ -219,7 +219,7 @@ const vi = {
 	tabBar: {
 		home: "Trang chủ",
 		recommend: "Đề xuất",
-		reward: "Phần thưởng",
+		reward: "thưởng",
 		profile: "Cá nhân"
 	},
 	toast: {
@@ -332,8 +332,8 @@ const vi = {
 		uploadVideo: 'Tải lên video',
 		uploadCover: 'Tải lên ảnh bìa video',
 		chooseCover: 'Chọn ảnh bìa',
-		inputText:'Vui lòng nhập tên video',
-		videoName:"Tên video"
+		inputText: 'Vui lòng nhập tên video',
+		videoName: "Tên video"
 	},
 }
 

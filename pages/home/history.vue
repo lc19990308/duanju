@@ -20,13 +20,13 @@
 						@refresherrefresh="refreshHandle" @scrolltolower="bottomHandle" @scroll="scrollHandle">
 						<view class="content_box">
 							<view class="boxTitle" v-if="contentCurrent == 0">
-								<view class="text">{{$t('history.currently_in_pursuit')}}{{item.total}}{{$t('history.total_views')}}</view>
+								<view class="text">{{$t('history.currently_in_pursuit')}} {{item.total}}</view>
 								<view class="icon">
 									<!-- 编辑图标预留 -->
 								</view>
 							</view>
 							<view class="boxTitle" v-if="contentCurrent == 1">
-								<view class="text">{{$t('history.total_views')}}{{item.total}}{{$t('history.total_views')}}</view>
+								<view class="text">{{$t('history.total_views')}} {{item.total}}</view>
 							</view>
 
 							<!-- 网格缩略图：当当前 tab 为 追剧（0）并且有数据时显示 -->

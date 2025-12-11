@@ -49,7 +49,9 @@
 </template>
 
 <script>
+	//#ifdef APP-PLUS
 	const JYGoogleSignin = uni.requireNativePlugin('JY-GoogleSignin');
+	//#endif
 	import i18n from '@/utils/i18n/index.js'
 	import apiMoen from '@/utils/config.js';
 	let that;
@@ -119,7 +121,7 @@
 				},
 				tips: 'lấy',
 				// refCode: null,
-				seconds: 30,
+				seconds: 90,
 				checked: false,
 				titleStyle: {
 					color: '#fff'
@@ -296,11 +298,12 @@
 		},
 		onShow() {
 			this.getLang();
+			//#ifdef APP-PLUS
 			JYGoogleSignin.jy_init({
 				//  安卓的client_id应该是谷歌开发者后台默认Web应用的；iOS的client_id应该是谷歌开发者后台iOS对应的
 				client_id: "446804274711-fjevh6bdtigb92hr78df0a206kqlqes9.apps.googleusercontent.com"
 			}, res => {})
-			// uni.getStorageSync('')
+			//#endif
 		},
 	}
 </script>

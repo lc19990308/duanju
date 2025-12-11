@@ -5,7 +5,6 @@
 			:placeholder='true'>
 		</u-navbar>
 		<u-toast ref="uToast"></u-toast>
-		<u-code :seconds="seconds" ref="uCode" @change="codeChange" />
 
 		<view class="title">
 			<view class="title-text">{{$t('changePassword.title')}}</view>
@@ -112,7 +111,7 @@
 					]
 				},
 				tips: i18n.t('form.getCode'),
-				seconds: 30,
+				seconds: 90,
 				placeholderStyle: 'color:#666;'
 
 

@@ -1,47 +1,41 @@
 <template>
 	<view class="page_content">
-		<!-- 		<view class="head_content">
-			<CustomNavbar title="đội của tôi"></CustomNavbar>
-		</view> -->
 		<statusBar />
-		<u-navbar :title="$t(`team.page_title`)" bgColor='transparent' :titleStyle='titleStyle'
-			leftIconColor='#fff' :autoBack="true" :fixed='false' :placeholder='true' />
+		<u-navbar :title="$t(`team.page_title`)" bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
+			:autoBack="true" :fixed='false' :placeholder='true' />
 		<view class="main_content">
-			<scroll-view class="scroll_view" :scroll-y="true" @scrolltolower="scrollBottom">
-				<view class="scroll_content">
-					<view class="top_card">
-						<!-- <view class="text1">{{ info.count }}人</view> -->
-						<view class="text2">
-							<view class="text2_lie">
-								<view>{{ info.count_direct }}</view>
-								<view>{{$t(`team.total`)}}</view>
-							</view>
-							<view class="text2_lie">
-								<view>{{ info.count_indirect }}</view>
-								<view>{{$t(`team.profit`)}}</view>
-							</view>
-
+			<view class="scroll_content">
+				<view class="top_card">
+					<view class="text2">
+						<view class="text2_lie">
+							<view>{{ info.count_direct }}</view>
+							<view>{{$t(`team.total`)}}</view>
 						</view>
+						<view class="text2_lie">
+							<view>{{ info.count_indirect }}</view>
+							<view>{{$t(`team.profit`)}}</view>
+						</view>
+
 					</view>
-					<view class="content_box">
-						<view class="title">{{$t('team.invitation')}}</view>
-						<view class="list_box" v-if="list.length">
-							<view class="item" v-for="(item, index) in list" :key="index">
-								<view class="left">
-									<view class="photo">
-										<image class="image" :src="item.avatar" mode="aspectFill"></image>
-									</view>
-									<view class="info">
-										<view class="text1">{{ item.memberName }}</view>
-										<view class="text2">{{ item.bindTime }}</view>
-									</view>
+				</view>
+				<view class="content_box">
+					<view class="title">{{$t('team.invitation')}}</view>
+					<view class="list_box" v-if="list.length">
+						<view class="item" v-for="(item, index) in list" :key="index">
+							<view class="left">
+								<view class="photo">
+									<image class="image" src="/static/images/avatar.png" mode="aspectFill"></image>
 								</view>
-								<view class="right">{{ item.todayDivideAmount }}</view>
+								<view class="info">
+									<view class="text1">{{ item.memberName }}</view>
+									<view class="text2">{{ item.bindTime }}</view>
+								</view>
 							</view>
+							<view class="right">+ {{ item.todayDivideGold }}</view>
 						</view>
 					</view>
 				</view>
-			</scroll-view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -57,7 +51,7 @@
 				},
 				list: [],
 				page: 1,
-				memberId: uni.getStorageSync('memberId') || '',
+				memberId: uni.getStorageSync('id') || '',
 				pagesize: 10,
 				titleStyle: {
 					color: '#fff',
@@ -71,31 +65,19 @@
 			this.teamList()
 		},
 		methods: {
-			scrollBottom() {
-				this.page++
-				this.teamList()
-			},
 			teamList() {
 				this.$request('share.teamNum', {
 					memberId: this.memberId,
 				}).then(res => {
-					if (res.code === 1) {
-						this.info = {
-							count_direct: res.totalExtendNumber,
-							count_indirect: res.totalProfit
-						}
-
+					this.info = {
+						count_direct: res.result.totalExtendNumber,
+						count_indirect: res.result.totalProfit
 					}
 				})
 				this.$request('share.teamNew', {
 					memberId: this.memberId,
 				}).then(res => {
-					if (res.code === 1) {
-
-						if (res.DivideRecordByTeamVo && res.DivideRecordByTeamVo.length) {
-							this.list = this.list.concat(res.DivideRecordByTeamVo)
-						}
-					}
+					this.list = res.result;
 				})
 			}
 		}
@@ -104,10 +86,15 @@
 
 <style lang="scss" scoped>
 	.page_content {
-		background: #000000;
+		background-color: #000;
+		background-image: url('/static/images/navbar-bg.png');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		background-position: 100% 100%;
+		min-height: 100vh;
 
 		.main_content {
-			overflow: hidden;
+			padding: 38rpx 36rpx 0 36rpx;
 
 			.scroll_view {
 				height: 100%;
@@ -197,7 +184,6 @@
 								width: 100rpx;
 								height: 100rpx;
 								border-radius: 20rpx;
-								background: #fff;
 								box-shadow: 0 0 60rpx 0 rgba(202, 202, 202, 0.3);
 								overflow: hidden;
 								display: flex;

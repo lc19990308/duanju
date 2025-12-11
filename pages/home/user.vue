@@ -322,6 +322,7 @@
 						uni.removeStorageSync('tenantId')
 						uni.removeStorageSync('sysOrgCode')
 						uni.removeStorageSync('memberId')
+						uni.removeStorageSync('bindMemberId')
 						uni.redirectTo({
 							url: '/pages/login/login'
 						})

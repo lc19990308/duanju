@@ -17,10 +17,10 @@ const en = {
 		login_text: 'Log In',
 		get_out: 'Log Out',
 		wallet: 'My Wallet',
-		gold: 'Coins',
-		points: 'Points',
+		gold: 'gold',
+		points: 'diamond',
 		top_up: 'Top Up',
-		open_member: 'Subscribe',
+		open_member: 'Activate Subscription',
 		mebmer_tips: 'Watch the next episode free',
 		invite: 'Invite Friends',
 		collection: 'My Favorites',
@@ -121,7 +121,7 @@ const en = {
 		page_title: 'Store',
 		balance: 'Balance: ',
 		balance_unit: 'diamond',
-		page_tips: 'Tip: Monkey Short provides both free and paid content for everyone. You decide what to unlock. Payment is optional and stored value is non-refundable. If your top-up does not arrive, please log out and log in again.',
+		page_tips: 'Tip: Monkey Short provides both free and paid content for everyone. You decide what to unlock. If your top-up does not arrive, please log out and log in again.',
 	},
 
 	watch: {
@@ -204,7 +204,7 @@ const en = {
 		cell_item_label2: 'Account Data',
 		cell_item_value2: 'All your personal data, including username and email, will be deleted',
 		cell_item_label3: 'Service Rights',
-		cell_item_value3: 'Your gold, points and VIP benefits will be cleared',
+		cell_item_value3: 'Your coins, diamonds, and VIP benefits will be deleted.',
 		cell_item_label4: 'History',
 		cell_item_value4: 'All history, including recharge and watch records, will be deleted',
 		cell_item_label5: 'Third-party Account Info',
@@ -214,7 +214,7 @@ const en = {
 
 	language: {
 		page_title: 'Language',
-		language_vi: 'Việt nam',
+		language_vi: 'Tiếng Việt',
 		language_cn: '简体中文',
 		language_en: 'English',
 		submit_btn: 'Confirm',
