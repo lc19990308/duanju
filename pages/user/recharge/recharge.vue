@@ -11,7 +11,7 @@
 				<view class="rechargeView_lists top3" v-for="(item,index) in goldList"
 					@click="handleToActive(index,item)" :key="index">
 					<view class="rechargeView_top">{{item.actualReceipt}} {{$t(`store.balance_unit`)}}</view>
-					<view class="rechargeView_cen">+{{item.rechargeCoins}} {{$t(`store.balance_unit`)}}</view>
+					<view class="rechargeView_cen">+{{item.giftCoins}} {{$t(`store.balance_unit`)}}</view>
 					<view class="rechargeView_bottom">{{$t('currency')}}{{item.packageMoney}}</view>
 				</view>
 			</view>

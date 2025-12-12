@@ -2,8 +2,8 @@
     "name" : "猴子短剧",
     "appid" : "__UNI__8BBE7AF",
     "description" : "",
-    "versionName" : "1.1.7",
-    "versionCode" : 117,
+    "versionName" : "1.1.9",
+    "versionCode" : 119,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,

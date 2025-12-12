@@ -3,13 +3,13 @@
 		<!-- #ifdef APP-NVUE -->
 		<tw-videon ref="videoGroup" @lodData="loadingData" @refreshData="refreshData" :autoplay="autoplay"
 			:nextPlay="nextPlay" :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick" @longpress="longpress"
-			@swiperChange="swiperChange" :totalvod="totalvod" @removeAllData="removeAllData"></tw-videon>
+			@swiperChange="swiperChange" :lang='lang' :totalvod="totalvod" @removeAllData="removeAllData"></tw-videon>
 		<!-- #endif -->
 
 		<!-- #ifndef APP-NVUE -->
 		<tw-videov ref="videoGroup" @lodData="loadingData" @refreshData="refreshData" :autoplay="autoplay"
 			:nextPlay="nextPlay" :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick" @longpress="longpress"
-			@swiperChange="swiperChange" :totalvod="totalvod" @removeAllData="removeAllData"></tw-videov>
+			@swiperChange="swiperChange" :lang='lang' :totalvod="totalvod" @removeAllData="removeAllData"></tw-videov>
 		<!-- #endif -->
 		<!-- 
 		<view class="automatic">
@@ -76,14 +76,15 @@
 				totalvod: 0, //视频总数量，有值才能滑动加载到最后一个视频并禁止循环滑动（仅H5、小程序支持）
 				query: {
 					pageNo: 1,
-					pageSize: 3,
+					pageSize: 1000,
 					sysOrgCode: api.sysOrgCode,
 					memberId: uni.getStorageSync('id') || '',
 				},
+				lang:'',
 			}
 		},
 		created() {
-
+			
 			// #ifdef H5
 			this.autoplay = false
 			// #endif
@@ -91,6 +92,7 @@
 		},
 		onShow() {
 			/* 播放视频 */
+			this.lang = uni.getStorageSync('lang');
 			if (this.$refs.videoGroup) {
 				this.$refs.videoGroup.showPlay()
 				this.$refs.videoGroup.muteVideo(false) //取消视频播放设置为静音，解决切换到其他页面后因为网络问题还在有声音播放

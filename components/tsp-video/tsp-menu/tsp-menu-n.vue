@@ -30,7 +30,9 @@
 			<view class="video-info" v-if="!showSelectShow" @tap.stop="JumpBtn(1,item)">
 				<view class="video-info-left">
 					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
-					<text class="label">{{language[lang].collect}} · {{language[lang].all}}{{discussNum}} {{language[lang].episode}} · {{language[lang].watchFull}}</text>
+					<text v-if="lang =='zh_CN'" class="label">汇总 · 全部 第{{discussNum}}集 · 看全集</text>
+					<text v-if="lang =='vi_VN'" class="label">Tổng hợp · Toàn bộ · Tập {{discussNum}} · Xem trọn bộ</text>
+					<text v-if="lang =='zh_EN'" class="label">Summary · Full series · Episode {{discussNum}} · Watch complete</text>
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
@@ -193,6 +195,12 @@
 				type: Boolean,
 				default: false
 			},
+			lang:{
+				type:{
+					type: String,
+					default: false,
+				}
+			}
 		},
 		onBackPress({
 			from
@@ -217,7 +225,7 @@
 						watchFull: '看全集',
 						episode: '第集',
 						all: '全部',
-						collect:'汇总',
+						collect: '汇总',
 					},
 					vi_VN: {
 						unfold: 'Mở rộng',
@@ -226,19 +234,18 @@
 						watchFull: 'Xem trọn bộ',
 						episode: 'Tập',
 						all: 'Tất cả',
-						collect:'Tổng hợp',
+						collect: 'Tổng hợp',
 					},
-					zh_EN: { 
+					zh_EN: {
 						unfold: 'Expand',
 						pack: 'Collapse',
 						share: 'Share',
 						watchFull: 'Watch Full',
 						episode: 'Episode',
 						all: 'All',
-						collect:'Summary',
+						collect: 'Summary',
 					},
 				},
-				lang:uni.getStorageSync('lang'),
 				followShow: null,
 				fabuTimeOut: null,
 				likeNum: 0,
@@ -537,7 +544,7 @@
 				})
 				// #endif
 			}
-		}
+		},
 	}
 </script>
 
@@ -840,6 +847,7 @@
 
 	.video-info-left {
 		flex-direction: row;
+		flex: 1;
 		/* 最关键：横向排列 */
 		align-items: center;
 	}

@@ -459,7 +459,7 @@
 	.page_content {
 		position: relative;
 		overflow-y: auto;
-		background-image: url(/static/images/navbar-bg.png);
+		background-image: url('/static/images/navbar-bg.png');
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: 100% 100%;

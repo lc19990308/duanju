@@ -82,6 +82,12 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		lang:{
+			type:{
+				type: String,
+				default: false,
+			}
+		}
 	},
 	data() {
 		return {
@@ -209,9 +215,9 @@ export default {
 					balance: '钻石',
 					fullScreen: '全屏显示',
 					unit: '¥',
-					vipFree: '设专属会员免费看',
+					vipFree: '订阅套餐免费看',
 					nextFree: '免费观看下一部分',
-					recharge: '充值',
+					recharge: '订阅',
 					goldUnlock: '金币解锁',
 					episode: '第',
 					diamondUnlock: '钻石解锁',
@@ -227,9 +233,9 @@ export default {
 					balance: 'kim cương',
 					fullScreen: 'Hiển thị toàn màn hình',
 					unit: '₫',
-					vipFree: 'Đặc quyền đặt miễn phí',
+					vipFree: 'Đặt gói đăng ký miễn phí',
 					nextFree: 'Xem tiếp free',
-					recharge: 'Nạptiền',
+					recharge: 'đăng ký',
 					goldUnlock: 'Mở khóa bằng vàng',
 					episode: 'Tập',
 					diamondUnlock: 'Mở khóa bằng kim cương',
@@ -245,9 +251,9 @@ export default {
 					balance: 'diamond',
 					fullScreen: 'Full Screen',
 					unit: '$',
-					vipFree: 'Members watch free',
+					vipFree: 'Set subscription plan to free',
 					nextFree: 'Watch free next',
-					recharge: 'Recharge',
+					recharge: 'subscribe',
 					goldUnlock: 'Unlock with Gold',
 					episode: 'Episode',
 					diamondUnlock: 'Unlock with Diamond',
@@ -258,7 +264,6 @@ export default {
 					choosePayMethod: 'Please select payment method'
 				},
 			},
-			lang: uni.getStorageSync('lang'),
 			unlock_show: false,
 			unlockingData: {
 				dramaName: '',

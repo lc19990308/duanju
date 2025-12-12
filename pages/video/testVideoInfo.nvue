@@ -1,7 +1,7 @@
 <template>
 	<view class="pageBox">
 		<!-- #ifdef APP-NVUE -->
-		<tw-videon ref="videoGroup" @lodData="loadingData" @refreshData="refreshData" :autoplay="autoplay"
+		<tw-videon ref="videoGroup" :lang='lang' @lodData="loadingData" @refreshData="refreshData" :autoplay="autoplay"
 			:nextPlay="nextPlay" :likeData='likeData' :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick"
 			@longpress="longpress" :showSelectShow='true' @swiperChange="swiperChange" @unlock='unlock'
 			@removeAllData="removeAllData"></tw-videon>
@@ -98,7 +98,7 @@
 						toLogin: 'Please go to log in.',
 					},
 				},
-				lang:uni.getStorageSync('lang'),
+				lang:'',
 			}
 		},
 		created() {
@@ -108,6 +108,7 @@
 			this.initVod()
 		},
 		onShow() {
+			this.lang = uni.getStorageSync('lang');
 			if (uni.getStorageSync('id') == '') {
 				uni.showToast({
 					title: this.language[this.lang].toLogin,
@@ -152,7 +153,6 @@
 			...mapActions('video', ['getVideoInfo']),
 			startData() {
 				const that = this;
-				console.log('打印查询参数',this.query)
 				return new Promise((resolve, reject) => {
 					uni.request({
 						url: `${api.MPWEIXIN}/api/appApi/filmDramaSeriesList`,

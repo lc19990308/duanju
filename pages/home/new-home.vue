@@ -7,7 +7,7 @@
 					<image class="icon" src="/static/images/Frame.png" mode=""></image>
 					<image class="logo-text" src="/static/images/logo-text.png" mode=""></image>
 				</view>
-				
+
 				<navigator url="/pages/home/watch" open-type='switchTab' hover-class="none">
 					<image class="right-icon" src="/static/images/gift1.png" mode=""></image>
 				</navigator>
@@ -52,7 +52,7 @@
 				query: {
 					pageNo: 1,
 					pageSize: 12,
-					sysOrgCode: apiMoen.sysOrgCode, 
+					sysOrgCode: apiMoen.sysOrgCode,
 					searchValue: '',
 					dramaClassify: '', //分类id
 					tenantld: uni.getStorageSync('tenantId') || '',
@@ -120,7 +120,7 @@
 					text: this.$t('tabBar.profile')
 				})
 			},
-			resetQuery(){
+			resetQuery() {
 				this.query.dramaClassify = '';
 				this.query.pageNo = 1;
 			},
@@ -131,7 +131,7 @@
 			this.getCateList();
 			this.getVideoList();
 		},
-		onPullDownRefresh(){
+		onPullDownRefresh() {
 			this.resetQuery();
 			this.getBanner();
 			this.getCateList();
@@ -287,5 +287,9 @@
 	.scroll-view_H {
 		white-space: nowrap;
 		width: 100%;
+	}
+	.scroll-view_Y{
+		width: 100%;
+		height: 1200rpx;
 	}
 </style>

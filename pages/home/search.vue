@@ -96,7 +96,7 @@
 				historyList: [],
 				memberId: uni.getStorageSync('memberId') || '',
 				sysOrgCode: apis.sysOrgCode,
-				token: uni.getStorageSync('token'),
+
 			}
 		},
 		computed: {
@@ -170,7 +170,7 @@
 				})
 			},
 			init() {
-				if (this.token) {
+				if (uni.getStorageSync('id')) {
 					this.getHistoryList();
 				}
 				this.getHotKeyword();

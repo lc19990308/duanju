@@ -60,7 +60,7 @@
 							@longpress="longpress(item)" class="vodPlayView" :style="videoStyle">
 							<!-- 底部标题、右侧操作栏 -->
 							<view :style="{width:videoStyle.width,height:videoStyle.height,opacity:appoint?0:1}">
-								<videoMenu :ref="'menuRef'+index" :vodHeight="vodHeight" :vodIndex="vodIndex"
+								<videoMenu :lang='lang' :ref="'menuRef'+index" :vodHeight="vodHeight" :vodIndex="vodIndex"
 									:item="item" :discussNum="item.totalEpisodes" :index="index"
 									:sliderDrag="sliderDrag" :moveOpacity="moveOpacity" :showSelectShow='showSelectShow'
 									:style="{width:videoStyle.width,height:videoStyle.height}"
@@ -161,7 +161,7 @@
 								<text class="title-value">{{item.actualReceipt}}</text>
 								<text class="title-unit">{{language[lang].balance}}</text>
 							</view>
-							<text class="plus">+{{item.rechargeCoins}} {{language[lang].balance}}</text>
+							<text class="plus">+{{item.giftCoins}} {{language[lang].balance}}</text>
 							<text class="price">{{language[lang].unit}} {{item.packageMoney}}</text>
 						</view>
 					</view>
