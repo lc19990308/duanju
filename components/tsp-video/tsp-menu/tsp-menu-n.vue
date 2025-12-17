@@ -392,7 +392,6 @@
 				let that = this;
 				switch (index) {
 					case 1:
-					
 						setTimeout(() => {
 							uni.navigateTo({
 								url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
