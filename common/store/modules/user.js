@@ -37,6 +37,7 @@ export default {
 			getters,
 			state
 		}, token = "") {
+			console.log('token11')
 			const result = await new Promise((resolve, reject) => {
 				token && commit("setToken", token)
 				request("user.getUserInfo")

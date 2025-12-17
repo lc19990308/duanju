@@ -1,4 +1,6 @@
-
+import request from '@/common/request/index.js'
+import apis from '@/utils/config.js'
+import store from '@/common/store/index.js'
 /**
  * 数据重新分组 (固定每个分组数组的长度)
  * @param { Array }  data 原数组
@@ -6,11 +8,12 @@
  * @return { Array }  [[chunk], [chunk], ...]
  */
 const regroupLength = (data, chunk) => {
-	if(!data || !data.length || !chunk) {
+	if (!data || !data.length || !chunk) {
 		console.log("error => 缺少参数!");
 		return
 	}
-	const len = data.length, result = []
+	const len = data.length,
+		result = []
 	for (let i = 0; i < len; i += chunk) {
 		result.push(data.slice(i, i + chunk))
 	}
@@ -47,10 +50,10 @@ const timestampToTime = (timestamp) => {
 		D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ',
 		h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':',
 		m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
-		
-		// m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':',
-		// s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
-	
+
+	// m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':',
+	// s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
+
 	return Y + M + D + h + m
 }
 
@@ -94,11 +97,11 @@ const platforms = () => {
 		return 'H5'
 	}
 	// #endif
-	
+
 	// #ifdef MP-WEIXIN
 	return 'wxMiniProgram'
 	// #endif
-	
+
 	// #ifdef APP-PLUS
 	return 'App'
 	// #endif
@@ -134,12 +137,12 @@ const checkAgainPassword = (rule, value, callback, params) => {
  */
 const navBack = () => {
 	const canNavBack = getCurrentPages()
-	if(canNavBack && canNavBack.length > 1) {
+	if (canNavBack && canNavBack.length > 1) {
 		uni.navigateBack()
 	} else {
 		try {
 			history.back()
-		} catch(e) {
+		} catch (e) {
 			uni.switchTab({
 				url: '/pages/home/index'
 			})
@@ -152,12 +155,12 @@ const navBack = () => {
  */
 const formatTime = seconds => {
 	const hours = Math.floor(seconds / 3600),
-		  minutes = Math.floor((seconds % 3600) / 60),
-		  remainingSeconds = seconds % 60,
-		  h = (hours < 10 ? "0" + hours : hours) + ":",
-		  m = (minutes < 10 ? "0" + minutes : minutes) + ":",
-		  s = (remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds),
-		  time = hours > 0 ? h + m + s : m + s
+		minutes = Math.floor((seconds % 3600) / 60),
+		remainingSeconds = seconds % 60,
+		h = (hours < 10 ? "0" + hours : hours) + ":",
+		m = (minutes < 10 ? "0" + minutes : minutes) + ":",
+		s = (remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds),
+		time = hours > 0 ? h + m + s : m + s
 
 	return time;
 }
@@ -173,7 +176,7 @@ const countCharacters = str => {
 		if (pattern.test(str.charAt(i))) {
 			count++;
 		} else {
-			count+=2
+			count += 2
 		}
 	}
 	return count;
@@ -181,9 +184,9 @@ const countCharacters = str => {
 
 /**
  * 获取url参数
-*/
+ */
 const getUrlParams = () => {
-	const url = window.location.href;  
+	const url = window.location.href;
 	const querys = url.substring(url.indexOf('?') + 1).split('&')
 	const result = {}
 	for (let i = 0; i < querys.length; i++) {
@@ -196,8 +199,80 @@ const getUrlParams = () => {
 	}
 	return result
 }
+const tokenKey = 'token';
+const getToken = () => {
+	return uni.getStorageSync(tokenKey);
+}
+const setToken = (token) => {
+	uni.setStorageSync(tokenKey, token)
+}
+const removeToken = () => {
+	uni.removeStorageSync('tokenKey')
+}
+// 确保游客已登录（无 id 才会触发）
+export const ensureGuestLogin = async () => {
+	const userId = uni.getStorageSync('id')
+	if (userId) return
+	try {
+		// 1. 游客登录
+		const loginRes = await request('login.guestLogin', {})
+		if (loginRes.code !== 200) {
+			uni.$u.toast('游客登录失败')
+			throw new Error('游客登录失败')
+		}
+		store.dispatch('user/getUserInfo', loginRes.result.token)
+		// 2. 绑定账号
+		const accountData = {
+			accountNumber: loginRes.result.accountNumber,
+			sysOrgCode: apis.sysOrgCode,
+		}
 
+		const accountRes = await request(
+			'common.memberAccountNumberAdd',
+			accountData
+		)
 
+		if (accountRes.code !== 200) {
+			uni.$u.toast('游客账号创建失败')
+			throw new Error('游客账号创建失败')
+		}
+
+		// 3. 持久化用户信息
+		const {
+			id,
+			tenantId,
+			sysOrgCode,
+			memberId,
+		} = accountRes.result
+
+		const storageMap = {
+			id,
+			tenantId,
+			sysOrgCode,
+			memberId,
+		}
+
+		Object.keys(storageMap).forEach(key => {
+			uni.setStorageSync(key, storageMap[key])
+		})
+		uni.setStorageSync('role', 'visitor');
+
+	} catch (err) {
+		uni.$u.toast('[游客登录异常]')
+		throw new Error('[游客登录异常]')
+		// 这里可以统一 toast / 上报 / fallback
+	}
+}
+const judgment = (callback) => {
+	const role = uni.getStorageSync('role');
+	if (role === 'user') {
+		callback && callback();
+	} else {
+		uni.navigateTo({
+			url: '/pages/login/login'
+		})
+	}
+}
 export default {
 	regroupLength,
 	timestampToTime,
@@ -209,5 +284,10 @@ export default {
 	navBack,
 	formatTime,
 	countCharacters,
-	getUrlParams
+	getUrlParams,
+	setToken,
+	getToken,
+	removeToken,
+	ensureGuestLogin,
+	judgment
 }

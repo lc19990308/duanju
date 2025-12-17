@@ -119,6 +119,12 @@ const api = {
 			method: 'POST',
 			desc: '发送邮箱验证码'
 		},
+		guestLogin: {
+			url: '/api/appApi/guestLogin',
+			method: 'POST',
+			desc: '游客模式'
+		},
+	
 		// codeLogin: {
 		// 	url: '/addons/drama/user/smsLogin',
 		// 	method: 'POST',

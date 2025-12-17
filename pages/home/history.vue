@@ -141,13 +141,13 @@
 			// 追剧跳转
 			openVideoDetail(item) {
 				uni.navigateTo({
-					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId || item.id}`
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId || item.id}&dramaSeries=${item.dramaSeries-1}`
 				})
 			},
 			// 历史跳转（同上）
 			HistoriCalcatchUp(item) {
 				uni.navigateTo({
-					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId || item.id}`
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId || item.id}&dramaSeries=${item.dramaSeries}`
 				})
 			},
 

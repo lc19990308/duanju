@@ -3,7 +3,7 @@
 		<view class="contentBox" :style="{width:videoStyle.width,height:videoStyle.height}" v-if="contentShow"
 			@touchmove="vodViewMove($event)" @touchend="vodViewEnd($event)">
 			<list @loadmore="lodData" @scroll="scrolls" :show-scrollbar="false" ref="listBox" :pagingEnabled="true">
-				<unirefresh class="refresh" ref="refresh" @refresh="refreshData" :bgStyle="'#000'" :fontColor="'#fff'"
+				<unirefresh class="refresh" :lang='lang' ref="refresh" @refresh="refreshData" :bgStyle="'#000'" :fontColor="'#fff'"
 					v-if="loadOpen"></unirefresh>
 				<cell v-for="(item,index) in vodList" :key="'myVodEl'+index+swId">
 					<view :style="{width:videoStyle.width,height:videoStyle.height}" :ref="'myVodEl'+index+swId">
@@ -120,11 +120,11 @@
 				</view>
 			</view>
 			<!-- 点赞桃心 -->
-			<view class="doubleImage" v-for="(item,index) in likeList" :key="index" :ref="'peachRef'+item.id"
+<!-- 			<view class="doubleImage" v-for="(item,index) in likeList" :key="index" :ref="'peachRef'+item.id"
 				:style="{width: item.width+10+'px',height:item.height+10+'px',top:item.top,left:item.left}">
 				<image src="/static/icon/selectTaoxin.png" v-if="item.isShow"
 					:style="{width: item.width+'px',height:item.height+'px',transform: `rotate(${item.rotate})`}" />
-			</view>
+			</view> -->
 		</view>
 		<!--付费弹窗-->
 		<u-popup :show="pay_show" :closeOnClickOverlay='true' :closeable='true' bgColor='#000'
@@ -222,7 +222,7 @@
 
 				<view class="unlock-popup__footer">
 					<text class="unlock-popup__submit"
-						@tap="buyVideoItem(unlockingData,payTypeIndex)">{{language[lang].unlockSeries}}</text>
+						@tap="buyVideoItem(unlockingData,unlockIndex)">{{language[lang].unlockSeries}}</text>
 				</view>
 			</view>
 		</u-popup>
@@ -236,6 +236,7 @@
 	.page {
 		background-color: #000000;
 		flex: 1;
+		height: 100vh;
 		overflow: hidden;
 	}
 

@@ -56,6 +56,12 @@ const vi = {
 		like: 'Thích',
 		no: 'Tập',
 	},
+	sys_share: {
+		systemShare: "Chia sẻ hệ thống",
+		cancelShare: "Hủy chia sẻ",
+		videoShare: "Chia sẻ video",
+		inviteFriends:'Mời bạn bè'
+	},
 	pop_up_window: {
 		unlocking: 'Mở khóa cần vàng',
 		balance: 'Số dư',

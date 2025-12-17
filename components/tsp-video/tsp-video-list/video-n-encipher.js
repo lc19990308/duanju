@@ -82,10 +82,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		lang:{
-			type:{
+		lang: {
+			type: {
 				type: String,
-				default: false,
+				default: '',
 			}
 		}
 	},
@@ -567,16 +567,24 @@ export default {
 			item
 		}) {
 			this.unlockIndex = index;
+			//切换剧集
 			if (item.unlockStatus != 3) {
+
 				await this.getVideoInfo({
 					seriesId: item.id,
 					memberId: this.memberId,
 				})
-				this.scrollToVod(index);
+				//来找到要切换剧集的在视频当中的下标
+				const videoPlayIndex = this.findVideoIndex(item.id);
+				this.scrollToVod(videoPlayIndex);
 			} else {
+				//解锁业务
 				this.unlockingData = item;
 				this.unlock_show = true;
 			}
+		},
+		findVideoIndex(id) {
+			return this.vodList.findIndex(item => item.id === id);
 		},
 		//购买剧集	
 		async buyVideoItem(item, index) {
@@ -603,11 +611,13 @@ export default {
 
 			})
 			if (res.data.code == 200) {
-				uni.$u.toast(`${res.data.message},${this.language[this.lang].unlockSuccess}！`)
+				uni.$u.toast(`${this.language[this.lang].unlockSuccess}`)
 				this.unlock_show = false;
-				this.$emit('unlock', index)
+				this.$emit('unlock', {
+					item,
+					index
+				})
 			} else if (res.data.code == 600) {
-
 				this.openPayPopup();
 			}
 		},
@@ -909,7 +919,6 @@ export default {
 			}
 			let newVideoInfo = this[_0x3513e5(0x150)]['myVideo' + newIndex + this['swId']][0x0];
 			newVideoInfo && (this[_0x3513e5(0x14e)] = ![], this[_0x3513e5(0x142)](newIndex));
-			console.log('xxx-zzz-aaa')
 			this.logRecord();
 		},
 		/* 视频加载成功 */
@@ -1818,7 +1827,7 @@ export default {
 				sysOrgCode: api.sysOrgCode,
 				tenantId: api.tenantId,
 				id: uni.getStorageSync('id')
-			},'video xx')
+			}, 'video xx')
 			const [rechargeFaill, rechargeRes] = await uni.request({
 				url: api.MPWEIXIN + '/api/wxApi/rechargePackageList',
 				method: 'GET',
@@ -1855,5 +1864,6 @@ export default {
 			// this.pay_show = false;
 			this.viperIndex = index;
 		}
-	}
+	},
+
 }

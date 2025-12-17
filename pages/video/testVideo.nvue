@@ -5,22 +5,15 @@
 			:nextPlay="nextPlay" :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick" @longpress="longpress"
 			@swiperChange="swiperChange" :lang='lang' :totalvod="totalvod" @removeAllData="removeAllData"></tw-videon>
 		<!-- #endif -->
-
-		<!-- #ifndef APP-NVUE -->
-		<tw-videov ref="videoGroup" @lodData="loadingData" @refreshData="refreshData" :autoplay="autoplay"
-			:nextPlay="nextPlay" :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick" @longpress="longpress"
-			@swiperChange="swiperChange" :lang='lang' :totalvod="totalvod" @removeAllData="removeAllData"></tw-videov>
-		<!-- #endif -->
-		<!-- 
-		<view class="automatic">
-			<text class="automatic-item" @click="openAutomatic">{{nextPlay?'关闭自动播放':'开启自动播放'}}</text>
-			<text class="automatic-item" @click="addVodData">点击在当前视频下标{{currIndex}}后插入视频</text>
-			<text class="automatic-item" @click="removeVodData">点击删除视频</text>
-			<text class="automatic-item" @click="specifyPlay(currIndex + 1)">点击指定第{{currIndex + 1}}个视频播放</text>
-		</view> -->
 	</view>
 </template>
 <script>
+	import {
+		mapState,
+		mapGetters,
+		mapMutations,
+		mapActions
+	} from "vuex"
 	import api from '@/utils/config.js'
 	/* 
 	 * nvue 可引用两个版本做兼容 (app nvue引用示例)
@@ -28,8 +21,6 @@
 	// #ifdef APP-NVUE
 	import twVideon from '@/components/tsp-video/tsp-video-list/video-n.nvue'
 	// #endif
-
-
 	// #ifndef APP-NVUE
 	import twVideov from '@/components/tsp-video/tsp-video-list/video-v.vue'
 	// #endif
@@ -76,23 +67,21 @@
 				totalvod: 0, //视频总数量，有值才能滑动加载到最后一个视频并禁止循环滑动（仅H5、小程序支持）
 				query: {
 					pageNo: 1,
-					pageSize: 1000,
+					pageSize: 100,
 					sysOrgCode: api.sysOrgCode,
 					memberId: uni.getStorageSync('id') || '',
 				},
-				lang:'',
+				lang: '',
+				videoList: [],
 			}
-		},
-		created() {
-			
-			// #ifdef H5
-			this.autoplay = false
-			// #endif
-			this.initVod()
 		},
 		onShow() {
 			/* 播放视频 */
 			this.lang = uni.getStorageSync('lang');
+			// #ifdef H5
+			this.autoplay = false
+			// #endif
+			this.initVod()
 			if (this.$refs.videoGroup) {
 				this.$refs.videoGroup.showPlay()
 				this.$refs.videoGroup.muteVideo(false) //取消视频播放设置为静音，解决切换到其他页面后因为网络问题还在有声音播放
@@ -101,8 +90,9 @@
 		onHide() {
 			/* 暂停视频 */
 			if (this.$refs.videoGroup) {
+				this.$refs.videoGroup.muteVideo(true)
 				this.$refs.videoGroup.hidePause()
-				this.$refs.videoGroup.muteVideo(true) //视频播放设置为静音，解决切换到其他页面后因为网络问题还在有声音播放
+				// this.$refs.videoGroup.muteVideo(true) //视频播放设置为静音，解决切换到其他页面后因为网络问题还在有声音播放
 			}
 		},
 		// watch: {
@@ -119,6 +109,7 @@
 		// 	}
 		// },
 		methods: {
+			...mapActions('video', ['getVideoInfo']),
 			startData() {
 				const that = this;
 				return new Promise((resolve, reject) => {
@@ -129,6 +120,7 @@
 						success({
 							data
 						}) {
+							that.totalvod = data.result.total;
 							data.result.records.forEach((item, index) => {
 								item.tsId = 'tsId' + (this.tNum * 15 +
 									index) //视频id，用于删除视频, 需要改成自己的视频id
@@ -154,11 +146,14 @@
 								item.rotateImgShow = true //是否显示旋转头像
 								item.fabulousShow = false //是否点赞
 								item.followReally = false //是否已经关注
-								item.seriesId;
+								item.id = item.seriesId;
 								item.dramaId;
+								item.filmDramaId = item.dramaId;
+								item.dramaSeries = 1;
+
 							})
 							this.tNum += 1
-							this.totalvod = data.result.total;
+							that.videoList = that.videoList.concat(data.result.records);
 							resolve(data.result.records);
 						}
 
@@ -171,6 +166,7 @@
 					if (res.length > 0) {
 						/* 调用视频的初始方法 */
 						this.$refs.videoGroup.initVod(res, 0); //0是播放的下标（默认播放下标是0）下标是从0开始
+						this.getLikeData()
 					}
 				})
 			},
@@ -178,7 +174,7 @@
 			refreshData() {
 				/* 请求获取数据 */
 				this.query.pageNo = 1;
-				this.videoData = [];
+				this.videoList = [];
 				this.tNum = 0;
 				this.autoplay = false
 				this.startData().then((res) => {
@@ -215,8 +211,10 @@
 			// },
 			/* swiper切换当前视频回调 */
 			swiperChange(event) {
-				// console.log('swiper切换当前视频回调',event)
-				this.currIndex = event.videoIndex
+				this.currIndex = event.videoIndex;
+				if (this.currIndex != this.videoList.length) {
+					this.getLikeData();
+				}
 			},
 			/* 添加、指定位置插入视频*/
 			// addVodData() {
@@ -265,6 +263,17 @@
 			/* tabVideo进度条滑动结束事件 */
 			appVodTouchendSlider(event) {
 				this.$refs.videoGroup.touchendSlider(event);
+			},
+			//获取点赞信息
+			async getLikeData() {
+				if (this.videoList.length < 0) {
+					return
+				}
+				let data = {
+					memberId: this.query.memberId,
+					seriesId: this.videoList[this.currIndex].id,
+				}
+				await this.getVideoInfo(data)
 			},
 		}
 	}

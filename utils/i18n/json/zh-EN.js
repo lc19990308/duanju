@@ -60,7 +60,12 @@ const en = {
 		like: 'Like',
 		no: 'the',
 	},
-
+	sys_share: {
+		systemShare: "System share",
+		cancelShare: "Cancel share",
+		videoShare: "Share video",
+		inviteFriends:'Invite friends'
+	},
 	pop_up_window: {
 		unlocking: 'Unlock for 80 gold',
 		balance: 'Balance',

@@ -9,6 +9,7 @@ export default {
 		collectStatus: '',
 		collectTotal: '',
 		pickerList:[],
+		menuShow:true,
 	},
 	mutations: {
 		setLikeStatus(state, val) {
@@ -23,6 +24,9 @@ export default {
 		setCollectTotal(state, val) {
 			state.collectTotal = val
 		},
+		setMenuShow(state,val){
+			state.menuShow = val;
+		}
 	},
 	actions: {
 		//点赞追剧
@@ -54,6 +58,7 @@ export default {
 			getters,
 			state
 		}, params) {
+			console.log('setLike run')
 			const result = await new Promise((resolve, reject) => {
 				request("video.likes", params)
 					.then(res => {

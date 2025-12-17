@@ -1,6 +1,5 @@
 <script>
 	import apiMoen from './utils/config.js';
-
 	export default {
 		usingComponents: {
 			"open-area-left": "/components/open-area-left/open-area-left",
@@ -25,6 +24,10 @@
 				}
 			}
 		},
+		onShow() {
+			this.$utils.ensureGuestLogin();
+			// isVisitor();
+		}
 	}
 </script>
 

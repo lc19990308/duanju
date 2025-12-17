@@ -18,7 +18,7 @@
 					</view>
 				</view>
 			</scroll-view>
-			<u-button class="reward-btn" @tap="rewardSign">{{$t(`reward.reg_now`)}}</u-button>
+			<u-button class="reward-btn" @tap="$utils.judgment(rewardSign)">{{$t(`reward.reg_now`)}}</u-button>
 		</view>
 		<view class="invite">
 			<view class="invite_t">{{$t(`reward.invite_friend`)}}</view>
@@ -32,7 +32,7 @@
 						<span>+100</span><i>{{$t(`reward.gold`)}}</i>
 					</view>
 				</view>
-				<u-button class="invite-btn" @click="goBtn">{{$t(`reward.btn`)}}</u-button>
+				<u-button class="invite-btn" @click="$utils.judgment(goBtn)">{{$t(`reward.btn`)}}</u-button>
 			</view>
 		</view>
 		<view class="rewardCover" v-if="rewardCover" @tap="closeBtn">
@@ -250,15 +250,15 @@
 					content: { //公共的分享参数配置  类型（type）、链接（herf）、标题（title）、summary（描述）、imageUrl（缩略图）
 						type: 0,
 						href: this.qrcodeText,
-						title: '邀请好友',
-						summary: '好友分享',
+						title: this.$t('sys_share.videoShare'),
+						summary: this.$t('sys_share.inviteFriends'),
 					},
 					menus: [{
 						"img": "/static/app-plus/sharemenu/more.png",
-						"text": "系统分享",
+						"text": this.$t('sys_share.systemShare'),
 						"share": "shareSystem"
 					}],
-					cancelText: "取消分享",
+					cancelText: this.$t('sys_share.cancelShare'),
 				}, e => { //callback
 					console.log(uniShare.isShow);
 					console.log(e);
@@ -611,7 +611,8 @@
 			}
 		}
 	}
-	.reward_tips{
+
+	.reward_tips {
 		margin-top: 70rpx;
 		padding: 15rpx 10rpx 0 10rpx;
 		width: 450rpx;

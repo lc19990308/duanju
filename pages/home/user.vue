@@ -6,14 +6,14 @@
 					<image class="image" v-if="avatar" :src="avatar" mode="aspectFill"></image>
 					<image class="image" v-else src="/static/images/avatar.png" mode="aspectFill"></image>
 				</view>
-				<navigator class="info" url="/pages/user/account/changeUserName" hover-class="none">
+				<view class="info" @tap="jumpLink('/pages/user/account/changeUserName')">
 					<view class="msg single-line">
 						<text class="membername">{{nickname}}</text>
 					</view>
 					<view class="msg">
 						<text class="text" v-if="memberId">ID：{{ memberId || "" }}</text>
 					</view>
-				</navigator>
+				</view>
 				<u-button class="user-btn" @tap="loginOut" v-if='token != ""'>{{$t(`my.get_out`)}}</u-button>
 				<u-button class="user-btn" @tap="tologin" v-else>{{$t(`my.login_text`)}}</u-button>
 			</view>
@@ -32,30 +32,29 @@
 		<view class="main_content">
 			<!-- VIP充值 -->
 			<view class="integral_box">
-				<view class="integral_box_t" @click="recharbtn">
+				<view class="integral_box_t" @tap="$utils.judgment(recharbtn)">
 					<view>{{$t(`my.wallet`)}}</view>
 					<span>></span>
 				</view>
 				<view class="integral_box_info">
-					<navigator class="right" url="/pages/user/integral/recharge-info" hover-class="none">
+					<view class="right" @tap="jumpLink('/pages/user/integral/recharge-info')">
 						<text class="text">{{$t(`my.gold`)}}</text>
 						<text class="text usable">{{
 						  balanceData.currency || 0
 						}}</text>
-					</navigator>
-					<navigator class="right" url="/pages/user/integral/recharge-info" hover-class="none">
+					</view>
+					<view class="right" @tap="jumpLink('/pages/user/integral/recharge-info')">
 						<text class="text">{{$t(`my.points`)}}</text>
 						<text class="text usables">{{
               balanceData.totalBalance || 0
             }}</text>
-					</navigator>
-
-					<view class="left" @click="recharbtn">{{$t(`my.top_up`)}}</view>
+					</view>
+					<view class="left" @tap="$utils.judgment(recharbtn)">{{$t(`my.top_up`)}}</view>
 				</view>
 			</view>
 			<view class="vip_card">
 				<view class="vip_box">
-					<view class="left" @click="openVip">
+					<view class="left" @tap="$utils.judgment(openVip)">
 						<view class="line1">
 							<view class="vipBox">
 								<image src="/static/images/Frame-39.png" mode="aspectFill"></image>
@@ -72,13 +71,13 @@
 				</view>
 			</view>
 			<view class="moinublock">
-				<view class="oinuntlist" @click="menuItemClicks">
+				<view class="oinuntlist" @tap="menuItemClicks">
 					<view> {{$t(`my.history`)}} </view>
 				</view>
 				<view class="list" v-if="mounList.length">
 					<u-scroll-list :indicator="false" @right="handleToRight" :indicatorActiveColor="'#f2f5f7'">
 						<view v-for="(item, index) in mounList" :key="index" style="position: relative"
-							@click="abunbtn(item)">
+							@tap="abunbtn(item)">
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
 								<u--text :lines="1" size="24rpx" color="#fff" align="left"
@@ -90,7 +89,7 @@
 					</u-scroll-list>
 				</view>
 				<view class="menu_box">
-					<view class="item" v-for="(item, index) in menuList" :key="item.id" @click="menuItemClick(item)">
+					<view class="item" v-for="(item, index) in menuList" :key="item.id" @tap="menuItemClick(item)">
 						<view class="left">
 							<view class="icon">
 								<image class="image" :src="item.img" :style="{ width: item.width }" mode="widthFix">
@@ -104,9 +103,7 @@
 					</view>
 				</view>
 			</view>
-
-
-			<view class="copyright" v-if="copyrightData.length" @click="debugClick">
+			<view class="copyright" v-if="copyrightData.length" @tap="debugClick">
 				<view class="item" v-for="(item, index) in copyrightData" :key="index">
 					<image class="image" v-if="item.image" :src="item.image" mode="widthFix"></image>
 					<!-- #ifdef MP-WEIXIN -->
@@ -125,6 +122,9 @@
 </template>
 
 <script>
+	import {
+		removeToken
+	} from '@/common/utils/index.js'
 	import apiMoen from "../../utils/config.js";
 	import {
 		mapState,
@@ -157,6 +157,7 @@
 						text: "my.invite", //邀请好友
 						rid: "",
 						path: "/pages/home/watchs",
+						role:'user',
 					},
 					{
 						id: 2,
@@ -181,6 +182,7 @@
 						text: "my.team", //我的团队
 						rid: "",
 						path: "/pages/user/share/team",
+						role:'user',
 					},
 					{
 						id: 5,
@@ -189,6 +191,7 @@
 						text: "my.contact_us", //客服
 						rid: "",
 						path: "/pages/user/seting/opinion",
+						role:'user',
 					},
 					{
 						id: 6,
@@ -205,6 +208,7 @@
 						text: "my.creation", //联系我们
 						rid: "",
 						path: "/pages/user/framer/index",
+						role:'user',
 					},
 				],
 				copyrightData: this.$store.state.app.copyright || [], // 版权说明
@@ -265,7 +269,6 @@
 		},
 		onShow() {
 			this.memberId = uni.getStorageSync("id");
-			console.log(this.memberId,'memberId')
 			this.setTab();
 			this.getIntegral();
 			this.getUserInfo();
@@ -275,6 +278,18 @@
 		},
 		methods: {
 			...mapActions("user", ["getUserInfo", 'logout']),
+			jumpLink(path) {
+				const role = uni.getStorageSync('role');
+				if (role === 'user') {
+					uni.navigateTo({
+						url: path,
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+				}
+			},
 			//获取货币信息
 			getIntegral() {
 				this.$request('withdraw.getBalance', {
@@ -307,23 +322,26 @@
 				})
 			},
 			async loginOut() {
+				const that = this;
 				const [res, model] = await uni.showModal({
-					title: this.$t('model_box.tip'),
-					content: this.$t('model_box.logout_confirm'),
-					confirmText: this.$t('model_box.confirm'),
-					cancelText: this.$t('model_box.cancel'),
+					title: that.$t('model_box.tip'),
+					content: that.$t('model_box.logout_confirm'),
+					confirmText: that.$t('model_box.confirm'),
+					cancelText: that.$t('model_box.cancel'),
 				})
 				if (model.confirm) {
-					this.logout();
+					that.logout();
+					uni.removeStorageSync('accountNumber')
+					uni.removeStorageSync('vuex')
+					uni.removeStorageSync('id')
+					uni.removeStorageSync('tenantId')
+					uni.removeStorageSync('sysOrgCode')
+					uni.removeStorageSync('memberId')
+					uni.removeStorageSync('bindMemberId')
+					that.$utils.removeToken();
+					this.$utils.ensureGuestLogin();
 					setTimeout(() => {
-						uni.removeStorageSync('accountNumber')
-						uni.removeStorageSync('vuex')
-						uni.removeStorageSync('id')
-						uni.removeStorageSync('tenantId')
-						uni.removeStorageSync('sysOrgCode')
-						uni.removeStorageSync('memberId')
-						uni.removeStorageSync('bindMemberId')
-						uni.redirectTo({
+						uni.navigateTo({
 							url: '/pages/login/login'
 						})
 					}, 500)
@@ -345,6 +363,10 @@
 				});
 			},
 			menuItemClick(val) {
+				//判断角色权限
+				if(val.role === 'user'){
+					return this.jumpLink(val.path);
+				}
 				uni.navigateTo({
 					url: val.path,
 				});

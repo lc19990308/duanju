@@ -3,67 +3,52 @@
 		<!-- 底部标题 -->
 		<view class="back" v-if="showSelectShow" @tap.stop="JumpBtn(7)">
 			<u-icon name="arrow-left" color="#fff" size="20"></u-icon>
-			<text class="back-text" v-if="lang =='zh_CN'">第{{vodIndex+1}}集</text>
-			<text class="back-text" v-if="lang =='vi_VN'">Tập{{vodIndex+1}}</text>
-			<text class="back-text" v-if="lang =='zh_EN'">Episode{{vodIndex+1}}集</text>
+			<text class="back-text" v-if="lang =='zh_CN'">第{{item.dramaSeries}}集</text>
+			<text class="back-text" v-if="lang =='vi_VN'">Tập {{item.dramaSeries}}</text>
+			<text class="back-text" v-if="lang =='zh_EN'">Episode {{item.dramaSeries}}</text>
 		</view>
-		<view @click.stop.prevent="moveHandle" class="footTitle"
+		<view @tap.stop.prevent="moveHandle" class="footTitle" v-if="menuShow"
 			:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
 			<view style="margin-left: 30rpx;">
-
-				<!-- 							<view class="footTitle-commodity">
-					<view class="footTitle-commodity-icon">
-						<image src="/static/icon/cart.png" class="footTitle-commodity-icon-img"></image>
-					</view>
-					<text class="footTitle-commodity-name text_one">商品商品商品商品商品商品商品商品商品商品商品商品商品</text>
-				</view> -->
 				<view><text class="foot-name">{{item.dramaName}}</text></view>
 				<view style="width: 500rpx;position: relative;font-size: 28rpx;" v-if="item.desc">
 					<text style="width: 450rpx;" class="foot-cont"
 						:class="[(item.desc.length > 33 && !expandDesc) ?'text_two':'']">{{item.desc}}</text>
-					<text class="foot-expand" v-if="item.desc.length > 33" @click="expandDesc = !expandDesc">
-						{{expandDesc? `...${language[lang].pack}`:`...${language[lang].unfold}`}}
-					</text>
 				</view>
-
 			</view>
 			<view class="video-info" v-if="!showSelectShow" @tap.stop="JumpBtn(1,item)">
 				<view class="video-info-left">
 					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
 					<text v-if="lang =='zh_CN'" class="label">汇总 · 全部 第{{discussNum}}集 · 看全集</text>
-					<text v-if="lang =='vi_VN'" class="label">Tổng hợp · Toàn bộ · Tập {{discussNum}} · Xem trọn bộ</text>
-					<text v-if="lang =='zh_EN'" class="label">Summary · Full series · Episode {{discussNum}} · Watch complete</text>
+					<text v-if="lang =='vi_VN'" class="label">Tổng hợp · Toàn bộ · Tập {{discussNum}} · Xem
+						trọnbộ</text>
+					<text v-if="lang =='zh_EN'" class="label">Summary · Full series · Episode {{discussNum}} ·
+						Watchcomplete</text>
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
 			<view class="video-info" v-else @tap.stop="JumpBtn(5,item)">
 				<view class="video-info-left">
 					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
-					<text class="label">{{language[lang].collect}} · {{language[lang].all}} {{discussNum}} {{language[lang].episode}} · {{language[lang].watchFull}}</text>
+					<text v-if="lang =='zh_CN'" class="label">汇总 · 全部 第{{discussNum}}集 · 看全集</text>
+					<text v-if="lang =='vi_VN'" class="label">Tổng hợp · Toàn bộ · Tập {{discussNum}} · Xem
+						trọnbộ</text>
+					<text v-if="lang =='zh_EN'" class="label">Summary · Full series · Episode {{discussNum}} ·
+						Watchcomplete</text>
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
 		</view>
 		<!-- 右侧操作栏 -->
-		<view class="menuBox" v-if="item.menuBox" :style="{height:vodHeight+'px'}" @click.stop.prevent="moveHandle">
+		<view class="menuBox" :style="{height:vodHeight+'px'}" @tap.stop.prevent="moveHandle">
 			<view class="vodMenu"
 				:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
-				<!-- 头像 -->
-				<!-- 			<view class="vodMenu-top">
-					<view class="menu-avatar" @click="JumpBtn(1)">
-						<image src="/static/icon/touxiang.jpg" mode="" class="avatar-image"></image>
-					</view>
-					<view class="follow" @click="followBtn(index)" v-if="!item.followReally" :class="{followHide:followShow==2}">
-						<image src="/static/icon/gou.png" mode="" class="follow-guanzhu guanzhu-gou" v-if="followShow == 1 || followShow == 2"></image>
-						<image src="/static/icon/guanzhu.png" mode="" class="follow-guanzhu" v-if="followShow==null || followShow==0"></image>
-					</view>
-				</view> -->
 				<!-- 点赞 -->
-				<view class="fabulous" @click="JumpBtn(2)" style="position: relative;padding-top: 5rpx;">
+				<view class="fabulous" @tap="JumpBtn(2)" style="position: relative;padding-top: 5rpx;">
 					<view class="likeBox" :ref="'pelRef'+index">
 						<view class="like-pellet" :class="'like-pellet'+j" v-for="(lt,j) in 8" :key="j"></view>
 					</view>
-					<view class="fabulous-image" @click="fabulousBtn" :ref="'likeRef'+index">
+					<view class="fabulous-image" @tap="fabulousBtn" :ref="'likeRef'+index">
 						<image src="/static/icon/selectTaoxin.png" mode="" class="fabulous-image" v-if="likeStatus">
 						</image>
 						<image src="/static/icon/taoxin.png" mode="" class="fabulous-image" v-else></image>
@@ -71,7 +56,7 @@
 					<text class="fabulous-num" v-if="likeTotal"> {{likeTotal}}</text>
 				</view>
 				<!-- 评论 -->
-				<view class="fabulous" style="margin-top: 30rpx;" @click="JumpBtn(3)">
+				<view class="fabulous" style="margin-top: 30rpx;" @tap="JumpBtn(3)">
 					<view class="fabulous-image" v-if="!collectStatus">
 						<image src="/static/images/Frame-15.png" mode="" class="fabulous-image"></image>
 					</view>
@@ -81,30 +66,20 @@
 					<text class="fabulous-num" v-if="collectTotal">{{collectTotal}}</text>
 				</view>
 				<!-- 转发 -->
-				<view class="fabulous" style="margin-top: 30rpx;" @click="JumpBtn(4)">
+				<view class="fabulous" style="margin-top: 30rpx;" @tap="JumpBtn(4)">
 					<view class="fabulous-image">
 						<image src="/static/icon/ward.png" mode="" class="fabulous-image"></image>
 					</view>
 					<text class="fabulous-num" style="font-size: 26rpx;">{{language[lang].share}}</text>
 				</view>
+				<view class="fabulous" style="margin-top: 30rpx;" @tap="menuBotomHide">
+					<view class="fabulous-image">
+						<image src="/static/images/hide.png" mode="" class="hide-image"></image>
+						<!-- <image v-else src="/static/images/show.png" mode="" class="fabulous-image"></image> -->
+					</view>
+				</view>
 			</view>
 		</view>
-		<!-- 旋转头像 -->
-		<!-- 		<view @click.stop.prevent="moveHandle" class="avatarMenu" v-if="item.rotateImgShow" :class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
-			<view style="position: relative;width: 95rpx;height: 95rpx;" @click="JumpBtn(5)">
-				<view :ref="'rotateImg'+ index">
-					<view class="rotate-avatar">
-						<image src="/static/icon/touxiang.jpg" mode="" class="rotate-image"></image>
-					</view>
-				</view>
-				<view :style="`position: absolute;top: 0;left: 0;opacity:${item.vodPaly? 0 : 1}`">
-					<view class="rotate-avatar">
-						<image src="/static/icon/touxiang.jpg" mode="" class="rotate-image"></image>
-					</view>
-				</view>
-			</view>
-		</view> -->
-
 		<u-popup :show="show" :closeOnClickOverlay='true' :closeable='true' bgColor='#000' @close.stop="show = false"
 			:round="15">
 			<view class="selected-video">
@@ -120,16 +95,17 @@
 						</text>
 					</view>
 				</view>
-				<view class="video-box">
-					<view class="video-box-item" @tap.stop="pickerVideoPlay(index,item)"
-						:class="vodIndex === index ? 'video-box-item_active':'' " v-for="(item,index) in videoList"
-						:key="index">
-						<text class="video-box-item-text">{{item.dramaSeries}}</text>
-						<view class="lock-box" v-if="item.unlockStatus === 3">
+
+				<scroll-view scroll-y="true" class="video-box">
+					<view class="video-box-item" @tap.stop="pickerVideoPlay(videoIndex,videoItem)"
+						:class="item.id === videoItem.id ? 'video-box-item_active':'' "
+						v-for="(videoItem,videoIndex) in videoList" :key="videoItem.id">
+						<text class="video-box-item-text">{{videoItem.dramaSeries}}</text>
+						<view class="lock-box" v-if="videoItem.unlockStatus === 3">
 							<u-icon name="lock-opened-fill" color="#fff" size="18"></u-icon>
 						</view>
 					</view>
-				</view>
+				</scroll-view>
 			</view>
 		</u-popup>
 	</view>
@@ -149,6 +125,7 @@
 		mapActions
 	} from "vuex"
 	const animation = uni.requireNativePlugin('animation')
+	import apis from '@/utils/config.js'
 	export default {
 		components: {
 			selectedVideo
@@ -195,8 +172,8 @@
 				type: Boolean,
 				default: false
 			},
-			lang:{
-				type:{
+			lang: {
+				type: {
 					type: String,
 					default: false,
 				}
@@ -213,7 +190,7 @@
 			}
 		},
 		computed: {
-			...mapState('video', ['likeStatus', 'likeTotal', 'collectStatus', 'collectTotal'])
+			...mapState('video', ['likeStatus', 'likeTotal', 'collectStatus', 'collectTotal', 'menuShow'])
 		},
 		data() {
 			return {
@@ -226,6 +203,10 @@
 						episode: '第集',
 						all: '全部',
 						collect: '汇总',
+						next: '请先解锁上一集',
+						systemShare: "系统分享",
+						cancelShare: "取消分享",
+						videoShare: "视频分享"
 					},
 					vi_VN: {
 						unfold: 'Mở rộng',
@@ -235,6 +216,10 @@
 						episode: 'Tập',
 						all: 'Tất cả',
 						collect: 'Tổng hợp',
+						next: 'Vui lòng mở khóa tập trước trước tiên.',
+						systemShare: "share",
+						cancelShare: "Hủy chia sẻ",
+						videoShare: "Chia sẻ video"
 					},
 					zh_EN: {
 						unfold: 'Expand',
@@ -244,6 +229,10 @@
 						episode: 'Episode',
 						all: 'All',
 						collect: 'Summary',
+						next: 'Please unlock the previous episode first.',
+						systemShare: "share",
+						cancelShare: "Cancel share",
+						videoShare: "Share video"
 					},
 				},
 				followShow: null,
@@ -322,10 +311,16 @@
 			}
 		},
 		methods: {
+			...mapMutations('video', [
+				'setMenuShow'
+			]),
 			...mapActions('video', ['setLike', 'getVideoInfo']),
 			/* 阻止事件冒泡 */
 			moveHandle(event) {
 				event.stopPropagation()
+			},
+			menuBotomHide() {
+				this.setMenuShow(!this.menuShow);
 			},
 			/* 旋转头像动画 */
 			rotateAvatar() {
@@ -397,46 +392,21 @@
 				let that = this;
 				switch (index) {
 					case 1:
-						uni.navigateTo({
-							url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
-						})
+					
+						setTimeout(() => {
+							uni.navigateTo({
+								url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
+							})
+						}, 200)
 						break;
 					case 2:
 						uni.$u.throttle(async () => {
-							const data = {
-								calculateType: that.likeStatus ? 2 : 1,
-								dramaId: that.item.filmDramaId,
-								dramaSeries: that.item.dramaSeries,
-								memberId: that.memberId,
-								secondType: 2,
-								seriesId: that.item.id,
-								sysOrgCode: that.item.sysOrgCode,
-								tenantId: that.item.tenantId,
-							}
-							await that.setLike(data);
-							await that.getVideoInfo({
-								seriesId: that.item.id,
-								memberId: that.memberId,
-							})
+							that.judgment(that.toLike)
 						}, 2000)
 						break;
 					case 3:
-						uni.$u.throttle(async () => {
-							const params = {
-								calculateType: this.collectStatus ? 2 : 1,
-								dramaId: this.item.filmDramaId,
-								dramaSeries: this.item.dramaSeries,
-								memberId: this.memberId,
-								secondType: 3,
-								seriesId: this.item.id,
-								sysOrgCode: this.item.sysOrgCode,
-								tenantId: this.item.tenantId,
-							}
-							await this.setLike(params);
-							await this.getVideoInfo({
-								seriesId: this.item.id,
-								memberId: this.memberId,
-							})
+						uni.$u.throttle(() => {
+							that.judgment(that.toCollect)
 						}, 2000)
 						break;
 					case 4:
@@ -453,6 +423,53 @@
 					case 7:
 						uni.navigateBack()
 						break
+				}
+			},
+			//点赞
+			async toLike() {
+				const data = {
+					calculateType: this.likeStatus ? 2 : 1,
+					dramaId: this.item.filmDramaId,
+					dramaSeries: this.item.dramaSeries,
+					memberId: this.memberId,
+					secondType: 2,
+					seriesId: this.item.id,
+					sysOrgCode: apis.sysOrgCode,
+					tenantId: api.tenantId,
+				}
+				await this.setLike(data);
+				await this.getVideoInfo({
+					seriesId: this.item.id,
+					memberId: this.memberId,
+				})
+			},
+			//收藏
+			async toCollect() {
+				const params = {
+					calculateType: this.collectStatus ? 2 : 1,
+					dramaId: this.item.filmDramaId,
+					dramaSeries: this.item.dramaSeries,
+					memberId: this.memberId,
+					secondType: 3,
+					seriesId: this.item.id,
+					sysOrgCode: apis.sysOrgCode,
+					tenantId: api.tenantId,
+				}
+				await this.setLike(params);
+				await this.getVideoInfo({
+					seriesId: this.item.id,
+					memberId: this.memberId,
+				})
+			},
+			//角色判断 
+			judgment(callback) {
+				const role = uni.getStorageSync('role');
+				if (role === 'user') {
+					callback && callback.call(this)
+				} else {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
 				}
 			},
 			//获取剧集列表
@@ -505,22 +522,30 @@
 			},
 			//选集
 			pickerVideoPlay(index, item) {
-				this.show = false;
-				let i = index - 1;
-				if (i === -1) {
-					this.$emit('pickerVideoPlay', {
-						index,
-						item
-					});
-				} else {
-					if (this.videoList[i].unlockStatus === 3) {
-						return uni.$u.toast('请先解锁上一集')
-					}
-					this.$emit('pickerVideoPlay', {
+				const that = this;
+				// that.setPickerVideoIndex(index);
+				that.show = false;
+				if (index === 0) {
+					return that.$emit('pickerVideoPlay', {
 						index,
 						item
 					});
 				}
+				//获取当前身份
+				const role = uni.getStorageSync('role');
+				//判断上一集是否收费
+				const currentVideoUnlockStatus = this.videoList[index].unlockStatus === 3;
+				//如果当前剧集需要解锁 角色不是游客
+				if (role !== 'user' && currentVideoUnlockStatus) {
+					return uni.navigateTo({
+						url: '/pages/login/login'
+					})
+				}
+				//切换剧集
+				this.$emit('pickerVideoPlay', {
+					index,
+					item
+				});
 			},
 			uniShare() {
 				// #ifndef APP-HARMONY
@@ -529,15 +554,15 @@
 						type: 0,
 						href: `https://www.vndrama.com:9082/#/pages/login/register?bindMemberId=${this.memberId}`,
 						title: this.videoInfo.dramaName,
-						summary: '视频分享',
+						summary: this.language[this.lang].videoShare,
 						imageUrl: this.videoInfo.dramaPoster,
 					},
 					menus: [{
 						"img": "/static/app-plus/sharemenu/more.png",
-						"text": "系统分享",
+						"text": this.language[this.lang].systemShare,
 						"share": "shareSystem"
 					}],
-					cancelText: "取消分享",
+					cancelText: this.language[this.lang].cancelShare,
 				}, e => { //callback
 					console.log(uniShare.isShow);
 					console.log(e);
@@ -672,6 +697,12 @@
 	.fabulous-image {
 		width: 80rpx;
 		height: 80rpx;
+	}
+
+	.hide-image {
+		margin: 15rpx 15rpx;
+		width: 50rpx;
+		height: 50rpx;
 	}
 
 	.fabulous-num {
@@ -870,7 +901,7 @@
 	.selected-video {
 		padding: 90rpx 30rpx 30rpx 30rpx;
 		// background-color: #000;
-		height: 700rpx;
+		// height: 700rpx;
 	}
 
 	.selected-video-head {
@@ -914,6 +945,7 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		margin-top: 20rpx;
+		height: 500rpx;
 
 		.video-box-item {
 			flex-direction: row;

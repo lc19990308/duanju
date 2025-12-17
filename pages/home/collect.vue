@@ -16,9 +16,11 @@
 							<image class="img" :src="item.dramaPoster"></image>
 							<view class="title">
 								<u--text :lines="1" size="26rpx" color="#fff" align="left"
-									:text="item.dramaName || 'bộ phim cổ ...'"></u--text>
-								<view class="title_num">Tập <u--text :lines="1" color="#fff" align="left"
-										style="margin-left: 20rpx;" :text="item.totalPlay || '0'"></u--text></view>
+									:text="item.dramaName"></u--text>
+								<view class="title_num">{{$t('history.viewing_up')}}
+									<text style="color: #fff;margin: 0 4rpx;">{{item.dramaSeries}}</text>
+									{{$t('history.unit')}}
+								</view>
 							</view>
 						</view>
 					</u-scroll-list>
@@ -157,7 +159,7 @@
 				mounList: [],
 				query: {
 					pageNo: 1,
-					pageSize: 20,
+					pageSize: 10000,
 				},
 				total: 0,
 			}
@@ -208,9 +210,6 @@
 			}
 
 			console.log(this.platform); // 输出设备平台信息
-			uni.$on('updateUserInfo', () => {
-				// this.getUserInfo()
-			})
 
 			this.tenantId = apiMoen.tenantId
 			this.sysOrgCode = apiMoen.sysOrgCode
@@ -392,7 +391,7 @@
 			},
 			jumpLink(item) {
 				uni.navigateTo({
-					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}`
+					url: `/pages/video/testVideoInfo?dramaId=${item.dramaId}&dramaSeries=${item.dramaSeries-1}`
 				})
 			}
 		}

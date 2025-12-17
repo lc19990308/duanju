@@ -57,6 +57,12 @@ const zh = {
 		like: '喜欢',
 		no: '第',
 	},
+	sys_share:{
+		systemShare:'系统分享',
+		cancelShare:'取消分享',
+		videoShare:'视频分享',
+		inviteFriends:'邀请好友'
+	},
 
 	// pop_up_window
 	pop_up_window: {

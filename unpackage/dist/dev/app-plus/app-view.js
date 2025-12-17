@@ -8254,11 +8254,21 @@ var render = function () {
                                   attrs: { _i: "12-" + $30 },
                                 },
                                 [
-                                  _vm._v("Tập "),
-                                  _c("u--text", {
-                                    staticStyle: { "margin-left": "20rpx" },
-                                    attrs: { _i: "13-" + $30 },
-                                  }),
+                                  _vm._v(_vm._$g("12-" + $30, "t0-0") + " "),
+                                  _c(
+                                    "v-uni-text",
+                                    {
+                                      staticStyle: {
+                                        color: "#fff",
+                                        margin: "0 4rpx",
+                                      },
+                                      attrs: { _i: "13-" + $30 },
+                                    },
+                                    [_vm._v(_vm._$g("13-" + $30, "t0-0"))]
+                                  ),
+                                  _vm._v(
+                                    " " + _vm._$g("12-" + $30, "t2-0") + " "
+                                  ),
                                 ],
                                 1
                               ),
@@ -10987,13 +10997,14 @@ var render = function () {
                     1
                   ),
                   _c(
-                    "v-uni-navigator",
+                    "uni-view",
                     {
                       staticClass: _vm._$g(6, "sc"),
-                      attrs: {
-                        url: "/pages/user/account/changeUserName",
-                        "hover-class": "none",
-                        _i: 6,
+                      attrs: { _i: 6 },
+                      on: {
+                        click: function ($event) {
+                          return _vm.$handleViewEvent($event)
+                        },
                       },
                     },
                     [
@@ -11142,13 +11153,14 @@ var render = function () {
                 { staticClass: _vm._$g(25, "sc"), attrs: { _i: 25 } },
                 [
                   _c(
-                    "v-uni-navigator",
+                    "uni-view",
                     {
                       staticClass: _vm._$g(26, "sc"),
-                      attrs: {
-                        url: "/pages/user/integral/recharge-info",
-                        "hover-class": "none",
-                        _i: 26,
+                      attrs: { _i: 26 },
+                      on: {
+                        click: function ($event) {
+                          return _vm.$handleViewEvent($event)
+                        },
                       },
                     },
                     [
@@ -11166,13 +11178,14 @@ var render = function () {
                     1
                   ),
                   _c(
-                    "v-uni-navigator",
+                    "uni-view",
                     {
                       staticClass: _vm._$g(29, "sc"),
-                      attrs: {
-                        url: "/pages/user/integral/recharge-info",
-                        "hover-class": "none",
-                        _i: 29,
+                      attrs: { _i: 29 },
+                      on: {
+                        click: function ($event) {
+                          return _vm.$handleViewEvent($event)
+                        },
                       },
                     },
                     [
@@ -22127,11 +22140,7 @@ var render = function () {
         "v-uni-navigator",
         {
           staticClass: _vm._$g(3, "sc"),
-          attrs: {
-            url: "/pages/user/account/changeUserName",
-            "hover-class": "none",
-            _i: 3,
-          },
+          attrs: { url: _vm._$g(3, "a-url"), "hover-class": "none", _i: 3 },
         },
         [
           _c(

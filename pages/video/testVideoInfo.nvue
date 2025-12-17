@@ -35,10 +35,6 @@
 	// #ifndef APP-NVUE
 	import twVideov from '@/components/tsp-video/tsp-video-list/video-v.vue'
 	// #endif
-	import {
-		getVodData,
-		videoList
-	} from '@/static/vodData.js'
 	export default {
 		components: {
 			// #ifdef APP-NVUE
@@ -73,6 +69,7 @@
 		},
 		data() {
 			return {
+				
 				tNum: 0,
 				currIndex: 0,
 				autoplay: true, //初始加载完成是否自动播放
@@ -81,7 +78,7 @@
 				totalvod: 0, //视频总数量，有值才能滑动加载到最后一个视频并禁止循环滑动（仅H5、小程序支持）
 				query: {
 					pageNo: 1,
-					pageSize: 120,
+					pageSize: 200,
 					sysOrgCode: api.sysOrgCode,
 					memberId: uni.getStorageSync('id') || '',
 					dramaId: '',
@@ -94,32 +91,20 @@
 					vi_VN: {
 						toLogin: 'Vui lòng đi đến đăng nhập.',
 					},
-					zh_EN: { 
+					zh_EN: {
 						toLogin: 'Please go to log in.',
 					},
 				},
-				lang:'',
+				lang: '',
+				videoList: [],
 			}
 		},
-		created() {
+		onShow() {
 			// #ifdef H5
 			this.autoplay = false
 			// #endif
 			this.initVod()
-		},
-		onShow() {
 			this.lang = uni.getStorageSync('lang');
-			if (uni.getStorageSync('id') == '') {
-				uni.showToast({
-					title: this.language[this.lang].toLogin,
-					icon: 'none'
-				})
-				setTimeout(() => {
-					uni.redirectTo({
-						url: '/pages/login/login'
-					})
-				}, 500)
-			}
 			/* 播放视频 */
 			if (this.$refs.videoGroup) {
 				this.$refs.videoGroup.showPlay()
@@ -148,6 +133,7 @@
 		// },
 		onLoad(e) {
 			this.query.dramaId = e.dramaId;
+			this.currIndex = Number(e.dramaSeries) || 0;
 		},
 		methods: {
 			...mapActions('video', ['getVideoInfo']),
@@ -157,7 +143,7 @@
 					uni.request({
 						url: `${api.MPWEIXIN}/api/appApi/filmDramaSeriesList`,
 						method: 'GET',
-						data: this.query,
+						data: that.query,
 						header: {
 							'content-type': 'application/json', // 添加 content-type
 							"X-Tenant-Id": uni.getStorageSync('tenantId')
@@ -165,12 +151,12 @@
 						success({
 							data
 						}) {
-							this.totalvod = data.result.total;
+							that.totalvod = data.result.total;
 							let videoList = [];
 							data.result.records.forEach((item, index) => {
 								if (item.unlockStatus != 3) {
 									videoList.push({
-										tsId: 'tsId' + (this.tNum * 15 + index), // 视频 id
+										tsId: 'tsId' + (that.tNum * 15 + index), // 视频 id
 										vodUrl: item.videoUrl,
 										coverImg: item.dramaPoster,
 										coverShow: true, // App 端需要封面
@@ -192,33 +178,36 @@
 
 
 							})
-							this.tNum += 1
+							that.tNum += 1
+							that.videoList = that.videoList.concat(videoList);
 							resolve(videoList);
 						}
 
 					})
 				})
 			},
-			unlock(index) {
-				console.log('unlock 执行')
+			unlock({item,index}) {
 				this.startData().then((res) => {
 					if (res.length > 0) {
 						/* 调用视频的初始方法 */
-						console.log(res, '解锁完毕数据')
-						this.$refs.videoGroup.initVod(res, index); //0是播放的下标（默认播放下标是0）下标是从0开始
-						this.currIndex = index;
-						this.getLikeData(res)
+						const videoPlayIndex = this.findVideoIndex(item.id,res);
+						console.log(videoPlayIndex,'videoPlayIndex')
+						this.$refs.videoGroup.initVod(res, videoPlayIndex); //0是播放的下标（默认播放下标是0）下标是从0开始
+						this.currIndex = videoPlayIndex;
+						this.getLikeData()
 					}
 				})
+			},
+			findVideoIndex(id,arr){
+				 return arr.findIndex(item => item.id === id);
 			},
 			/* 初始加载视频 */
 			initVod() {
 				this.startData().then((res) => {
 					if (res.length > 0) {
 						/* 调用视频的初始方法 */
-						console.log('拿到播放列表的数据',res,'rees')
-						this.$refs.videoGroup.initVod(res, 0); //0是播放的下标（默认播放下标是0）下标是从0开始
-						this.getLikeData(res)
+						this.$refs.videoGroup.initVod(res, this.currIndex); //0是播放的下标（默认播放下标是0）下标是从0开始
+						this.getLikeData()
 					}
 				})
 			},
@@ -226,7 +215,7 @@
 			refreshData() {
 				/* 请求获取数据 */
 				this.query.pageNo = 1;
-				this.videoData = [];
+				this.videoList = [];
 				this.tNum = 0;
 				this.autoplay = false
 				this.startData().then((res) => {
@@ -235,6 +224,13 @@
 						this.$refs.videoGroup.refreshSquare(res);
 					}
 				})
+			},
+			/* swiper切换当前视频回调 */
+			swiperChange(event) {
+				this.currIndex = event.videoIndex;
+				if (this.currIndex != this.videoList.length) {
+					this.getLikeData();
+				}
 			},
 			/* 上拉加载 */
 			loadingData() {
@@ -261,17 +257,6 @@
 			// 	this.nextPlay = !this.nextPlay
 			// 	this.loopPlay = this.nextPlay ? false : true
 			// },
-			/* swiper切换当前视频回调 */
-			swiperChange(event) {
-				// console.log('swiper切换当前视频回调',event)
-				console.log(event.unlockStatus, 'event')
-				this.currIndex = event.videoIndex
-				this.startData().then((res) => {
-					if (res.length > 0) {
-						this.getLikeData(res)
-					}
-				})
-			},
 			/* 添加、指定位置插入视频*/
 			// addVodData() {
 			// 	this.startData().then((res) => {
@@ -321,13 +306,13 @@
 				this.$refs.videoGroup.touchendSlider(event);
 			},
 			//获取点赞信息
-			async getLikeData(list) {
-				if (list.length < 0) {
+			async getLikeData() {
+				if (this.videoList.length < 0) {
 					return
 				}
 				let data = {
 					memberId: this.query.memberId,
-					seriesId: list[this.currIndex].id,
+					seriesId: this.videoList[this.currIndex].id,
 				}
 				await this.getVideoInfo(data)
 			},
@@ -344,7 +329,7 @@
 		right: 0;
 		bottom: 0;
 		/* #endif */
-		background-color: #000000;
+		/* background-color: #000000; */
 		flex: 1;
 	}
 

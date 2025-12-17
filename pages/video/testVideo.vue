@@ -87,13 +87,12 @@
 				},
 			}
 		},
-		created() {
+		onShow() {
+			console.log('on show')
 			// #ifdef H5
 			this.autoplay = false
 			// #endif
 			this.initVod()
-		},
-		onShow() {
 			/* 播放视频 */
 			if (this.$refs.videoGroup) {
 				this.$refs.videoGroup.showPlay()
@@ -149,16 +148,19 @@
 								item.fullScreenShow = false;
 								item.dramaName = item.dramaName;
 								item.userName = '';
-								item.menuBox = false;
+								item.menuBox = true;
 								item.video_title = '@窝是吉吉';
 								item.video_sound = '';
 								item.sliderShow = true //是否显示进度条
 								item.rotateImgShow = true //是否显示旋转头像
 								item.fabulousShow = false //是否点赞
 								item.followReally = false //是否已经关注
-								item.seriesId
+								item.seriesId,
+								item.filmDramaId = item.dramaId;
+								item.dramaSeries = item.dramaSeries;
 							})
 							this.tNum += 1
+							console.log(data.result.records)
 							resolve(data.result.records);
 						}
 
@@ -170,6 +172,7 @@
 				this.startData().then((res) => {
 					if (res.length > 0) {
 						/* 调用视频的初始方法 */
+						console.log('initVod',res)
 						this.$refs.videoGroup.initVod(res, 0); //0是播放的下标（默认播放下标是0）下标是从0开始
 					}
 				})

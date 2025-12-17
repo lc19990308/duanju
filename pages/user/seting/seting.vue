@@ -3,7 +3,7 @@
 		<statusBar />
 		<u-navbar :title="$t(`setting.page_title`)" :autoBack="true" :fixed='true' bgColor='transparent' :titleStyle='titleStyle'
 			leftIconColor='#fff' :placeholder='true' />
-		<navigator class="user-info" url="/pages/user/account/changeUserName" hover-class="none">
+		<navigator class="user-info" :url="changeUerPath" hover-class="none">
 			<view class="left">
 				<image class="profile" :src="userInfo.avatar" mode=""></image>
 				<view class="nickName">{{userInfo.realname}}</view>
@@ -31,7 +31,7 @@
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
 				</u-cell>
-				<u-cell :title="$t(`setting.cell_item4`)" :border="false" url='/pages/login/unsubscribe'>
+				<u-cell :title="$t(`setting.cell_item4`)" :border="false" :url='logoutPath'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
@@ -60,17 +60,23 @@
 					avatar: '',
 				},
 				agreementId:"",
+				logoutPath:'',
+				changeUerPath:''
 			}
 		},
 		methods: {
+			getRoleInfo(){
+				const role = uni.getStorageSync('role');
+				if(role === 'user'){
+					this.logoutPath = '/pages/login/unsubscribe'
+					this.changeUerPath = '/pages/login/unsubscribe'
+				}else{
+					this.logoutPath = '/pages/login/login'
+					this.changeUerPath = '/pages/login/login'
+				}
+			},
 			change(e) {
 				console.log('change', e);
-			},
-			login() {
-				uni.navigateTo({
-					url: '/pages/user/login/login'
-				})
-				uni.removeStorageSync('id');
 			},
 			//获取用户信息
 			getUserInfo() {
@@ -99,6 +105,7 @@
 		},
 		onLoad() {
 			this.getLang();
+			this.getRoleInfo();
 			this.getUserInfo();
 		}
 	}

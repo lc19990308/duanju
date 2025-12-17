@@ -183,6 +183,7 @@
 									email: res.data.email,
 									token: resp.result.token
 								};
+								that.$utils.setToken(resp.result.token)
 								that.googleCallBack(loginInfo);
 							})
 						}
@@ -208,6 +209,7 @@
 						uni.setStorageSync('accountNumber', obj.email);
 						that.$u.toast(this.$t('toast.login_success'))
 						const userInfo = await that.getUserInfo(resp.result.token);
+						that.$utils.setToken(resp.result.token)
 						that.memberAccountNumberAdd();
 						if (userInfo.code === 200) {
 							uni.switchTab({
@@ -248,6 +250,7 @@
 						uni.setStorageSync('tenantId', tenantId)
 						uni.setStorageSync('sysOrgCode', sysOrgCode)
 						uni.setStorageSync('memberId', memberId)
+						uni.setStorageSync('role','user');
 						uni.switchTab({
 							url: '/pages/home/new-home'
 						})

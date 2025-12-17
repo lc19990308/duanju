@@ -172,15 +172,15 @@
 					content: { //公共的分享参数配置  类型（type）、链接（herf）、标题（title）、summary（描述）、imageUrl（缩略图）
 						type: 0,
 						href: this.qrcodeText,
-						title: '邀请好友',
-						summary: '好友分享',
+						title: this.$t('sys_share.inviteFriends'),
+						summary: this.$t('sys_share.videoShare'),
 					},
 					menus: [{
 						"img": "/static/app-plus/sharemenu/more.png",
-						"text": "系统分享",
+						"text": this.$t('sys_share.systemShare'),
 						"share": "shareSystem"
 					}],
-					cancelText: "取消分享",
+					cancelText: this.$t('sys_share.cancelShare'),
 				}, e => { //callback
 					console.log(uniShare.isShow);
 					console.log(e);
@@ -190,6 +190,9 @@
 		},
 		onShow() {
 			this.getUserInfo();
+		},
+		onHide() {
+			uni.hideLoading();
 		}
 	}
 </script>
@@ -529,7 +532,8 @@
 			}
 		}
 	}
-	.reward_tips{
+
+	.reward_tips {
 		margin-top: 70rpx;
 		padding: 15rpx 10rpx 0 10rpx;
 		width: 450rpx;
