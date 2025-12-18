@@ -66,6 +66,16 @@ const api = {
 			method: 'POST',
 			desc: 'app版本检测'
 		},
+		google: {
+			url: '/api/sys/user/oauth2/verify-google',
+			method: 'POST',
+			desc: 'app版本检测'
+		},
+		storage: {
+			url: '/api/film/drama/user/storage',
+			method: 'GET',
+			desc: 'oss配置'
+		},
 	},
 	// 登录
 	login: {

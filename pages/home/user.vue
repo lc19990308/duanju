@@ -157,7 +157,8 @@
 						text: "my.invite", //邀请好友
 						rid: "",
 						path: "/pages/home/watchs",
-						role:'user',
+						role: 'user',
+						role: 'user',
 					},
 					{
 						id: 2,
@@ -166,6 +167,7 @@
 						text: "my.collection", //我的收藏
 						rid: "",
 						path: "/pages/home/collect",
+						role: 'user',
 					},
 					{
 						id: 3,
@@ -182,7 +184,7 @@
 						text: "my.team", //我的团队
 						rid: "",
 						path: "/pages/user/share/team",
-						role:'user',
+						role: 'user',
 					},
 					{
 						id: 5,
@@ -191,7 +193,7 @@
 						text: "my.contact_us", //客服
 						rid: "",
 						path: "/pages/user/seting/opinion",
-						role:'user',
+						role: 'user',
 					},
 					{
 						id: 6,
@@ -208,7 +210,7 @@
 						text: "my.creation", //联系我们
 						rid: "",
 						path: "/pages/user/framer/index",
-						role:'user',
+						role: 'user',
 					},
 				],
 				copyrightData: this.$store.state.app.copyright || [], // 版权说明
@@ -364,7 +366,7 @@
 			},
 			menuItemClick(val) {
 				//判断角色权限
-				if(val.role === 'user'){
+				if (val.role === 'user') {
 					return this.jumpLink(val.path);
 				}
 				uni.navigateTo({

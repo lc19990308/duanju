@@ -26,7 +26,7 @@
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
 				</u-cell> -->
-				<u-cell :title="$t(`setting.cell_item3`)" :border="false" url='/pages/user/seting/opinion'>
+				<u-cell :title="$t(`setting.cell_item3`)" :border="false" :url='opinionPath'>
 					<template slot='value'>
 						<u-icon name="arrow-right" color="#939393" size="15"></u-icon>
 					</template>
@@ -61,7 +61,8 @@
 				},
 				agreementId:"",
 				logoutPath:'',
-				changeUerPath:''
+				changeUerPath:'',
+				opinionPath:'',
 			}
 		},
 		methods: {
@@ -70,9 +71,11 @@
 				if(role === 'user'){
 					this.logoutPath = '/pages/login/unsubscribe'
 					this.changeUerPath = '/pages/login/unsubscribe'
+					this.opinionPath = '/pages/user/seting/opinion'
 				}else{
 					this.logoutPath = '/pages/login/login'
 					this.changeUerPath = '/pages/login/login'
+					this.opinionPath = '/pages/login/login'
 				}
 			},
 			change(e) {

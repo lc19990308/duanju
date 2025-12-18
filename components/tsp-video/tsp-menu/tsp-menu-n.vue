@@ -547,14 +547,15 @@
 				});
 			},
 			uniShare() {
+				console.log(this.item,'item')
 				// #ifndef APP-HARMONY
 				uniShare.show({
 					content: { //公共的分享参数配置  类型（type）、链接（herf）、标题（title）、summary（描述）、imageUrl（缩略图）
 						type: 0,
-						href: `https://www.vndrama.com:9082/#/pages/login/register?bindMemberId=${this.memberId}`,
-						title: this.videoInfo.dramaName,
+						href: `?dramaId=${this.item.dramaId}`,
+						title: this.item.dramaName,
 						summary: this.language[this.lang].videoShare,
-						imageUrl: this.videoInfo.dramaPoster,
+						imageUrl: this.item.dramaPoster,
 					},
 					menus: [{
 						"img": "/static/app-plus/sharemenu/more.png",

@@ -1,3 +1,4 @@
+import request from '@/common/request/index.js'
 import { Base64 } from './base64.js'
 import { util } from './crypto.js'
 import { HMAC } from './hmac.js'
@@ -7,7 +8,6 @@ import { SHA1 } from './sha1.js'
 const url = 'https://monkey-video.oss-ap-southeast-7.aliyuncs.com/'
 const OSSAccessKeyId = 'LTAI5tHeocmGmQhrGjgmRcFb'
 const OssAccesskeySercet= 'u5wblQW3w7ldFxM5NyJiyvgm1MMaJu';
-
 
 const policyText = {
   "expiration": "2034-01-01T12:00:00.000Z", // 设置Policy的有效期，格式为UTC时间。如果Policy失效，将无法上传文件。
@@ -19,7 +19,6 @@ const policyText = {
 const policy = Base64.encode(JSON.stringify(policyText))
 const bytes = HMAC(SHA1, policy, OssAccesskeySercet, { asBytes: true })
 const signature = util.bytesToBase64(bytes)
-
 // 生成文件名随机字符串
 function random_string(len) {
 　　const strLeng = len || 32;

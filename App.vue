@@ -8,7 +8,6 @@
 			"playlet-plugin": "/pages/playlet/playlet"
 		},
 		onLaunch: function(options) {
-			console.log(uni.getStorageSync('lang'),'获取存入的语言')
 			if (!uni.getStorageSync('lang')) {
 				const langSys = uni.getSystemInfoSync().language;
 				switch (langSys) {
@@ -23,6 +22,21 @@
 						break
 				}
 			}
+			uni.getClipboardData({
+				success: function(res) {
+					uni.setClipboardData({
+						data: '',
+						success() {
+							const dramaId = (res.data.match(/dramaId=(\d+)/) || [, null])[1];
+							if(dramaId){
+								uni.navigateTo({
+									url:`/pages/video/testVideoInfo?dramaId=${dramaId}`
+								})
+							}
+						}
+					});
+				}
+			});
 		},
 		onShow() {
 			this.$utils.ensureGuestLogin();
