@@ -277,6 +277,11 @@ const api = {
 			method: 'GET',
 			desc: '根据剧集id查询剧集免费状态'
 		},
+		selectVideoUrlListBySeriesId: {
+			url: '/api/appApi/selectVideoUrlListBySeriesId',
+			method: 'GET',
+			desc: '画质切换'
+		},
 		filmDramaSeriesList: {
 			url: '/api/appApi/filmDramaSeriesList',
 			method: 'GET',

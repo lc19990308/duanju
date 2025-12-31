@@ -87,6 +87,10 @@ export default {
 				type: String,
 				default: '',
 			}
+		},
+		record:{
+			type: Boolean,
+			default: false,
 		}
 	},
 	data() {
@@ -273,7 +277,9 @@ export default {
 			unlockIndex: -1,
 			payTypeIndex: -1,
 			viperIndex: -1,
-
+			resolutionList: [],
+			switch_video: false,
+			jumpSecond:0,
 		}
 	},
 	created() {
@@ -919,7 +925,69 @@ export default {
 			}
 			let newVideoInfo = this[_0x3513e5(0x150)]['myVideo' + newIndex + this['swId']][0x0];
 			newVideoInfo && (this[_0x3513e5(0x14e)] = ![], this[_0x3513e5(0x142)](newIndex));
-			this.logRecord();
+			if(this.record){
+				this.logRecord();
+			}
+			this.getVideoResolution();
+		},
+		//切换分辨率
+		resolutionChange(index) {
+			this.jumpSecond = this.currentTime;
+			this.$set(this.vodList[this.currentIndex], 'vodUrl', this.resolutionList[index].videoUrl);
+			this.switch_video = true;
+		},
+		seekVidoe() {
+			if (this.switch_video) {
+				let videoCtx = this.$refs[
+					'myVideo' + this.vodIndex + this.swId
+				][0]
+				// // 跳转到拖动结束的时间点（秒）
+				videoCtx.seek(this.jumpSecond)
+				
+			}
+			this.switch_video = false;
+			this.jumpSecond = 0;
+		},
+		//获取分辨率
+		getVideoResolution() {
+			const that = this;
+			let videoItem = this.vodList[this.currentIndex];
+			uni.request({
+				url: `${api.MPWEIXIN}/api/appApi/selectVideoUrlListBySeriesId`,
+				method: 'GET',
+				data: {
+					seriesId: this.vodList[this.currentIndex].seriesId,
+					memberId: uni.getStorageSync('id'), //会员ID
+				},
+				success({
+					data
+				}) {
+					that.resolutionList = data.result || [];
+				}
+			})
+		},
+		//记录日志
+		logRecord() {
+			let videoItem = this.vodList[this.vodIndex];
+			uni.request({
+				url: api.MPWEIXIN + '/api/appApi/filmDramaSeriesSecond',
+				method: 'POST',
+				header: {
+					'content-type': 'application/json', // 添加 content-type
+					"X-Tenant-Id": api.tenantId,
+					'x-lang': this.setLang(),
+				},
+				data: {
+					secondType: 1, //操作分类 1播放、2点赞、3收藏、4转发
+					calculateType: 1,
+					memberId: uni.getStorageSync('id'), //会员ID
+					dramaId: videoItem.filmDramaId,
+					seriesId: videoItem.id, //剧目ID
+					dramaSeries: videoItem.dramaSeries, //剧集集数
+					tenantId: api.tenantId, //租户ID
+					sysOrgCode: api.sysOrgCode,
+				},
+			})
 		},
 		/* 视频加载成功 */
 		loadchange(index) {
@@ -1004,29 +1072,6 @@ export default {
 				};
 				return _0x2d10();
 			}
-		},
-		//记录日志
-		logRecord() {
-			let videoItem = this.vodList[this.currentIndex];
-			uni.request({
-				url: api.MPWEIXIN + '/api/appApi/filmDramaSeriesSecond',
-				method: 'POST',
-				header: {
-					'content-type': 'application/json', // 添加 content-type
-					"X-Tenant-Id": api.tenantId,
-					'x-lang': this.setLang(),
-				},
-				data: {
-					secondType: 1, //操作分类 1播放、2点赞、3收藏、4转发
-					calculateType: 1,
-					memberId: uni.getStorageSync('id'), //会员ID
-					dramaId: videoItem.filmDramaId,
-					seriesId: videoItem.id, //剧目ID
-					dramaSeries: videoItem.dramaSeries, //剧集集数
-					tenantId: api.tenantId, //租户ID
-					sysOrgCode: api.sysOrgCode,
-				},
-			})
 		},
 		/* 视频出现缓冲 */
 		bufferVod(index) {
@@ -1122,6 +1167,9 @@ export default {
 		},
 		/* 播放进度变化时触发 */
 		timeupdateVod(ev, index) {
+			this.currentTime = ev.detail.currentTime;
+			//当视频播放了，我就认为初始化了，那就去跳到应该去的秒数。
+			this.seekVidoe();
 			var _0x2502af = _0x13c2;
 
 			function _0x5078() {
@@ -1820,14 +1868,7 @@ export default {
 			})
 			if (vipRes.data.code == 200) {
 				this.viperInfo = vipRes.data.result;
-				console.log(this.viperInfo, 'viperInfo')
 			}
-			//获取充值套餐详情
-			console.log({
-				sysOrgCode: api.sysOrgCode,
-				tenantId: api.tenantId,
-				id: uni.getStorageSync('id')
-			}, 'video xx')
 			const [rechargeFaill, rechargeRes] = await uni.request({
 				url: api.MPWEIXIN + '/api/wxApi/rechargePackageList',
 				method: 'GET',

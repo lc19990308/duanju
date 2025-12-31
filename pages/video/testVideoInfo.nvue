@@ -3,7 +3,7 @@
 		<!-- #ifdef APP-NVUE -->
 		<tw-videon ref="videoGroup" :lang='lang' @lodData="loadingData" @refreshData="refreshData" :autoplay="autoplay"
 			:nextPlay="nextPlay" :likeData='likeData' :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick"
-			@longpress="longpress" :showSelectShow='true' @swiperChange="swiperChange" @unlock='unlock'
+			@longpress="longpress" :showSelectShow='true' :record='true' @swiperChange="swiperChange" @unlock='unlock'
 			@removeAllData="removeAllData"></tw-videon>
 		<!-- #endif -->
 
@@ -134,6 +134,7 @@
 		onLoad(e) {
 			this.query.dramaId = e.dramaId;
 			this.currIndex = Number(e.dramaSeries) || 0;
+			console.log('查看播放第几集',this.currIndex,'this.currIndex')
 		},
 		methods: {
 			...mapActions('video', ['getVideoInfo']),
@@ -164,6 +165,7 @@
 										desc: item.dramaDescribe,
 										fullScreenShow: false,
 										dramaName: item.dramaName,
+										seriesId:item.id,
 										userName: '',
 										menuBox: true,
 										video_title: '@窝是吉吉',
@@ -206,6 +208,7 @@
 				this.startData().then((res) => {
 					if (res.length > 0) {
 						/* 调用视频的初始方法 */
+						console.log('播放的下标',this.currIndex)
 						this.$refs.videoGroup.initVod(res, this.currIndex); //0是播放的下标（默认播放下标是0）下标是从0开始
 						this.getLikeData()
 					}

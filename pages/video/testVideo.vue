@@ -5,14 +5,8 @@
 			:nextPlay="nextPlay" :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick" @longpress="longpress"
 			@swiperChange="swiperChange" @removeAllData="removeAllData"></tw-videon>
 		<!-- #endif -->
-
-		<!-- #ifndef APP-NVUE -->
-		<tw-videov ref="videoGroup" @lodData="loadingData" @refreshData="refreshData" :autoplay="autoplay"
-			:nextPlay="nextPlay" :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick" @longpress="longpress"
-			@swiperChange="swiperChange" :totalvod="totalvod" @removeAllData="removeAllData"></tw-videov>
-		<!-- #endif -->
-		<!-- 
-		<view class="automatic">
+		
+	<!-- 	<view class="automatic">
 			<text class="automatic-item" @click="openAutomatic">{{nextPlay?'关闭自动播放':'开启自动播放'}}</text>
 			<text class="automatic-item" @click="addVodData">点击在当前视频下标{{currIndex}}后插入视频</text>
 			<text class="automatic-item" @click="removeVodData">点击删除视频</text>
@@ -98,6 +92,7 @@
 				this.$refs.videoGroup.showPlay()
 				this.$refs.videoGroup.muteVideo(false) //取消视频播放设置为静音，解决切换到其他页面后因为网络问题还在有声音播放
 			}
+			this.getVideoResolution();
 		},
 		onHide() {
 			/* 暂停视频 */
@@ -156,7 +151,7 @@
 								item.fabulousShow = false //是否点赞
 								item.followReally = false //是否已经关注
 								item.seriesId,
-								item.filmDramaId = item.dramaId;
+									item.filmDramaId = item.dramaId;
 								item.dramaSeries = item.dramaSeries;
 							})
 							this.tNum += 1
@@ -172,7 +167,7 @@
 				this.startData().then((res) => {
 					if (res.length > 0) {
 						/* 调用视频的初始方法 */
-						console.log('initVod',res)
+						console.log('initVod', res)
 						this.$refs.videoGroup.initVod(res, 0); //0是播放的下标（默认播放下标是0）下标是从0开始
 					}
 				})
@@ -269,7 +264,23 @@
 			appVodTouchendSlider(event) {
 				this.$refs.videoGroup.touchendSlider(event);
 			},
-		}
+			getVideoResolution() {
+				console.log('getVideoResolution')
+				uni.request({
+					url: `${api.MPWEIXIN}/api/appApi/selectVideoUrlListBySeriesId`,
+					method: 'GET',
+					data: {
+						seriesId: '1995878935749402626',
+						memberId: this.query.memberId,
+					},
+					success({
+						data
+					}) {
+						console.log(data);
+					}
+				})
+			}
+		},
 	}
 </script>
 <style>

@@ -64,6 +64,7 @@
 									:item="item" :discussNum="item.totalEpisodes" :index="index"
 									:sliderDrag="sliderDrag" :moveOpacity="moveOpacity" :showSelectShow='showSelectShow'
 									:style="{width:videoStyle.width,height:videoStyle.height}"
+									:resolutionList='resolutionList' @resolutionChange='resolutionChange'
 									@pickerVideoPlay='pickerVideoPlay' @fabulousBtn="fabulousBtn"></videoMenu>
 							</view>
 						</view>

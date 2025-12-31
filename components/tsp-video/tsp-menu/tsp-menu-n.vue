@@ -1,11 +1,20 @@
 <template>
 	<view>
 		<!-- 底部标题 -->
-		<view class="back" v-if="showSelectShow" @tap.stop="JumpBtn(7)">
-			<u-icon name="arrow-left" color="#fff" size="20"></u-icon>
-			<text class="back-text" v-if="lang =='zh_CN'">第{{item.dramaSeries}}集</text>
-			<text class="back-text" v-if="lang =='vi_VN'">Tập {{item.dramaSeries}}</text>
-			<text class="back-text" v-if="lang =='zh_EN'">Episode {{item.dramaSeries}}</text>
+		<view class="back" v-if="showSelectShow">
+			<view class="back-left" @tap.stop="JumpBtn(7)">
+				<u-icon name="arrow-left" color="#fff" size="20"></u-icon>
+				<text class="back-text" v-if="lang =='zh_CN'">第{{item.dramaSeries}}集</text>
+				<text class="back-text" v-if="lang =='vi_VN'">Tập {{item.dramaSeries}}</text>
+				<text class="back-text" v-if="lang =='zh_EN'">Episode {{item.dramaSeries}}</text>
+			</view>
+			<!-- 	<view  class="top-menu">
+				<text  @tap.stop="JumpBtn(7)">111</text>
+			</view>
+			<image v-if="resolutionList.length" @tap.stop="openDefinition" class="top-menu" src="/static/images/dot.png" mode=""></image>
+					<view class="top-menu" v-if="resolutionList.length">
+				<text class="top-menu-item" @tap.stop="resolutionChange(index)" v-for="(item,index) in resolutionList" :key="index">{{item.definition}}</text>
+			</view> -->
 		</view>
 		<view @tap.stop.prevent="moveHandle" class="footTitle" v-if="menuShow"
 			:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
@@ -38,6 +47,10 @@
 				</view>
 				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
+			<!-- 	<view class="video-resolution" v-if="resolutionList.length">
+				<text class="video-resolution-item" @tap.stop="resolutionChange(index)" v-for="(item,index) in resolutionList"
+					:key="index">{{item.definition}}</text>
+			</view> -->
 		</view>
 		<!-- 右侧操作栏 -->
 		<view class="menuBox" :style="{height:vodHeight+'px'}" @tap.stop.prevent="moveHandle">
@@ -78,6 +91,13 @@
 						<!-- <image v-else src="/static/images/show.png" mode="" class="fabulous-image"></image> -->
 					</view>
 				</view>
+				<view class="fabulous" style="margin-top: 30rpx;" v-if="resolutionList.length" @tap="definitionShow = !definitionShow">
+					<view class="fabulous-image">
+						<image src="/static/images/dot.png" mode="" class="fabulous-image"></image>
+						<!-- <image v-else src="/static/images/show.png" mode="" class="fabulous-image"></image> -->
+					</view>
+				</view>
+
 			</view>
 		</view>
 		<u-popup :show="show" :closeOnClickOverlay='true' :closeable='true' bgColor='#000' @close.stop="show = false"
@@ -106,6 +126,15 @@
 						</view>
 					</view>
 				</scroll-view>
+			</view>
+		</u-popup>
+		<u-popup :show="definitionShow" :closeOnClickOverlay='true' :closeable='true' bgColor='#202020'
+			@close.stop="definitionShow = false" :round="15">
+			<view class="definitionShow">
+				<view class="definitionShow-row">
+					<text class="definition-label">{{language[this.lang].resolution}}</text>
+					<text class="definition-value" :class="definitionIndex === index ?'active':'' " @tap.stop="resolutionChange(index)" v-for="(item,index) in resolutionList" :key="index">{{item.definition}}</text>
+				</view>
 			</view>
 		</u-popup>
 	</view>
@@ -177,7 +206,13 @@
 					type: String,
 					default: false,
 				}
-			}
+			},
+			resolutionList: {
+				type: Array,
+				default: () => {
+					return []
+				}
+			},
 		},
 		onBackPress({
 			from
@@ -206,7 +241,8 @@
 						next: '请先解锁上一集',
 						systemShare: "系统分享",
 						cancelShare: "取消分享",
-						videoShare: "视频分享"
+						videoShare: "视频分享",
+						resolution:'清晰度'
 					},
 					vi_VN: {
 						unfold: 'Mở rộng',
@@ -219,7 +255,8 @@
 						next: 'Vui lòng mở khóa tập trước trước tiên.',
 						systemShare: "share",
 						cancelShare: "Hủy chia sẻ",
-						videoShare: "Chia sẻ video"
+						videoShare: "Chia sẻ video",
+						resolution:'độ phân giải'
 					},
 					zh_EN: {
 						unfold: 'Expand',
@@ -232,7 +269,8 @@
 						next: 'Please unlock the previous episode first.',
 						systemShare: "share",
 						cancelShare: "Cancel share",
-						videoShare: "Share video"
+						videoShare: "Share video",
+						resolution:'resolution'
 					},
 				},
 				followShow: null,
@@ -308,6 +346,8 @@
 					dramaPoster: '',
 				},
 				show: false,
+				definitionShow: false,
+				definitionIndex:2,
 			}
 		},
 		methods: {
@@ -547,7 +587,7 @@
 				});
 			},
 			uniShare() {
-				console.log(this.item,'item')
+				console.log(this.item, 'item')
 				// #ifndef APP-HARMONY
 				uniShare.show({
 					content: { //公共的分享参数配置  类型（type）、链接（herf）、标题（title）、summary（描述）、imageUrl（缩略图）
@@ -568,6 +608,14 @@
 					console.log(e);
 				})
 				// #endif
+			},
+			resolutionChange(index) {
+				this.definitionIndex = index;
+				this.definitionShow = false;
+				this.$emit('resolutionChange', index);
+			},
+			openDefinition() {
+				console.log('触发')
 			}
 		},
 	}
@@ -979,16 +1027,89 @@
 	}
 
 	.back {
-		position: absolute;
-		top: 80rpx;
+		position: relative;
+		top: 50rpx;
 		left: 20rpx;
 		z-index: 999999;
 		flex-direction: row;
 		align-items: center;
+		width: 750rpx;
+		justify-content: space-between;
 
-		.back-text {
+		.back-left {
+			flex-direction: row;
+			align-items: center;
+
+			.back-text {
+				color: #fff;
+				font-size: 28rpx;
+			}
+		}
+
+		.top-menu {
+			width: 80rpx;
+			height: 80rpx;
+			margin-right: 40rpx;
+		}
+	}
+
+	.video-resolution {
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-end;
+		height: 60rpx;
+		width: 750rpx;
+		margin-right: 40rpx;
+		background-color: rgba(0, 0, 0, .1);
+		border-radius: 20rpx;
+
+		.video-resolution-item {
+			color: rgba(255, 255, 255, .7);
+			font-size: 20rpx;
+			padding: 0rpx 5rpx;
+		}
+
+		.active {
 			color: #fff;
-			font-size: 28rpx;
+			font-size: 21rpx;
+		}
+	}
+
+	.definitionShow {
+		position: relative;
+		flex-direction: row;
+		flex-wrap: wrap;
+		margin-top: 20rpx;
+		height: 150rpx;
+		padding: 40rpx 40rpx 0 40rpx;
+
+		.definitionShow-row {
+			flex-direction: row;
+			justify-content: center;
+
+			.definition-label {
+				padding: 5rpx;
+				color: #fff;
+				font-size: 26rpx;
+				height: 50rpx;
+				margin-right: 20rpx;
+			}
+
+			.definition-value {
+				width: 100rpx;
+				text-align: center;
+				margin-right: 10rpx;
+				border-radius: 10rpx;
+				height: 50rpx;
+				color: #fff;
+				padding: 5rpx;
+				font-size: 24rpx;
+				background-color: #2a2a2a;
+			}
+
+			.active {
+				color: #F5CF02;
+			}
 		}
 	}
 </style>

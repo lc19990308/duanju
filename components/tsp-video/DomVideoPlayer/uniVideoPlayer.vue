@@ -19,7 +19,7 @@
 			:show-fullscreen-btn="optionVod.showFullscreenBtn" :vslide-gesture-in-fullscreen="optionVod.vslideGestureInFullscreen" :show-progress="optionVod.showProgress"
 			:object-fit="item.object_fit" :http-cache="true" :loop="loopVod"
 			:muted="(index == vodIndex && !changeVod && !muteSetup && !muteVodSetup) ? false : true" :id="'myVideo'+index+swId"
-			@play="startPlay(index)" @waiting="bufferVod(index)" @timeupdate="timeupdateVod($event,index)"
+			@play="startPlay(index)" @waiting="bufferVod(index)" @timeupdate="timeupdateVod($event,index)" @loadedmetadata='loadedmetadata'
 			@error="errVod(index)" @ended="endedVod(index)" @fullscreenchange="fullscreenchangeVod($event,index)">
 			
 		</video>
@@ -153,6 +153,9 @@
 			}
 		},
 		methods: {
+			loadedmetadata(e){
+				console.log('获取视频元数据',e);
+			},
 			//播放
 			play() {
 				uni.createVideoContext('myVideo' + this.index + this.swId, this).play();
