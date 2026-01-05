@@ -146,10 +146,7 @@
 		background-image: url('/static/images/navbar-bg.png');
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
-		background-color: #000;
 	}
-
-
 	.navbar {
 		padding: 22rpx 24rpx 16rpx 24rpx;
 

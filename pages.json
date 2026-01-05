@@ -327,9 +327,14 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#FFF",
-		"backgroundColor": "#FFF",
-		"navigationStyle": "custom"
+		"navigationBarBackgroundColor": "#000000",
+		"backgroundColor": "#000000",
+		"navigationStyle": "custom",
+		"app-plus": {
+			"bounce": "none"
+		},
+		"backgroundColorTop":"#000000",
+		"backgroundColorBottom":"#000000"
 	},
 	"uniIdRouter": {},
 	"tabBar": {
