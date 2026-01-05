@@ -5,13 +5,6 @@
 			:nextPlay="nextPlay" :loopPlay="loopPlay" :swId="swId" @doubleClick="doubleClick" @longpress="longpress"
 			@swiperChange="swiperChange" @removeAllData="removeAllData"></tw-videon>
 		<!-- #endif -->
-		
-	<!-- 	<view class="automatic">
-			<text class="automatic-item" @click="openAutomatic">{{nextPlay?'关闭自动播放':'开启自动播放'}}</text>
-			<text class="automatic-item" @click="addVodData">点击在当前视频下标{{currIndex}}后插入视频</text>
-			<text class="automatic-item" @click="removeVodData">点击删除视频</text>
-			<text class="automatic-item" @click="specifyPlay(currIndex + 1)">点击指定第{{currIndex + 1}}个视频播放</text>
-		</view> -->
 	</view>
 </template>
 <script>

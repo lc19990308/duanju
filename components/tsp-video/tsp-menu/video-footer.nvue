@@ -1,52 +1,36 @@
 <template>
-	<view class="tsp-menu-n">
-		<!-- 右侧操作栏 -->
-		<view class="menuBox" :style="{height:vodHeight+'px'}" @tap.stop.prevent="moveHandle">
-			<view class="vodMenu"
-				:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
-				<!-- 点赞 -->
-				<view class="fabulous" @tap="JumpBtn(2)" style="position: relative;padding-top: 5rpx;">
-					<view class="likeBox" :ref="'pelRef'+index">
-						<view class="like-pellet" :class="'like-pellet'+j" v-for="(lt,j) in 8" :key="j"></view>
-					</view>
-					<view class="fabulous-image" @tap="fabulousBtn" :ref="'likeRef'+index">
-						<image src="/static/icon/selectTaoxin.png" mode="" class="fabulous-image" v-if="likeStatus">
-						</image>
-						<image src="/static/icon/taoxin.png" mode="" class="fabulous-image" v-else></image>
-					</view>
-					<text class="fabulous-num" v-if="likeTotal"> {{likeTotal}}</text>
+	<view >
+		<!-- 底部标题 -->
+		<view @tap.stop.prevent="moveHandle" class="footTitle" v-if="menuShow"
+			:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
+			<view style="margin-left: 30rpx;">
+				<view><text class="foot-name">{{item.dramaName}}</text></view>
+				<view style="width: 500rpx;position: relative;font-size: 28rpx;" v-if="item.desc">
+					<text style="width: 450rpx;" class="foot-cont"
+						:class="[(item.desc.length > 33 && !expandDesc) ?'text_two':'']">{{item.desc}}</text>
 				</view>
-				<!-- 评论 -->
-				<view class="fabulous" style="margin-top: 30rpx;" @tap="JumpBtn(3)">
-					<view class="fabulous-image" v-if="!collectStatus">
-						<image src="/static/images/Frame-15.png" mode="" class="fabulous-image"></image>
-					</view>
-					<view class="fabulous-image" v-if="collectStatus">
-						<image src="/static/images/Frame-16.png" mode="" class="fabulous-image"></image>
-					</view>
-					<text class="fabulous-num" v-if="collectTotal">{{collectTotal}}</text>
+			</view>
+			<view class="video-info" v-if="!showSelectShow" @tap.stop="JumpBtn(1,item)">
+				<view class="video-info-left">
+					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
+					<text v-if="lang =='zh_CN'" class="label">汇总 · 全部 第{{discussNum}}集 · 看全集</text>
+					<text v-if="lang =='vi_VN'" class="label">Tổng hợp · Toàn bộ · Tập {{discussNum}} · Xem
+						trọnbộ</text>
+					<text v-if="lang =='zh_EN'" class="label">Summary · Full series · Episode {{discussNum}} ·
+						Watchcomplete</text>
 				</view>
-				<!-- 转发 -->
-				<view class="fabulous" style="margin-top: 30rpx;" @tap="JumpBtn(4)">
-					<view class="fabulous-image">
-						<image src="/static/icon/ward.png" mode="" class="fabulous-image"></image>
-					</view>
-					<text class="fabulous-num" style="font-size: 26rpx;">{{language[lang].share}}</text>
+				<uni-icons type="right" color="#fff" size="18"></uni-icons>
+			</view>
+			<view class="video-info" v-else @tap.stop="JumpBtn(5,item)">
+				<view class="video-info-left">
+					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
+					<text v-if="lang =='zh_CN'" class="label">汇总 · 全部 第{{discussNum}}集 · 看全集</text>
+					<text v-if="lang =='vi_VN'" class="label">Tổng hợp · Toàn bộ · Tập {{discussNum}} · Xem
+						trọnbộ</text>
+					<text v-if="lang =='zh_EN'" class="label">Summary · Full series · Episode {{discussNum}} ·
+						Watchcomplete</text>
 				</view>
-				<view class="fabulous" style="margin-top: 30rpx;" @tap="menuBotomHide">
-					<view class="fabulous-image">
-						<image src="/static/images/hide.png" mode="" class="hide-image"></image>
-						<!-- <image v-else src="/static/images/show.png" mode="" class="fabulous-image"></image> -->
-					</view>
-				</view>
-				<view class="fabulous" style="margin-top: 30rpx;" v-if="resolutionList.length"
-					@tap="definitionShow = !definitionShow">
-					<view class="fabulous-image">
-						<image src="/static/images/dot.png" mode="" class="fabulous-image"></image>
-						<!-- <image v-else src="/static/images/show.png" mode="" class="fabulous-image"></image> -->
-					</view>
-				</view>
-
+				<uni-icons type="right" color="#fff" size="18"></uni-icons>
 			</view>
 		</view>
 		<u-popup :show="show" :closeOnClickOverlay='true' :closeable='true' bgColor='#000' @close.stop="show = false"
@@ -297,7 +281,7 @@
 				},
 				show: false,
 				definitionShow: false,
-				definitionIndex: -1,
+				definitionIndex: 2,
 			}
 		},
 		methods: {
@@ -572,24 +556,13 @@
 </script>
 
 <style lang="scss" scoped>
-	.tsp-menu-n {
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 115rpx;
-		/* 固定宽度 */
-		display: flex;
-		/* 必须加 flex */
-		flex-direction: column;
-		/* 垂直排列 */
-		background-color: orange;
-	}
 
 	.menuBox {
 		position: absolute;
 		right: 10rpx;
 		width: 115rpx;
 		justify-content: center;
+		background-color: blue;
 	}
 
 	.avatarMenu {
@@ -782,10 +755,9 @@
 	/* 底部标题部分 */
 	.footTitle {
 		position: absolute;
-		bottom: 40px;
+		bottom: 70rpx;
 		left: 0;
 		width: 750rpx;
-		background-color: red;
 	}
 
 	.footTitle-commodity {

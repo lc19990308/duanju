@@ -332,7 +332,7 @@
 		right: 0;
 		bottom: 0;
 		/* #endif */
-		/* background-color: #000000; */
+		background-color: #000000;
 		flex: 1;
 	}
 

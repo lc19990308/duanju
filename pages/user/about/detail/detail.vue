@@ -28,7 +28,6 @@
 		methods: {
 			//获取详情
 			handleToAllocatProtocolById() {
-				console.log(this.id,'id')
 				this.$request('wchatapi.allocatProtocolById', {
 					id: this.id
 				}).then(res => {

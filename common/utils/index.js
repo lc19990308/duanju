@@ -263,6 +263,13 @@ export const ensureGuestLogin = async () => {
 		// 这里可以统一 toast / 上报 / fallback
 	}
 }
+const getAppPlatform = () => {
+	// #ifdef APP-PLUS
+	const p = uni.getSystemInfoSync().platform // 只有 'ios' 或 'android'
+	return p === 'ios' ? 'ios' : 'android'
+	// #endif
+	return '' // 非 App 端返回空串，方便统一判断
+}
 const judgment = (callback) => {
 	const role = uni.getStorageSync('role');
 	if (role === 'user') {
@@ -289,5 +296,6 @@ export default {
 	getToken,
 	removeToken,
 	ensureGuestLogin,
-	judgment
+	judgment,
+	getAppPlatform
 }

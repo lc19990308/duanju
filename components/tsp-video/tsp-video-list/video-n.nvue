@@ -3,8 +3,8 @@
 		<view class="contentBox" :style="{width:videoStyle.width,height:videoStyle.height}" v-if="contentShow"
 			@touchmove="vodViewMove($event)" @touchend="vodViewEnd($event)">
 			<list @loadmore="lodData" @scroll="scrolls" :show-scrollbar="false" ref="listBox" :pagingEnabled="true">
-				<unirefresh class="refresh" :lang='lang' ref="refresh" @refresh="refreshData" :bgStyle="'#000'" :fontColor="'#fff'"
-					v-if="loadOpen"></unirefresh>
+				<unirefresh class="refresh" :lang='lang' ref="refresh" @refresh="refreshData" :bgStyle="'#000'"
+					:fontColor="'#fff'" v-if="loadOpen"></unirefresh>
 				<cell v-for="(item,index) in vodList" :key="'myVodEl'+index+swId">
 					<view :style="{width:videoStyle.width,height:videoStyle.height}" :ref="'myVodEl'+index+swId">
 						<!-- 底层图标 -->
@@ -13,24 +13,6 @@
 							<image src="/static/icon/sound.png" mode="" class="vodLayer-img"></image>
 						</view>
 						<view class="vodPlayer" v-if="Math.abs(vodIndex-index) <= 1" :style="{opacity:appoint?0:1}">
-							<!-- <video :style="{width:videoStyle.width,height:videoStyle.height}" :src="item.vodUrl"
-							:controls="false"
-							:enable-progress-gesture="false"
-							:page-gesture="false"
-							:show-loading="false" 
-							:show-play-btn="false" 
-							:show-center-play-btn="false"
-							:show-fullscreen-btn="false"
-							:vslide-gesture-in-fullscreen="false"
-							:show-progress="false"
-							:object-fit="item.object_fit"
-							:http-cache="true"
-							:loop="loopPlay"
-							:muted="(index == vodIndex && !changeVod && !muteSetup) ? false : true"
-							 :id="'myVideo'+index+swId" @play="startPlay(index)" @waiting="bufferVod(index)" @timeupdate="timeupdateVod($event,index)"
-							  @error="errVod(index)" @ended="endedVod(index)">
-							</video> -->
-
 							<uniVideoPlayer :style="{width:videoStyle.width,height:videoStyle.height}"
 								:ref="'myVideo'+index+swId" :src="item.vodUrl" :videoStyle="videoStyle" :item="item"
 								:loopPlay="loopVod" :muteSetup="muteSetup" :index="index" :vodIndex="vodIndex"
@@ -56,20 +38,24 @@
 								style="opacity: 0;"></image>
 						</view>
 						<!-- 暂停播放操作层 -->
-						<view @click="handClick($event,index)" @touchstart="handClick($event,index)"
-							@longpress="longpress(item)" class="vodPlayView" :style="videoStyle">
-							<!-- 底部标题、右侧操作栏 -->
-							<view :style="{width:videoStyle.width,height:videoStyle.height,opacity:appoint?0:1}">
-								<videoMenu :lang='lang' :ref="'menuRef'+index" :vodHeight="vodHeight" :vodIndex="vodIndex"
-									:item="item" :discussNum="item.totalEpisodes" :index="index"
-									:sliderDrag="sliderDrag" :moveOpacity="moveOpacity" :showSelectShow='showSelectShow'
-									:style="{width:videoStyle.width,height:videoStyle.height}"
-									:resolutionList='resolutionList' @resolutionChange='resolutionChange'
-									@pickerVideoPlay='pickerVideoPlay' @fabulousBtn="fabulousBtn"></videoMenu>
-							</view>
+						<view @tap.stop="handClick($event,index)" @longpress.stop="longpress(item)" class="vodPlayView"
+							:style="{width:'605rpx',height:videoStyle.height,opacity:appoint?0:1}">
 						</view>
+						<videoHead :lang='lang' :ref="'videoHead'+index" :showSelectShow='showSelectShow'
+							:style="{width:videoStyle.width,height:videoStyle.statusBarHeight}" :item="item" />
+						<videoMenu :lang='lang' :ref="'menuRef'+index" :vodHeight="vodHeight" :vodIndex="vodIndex"
+							:item="item" :discussNum="item.totalEpisodes" :index="index" :sliderDrag="sliderDrag"
+							:moveOpacity="moveOpacity" :showSelectShow='showSelectShow' :resolutionList='resolutionList'
+							@resolutionChange='resolutionChange' @pickerVideoPlay='pickerVideoPlay'
+							@fabulousBtn="fabulousBtn"></videoMenu>
+						<videoFooter :lang='lang' :ref="'videoFooter'+index" :vodHeight="vodHeight" :vodIndex="vodIndex"
+							:item="item" :discussNum="item.totalEpisodes" :index="index" :sliderDrag="sliderDrag"
+							:moveOpacity="moveOpacity" :showSelectShow='showSelectShow' :resolutionList='resolutionList'
+							@resolutionChange='resolutionChange' @pickerVideoPlay='pickerVideoPlay'
+							@fabulousBtn="fabulousBtn"></videoFooter>
+
 						<!-- 全屏观看 -->
-						<view class="fullScreen" v-if="item.fullScreenShow" @click="openScreen(index)"
+						<view class="fullScreen" v-if="item.fullScreenShow" @tap.stop="openScreen(index)"
 							:style="{left: (screenWidth/2) - 46.5 + 'px', bottom: vodHeight / 3.4 + 'px'}"
 							:class="[vodIndex == index ? (moveOpacity?'vodMenu-bright2':'vodMenu-bright0') : '']">
 							<image src="/static/icon/tsp-qp.png" class="fullScreen-icon"></image>
@@ -121,7 +107,7 @@
 				</view>
 			</view>
 			<!-- 点赞桃心 -->
-<!-- 			<view class="doubleImage" v-for="(item,index) in likeList" :key="index" :ref="'peachRef'+item.id"
+			<!-- 			<view class="doubleImage" v-for="(item,index) in likeList" :key="index" :ref="'peachRef'+item.id"
 				:style="{width: item.width+10+'px',height:item.height+10+'px',top:item.top,left:item.left}">
 				<image src="/static/icon/selectTaoxin.png" v-if="item.isShow"
 					:style="{width: item.width+'px',height:item.height+'px',transform: `rotate(${item.rotate})`}" />
@@ -134,13 +120,13 @@
 				<view class="pay-popup-head">
 					<view class="gold-row">
 						<text class="tips">{{language[lang].gold}}:</text>
-			<!-- 			<image style="width: 28rpx;height: 28rpx;margin-right: 10rpx;" src="/static/images/image73.png"
+						<!-- 			<image style="width: 28rpx;height: 28rpx;margin-right: 10rpx;" src="/static/images/image73.png"
 							mode=""></image> -->
 						<text class="tips">{{viperInfo.currency}}</text>
 					</view>
 					<view class="gold-row">
 						<text class="tips">{{language[lang].balance}}:</text>
-					<!-- 	<image style="width: 28rpx;height: 28rpx;margin-right: 10rpx;" src="/static/images/diamond.png"
+						<!-- 	<image style="width: 28rpx;height: 28rpx;margin-right: 10rpx;" src="/static/images/diamond.png"
 							mode=""></image> -->
 						<text class="tips">{{viperInfo.totalBalance}}</text>
 					</view>
@@ -185,7 +171,7 @@
 							</view>
 						</view>
 						<view class="member-right">
-							<text class="member-btn" @tap="openPayPopup">{{language[lang].recharge}}</text>
+							<text class="member-btn" @tap.stop="openPayPopup">{{language[lang].recharge}}</text>
 						</view>
 					</view>
 					<!-- 单独解锁 -->
@@ -207,7 +193,7 @@
 						<!-- 打包解锁 -->
 						<view class="unlock-type-item">
 							<text class="unlock-type-item__label">{{language[lang].diamondUnlock}}</text>
-							<view class="unlock-card" @tap="payTypeIndex = 1"
+							<view class="unlock-card" @tap.stop="payTypeIndex = 1"
 								:class="payTypeIndex === 1 ?'unlock-card_active':'' ">
 								<text class="unlock-card__title">{{unlockingData.dramaName}}</text>
 								<view class="unlock-card__info">
@@ -236,9 +222,9 @@
 <style lang="scss" scoped>
 	.page {
 		background-color: #000000;
-		flex: 1;
-		height: 100vh;
-		overflow: hidden;
+		// flex: 1;
+		// height: 100vh;
+		// overflow: hidden;
 	}
 
 	.contentBox {
@@ -288,10 +274,9 @@
 	}
 
 	.vodPlayView {
-		position: absolute;
+		position: relative;
 		top: 0;
 		left: 0;
-		background-color: rgba(0, 0, 0, 0.1);
 	}
 
 	.vodPause-img {
@@ -323,6 +308,7 @@
 		position: relative;
 		width: 750rpx;
 		height: 18px;
+		bottom: 50rpx;
 	}
 
 	.slider-item {
@@ -970,4 +956,13 @@
 			}
 		}
 	}
+
+	// .box{
+	// 	position: absolute;
+	// 	top: 0;
+	// 	left: 0;
+	// 	width: 750rpx;
+	// 	height: 200rpx;
+	// 	background-color: red;
+	// }
 </style>

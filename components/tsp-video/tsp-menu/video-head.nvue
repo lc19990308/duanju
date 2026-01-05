@@ -1,0 +1,124 @@
+<template>
+	<view class="back" v-if="showSelectShow">
+		<view class="back-left" @tap.stop="JumpBtn(7)">
+			<u-icon name="arrow-left" color="#fff" size="20"></u-icon>
+			<text class="back-text" v-if="lang =='zh_CN'">第{{item.dramaSeries}}集</text>
+			<text class="back-text" v-if="lang =='vi_VN'">Tập {{item.dramaSeries}}</text>
+			<text class="back-text" v-if="lang =='zh_EN'">Episode {{item.dramaSeries}}</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			showSelectShow: {
+				type: Boolean,
+				default: false
+			},
+			lang: {
+				type: {
+					type: String,
+					default: false,
+				}
+			},
+			//当前视频的整个对象
+			item: {
+				type: Object,
+				default: () => {
+					return {}
+				}
+			},
+
+		},
+		data() {
+			return {
+				language: {
+					zh_CN: {
+						unfold: '展开',
+						pack: '收起',
+						share: '分享',
+						watchFull: '看全集',
+						episode: '第集',
+						all: '全部',
+						collect: '汇总',
+						next: '请先解锁上一集',
+						systemShare: "系统分享",
+						cancelShare: "取消分享",
+						videoShare: "视频分享",
+						resolution: '清晰度'
+					},
+					vi_VN: {
+						unfold: 'Mở rộng',
+						pack: 'Thu gọn',
+						share: 'Chia sẻ',
+						watchFull: 'Xem trọn bộ',
+						episode: 'Tập',
+						all: 'Tất cả',
+						collect: 'Tổng hợp',
+						next: 'Vui lòng mở khóa tập trước trước tiên.',
+						systemShare: "share",
+						cancelShare: "Hủy chia sẻ",
+						videoShare: "Chia sẻ video",
+						resolution: 'độ phân giải'
+					},
+					zh_EN: {
+						unfold: 'Expand',
+						pack: 'Collapse',
+						share: 'Share',
+						watchFull: 'Watch Full',
+						episode: 'Episode',
+						all: 'All',
+						collect: 'Summary',
+						next: 'Please unlock the previous episode first.',
+						systemShare: "share",
+						cancelShare: "Cancel share",
+						videoShare: "Share video",
+						resolution: 'resolution'
+					},
+				},
+			}
+		},
+		methods: {
+			/* 点击右侧菜单选项 1头像 2点赞 3评论 4转发 5旋转头像 */
+			async JumpBtn(index, item) {
+				let that = this;
+				switch (index) {
+					case 7:
+						uni.navigateBack()
+						break
+				}
+			},
+
+		},
+	}
+</script>
+
+<style lang="scss" scoped>
+	.back {
+		position: absolute;
+		top: 0;
+		left: 20rpx;
+		width: 750rpx;
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		
+
+		.back-left {
+			flex-direction: row;
+			align-items: center;
+
+			.back-text {
+				color: #fff;
+				font-size: 28rpx;
+			}
+		}
+
+		.top-menu {
+			width: 80rpx;
+			height: 80rpx;
+			margin-right: 40rpx;
+		}
+	}
+</style>

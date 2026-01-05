@@ -12447,6 +12447,11 @@ var render = function () {
               key: item,
               staticClass: _vm._$g("18-" + $30, "sc"),
               attrs: { _i: "18-" + $30 },
+              on: {
+                click: function ($event) {
+                  return _vm.$handleViewEvent($event)
+                },
+              },
             },
             [
               _c("v-uni-image", {
@@ -12454,11 +12459,6 @@ var render = function () {
                   src: _vm._$g("19-" + $30, "a-src"),
                   mode: "",
                   _i: "19-" + $30,
-                },
-                on: {
-                  click: function ($event) {
-                    return _vm.$handleViewEvent($event)
-                  },
                 },
               }),
             ],

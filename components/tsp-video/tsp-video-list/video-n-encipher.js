@@ -4,6 +4,8 @@ const dom = uni.requireNativePlugin('dom')
 import unirefresh from '../tsp-load/tsp-refresh-n.vue'
 import videoMenu from '../tsp-menu/tsp-menu-n.vue'
 import uniVideoPlayer from '../DomVideoPlayer/uniVideoPlayer'
+import videoHead from '../tsp-menu/video-head.nvue'
+import videoFooter from '../tsp-menu/video-footer.nvue'
 
 import {
 	mapState,
@@ -20,7 +22,9 @@ export default {
 	components: {
 		unirefresh,
 		videoMenu,
-		uniVideoPlayer
+		uniVideoPlayer,
+		videoHead,
+		videoFooter
 	},
 	props: {
 		/* 是否开启下拉刷新 */
@@ -88,7 +92,7 @@ export default {
 				default: '',
 			}
 		},
-		record:{
+		record: {
 			type: Boolean,
 			default: false,
 		}
@@ -279,7 +283,7 @@ export default {
 			viperIndex: -1,
 			resolutionList: [],
 			switch_video: false,
-			jumpSecond:0,
+			jumpSecond: 0,
 		}
 	},
 	created() {
@@ -328,10 +332,20 @@ export default {
 		this[_0x48538e(0x1c3)]['statusBarHeight'] = topBarHeight + 'px', this[_0x48538e(0x1c3)][_0x48538e(0x1d3)] =
 			deviceInfo[_0x48538e(0x1cd)] + 'px', this[_0x48538e(0x1cd)] = deviceInfo[_0x48538e(0x1cd)], this[
 				'screenHeight'] = deviceInfo[_0x48538e(0x1c0)];
-		this['tabBarShow'] == 0x1 ? (this[_0x48538e(0x1c3)]['height'] = deviceInfo[_0x48538e(0x1c1)] - topBarHeight -
-			this[_0x48538e(0x1ce)] + 'px', this['vodHeight'] = deviceInfo[_0x48538e(0x1c1)] - topBarHeight - this[
-				_0x48538e(0x1ce)]) : (this[_0x48538e(0x1c3)][_0x48538e(0x1cc)] = deviceInfo['windowHeight'] -
-			topBarHeight + 'px', this[_0x48538e(0x1c2)] = deviceInfo[_0x48538e(0x1c1)] - topBarHeight);
+		// this['tabBarShow'] == 0x1 ? (this[_0x48538e(0x1c3)]['height'] = deviceInfo[_0x48538e(0x1c1)] - topBarHeight -
+		// 	this[_0x48538e(0x1ce)] + 'px', this['vodHeight'] = deviceInfo[_0x48538e(0x1c1)] - topBarHeight - this[
+		// 		_0x48538e(0x1ce)]) : (this[_0x48538e(0x1c3)][_0x48538e(0x1cc)] = deviceInfo['windowHeight'] -
+		// 	topBarHeight + 'px', this[_0x48538e(0x1c2)] = deviceInfo[_0x48538e(0x1c1)] - topBarHeight);
+		this['tabBarShow'] == 0x1 ?
+			(
+				this[_0x48538e(0x1c3)]['height'] = deviceInfo['screenHeight'] - topBarHeight - this[_0x48538e(0x1ce)] +
+				'px',
+				this['vodHeight'] = deviceInfo['screenHeight'] - topBarHeight - this[_0x48538e(0x1ce)]
+			) :
+			(
+				this[_0x48538e(0x1c3)][_0x48538e(0x1cc)] = deviceInfo['screenHeight'] - topBarHeight + 'px',
+				this[_0x48538e(0x1c2)] = deviceInfo['screenHeight'] - topBarHeight
+			);
 		this['loopVod'] = this['loopPlay'];
 	},
 	watch: {
@@ -925,7 +939,7 @@ export default {
 			}
 			let newVideoInfo = this[_0x3513e5(0x150)]['myVideo' + newIndex + this['swId']][0x0];
 			newVideoInfo && (this[_0x3513e5(0x14e)] = ![], this[_0x3513e5(0x142)](newIndex));
-			if(this.record){
+			if (this.record) {
 				this.logRecord();
 			}
 			this.getVideoResolution();
@@ -943,7 +957,7 @@ export default {
 				][0]
 				// // 跳转到拖动结束的时间点（秒）
 				videoCtx.seek(this.jumpSecond)
-				
+
 			}
 			this.switch_video = false;
 			this.jumpSecond = 0;
@@ -1613,7 +1627,7 @@ export default {
 		},
 		// 单击或双击
 		handClick(event, index) {
-			// console.log(event)
+			console.log(this.videoStyle,'videoStyle')
 			const _0x4cc259 = _0x3287;
 			(function(_0x2403fc, _0x5dd26d) {
 				const _0x139a83 = _0x3287,

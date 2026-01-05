@@ -30,7 +30,9 @@
             "type" : "uni-app:miniProgram"
         },
         {
+            "customPlaygroundType" : "local",
             "openVueDevtools" : true,
+            "playground" : "custom",
             "type" : "uni-app:app-ios"
         },
         {

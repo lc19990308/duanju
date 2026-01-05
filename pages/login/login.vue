@@ -27,12 +27,12 @@
 			<navigator hover-class="none" url="/pages/login/changePassword" class="forgot_password_tips">
 				{{$t(`login.forgot_password_tips`)}}
 			</navigator>
-			<u-button class="submt-btn" @click="submit">{{$t(`login.login_btn`)}}</u-button>
-			<u-button class="reset-btn" @click="reset">{{$t(`login.register_btn`)}}</u-button>
+			<u-button class="submt-btn" @tap="submit">{{$t(`login.login_btn`)}}</u-button>
+			<u-button class="reset-btn" @tap="reset">{{$t(`login.register_btn`)}}</u-button>
 		</view>
 		<view class="btn-groud">
-			<view class="btn-groud-item" v-show="item.show" v-for="(item,index) in providersList" :key="index">
-				<image :src="item.icon" mode="" @click="submitGA(item.key)"></image>
+			<view class="btn-groud-item" @tap="submitGA(item.key)" v-show="item.show" v-for="(item,index) in providersList" :key="index">
+				<image :src="item.icon" mode="" ></image>
 			</view>
 		</view>
 		<view class="agreement-checked">
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+	import utils from '@/common/utils/index.js'
 	//#ifdef APP-PLUS
 	const JYGoogleSignin = uni.requireNativePlugin('JY-GoogleSignin');
 	//#endif
@@ -163,6 +164,7 @@
 				})
 			},
 			submitGA(val) {
+				console.log(val,'val')
 				const that = this;
 				if (!this.checked) {
 					return uni.showToast({
@@ -170,8 +172,12 @@
 						icon: 'none'
 					})
 				}
+				console.log('submitGA run',val)
 				if (val == "google") {
+					console.log('进入jy_startLogin run')
+					console.log(JYGoogleSignin.jy_startLogin,'JYGoogleSignin.jy_startLogin')
 					JYGoogleSignin.jy_startLogin(res => {
+						console.log('查看谷歌登陆回调:',res);
 						//  这里会返回登录的结果，如果errorCode = 1，代表错误，可检查msg返回的数据判断；如果errorCode = 0，代表成功，也会在data里面返回登录数据
 						if (res.errorCode == 0) {
 							const form = {
@@ -294,6 +300,26 @@
 						break;
 				}
 			},
+			initGoogleServices(){
+				console.log('initGoogleServices')
+				const plt = utils.getAppPlatform();
+				console.log(plt,'plt')
+				let client_id = '';
+				if(plt === 'ios'){
+					client_id = 'com.googleusercontent.apps.446804274711-vk9v54iqvsur3s25dtte6nq5fvpanvm6'
+				}else if(client_id === 'android'){
+					client_id = '446804274711-fjevh6bdtigb92hr78df0a206kqlqes9.apps.googleusercontent.com'
+				}
+				console.log('打印client_id',client_id)
+				//#ifdef APP-PLUS
+				JYGoogleSignin.jy_init({
+					//  安卓的client_id应该是谷歌开发者后台默认Web应用的；iOS的client_id应该是谷歌开发者后台iOS对应的
+					client_id:client_id
+				}, res => {
+					console.log('初始化成功')
+				})
+				//#endif
+			},
 		},
 		onLoad() {
 			that = this;
@@ -301,12 +327,8 @@
 		},
 		onShow() {
 			this.getLang();
-			//#ifdef APP-PLUS
-			JYGoogleSignin.jy_init({
-				//  安卓的client_id应该是谷歌开发者后台默认Web应用的；iOS的client_id应该是谷歌开发者后台iOS对应的
-				client_id: "446804274711-fjevh6bdtigb92hr78df0a206kqlqes9.apps.googleusercontent.com"
-			}, res => {})
-			//#endif
+			this.initGoogleServices();
+	
 		},
 	}
 </script>

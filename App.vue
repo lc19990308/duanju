@@ -33,14 +33,13 @@
 									url:`/pages/video/testVideoInfo?dramaId=${dramaId}`
 								})
 							}
-						}
+						}	
 					});
 				}
 			});
 		},
 		onShow() {
 			this.$utils.ensureGuestLogin();
-			// isVisitor();
 		}
 	}
 </script>
