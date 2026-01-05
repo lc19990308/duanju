@@ -9,8 +9,10 @@ import zh_EN from "./json/zh-EN.js";
 //注册vue-i18n实例i18n，并引入语言文件
 const setlang = () => {
 	let originLang = '';
+	console.log(!uni.getStorageSync('lang'))
 	if (!uni.getStorageSync('lang')) {
 		const langSys = uni.getSystemInfoSync().language;
+		console.log(langSys, 'langSys')
 		switch (langSys) {
 			case 'zh-CN':
 				originLang = 'zh_CN'
@@ -21,8 +23,17 @@ const setlang = () => {
 			case 'zh-EN':
 				originLang = 'zh-EN'
 				break
+			case 'zh-Hans-CN':
+				originLang = 'zh_CN'
+				break
+			case 'en-CN':
+				originLang = 'zh_EN'
+				break
+			case 'vi-CN':
+				originLang = 'vi_VN'
+				break
 		}
-	}else{
+	} else {
 		originLang = uni.getStorageSync('lang');
 	}
 	return originLang;
