@@ -7,8 +7,8 @@ Vue.use(uView)
 
 import request from '@/common/request/index.js'
 Vue.prototype.$request = request
-import sayHello from '@/utils/postins.js';
-Vue.use(sayHello) // 使用全局模块
+// import sayHello from '@/utils/postins.js';
+// Vue.use(sayHello) // 使用全局模块
 
 import utils from '@/common/utils/index.js'
 Vue.prototype.$utils = utils

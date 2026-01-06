@@ -301,19 +301,15 @@
 				}
 			},
 			initGoogleServices(){
-				console.log('initGoogleServices')
 				const plt = utils.getAppPlatform();
-				console.log(plt,'plt')
 				let client_id = '';
 				if(plt === 'ios'){
-					client_id = 'com.googleusercontent.apps.446804274711-vk9v54iqvsur3s25dtte6nq5fvpanvm6'
+					client_id = '446804274711-vk9v54iqvsur3s25dtte6nq5fvpanvm6.apps.googleusercontent.com'
 				}else if(client_id === 'android'){
 					client_id = '446804274711-fjevh6bdtigb92hr78df0a206kqlqes9.apps.googleusercontent.com'
 				}
-				console.log('打印client_id',client_id)
 				//#ifdef APP-PLUS
 				JYGoogleSignin.jy_init({
-					//  安卓的client_id应该是谷歌开发者后台默认Web应用的；iOS的client_id应该是谷歌开发者后台iOS对应的
 					client_id:client_id
 				}, res => {
 					console.log('初始化成功')

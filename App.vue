@@ -10,14 +10,18 @@
 		onLaunch: function(options) {
 			if (!uni.getStorageSync('lang')) {
 				const langSys = uni.getSystemInfoSync().language;
+				console.log(langSys, 'langsys')
 				switch (langSys) {
 					case 'zh-CN':
+					case 'zh-Hans-CN':
 						uni.setStorageSync('lang', 'zh_CN');
 						break
 					case 'vi-VN':
+					case 'vi-CN':
 						uni.setStorageSync('lang', 'vi_VN');
 						break
 					case 'zh-EN':
+					case 'en-CN':
 						uni.setStorageSync('lang', 'zh_EN');
 						break
 				}
@@ -28,12 +32,12 @@
 						data: '',
 						success() {
 							const dramaId = (res.data.match(/dramaId=(\d+)/) || [, null])[1];
-							if(dramaId){
+							if (dramaId) {
 								uni.navigateTo({
-									url:`/pages/video/testVideoInfo?dramaId=${dramaId}`
+									url: `/pages/video/testVideoInfo?dramaId=${dramaId}`
 								})
 							}
-						}	
+						}
 					});
 				}
 			});

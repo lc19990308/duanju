@@ -119,7 +119,7 @@
 			<view class="pay-popup">
 				<view class="pay-popup-head">
 					<view class="gold-row">
-						<text class="tips">{{language[lang].gold}}:</text>
+						<!-- <text class="tips">{{language[lang].gold}}:</text> -->
 						<!-- 			<image style="width: 28rpx;height: 28rpx;margin-right: 10rpx;" src="/static/images/image73.png"
 							mode=""></image> -->
 						<text class="tips">{{viperInfo.currency}}</text>

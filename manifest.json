@@ -2,8 +2,8 @@
     "name" : "猴子短剧",
     "appid" : "__UNI__8BBE7AF",
     "description" : "",
-    "versionName" : "1.2.5",
-    "versionCode" : 125,
+    "versionName" : "1.2.6",
+    "versionCode" : 126,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -40,7 +40,8 @@
                 "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ]
             },
             "ios" : {
-                "dSYMs" : false
+                "dSYMs" : false,
+                "urltypes" : "com.googleusercontent.apps.446804274711-vk9v54iqvsur3s25dtte6nq5fvpanvm6"
             },
             "sdkConfigs" : {
                 "ad" : {},
