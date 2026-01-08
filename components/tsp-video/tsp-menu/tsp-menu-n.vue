@@ -1,5 +1,57 @@
 <template>
-	<view class="tsp-menu-n">
+	<view>
+		<!-- 底部标题 -->
+		<view class="back" v-if="showSelectShow">
+			<view class="back-left" @tap.stop="JumpBtn(7)">
+				<u-icon name="arrow-left" color="#fff" size="20"></u-icon>
+				<text class="back-text" v-if="lang =='zh_CN'">第{{item.dramaSeries}}集</text>
+				<text class="back-text" v-if="lang =='vi_VN'">Tập {{item.dramaSeries}}</text>
+				<text class="back-text" v-if="lang =='zh_EN'">Episode {{item.dramaSeries}}</text>
+			</view>
+			<!-- 	<view  class="top-menu">
+				<text  @tap.stop="JumpBtn(7)">111</text>
+			</view>
+			<image v-if="resolutionList.length" @tap.stop="openDefinition" class="top-menu" src="/static/images/dot.png" mode=""></image>
+					<view class="top-menu" v-if="resolutionList.length">
+				<text class="top-menu-item" @tap.stop="resolutionChange(index)" v-for="(item,index) in resolutionList" :key="index">{{item.definition}}</text>
+			</view> -->
+		</view>
+		<view @tap.stop.prevent="moveHandle" class="footTitle" v-if="menuShow"
+			:class="[vodIndex == index?(sliderDrag?'vodMenu-bright1':(moveOpacity?'vodMenu-bright2':'vodMenu-bright0')):'']">
+			<view style="margin-left: 30rpx;">
+				<view><text class="foot-name">{{item.dramaName}}</text></view>
+				<view style="width: 500rpx;position: relative;font-size: 28rpx;" v-if="item.desc">
+					<text style="width: 450rpx;" class="foot-cont"
+						:class="[(item.desc.length > 33 && !expandDesc) ?'text_two':'']">{{item.desc}}</text>
+				</view>
+			</view>
+			<view class="video-info" v-if="!showSelectShow" @tap.stop="JumpBtn(1,item)">
+				<view class="video-info-left">
+					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
+					<text v-if="lang =='zh_CN'" class="label">汇总 · 全部 第{{discussNum}}集 · 看全集</text>
+					<text v-if="lang =='vi_VN'" class="label">Tổng hợp · Toàn bộ · Tập {{discussNum}} · Xem
+						trọnbộ</text>
+					<text v-if="lang =='zh_EN'" class="label">Summary · Full series · Episode {{discussNum}} ·
+						Watchcomplete</text>
+				</view>
+				<uni-icons type="right" color="#fff" size="18"></uni-icons>
+			</view>
+			<view class="video-info" v-else @tap.stop="JumpBtn(5,item)">
+				<view class="video-info-left">
+					<image class="icon" src="/static/icons/file-copy-fill.png"></image>
+					<text v-if="lang =='zh_CN'" class="label">汇总 · 全部 第{{discussNum}}集 · 看全集</text>
+					<text v-if="lang =='vi_VN'" class="label">Tổng hợp · Toàn bộ · Tập {{discussNum}} · Xem
+						trọnbộ</text>
+					<text v-if="lang =='zh_EN'" class="label">Summary · Full series · Episode {{discussNum}} ·
+						Watchcomplete</text>
+				</view>
+				<uni-icons type="right" color="#fff" size="18"></uni-icons>
+			</view>
+			<!-- 	<view class="video-resolution" v-if="resolutionList.length">
+				<text class="video-resolution-item" @tap.stop="resolutionChange(index)" v-for="(item,index) in resolutionList"
+					:key="index">{{item.definition}}</text>
+			</view> -->
+		</view>
 		<!-- 右侧操作栏 -->
 		<view class="menuBox" :style="{height:vodHeight+'px'}" @tap.stop.prevent="moveHandle">
 			<view class="vodMenu"
@@ -39,8 +91,7 @@
 						<!-- <image v-else src="/static/images/show.png" mode="" class="fabulous-image"></image> -->
 					</view>
 				</view>
-				<view class="fabulous" style="margin-top: 30rpx;" v-if="resolutionList.length"
-					@tap="definitionShow = !definitionShow">
+				<view class="fabulous" style="margin-top: 30rpx;" v-if="resolutionList.length" @tap="definitionShow = !definitionShow">
 					<view class="fabulous-image">
 						<image src="/static/images/dot.png" mode="" class="fabulous-image"></image>
 						<!-- <image v-else src="/static/images/show.png" mode="" class="fabulous-image"></image> -->
@@ -64,6 +115,7 @@
 						</text>
 					</view>
 				</view>
+
 				<scroll-view scroll-y="true" class="video-box">
 					<view class="video-box-item" @tap.stop="pickerVideoPlay(videoIndex,videoItem)"
 						:class="item.id === videoItem.id ? 'video-box-item_active':'' "
@@ -81,9 +133,7 @@
 			<view class="definitionShow">
 				<view class="definitionShow-row">
 					<text class="definition-label">{{language[this.lang].resolution}}</text>
-					<text class="definition-value" :class="definitionIndex === index ?'active':'' "
-						@tap.stop="resolutionChange(index)" v-for="(item,index) in resolutionList"
-						:key="index">{{item.definition}}</text>
+					<text class="definition-value" :class="definitionIndex === index ?'active':'' " @tap.stop="resolutionChange(index)" v-for="(item,index) in resolutionList" :key="index">{{item.definition}}</text>
 				</view>
 			</view>
 		</u-popup>
@@ -192,7 +242,7 @@
 						systemShare: "系统分享",
 						cancelShare: "取消分享",
 						videoShare: "视频分享",
-						resolution: '清晰度'
+						resolution:'清晰度'
 					},
 					vi_VN: {
 						unfold: 'Mở rộng',
@@ -206,7 +256,7 @@
 						systemShare: "share",
 						cancelShare: "Hủy chia sẻ",
 						videoShare: "Chia sẻ video",
-						resolution: 'độ phân giải'
+						resolution:'độ phân giải'
 					},
 					zh_EN: {
 						unfold: 'Expand',
@@ -220,7 +270,7 @@
 						systemShare: "share",
 						cancelShare: "Cancel share",
 						videoShare: "Share video",
-						resolution: 'resolution'
+						resolution:'resolution'
 					},
 				},
 				followShow: null,
@@ -297,7 +347,7 @@
 				},
 				show: false,
 				definitionShow: false,
-				definitionIndex: -1,
+				definitionIndex:-1,
 			}
 		},
 		methods: {
@@ -572,23 +622,11 @@
 </script>
 
 <style lang="scss" scoped>
-	.tsp-menu-n {
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 115rpx;
-		/* 固定宽度 */
-		display: flex;
-		/* 必须加 flex */
-		flex-direction: column;
-		/* 垂直排列 */
-		background-color: orange;
-	}
-
 	.menuBox {
 		position: absolute;
 		right: 10rpx;
 		width: 115rpx;
+		z-index: 99999;
 		justify-content: center;
 	}
 
@@ -782,10 +820,11 @@
 	/* 底部标题部分 */
 	.footTitle {
 		position: absolute;
-		bottom: 40px;
+		bottom: 20px;
 		left: 0;
 		width: 750rpx;
-		background-color: red;
+		/* padding-left: 30rpx; */
+		/* margin-left: 30rpx; */
 	}
 
 	.footTitle-commodity {
@@ -991,11 +1030,11 @@
 		position: relative;
 		top: 50rpx;
 		left: 20rpx;
+		z-index: 999999;
 		flex-direction: row;
 		align-items: center;
 		width: 750rpx;
 		justify-content: space-between;
-		background-color: orange;
 
 		.back-left {
 			flex-direction: row;
