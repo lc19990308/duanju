@@ -2,6 +2,7 @@ import apiList from './api.js';
 import apiMoen from '../../utils/config.js';
 import i18n from '@/utils/i18n/index.js'
 import store from '@/common/store/index.js'
+import utils from '@/common/utils/index.js'
 
 // 组装接口路径
 const getApiPath = path => {
@@ -11,6 +12,31 @@ const getApiPath = path => {
 		api = api[v]
 	});
 	return api
+}
+/**
+ * 获取当前运行平台
+ * @returns {string}  'ios' | 'android' | 'devtools' | 'other'
+ */
+export function getPlatform () {
+  // #ifdef H5
+  // H5 端：靠 UA 区分
+  const ua = navigator.userAgent.toLowerCase()
+  if (/iphone|ipad|ipod/.test(ua)) return 'ios'
+  if (/android/.test(ua)) return 'android'
+  return 'other'
+  // #endif
+
+  // #ifndef H5
+  // App、小程序、快应用端：用官方 API
+  try {
+    const { platform } = uni.getSystemInfoSync()
+    // 微信小程序里 ios 返回 'ios'，android 返回 'android'，devtools 返回 'devtools'
+    return platform.toLowerCase()
+  } catch (e) {
+    console.error('getPlatform error:', e)
+    return 'other'
+  }
+  // #endif
 }
 const setLang = () => {
 	const lang = uni.getStorageSync('lang')
@@ -59,6 +85,7 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				'X-Tenant-Id': apiMoen.tenantId,
 				'X-Access-Token': store.state.user.token,
 				'x-lang': setLang(),
+				'platform':utils.getAppPlatform(),
 				...customHeaders,
 			},
 			success: res => {

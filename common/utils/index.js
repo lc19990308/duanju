@@ -106,7 +106,31 @@ const platforms = () => {
 	return 'App'
 	// #endif
 }
+/**
+ * 获取当前运行平台
+ * @returns {string}  'ios' | 'android' | 'devtools' | 'other'
+ */
+ function getPlatform () {
+  // #ifdef H5
+  // H5 端：靠 UA 区分
+  const ua = navigator.userAgent.toLowerCase()
+  if (/iphone|ipad|ipod/.test(ua)) return 'ios'
+  if (/android/.test(ua)) return 'android'
+  return 'other'
+  // #endif
 
+  // #ifndef H5
+  // App、小程序、快应用端：用官方 API
+  try {
+    const { platform } = uni.getSystemInfoSync()
+    // 微信小程序里 ios 返回 'ios'，android 返回 'android'，devtools 返回 'devtools'
+    return platform.toLowerCase()
+  } catch (e) {
+    console.error('getPlatform error:', e)
+    return 'other'
+  }
+  // #endif
+}
 /**
  * 验证密码
  */
@@ -297,5 +321,6 @@ export default {
 	removeToken,
 	ensureGuestLogin,
 	judgment,
-	getAppPlatform
+	getAppPlatform,
+	getPlatform
 }

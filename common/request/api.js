@@ -11,6 +11,11 @@ const api = {
 			method: 'GET',
 			desc: '登录'
 		},
+		verifyApple: {
+			url: '/api/sys/user/oauth2/verify-apple',
+			method: 'post',
+			desc: '登录'
+		},
 		allocatProgram: {
 			url: '/api/wxApi/allocatProgram',
 			method: 'GET',

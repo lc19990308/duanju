@@ -2,8 +2,8 @@
     "name" : "猴子短剧",
     "appid" : "__UNI__8BBE7AF",
     "description" : "",
-    "versionName" : "1.2.6",
-    "versionCode" : 126,
+    "versionName" : "1.2.7",
+    "versionCode" : 127,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -18,7 +18,8 @@
         "modules" : {
             "VideoPlayer" : {},
             "Camera" : {},
-            "Share" : {}
+            "Share" : {},
+            "OAuth" : {}
         },
         "distribute" : {
             "android" : {
@@ -50,7 +51,10 @@
                         "__platform__" : [ "ios", "android" ]
                     }
                 },
-                "share" : {}
+                "share" : {},
+                "oauth" : {
+                    "apple" : {}
+                }
             },
             "icons" : {
                 "android" : {
