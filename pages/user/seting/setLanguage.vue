@@ -1,8 +1,8 @@
 <template>
 	<view class="app-container">
 		<statusBar />
-		<u-navbar :title="$t(`language.page_title`)" :fixed='true' bgColor='transparent' :titleStyle='titleStyle' leftIconColor='#fff'
-			:autoBack="true" :placeholder='true' />
+		<u-navbar :title="$t(`language.page_title`)" :fixed='true' bgColor='transparent' :titleStyle='titleStyle'
+			leftIconColor='#fff' :autoBack="true" :placeholder='true' />
 		<view class="issue-card">
 			<u-radio-group v-model="value" iconPlacement="right">
 				<u-radio activeColor="#FFCD03" name='zh_CN' :label='$t(`language.language_cn`)' labelColor='#d1d1d1' />
@@ -31,11 +31,11 @@
 			submit() {
 				if (this.value) {
 					this.$i18n.locale = this.value;
-					uni.setStorageSync('lang',this.value)
+					uni.setStorageSync('lang', this.value)
 					uni.$u.toast(this.$t('toast.msg_success'))
-					setTimeout(()=>{
+					setTimeout(() => {
 						uni.navigateBack();
-					},500)
+					}, 500)
 				} else {
 					uni.$u.toast(this.$t('toast.picker_language_settings'));
 				}
@@ -43,7 +43,6 @@
 		},
 		onLoad() {
 			this.value = uni.getStorageSync('lang');
-			console.log(this.value,'value')
 		}
 	}
 </script>

@@ -10,7 +10,6 @@
 		onLaunch: function(options) {
 			if (!uni.getStorageSync('lang')) {
 				const langSys = uni.getSystemInfoSync().language;
-				console.log(langSys, 'langsys')
 				switch (langSys) {
 					case 'zh-CN':
 					case 'zh-Hans-CN':

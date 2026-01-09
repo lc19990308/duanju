@@ -9,10 +9,8 @@ import zh_EN from "./json/zh-EN.js";
 //注册vue-i18n实例i18n，并引入语言文件
 const setlang = () => {
 	let originLang = '';
-	console.log(!uni.getStorageSync('lang'))
 	if (!uni.getStorageSync('lang')) {
 		const langSys = uni.getSystemInfoSync().language;
-		console.log(langSys, 'langSys')
 		switch (langSys) {
 			case 'zh-CN':
 				originLang = 'zh_CN'
