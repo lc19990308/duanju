@@ -155,6 +155,7 @@
 			},
 			submitGAList() {
 				this.$request('login.loginGAList').then(res => {
+					console.log(res.result.whitelistProviders,'res.result.whitelistProviders')
 					this.providersList.forEach((item, index) => {
 						res.result.whitelistProviders.map((childItem) => {
 							if (item.key === childItem) {
@@ -461,6 +462,7 @@
 	}
 
 	.btn-groud {
+		display: flex;
 		width: 600rpx;
 		margin: 103rpx auto 0 auto;
 	}

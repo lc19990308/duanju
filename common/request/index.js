@@ -76,6 +76,7 @@ const request = (path, data, error = true, customHeaders = {}) => {
 	const url = BASE_URL + api.url,
 		method = api.method
 	// 通过Promise封装请求, 返回异步请求结果
+	console.log(utils.getPlatform(),'utils.getPlatform()')
 	return new Promise(async (resolve, reject) => {
 		uni.request({
 			url,
@@ -85,7 +86,7 @@ const request = (path, data, error = true, customHeaders = {}) => {
 				'X-Tenant-Id': apiMoen.tenantId,
 				'X-Access-Token': store.state.user.token,
 				'x-lang': setLang(),
-				'platform':utils.getAppPlatform(),
+				'x-platform':utils.getPlatform(),
 				...customHeaders,
 			},
 			success: res => {
